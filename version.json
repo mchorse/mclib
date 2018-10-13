@@ -1,0 +1,20 @@
+{
+    "homepage": "https://minecraft.curseforge.com/projects/mchorses-mclib",
+    "1.10.2": {
+    	"1.0": "Initial release. This bad boy contains so much useful code."
+    },
+    "1.11.2": {
+    	"1.0": "Initial release. This bad boy contains so much useful code."
+    },
+    "1.12.2": {
+    	"1.0": "Initial release. This bad boy contains so much useful code."
+    },
+    "promos": {
+        "1.10.2-latest": "1.0",
+        "1.10.2-recommended": "1.0",
+        "1.11.2-latest": "1.0",
+        "1.11.2-recommended": "1.0",
+        "1.12.2-latest": "1.0",
+        "1.12.2-recommended": "1.0"
+    }
+}
