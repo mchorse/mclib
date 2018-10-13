@@ -16,12 +16,12 @@ import net.minecraftforge.fml.relauncher.Side;
  *
  * @author Ernio (Ernest Sadowski)
  */
-public abstract class Dispatcher
+public abstract class AbstractDispatcher
 {
     private final SimpleNetworkWrapper dispatcher;
     private byte nextPacketID;
 
-    public Dispatcher(String modID)
+    public AbstractDispatcher(String modID)
     {
         this.dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel(modID);
     }
