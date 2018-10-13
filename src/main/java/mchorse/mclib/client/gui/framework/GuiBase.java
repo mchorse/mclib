@@ -110,6 +110,6 @@ public class GuiBase extends GuiScreen
     {
         this.tooltip.set(null, null);
         this.elements.draw(this.tooltip, mouseX, mouseY, partialTicks);
-        this.tooltip.draw(this.fontRendererObj, this.width, this.height);
+        this.tooltip.draw(this.fontRenderer, this.width, this.height);
     }
 }

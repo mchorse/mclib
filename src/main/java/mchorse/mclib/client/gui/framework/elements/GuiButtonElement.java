@@ -65,8 +65,8 @@ public class GuiButtonElement<T extends GuiButton> extends GuiElement
     {
         super.resize(width, height);
 
-        this.button.xPosition = this.area.x;
-        this.button.yPosition = this.area.y;
+        this.button.x = this.area.x;
+        this.button.y = this.area.y;
         this.button.width = this.area.w;
         this.button.height = this.area.h;
     }
@@ -103,6 +103,6 @@ public class GuiButtonElement<T extends GuiButton> extends GuiElement
             tooltip.set(this, this.tooltip);
         }
 
-        this.button.drawButton(this.mc, mouseX, mouseY);
+        this.button.drawButton(this.mc, mouseX, mouseY, partialTicks);
     }
 }

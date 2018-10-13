@@ -108,7 +108,7 @@ public class GuiInventory
 
         FontRenderer font = null;
         if (stack != null) font = stack.getItem().getFontRenderer(stack);
-        if (font == null) font = Minecraft.getMinecraft().fontRendererObj;
+        if (font == null) font = Minecraft.getMinecraft().fontRenderer;
 
         itemRender.renderItemAndEffectIntoGUI(stack, x, y);
         itemRender.renderItemOverlayIntoGUI(font, stack, x, y, altText);

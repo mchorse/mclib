@@ -47,7 +47,7 @@ public class GuiElement extends Gui implements IGuiElement
     public GuiElement(Minecraft mc)
     {
         this.mc = mc;
-        this.font = mc.fontRendererObj;
+        this.font = mc.fontRenderer;
     }
 
     public GuiElement createChildren()
