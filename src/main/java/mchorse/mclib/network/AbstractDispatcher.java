@@ -68,7 +68,7 @@ public abstract class AbstractDispatcher
     /**
      * Register given message with given message handler on a given side
      */
-    protected <REQ extends IMessage, REPLY extends IMessage> void register(Class<REQ> message, Class<? extends IMessageHandler<REQ, REPLY>> handler, Side side)
+    public <REQ extends IMessage, REPLY extends IMessage> void register(Class<REQ> message, Class<? extends IMessageHandler<REQ, REPLY>> handler, Side side)
     {
         this.dispatcher.registerMessage(handler, message, this.nextPacketID++, side);
     }
