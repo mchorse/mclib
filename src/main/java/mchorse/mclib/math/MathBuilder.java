@@ -266,7 +266,7 @@ public class MathBuilder
         if (secondOp == -1)
         {
             IValue left = this.parseSymbols(symbols.subList(0, firstOp));
-            IValue right = this.parseSymbols(symbols.subList(firstOp + 1, MathHelper.clamp_int(firstOp + 3, 0, size)));
+            IValue right = this.parseSymbols(symbols.subList(firstOp + 1, MathHelper.clamp(firstOp + 3, 0, size)));
 
             return new Operator(op, left, right);
         }

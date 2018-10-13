@@ -25,6 +25,6 @@ public class Clamp extends Function
     @Override
     public double get()
     {
-        return MathHelper.clamp_double(this.args[0].get(), this.args[1].get(), this.args[2].get());
+        return MathHelper.clamp(this.args[0].get(), this.args[1].get(), this.args[2].get());
     }
 }

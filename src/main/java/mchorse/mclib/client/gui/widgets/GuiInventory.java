@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public class GuiInventory
 {
@@ -45,7 +46,7 @@ public class GuiInventory
 
         if (index >= 0 && index < 36 && this.picker != null)
         {
-            this.picker.pickItem(this, this.player.inventory.mainInventory[index]);
+            this.picker.pickItem(this, this.player.inventory.mainInventory.get(index));
         }
     }
 
@@ -66,11 +67,11 @@ public class GuiInventory
         RenderHelper.enableGUIStandardItemLighting();
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 
-        ItemStack[] inventory = this.player.inventory.mainInventory;
+        NonNullList<ItemStack> inventory = this.player.inventory.mainInventory;
 
-        for (int i = 0, c = inventory.length; i < c; i++)
+        for (int i = 0, c = inventory.size(); i < c; i++)
         {
-            ItemStack stack = inventory[i];
+            ItemStack stack = inventory.get(i);
 
             int x = i % 9;
             int y = i / 9;

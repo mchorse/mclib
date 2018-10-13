@@ -42,8 +42,8 @@ public class GuiTooltip
                 y = area.getY(1) + 6;
             }
 
-            x = MathHelper.clamp_int(x, 6, width - w - 6);
-            y = MathHelper.clamp_int(y, 6, height - font.FONT_HEIGHT - 6);
+            x = MathHelper.clamp(x, 6, width - w - 6);
+            y = MathHelper.clamp(y, 6, height - font.FONT_HEIGHT - 6);
 
             Gui.drawRect(x - 3, y - 3, x + w + 3, y + font.FONT_HEIGHT + 3, 0x88000000);
             font.drawStringWithShadow(this.tooltip.label, x, y, 0xffffff);

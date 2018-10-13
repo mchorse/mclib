@@ -82,7 +82,7 @@ public class ScrollArea extends Area
         }
         else
         {
-            this.scroll = MathHelper.clamp_int(this.scroll, 0, this.scrollSize - size);
+            this.scroll = MathHelper.clamp(this.scroll, 0, this.scrollSize - size);
         }
     }
 
