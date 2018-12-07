@@ -46,13 +46,18 @@ public class GuiBase extends GuiScreen
             return;
         }
 
-        this.elements.mouseScrolled(x, y, scroll);
+        this.mouseScrolled(x, y, scroll);
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         this.elements.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    protected void mouseScrolled(int x, int y, int scroll)
+    {
+        this.elements.mouseScrolled(x, y, scroll);
     }
 
     @Override
