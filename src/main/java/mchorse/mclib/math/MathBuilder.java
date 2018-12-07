@@ -215,6 +215,7 @@ public class MathBuilder
      * However, beside parsing operations, it's also can return one or 
      * two item sized symbol lists.
      */
+    @SuppressWarnings("unchecked")
     public IValue parseSymbols(List<Object> symbols) throws Exception
     {
         int size = symbols.size();
@@ -343,6 +344,7 @@ public class MathBuilder
      * based on the input object. It can create constants, variables and 
      * groups. 
      */
+    @SuppressWarnings("unchecked")
     public IValue valueFromObject(Object object) throws Exception
     {
         if (object instanceof String)
@@ -408,15 +410,6 @@ public class MathBuilder
     private boolean isVariable(Object o)
     {
         return o instanceof String && !this.isDecimal((String) o) && !this.isOperator((String) o);
-    }
-
-    /**
-     * Whether given object is a value (it can be a constant, variable 
-     * or a group) 
-     */
-    private boolean isValue(Object o)
-    {
-        return o instanceof String && !this.isOperator((String) o) || o instanceof List;
     }
 
     private boolean isOperator(Object o)

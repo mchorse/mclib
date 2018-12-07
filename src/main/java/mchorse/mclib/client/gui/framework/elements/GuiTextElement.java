@@ -101,7 +101,7 @@ public class GuiTextElement extends GuiElement implements GuiResponder
     @Override
     public boolean hasActiveTextfields()
     {
-        return this.field.isFocused();
+        return this.isEnabled() && this.field.isFocused();
     }
 
     @Override
