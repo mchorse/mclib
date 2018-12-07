@@ -25,7 +25,7 @@ public class GuiElement extends Gui implements IGuiElement
     /**
      * Children elements
      */
-    public GuiElements children;
+    public GuiElements<IGuiElement> children;
 
     /**
      * Whether this element is enabled (can handle any input) 
@@ -52,7 +52,11 @@ public class GuiElement extends Gui implements IGuiElement
 
     public GuiElement createChildren()
     {
-        this.children = new GuiElements();
+        /* Create children only if they're absent */
+        if (this.children != null)
+        {
+            this.children = new GuiElements<IGuiElement>();
+        }
 
         return this;
     }
