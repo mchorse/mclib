@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.lwjgl.input.Mouse;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElements;
+import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.utils.Area;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.relauncher.Side;
@@ -16,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiBase extends GuiScreen
 {
-    public GuiElements elements = new GuiElements();
+    public GuiElements<IGuiElement> elements = new GuiElements<IGuiElement>();
     public GuiTooltip tooltip = new GuiTooltip();
     public Area area = new Area();
 
