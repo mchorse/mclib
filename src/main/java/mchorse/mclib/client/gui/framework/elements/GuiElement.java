@@ -53,7 +53,7 @@ public class GuiElement extends Gui implements IGuiElement
     public GuiElement createChildren()
     {
         /* Create children only if they're absent */
-        if (this.children != null)
+        if (this.children == null)
         {
             this.children = new GuiElements<IGuiElement>();
         }
