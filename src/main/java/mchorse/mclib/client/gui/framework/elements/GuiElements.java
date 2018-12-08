@@ -139,11 +139,14 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
     @Override
     public boolean hasActiveTextfields()
     {
-        for (T element : this.elements)
+        if (this.isEnabled())
         {
-            if (element.isEnabled() && element.hasActiveTextfields())
+            for (T element : this.elements)
             {
-                return true;
+                if (element.isEnabled() && element.hasActiveTextfields())
+                {
+                    return true;
+                }
             }
         }
 
