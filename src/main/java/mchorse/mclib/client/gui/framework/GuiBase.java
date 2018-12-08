@@ -34,7 +34,7 @@ public class GuiBase extends GuiScreen
         int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
 
-        if (this.elements.isEnabled() && !this.elements.handleMouseInput(x, y))
+        if (!this.elements.handleMouseInput(x, y))
         {
             super.handleMouseInput();
         }
@@ -78,7 +78,7 @@ public class GuiBase extends GuiScreen
     @Override
     public void handleKeyboardInput() throws IOException
     {
-        if (this.elements.isEnabled() && !this.elements.handleKeyboardInput())
+        if (!this.elements.handleKeyboardInput())
         {
             super.handleKeyboardInput();
         }
