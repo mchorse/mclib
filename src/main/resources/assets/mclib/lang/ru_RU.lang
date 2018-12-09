@@ -1,0 +1,3 @@
+#PARSE_ESCAPES
+mclib.gui.ok=OK
+mclib.gui.cancel=Отменить
