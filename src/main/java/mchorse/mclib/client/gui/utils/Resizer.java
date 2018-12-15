@@ -22,22 +22,17 @@ public class Resizer
 
     public Resizer set(float x, float y, float w, float h)
     {
-        this.x.value = x;
-        this.y.value = y;
-        this.w.value = w;
-        this.h.value = h;
-
-        return this;
+        return this.set(x, y, w, h, Measure.PIXELS);
     }
 
     public Resizer set(float x, float y, float w, float h, Measure measure)
     {
-        this.x.unit = measure;
-        this.y.unit = measure;
-        this.w.unit = measure;
-        this.h.unit = measure;
+        this.x.set(x, measure);
+        this.y.set(y, measure);
+        this.w.set(w, measure);
+        this.h.set(h, measure);
 
-        return this.set(x, y, w, h);
+        return this;
     }
 
     public Resizer x(int value)
