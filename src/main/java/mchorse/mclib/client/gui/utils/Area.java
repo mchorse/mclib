@@ -1,5 +1,7 @@
 package mchorse.mclib.client.gui.utils;
 
+import net.minecraft.client.gui.Gui;
+
 /**
  * Utility class for boxes
  *
@@ -87,5 +89,13 @@ public class Area
     public int getY(float anchor)
     {
         return this.y + (int) (this.h * anchor);
+    }
+
+    /**
+     * Draw a rect within the bound of this rect
+     */
+    public void draw(int color)
+    {
+        Gui.drawRect(this.x, this.y, this.getX(1), this.getY(1), color);
     }
 }
