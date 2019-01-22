@@ -70,6 +70,12 @@ public class GuiTrackpadElement extends GuiElement implements ITrackpadListener
     }
 
     @Override
+    public boolean hasActiveTextfields()
+    {
+        return super.hasActiveTextfields() || this.trackpad.text.isFocused();
+    }
+
+    @Override
     public void keyTyped(char typedChar, int keyCode)
     {
         this.trackpad.keyTyped(typedChar, keyCode);
