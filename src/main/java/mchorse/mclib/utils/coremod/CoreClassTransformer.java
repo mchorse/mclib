@@ -6,7 +6,7 @@ public abstract class CoreClassTransformer implements IClassTransformer
 {
     public static boolean obfuscated = false;
 
-    public boolean checkName(String name, String notch, String mcp)
+    public static boolean checkName(String name, String notch, String mcp)
     {
         if (name.equals(mcp) || name.equals(notch))
         {
@@ -16,5 +16,10 @@ public abstract class CoreClassTransformer implements IClassTransformer
         }
 
         return false;
+    }
+
+    public static String get(String notch, String mcp)
+    {
+        return obfuscated ? notch : mcp;
     }
 }

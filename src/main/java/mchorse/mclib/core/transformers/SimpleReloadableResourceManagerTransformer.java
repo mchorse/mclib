@@ -11,8 +11,8 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-import mchorse.mclib.core.McLibCMClassTransformer;
 import mchorse.mclib.utils.coremod.ClassTransformer;
+import mchorse.mclib.utils.coremod.CoreClassTransformer;
 
 public class SimpleReloadableResourceManagerTransformer extends ClassTransformer
 {
@@ -37,7 +37,7 @@ public class SimpleReloadableResourceManagerTransformer extends ClassTransformer
         if (label != null)
         {
             InsnList list = new InsnList();
-            String desc = "(Lmchorse/mclib/utils/resources/MultiResourceLocation;)L" + (McLibCMClassTransformer.obfuscated ? "bxc" : "net/minecraft/client/resources/IResource") + ";";
+            String desc = "(Lmchorse/mclib/utils/resources/MultiResourceLocation;)L" + CoreClassTransformer.get("bxc", "net/minecraft/client/resources/IResource") + ";";
 
             list.add(new VarInsnNode(Opcodes.ALOAD, 1));
             list.add(new TypeInsnNode(Opcodes.INSTANCEOF, "mchorse/mclib/utils/resources/MultiResourceLocation"));
