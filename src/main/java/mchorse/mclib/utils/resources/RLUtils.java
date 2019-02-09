@@ -86,7 +86,7 @@ public class RLUtils
             path = "b.a" + path.substring(18);
         }
 
-        return new ResourceLocation(path);
+        return new TextureLocation(path);
     }
 
     public static ResourceLocation create(String domain, String path)
@@ -96,7 +96,7 @@ public class RLUtils
             domain = "b.a";
         }
 
-        return new ResourceLocation(domain, path);
+        return new TextureLocation(domain, path);
     }
 
     public static ResourceLocation create(NBTBase base)
