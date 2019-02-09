@@ -68,6 +68,10 @@ processResources
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     classifier = 'dev'
+    
+    manifest {
+        attributes 'FMLCorePlugin': coremodPath, 'FMLCorePluginContainsFMLMod': 'true'
+    }
 }
 
 task sourcesJar(type: Jar) {
