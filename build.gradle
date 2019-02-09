@@ -34,10 +34,16 @@ minecraft
     runDir = "run"
     mappings = snapshot
     
-    clientJvmArgs = ["-Xmx1G"]
+    clientJvmArgs = ["-Xmx1G", "-Dfml.coreMods.load=" + coremodPath]
     serverJvmArgs = ["-Xmx1G"]
     
-    replace "@VERSION@", project.version
+    replace "%VERSION%", project.version
+}
+
+jar {
+   manifest {
+       attributes 'FMLCorePlugin': coremodPath, 'FMLCorePluginContainsFMLMod': 'true'
+   }
 }
 
 processResources
