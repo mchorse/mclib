@@ -1,4 +1,4 @@
-package mchorse.mclib.math;
+package mchorse.mclib.utils;
 
 import net.minecraft.util.math.MathHelper;
 
