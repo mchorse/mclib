@@ -21,7 +21,7 @@ public class SimpleReloadableResourceManagerTransformer extends ClassTransformer
     {
         for (MethodNode method : node.methods)
         {
-            String methodName = this.checkName(method, "a", "(Lkn;)Lbxc;", "getResource", "(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource;");
+            String methodName = this.checkName(method, "a", "(Lkq;)Lbzx;", "getResource", "(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource;");
 
             if (methodName != null)
             {
@@ -37,7 +37,7 @@ public class SimpleReloadableResourceManagerTransformer extends ClassTransformer
         if (label != null)
         {
             InsnList list = new InsnList();
-            String desc = "(Lmchorse/mclib/utils/resources/MultiResourceLocation;)L" + CoreClassTransformer.get("bxc", "net/minecraft/client/resources/IResource") + ";";
+            String desc = "(Lmchorse/mclib/utils/resources/MultiResourceLocation;)L" + CoreClassTransformer.get("bzx", "net/minecraft/client/resources/IResource") + ";";
 
             list.add(new VarInsnNode(Opcodes.ALOAD, 1));
             list.add(new TypeInsnNode(Opcodes.INSTANCEOF, "mchorse/mclib/utils/resources/MultiResourceLocation"));

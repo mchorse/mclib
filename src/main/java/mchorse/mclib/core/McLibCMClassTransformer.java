@@ -10,7 +10,7 @@ public class McLibCMClassTransformer extends CoreClassTransformer
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass)
     {
-        if (checkName(name, "bxi", "net.minecraft.client.resources.SimpleReloadableResourceManager"))
+        if (checkName(name, "cae", "net.minecraft.client.resources.SimpleReloadableResourceManager"))
         {
             System.out.println("McLib: Transforming SimpleReloadableResourceManager class (" + name + ")");
 
