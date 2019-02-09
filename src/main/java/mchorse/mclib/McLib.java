@@ -11,5 +11,5 @@ import net.minecraftforge.fml.common.Mod;
 public class McLib
 {
     public static final String MOD_ID = "mclib";
-    public static final String VERSION = "@VERSION@";
+    public static final String VERSION = "%VERSION%";
 }
