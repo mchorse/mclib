@@ -9,7 +9,7 @@ import net.minecraft.client.resources.I18n;
 
 public class GuiMessageModal extends GuiModal
 {
-    private GuiButtonElement<GuiButton> button;
+    public GuiButtonElement<GuiButton> button;
 
     public GuiMessageModal(Minecraft mc, GuiDelegateElement<IGuiElement> parent, String label)
     {
