@@ -4,10 +4,12 @@ import java.io.IOException;
 
 import org.lwjgl.input.Mouse;
 
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiElements;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.utils.Area;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -17,6 +19,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiBase extends GuiScreen
 {
+    /**
+     * Icons texture used across all dashboard panels 
+     */
+    public static final ResourceLocation ICONS = new ResourceLocation(McLib.MOD_ID, "textures/gui/icons.png");
+
     public GuiElements<IGuiElement> elements = new GuiElements<IGuiElement>();
     public GuiTooltip tooltip = new GuiTooltip();
     public Area area = new Area();

@@ -80,6 +80,7 @@ public abstract class GuiListElement<T> extends GuiElement
     public void setList(List<T> list)
     {
         this.list = list;
+        this.update();
     }
 
     public List<T> getList()
