@@ -11,8 +11,8 @@ import net.minecraft.client.resources.I18n;
 
 public class GuiConfirmModal extends GuiModal
 {
-    private GuiButtonElement<GuiButton> confirm;
-    private GuiButtonElement<GuiButton> cancel;
+    public GuiButtonElement<GuiButton> confirm;
+    public GuiButtonElement<GuiButton> cancel;
 
     public Consumer<Boolean> callback;
 
