@@ -204,7 +204,8 @@ public class GuiTexturePicker extends GuiElement
 
         if (notify)
         {
-            this.selectCurrent(skin);
+            if (show) if (this.callback != null) this.callback.accept(skin);
+            else this.selectCurrent(skin);
         }
 
         this.multiList.setVisible(show);
