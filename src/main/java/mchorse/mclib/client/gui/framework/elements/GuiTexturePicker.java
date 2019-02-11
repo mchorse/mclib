@@ -59,7 +59,7 @@ public class GuiTexturePicker extends GuiElement
             this.text.setText(rl == null ? "" : rl.toString());
         });
 
-        this.multi = GuiButtonElement.button(mc, I18n.format("blockbuster.gui.multi_skin"), (b) -> this.toggleMultiSkin());
+        this.multi = GuiButtonElement.button(mc, I18n.format("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
         this.multiList = new GuiResourceLocationList(mc, (rl) -> this.displayCurrent(rl));
         this.add = GuiButtonElement.icon(mc, GuiBase.ICONS, 32, 32, 32, 48, (b) -> this.addMultiSkin());
         this.remove = GuiButtonElement.icon(mc, GuiBase.ICONS, 64, 32, 64, 48, (b) -> this.removeMultiSkin());
@@ -241,7 +241,7 @@ public class GuiTexturePicker extends GuiElement
 
         if (this.picker.getList().isEmpty())
         {
-            this.drawCenteredString(this.font, I18n.format("blockbuster.gui.no_data"), this.area.getX(0.5F), this.area.getY(0.5F), 0xffffff);
+            this.drawCenteredString(this.font, I18n.format("mclib.gui.no_data"), this.area.getX(0.5F), this.area.getY(0.5F), 0xffffff);
         }
 
         super.draw(tooltip, mouseX, mouseY, partialTicks);
