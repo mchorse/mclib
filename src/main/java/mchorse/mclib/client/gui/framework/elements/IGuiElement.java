@@ -43,6 +43,11 @@ public interface IGuiElement
     public boolean hasActiveTextfields();
 
     /**
+     * Unfocus any text fields this GUI element might have 
+     */
+    public void unfocus();
+
+    /**
      * Key was typed
      */
     public void keyTyped(char typedChar, int keyCode);

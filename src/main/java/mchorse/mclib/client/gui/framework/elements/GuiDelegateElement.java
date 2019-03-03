@@ -109,6 +109,15 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implem
     }
 
     @Override
+    public void unfocus()
+    {
+        if (this.delegate != null)
+        {
+            this.delegate.unfocus();
+        }
+    }
+
+    @Override
     public boolean handleKeyboardInput() throws IOException
     {
         if (this.delegate instanceof IGuiLegacy)

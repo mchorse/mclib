@@ -169,6 +169,15 @@ public class GuiElement extends Gui implements IGuiElement
     }
 
     @Override
+    public void unfocus()
+    {
+        if (this.children != null)
+        {
+            this.children.unfocus();
+        }
+    }
+
+    @Override
     public void keyTyped(char typedChar, int keyCode)
     {
         if (this.children != null)

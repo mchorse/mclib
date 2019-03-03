@@ -105,6 +105,13 @@ public class GuiTextElement extends GuiElement implements GuiResponder
     }
 
     @Override
+    public void unfocus()
+    {
+        super.unfocus();
+        this.field.setFocused(false);
+    }
+
+    @Override
     public void keyTyped(char typedChar, int keyCode)
     {
         super.keyTyped(typedChar, keyCode);
