@@ -76,6 +76,13 @@ public class GuiTrackpadElement extends GuiElement implements ITrackpadListener
     }
 
     @Override
+    public void unfocus()
+    {
+        super.unfocus();
+        this.trackpad.text.setFocused(false);
+    }
+
+    @Override
     public void keyTyped(char typedChar, int keyCode)
     {
         this.trackpad.keyTyped(typedChar, keyCode);
