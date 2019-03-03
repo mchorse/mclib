@@ -140,7 +140,7 @@ public class GuiTexturePicker extends GuiElement
         {
             FolderEntry folder = this.tree.getByPath(rl.getResourcePath());
 
-            if (folder != this.tree.root)
+            if (folder != this.tree.root || this.picker.getList().isEmpty())
             {
                 this.picker.setList(folder.entries);
                 this.picker.setCurrent(rl);
