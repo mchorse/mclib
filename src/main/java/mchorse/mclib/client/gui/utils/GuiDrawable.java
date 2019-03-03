@@ -53,6 +53,10 @@ public class GuiDrawable implements IGuiElement
     }
 
     @Override
+    public void unfocus()
+    {}
+
+    @Override
     public void keyTyped(char typedChar, int keyCode)
     {}
 

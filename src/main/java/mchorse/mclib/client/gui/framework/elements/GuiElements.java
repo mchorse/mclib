@@ -154,6 +154,15 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
     }
 
     @Override
+    public void unfocus()
+    {
+        for (T element : this.elements)
+        {
+            element.unfocus();
+        }
+    }
+
+    @Override
     public boolean handleKeyboardInput() throws IOException
     {
         for (T element : this.elements)
