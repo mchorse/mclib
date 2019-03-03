@@ -56,6 +56,22 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
         return null;
     }
 
+    public void setCurrent(ResourceLocation rl)
+    {
+        this.current = -1;
+
+        for (int i = 0, c = this.list.size(); i < c; i++)
+        {
+            AbstractEntry entry = this.list.get(i);
+
+            if (entry instanceof FileEntry && ((FileEntry) entry).resource.equals(rl))
+            {
+                this.current = i;
+                break;
+            }
+        }
+    }
+
     @Override
     public void sort()
     {}
