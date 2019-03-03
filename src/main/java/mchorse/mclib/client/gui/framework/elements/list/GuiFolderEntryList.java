@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
 {
     public Consumer<FileEntry> fileCallback;
+    public ResourceLocation rl;
 
     public GuiFolderEntryList(Minecraft mc, Consumer<FileEntry> fileCallback)
     {
@@ -38,6 +39,8 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
             {
                 this.setList(((FolderEntry) entry).entries);
                 this.current = -1;
+
+                this.setCurrent(this.rl);
             }
         };
         this.fileCallback = fileCallback;
