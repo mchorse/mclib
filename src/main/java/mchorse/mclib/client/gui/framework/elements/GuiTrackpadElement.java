@@ -39,7 +39,7 @@ public class GuiTrackpadElement extends GuiElement implements ITrackpadListener
     public void setLimit(float min, float max, boolean integer)
     {
         this.setLimit(min, max);
-        this.trackpad.integer = true;
+        this.trackpad.integer = integer;
     }
 
     public void setValue(float value)

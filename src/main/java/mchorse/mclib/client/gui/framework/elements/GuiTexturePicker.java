@@ -9,6 +9,8 @@ import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.list.GuiFolderEntryList;
 import mchorse.mclib.client.gui.framework.elements.list.GuiResourceLocationList;
 import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
+import mchorse.mclib.utils.files.AbstractEntry.FolderEntry;
+import mchorse.mclib.utils.files.FileTree;
 import mchorse.mclib.utils.resources.MultiResourceLocation;
 import mchorse.mclib.utils.resources.RLUtils;
 import net.minecraft.client.Minecraft;
@@ -44,8 +46,9 @@ public class GuiTexturePicker extends GuiElement
 
     public MultiResourceLocation multiRL;
     public ResourceLocation current;
+    public FileTree tree;
 
-    public GuiTexturePicker(Minecraft mc, Consumer<ResourceLocation> callback)
+    public GuiTexturePicker(Minecraft mc, Consumer<ResourceLocation> callback, FileTree tree)
     {
         super(mc);
 
@@ -76,6 +79,7 @@ public class GuiTexturePicker extends GuiElement
 
         this.children.add(this.text, this.pick, this.picker, this.multi, this.multiList, this.add, this.remove);
         this.callback = callback;
+        this.tree = tree;
     }
 
     public void fill(ResourceLocation skin)
@@ -131,6 +135,17 @@ public class GuiTexturePicker extends GuiElement
         this.current = rl;
         this.text.setText(rl == null ? "" : rl.toString());
         this.text.field.setCursorPositionZero();
+
+        if (this.tree != null)
+        {
+            FolderEntry folder = this.tree.getByPath(rl.getResourcePath());
+
+            if (folder != this.tree.root)
+            {
+                this.picker.setList(folder.entries);
+                this.picker.setCurrent(rl);
+            }
+        }
     }
 
     /**
@@ -184,10 +199,7 @@ public class GuiTexturePicker extends GuiElement
         if (show)
         {
             this.multiRL = (MultiResourceLocation) skin;
-            this.current = this.multiRL.children.get(0);
-
-            this.multiList.current = this.multiRL.children.isEmpty() ? -1 : 0;
-            this.multiList.setList(this.multiRL.children);
+            this.displayCurrent(this.multiRL.children.get(0));
 
             this.picker.resizer().set(115, 30, 0, 0).parent(this.area).w(1, -120).h(1, -30);
             this.multi.resizer().set(5, 5, 60, 20).parent(this.area);
