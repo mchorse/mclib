@@ -200,6 +200,9 @@ public class GuiTexturePicker extends GuiElement
             this.multiRL = (MultiResourceLocation) skin;
             this.displayCurrent(this.multiRL.children.get(0));
 
+            this.multiList.current = this.multiRL.children.isEmpty() ? -1 : 0;
+            this.multiList.setList(this.multiRL.children);
+
             this.picker.resizer().set(115, 30, 0, 0).parent(this.area).w(1, -120).h(1, -30);
             this.multi.resizer().set(5, 5, 60, 20).parent(this.area);
         }
