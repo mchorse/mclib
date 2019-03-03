@@ -48,7 +48,7 @@ public class GuiTexturePicker extends GuiElement
     public ResourceLocation current;
     public FileTree tree;
 
-    public GuiTexturePicker(Minecraft mc, Consumer<ResourceLocation> callback, FileTree tree)
+    public GuiTexturePicker(Minecraft mc, Consumer<ResourceLocation> callback)
     {
         super(mc);
 
@@ -79,7 +79,6 @@ public class GuiTexturePicker extends GuiElement
 
         this.children.add(this.text, this.pick, this.picker, this.multi, this.multiList, this.add, this.remove);
         this.callback = callback;
-        this.tree = tree;
     }
 
     public void fill(ResourceLocation skin)
