@@ -135,7 +135,7 @@ public class GuiTexturePicker extends GuiElement
         this.text.setText(rl == null ? "" : rl.toString());
         this.text.field.setCursorPositionZero();
 
-        if (this.tree != null)
+        if (this.tree != null && rl != null)
         {
             FolderEntry folder = this.tree.getByPath(rl.getResourcePath());
 
