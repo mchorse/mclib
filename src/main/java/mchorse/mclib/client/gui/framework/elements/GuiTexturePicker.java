@@ -132,6 +132,7 @@ public class GuiTexturePicker extends GuiElement
     protected void displayCurrent(ResourceLocation rl)
     {
         this.current = rl;
+        this.picker.rl = rl;
         this.text.setText(rl == null ? "" : rl.toString());
         this.text.field.setCursorPositionZero();
 
@@ -153,6 +154,7 @@ public class GuiTexturePicker extends GuiElement
     protected void selectCurrent(ResourceLocation rl)
     {
         this.current = rl;
+        this.picker.rl = rl;
 
         if (this.multiRL != null)
         {
