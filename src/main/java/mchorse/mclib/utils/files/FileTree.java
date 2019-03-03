@@ -2,6 +2,7 @@ package mchorse.mclib.utils.files;
 
 import java.util.Comparator;
 
+import mchorse.mclib.client.gui.framework.elements.GuiTexturePicker;
 import mchorse.mclib.utils.files.AbstractEntry.FolderEntry;
 
 /**
@@ -64,5 +65,35 @@ public abstract class FileTree
         }
 
         return this.root;
+    }
+
+    /**
+     * Get a folder entry by path 
+     */
+    public FolderEntry getByPath(String path)
+    {
+        return this.getByPath(path, this.root);
+    }
+
+    /**
+     * Get a folder entry by path with a default value, if given path 
+     * wasn't found 
+     */
+    public FolderEntry getByPath(String path, FolderEntry orDefault)
+    {
+        FolderEntry entry = this.root;
+
+        for (String segment : path.trim().split("/"))
+        {
+            for (AbstractEntry folder : entry.entries)
+            {
+                if (folder.isFolder() && folder.title.equalsIgnoreCase(segment))
+                {
+                    entry = (FolderEntry) folder;
+                }
+            }
+        }
+
+        return this.root == entry ? orDefault : entry;
     }
 }
