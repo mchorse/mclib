@@ -42,6 +42,7 @@ public class GlobalTree extends FileTree
         for (FileTree tree : this.trees)
         {
             tree.rebuild();
+            tree.addBackEntry(this.root);
             this.root.entries.add(tree.root);
         }
     }
