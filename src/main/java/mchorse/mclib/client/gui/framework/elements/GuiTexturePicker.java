@@ -11,6 +11,7 @@ import mchorse.mclib.client.gui.framework.elements.list.GuiResourceLocationList;
 import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
 import mchorse.mclib.utils.files.AbstractEntry.FolderEntry;
 import mchorse.mclib.utils.files.FileTree;
+import mchorse.mclib.utils.files.GlobalTree;
 import mchorse.mclib.utils.resources.MultiResourceLocation;
 import mchorse.mclib.utils.resources.RLUtils;
 import net.minecraft.client.Minecraft;
@@ -46,7 +47,7 @@ public class GuiTexturePicker extends GuiElement
 
     public MultiResourceLocation multiRL;
     public ResourceLocation current;
-    public FileTree tree;
+    public FileTree tree = GlobalTree.TREE;
 
     public GuiTexturePicker(Minecraft mc, Consumer<ResourceLocation> callback)
     {
@@ -138,7 +139,7 @@ public class GuiTexturePicker extends GuiElement
 
         if (this.tree != null && rl != null)
         {
-            FolderEntry folder = this.tree.getByPath(rl.getResourcePath());
+            FolderEntry folder = this.tree.getByPath(rl.getResourceDomain() + "/" + rl.getResourcePath());
 
             if (folder != this.tree.root || this.picker.getList().isEmpty())
             {
