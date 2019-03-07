@@ -19,6 +19,17 @@ public class GlobalTree extends FileTree
     public List<FileTree> trees = new ArrayList<FileTree>();
 
     @Override
+    public void needsRebuild()
+    {
+        super.needsRebuild();
+
+        for (FileTree tree : this.trees)
+        {
+            tree.needsRebuild();
+        }
+    }
+
+    @Override
     public void rebuild()
     {
         if (!this.needsRebuild)
