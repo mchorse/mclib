@@ -28,7 +28,15 @@ public abstract class FileTree
     /**
      * Does the tree needs a rebuild 
      */
-    public boolean needsRebuild = true;
+    protected boolean needsRebuild = true;
+
+    /**
+     * Make needs rebuild dirty 
+     */
+    public void needsRebuild()
+    {
+        this.needsRebuild = true;
+    }
 
     /**
      * Rebuild the file tree 
