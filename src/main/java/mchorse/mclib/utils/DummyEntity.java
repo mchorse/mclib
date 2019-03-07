@@ -66,7 +66,7 @@ public class DummyEntity extends EntityLivingBase
             return this.held[1];
         }
 
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
