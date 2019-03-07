@@ -1,5 +1,9 @@
 package mchorse.mclib.utils;
 
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -16,6 +20,7 @@ import net.minecraft.world.World;
 public class DummyEntity extends EntityLivingBase
 {
     private final ItemStack[] held;
+    private final List<ItemStack> emptyList;
     public ItemStack right;
     public ItemStack left;
 
@@ -25,6 +30,7 @@ public class DummyEntity extends EntityLivingBase
 
         this.right = new ItemStack(Items.DIAMOND_SWORD);
         this.left = new ItemStack(Items.GOLDEN_SWORD);
+        this.emptyList = ImmutableList.of();
 
         this.held = new ItemStack[] {null, null};
     }
@@ -51,7 +57,7 @@ public class DummyEntity extends EntityLivingBase
     @Override
     public Iterable<ItemStack> getArmorInventoryList()
     {
-        return null;
+        return this.emptyList;
     }
 
     @Override
