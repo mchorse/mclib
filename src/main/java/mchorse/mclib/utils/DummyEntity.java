@@ -26,7 +26,7 @@ public class DummyEntity extends EntityLivingBase
         this.right = new ItemStack(Items.DIAMOND_SWORD);
         this.left = new ItemStack(Items.GOLDEN_SWORD);
 
-        this.held = new ItemStack[] {null, null};
+        this.held = new ItemStack[] {ItemStack.EMPTY, ItemStack.EMPTY};
     }
 
     public void setItems(ItemStack left, ItemStack right)
@@ -44,7 +44,7 @@ public class DummyEntity extends EntityLivingBase
         }
         else
         {
-            this.held[0] = this.held[1] = null;
+            this.held[0] = this.held[1] = ItemStack.EMPTY;
         }
     }
 
