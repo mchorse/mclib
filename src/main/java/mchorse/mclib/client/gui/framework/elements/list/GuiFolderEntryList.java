@@ -50,7 +50,7 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
     public void setFolder(FolderEntry folder)
     {
         /* Quick jump to children folder that has only one folder */
-        if (folder.entries.size() <= 2)
+        if (folder.entries.size() <= 2 && !folder.isTop())
         {
             boolean hasTop = false;
             FolderEntry otherFolder = null;
@@ -62,7 +62,7 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
                     FolderEntry subFolder = (FolderEntry) subEntry;
 
                     /* Top folders (../) usually simply link their  grandparent's entries */
-                    if (subFolder.parent != null && subFolder.parent.parent != null && subFolder.parent.parent.entries == subFolder.entries)
+                    if (subFolder.isTop())
                     {
                         hasTop = true;
                     }
