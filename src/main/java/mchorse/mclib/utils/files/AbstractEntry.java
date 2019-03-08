@@ -38,6 +38,11 @@ public abstract class AbstractEntry
 
             this.parent = parent;
         }
+
+        public boolean isTop()
+        {
+            return this.parent != null && this.parent.parent != null && this.parent.parent.entries == this.entries;
+        }
     }
 
     public static class FileEntry extends AbstractEntry
