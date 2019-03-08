@@ -51,7 +51,7 @@ public abstract class FileTree
         FolderEntry top = new FolderEntry("../", entry);
 
         top.entries = entry.parent.entries;
-        entry.entries.add(top);
+        entry.entries.add(0, top);
     }
 
     /**

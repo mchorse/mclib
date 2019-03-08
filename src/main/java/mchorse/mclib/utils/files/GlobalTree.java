@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mchorse.mclib.utils.files.AbstractEntry.FolderEntry;
-
 /**
  * Global file tree 
  */
@@ -44,14 +42,11 @@ public class GlobalTree extends FileTree
 
         for (FileTree tree : this.trees)
         {
+            tree.root.parent = this.root;
+
             tree.rebuild();
+            tree.addBackEntry(tree.root);
             this.root.entries.add(tree.root);
-
-            /* Add back to global tree root */
-            FolderEntry top = new FolderEntry("../", this.root);
-
-            top.entries = this.root.entries;
-            tree.root.entries.add(0, top);
         }
 
         Collections.sort(this.root.entries, FileTree.SORTER);
