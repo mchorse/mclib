@@ -21,7 +21,7 @@ public class McLib
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
-    public void onGuiOpen(GuiOpenEvent event)
+    public static void onGuiOpen(GuiOpenEvent event)
     {
         GlobalTree.TREE.needsRebuild();
         GlobalTree.TREE.rebuild();
