@@ -1,3 +1,5 @@
 #PARSE_ESCAPES
 mclib.gui.ok=好
 mclib.gui.cancel=取消
+mclib.gui.multi_skin=多皮膚
+mclib.gui.no_data=沒有資料可用……
