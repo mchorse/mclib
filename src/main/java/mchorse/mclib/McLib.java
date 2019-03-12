@@ -24,6 +24,5 @@ public class McLib
     public static void onGuiOpen(GuiOpenEvent event)
     {
         GlobalTree.TREE.needsRebuild();
-        GlobalTree.TREE.rebuild();
     }
 }
