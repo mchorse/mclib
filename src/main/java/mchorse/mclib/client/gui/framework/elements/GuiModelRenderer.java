@@ -1,9 +1,5 @@
 package mchorse.mclib.client.gui.framework.elements;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
@@ -43,12 +39,6 @@ public abstract class GuiModelRenderer extends GuiElement
     protected float lastX;
     protected float lastY;
 
-    /* Picking items */
-    public List<String> items = new ArrayList<String>();
-    public Consumer<String> callback;
-    public boolean picking = false;
-    public int current = -1;
-
     public GuiModelRenderer(Minecraft mc)
     {
         super(mc);
@@ -73,18 +63,11 @@ public abstract class GuiModelRenderer extends GuiElement
             return true;
         }
 
-        if (mouseButton == 0)
-        {
-            this.picking = true;
-        }
-        else
-        {
-            this.dragging = true;
-            this.lastX = mouseX;
-            this.lastY = mouseY;
+        this.dragging = true;
+        this.lastX = mouseX;
+        this.lastY = mouseY;
 
-            this.position = GuiScreen.isShiftKeyDown() || mouseButton == 2;
-        }
+        this.position = GuiScreen.isShiftKeyDown() || mouseButton == 2;
 
         return false;
     }
@@ -194,13 +177,6 @@ public abstract class GuiModelRenderer extends GuiElement
         GlStateManager.rotate(180.0F + newYaw, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(newPitch, 1.0F, 0.0F, 0.0F);
 
-        /* Pick an item */
-        if (this.picking)
-        {
-            this.picking = false;
-            this.pick(mouseX, mouseY);
-        }
-
         /* Drawing begins */
         this.drawGround();
         this.drawModel(newYaw, newPitch, mouseX, mouseY, partialTicks);
@@ -228,25 +204,9 @@ public abstract class GuiModelRenderer extends GuiElement
     }
 
     /**
-     * Pick an item 
-     */
-    protected void pick(int mouseX, int mouseY)
-    {
-        for (int i = 0, c = this.items.size(); i < c; i++)
-        {
-            this.drawPickableItem(i, this.current);
-        }
-    }
-
-    /**
      * Draw your model here 
      */
     protected abstract void drawModel(float headYaw, float headPitch, int mouseX, int mouseY, float partial);
-
-    /**
-     * Draw a pickable item
-     */
-    protected abstract void drawPickableItem(int id, int current);
 
     /**
      * Render block of grass under the model (which signify where 
