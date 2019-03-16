@@ -42,6 +42,7 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
         };
         this.fileCallback = fileCallback;
         this.scroll.scrollItemSize = 16;
+        this.scroll.scrollSpeed = 16;
     }
 
     /**
