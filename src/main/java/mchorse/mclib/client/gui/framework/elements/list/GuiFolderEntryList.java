@@ -53,30 +53,17 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
         /* Quick jump to children folder that has only one folder */
         if (folder.entries.size() <= 2 && !folder.isTop())
         {
-            boolean hasTop = false;
-            FolderEntry otherFolder = null;
-
             for (AbstractEntry subEntry : folder.entries)
             {
                 if (subEntry.isFolder())
                 {
                     FolderEntry subFolder = (FolderEntry) subEntry;
 
-                    /* Top folders (../) usually simply link their  grandparent's entries */
-                    if (subFolder.isTop())
+                    if (!subFolder.isTop())
                     {
-                        hasTop = true;
-                    }
-                    else
-                    {
-                        otherFolder = subFolder;
+                        this.setFolder(subFolder);
                     }
                 }
-            }
-
-            if (hasTop && otherFolder != null)
-            {
-                this.setFolder(otherFolder);
             }
         }
         else
