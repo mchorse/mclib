@@ -82,6 +82,16 @@ public class GuiTexturePicker extends GuiElement
         this.callback = callback;
     }
 
+    public void refresh()
+    {
+        if (this.tree != null)
+        {
+            this.tree.rebuild();
+        }
+
+        this.picker.update();
+    }
+
     public void fill(ResourceLocation skin)
     {
         this.setMultiSkin(skin, false);
