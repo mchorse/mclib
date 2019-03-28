@@ -1,15 +1,12 @@
 package mchorse.mclib.utils;
 
-import java.util.List;
-
-import com.google.common.collect.ImmutableList;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
+import scala.actors.threadpool.Arrays;
 
 /**
  * Dummy entity
@@ -20,7 +17,6 @@ import net.minecraft.world.World;
 public class DummyEntity extends EntityLivingBase
 {
     private final ItemStack[] held;
-    private final List<ItemStack> emptyList;
     public ItemStack right;
     public ItemStack left;
 
@@ -30,9 +26,7 @@ public class DummyEntity extends EntityLivingBase
 
         this.right = new ItemStack(Items.DIAMOND_SWORD);
         this.left = new ItemStack(Items.GOLDEN_SWORD);
-        this.emptyList = ImmutableList.of();
-
-        this.held = new ItemStack[] {ItemStack.EMPTY, ItemStack.EMPTY};
+        this.held = new ItemStack[] {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
     }
 
     public void setItems(ItemStack left, ItemStack right)
@@ -43,41 +37,37 @@ public class DummyEntity extends EntityLivingBase
 
     public void toggleItems(boolean toggle)
     {
+        int main = EntityEquipmentSlot.MAINHAND.getSlotIndex();
+        int off = EntityEquipmentSlot.OFFHAND.getSlotIndex();
+
         if (toggle)
         {
-            this.held[0] = this.right;
-            this.held[1] = this.left;
+            this.held[main] = this.right;
+            this.held[off] = this.left;
         }
         else
         {
-            this.held[0] = this.held[1] = ItemStack.EMPTY;
+            this.held[main] = this.held[off] = ItemStack.EMPTY;
         }
     }
 
     @Override
     public Iterable<ItemStack> getArmorInventoryList()
     {
-        return this.emptyList;
+        return (Iterable<ItemStack>) Arrays.asList(this.held).iterator();
     }
 
     @Override
     public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn)
     {
-        if (slotIn.equals(EntityEquipmentSlot.MAINHAND))
-        {
-            return this.held[0];
-        }
-        else if (slotIn.equals(EntityEquipmentSlot.OFFHAND))
-        {
-            return this.held[1];
-        }
-
-        return ItemStack.EMPTY;
+        return this.held[slotIn.getSlotIndex()];
     }
 
     @Override
     public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack)
-    {}
+    {
+        this.held[slotIn.getSlotIndex()] = stack;
+    }
 
     @Override
     public EnumHandSide getPrimaryHand()
