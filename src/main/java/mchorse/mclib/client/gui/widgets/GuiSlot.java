@@ -24,6 +24,7 @@ public class GuiSlot
     public GuiSlot(int slot)
     {
         this.slot = slot;
+        this.stack = ItemStack.EMPTY;
     }
 
     public void update(int x, int y)
@@ -41,7 +42,7 @@ public class GuiSlot
         int x = this.area.x + 2;
         int y = this.area.y + 2;
 
-        if (this.stack == null && this.slot != 0)
+        if (this.stack.isEmpty() && this.slot != 0)
         {
             GlStateManager.enableAlpha();
 
