@@ -55,7 +55,7 @@ public class DummyEntity extends EntityLivingBase
     @Override
     public Iterable<ItemStack> getArmorInventoryList()
     {
-        return (Iterable<ItemStack>) Arrays.asList(this.held).iterator();
+        return Arrays.asList(this.held);
     }
 
     @Override
