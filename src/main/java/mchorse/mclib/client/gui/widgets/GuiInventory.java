@@ -100,6 +100,11 @@ public class GuiInventory
      */
     public static void drawItemStack(ItemStack stack, int x, int y, String altText)
     {
+        if (stack == null)
+        {
+            return;
+        }
+
         RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
 
         GlStateManager.pushMatrix();
@@ -107,7 +112,7 @@ public class GuiInventory
         itemRender.zLevel = 200.0F;
 
         FontRenderer font = null;
-        if (stack != null) font = stack.getItem().getFontRenderer(stack);
+        if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
         if (font == null) font = Minecraft.getMinecraft().fontRendererObj;
 
         itemRender.renderItemAndEffectIntoGUI(stack, x, y);
