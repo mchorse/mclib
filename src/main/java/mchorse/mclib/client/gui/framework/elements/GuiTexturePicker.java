@@ -154,7 +154,9 @@ public class GuiTexturePicker extends GuiElement
             if (folder != this.tree.root || this.picker.getList().isEmpty())
             {
                 this.picker.setList(folder.entries);
+                this.picker.sort();
                 this.picker.setCurrent(rl);
+                this.picker.update();
             }
         }
     }
@@ -164,6 +166,18 @@ public class GuiTexturePicker extends GuiElement
      */
     protected void selectCurrent(ResourceLocation rl)
     {
+        try
+        {
+            /* If this code causes an exception, that means that there 
+             * is some issue with the texture, so we should rather not 
+             * use it */
+            this.mc.renderEngine.bindTexture(rl);
+        }
+        catch (Exception e)
+        {
+            return;
+        }
+
         this.current = rl;
         this.picker.rl = rl;
 
