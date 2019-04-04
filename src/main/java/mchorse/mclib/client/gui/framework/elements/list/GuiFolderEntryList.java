@@ -62,16 +62,16 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
                     if (!subFolder.isTop())
                     {
                         this.setFolder(subFolder);
+
+                        return;
                     }
                 }
             }
         }
-        else
-        {
-            this.setList(folder.entries);
-            this.current = -1;
-            this.setCurrent(this.rl);
-        }
+
+        this.setList(folder.entries);
+        this.current = -1;
+        this.setCurrent(this.rl);
     }
 
     public ResourceLocation getCurrentResource()
