@@ -129,14 +129,15 @@ public class Interpolations
      * @param x1 - control point of initial value
      * @param x2 - control point of final value
      * @param t - time (should be 0..1)
+     * @param epsilon - delta that would satisfy the approximation 
      */
-    public static float bezierX(float x1, float x2, float t)
+    public static float bezierX(float x1, float x2, float t, final float epsilon)
     {
         float x = t;
         float init = bezier(0, x1, x2, 1, t);
         float factor = Math.copySign(0.1F, t - init);
 
-        while (Math.abs(t - init) > 0.0005F)
+        while (Math.abs(t - init) > epsilon)
         {
             float oldFactor = factor;
 
@@ -150,6 +151,15 @@ public class Interpolations
         }
 
         return x;
+    }
+
+    /**
+     * Calculate X value for given T using default epsilon value. See 
+     * other overload method for more information. 
+     */
+    public static float bezierX(float x1, float x2, float t)
+    {
+        return bezierX(x1, x2, t, 0.0005F);
     }
 
     /**
