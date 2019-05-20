@@ -11,6 +11,7 @@ import mchorse.mclib.math.functions.Clamp;
 import mchorse.mclib.math.functions.Cos;
 import mchorse.mclib.math.functions.Floor;
 import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.Random;
 import mchorse.mclib.math.functions.Sin;
 import net.minecraft.util.math.MathHelper;
 
@@ -53,6 +54,7 @@ public class MathBuilder
         this.functions.put("cos", Cos.class);
         this.functions.put("floor", Floor.class);
         this.functions.put("sin", Sin.class);
+        this.functions.put("random", Random.class);
     }
 
     /**

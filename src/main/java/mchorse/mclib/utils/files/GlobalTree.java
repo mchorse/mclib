@@ -50,5 +50,7 @@ public class GlobalTree extends FileTree
         }
 
         Collections.sort(this.root.entries, FileTree.SORTER);
+
+        this.needsRebuild = false;
     }
 }
