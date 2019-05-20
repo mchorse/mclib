@@ -36,11 +36,11 @@ public class RLUtils
      * Get stream for multi resource location 
      */
     @SideOnly(Side.CLIENT)
-    public static IResource getStreamForMultiskin(MultiResourceLocation multi)
+    public static IResource getStreamForMultiskin(MultiResourceLocation multi) throws IOException
     {
         if (multi.children.isEmpty())
         {
-            return null;
+            throw new IOException("Multi-skin is empty!");
         }
 
         try
@@ -73,10 +73,12 @@ public class RLUtils
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            throw e;
         }
-
-        return null;
+        catch (Exception e)
+        {
+            throw new IOException(e.getMessage());
+        }
     }
 
     public static ResourceLocation create(String path)
