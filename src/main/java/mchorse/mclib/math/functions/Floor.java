@@ -24,6 +24,6 @@ public class Floor extends Function
     @Override
     public double get()
     {
-        return Math.floor(this.args[0].get());
+        return Math.floor(this.getArg(0));
     }
 }

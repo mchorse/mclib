@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * All it does is provides common code for McHorse's mods.
  */
 @Mod.EventBusSubscriber
-@Mod(modid = McLib.MOD_ID, name = "McLib", version = McLib.VERSION)
+@Mod(modid = McLib.MOD_ID, name = "McLib", version = McLib.VERSION, updateJSON = "https://raw.githubusercontent.com/mchorse/mclib/master/version.json")
 public class McLib
 {
     public static final String MOD_ID = "mclib";
