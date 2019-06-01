@@ -110,12 +110,8 @@ public class GuiTexturePicker extends GuiElement
         }
 
         this.multiList.add(rl);
-        this.multiList.current = this.multiList.getList().indexOf(rl);
-
-        if (this.multiList.current >= 0)
-        {
-            this.displayCurrent(this.multiList.getCurrent());
-        }
+        this.multiList.current = this.multiList.getList().size() - 1;
+        this.displayCurrent(this.multiList.getCurrent());
     }
 
     /**

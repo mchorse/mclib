@@ -24,6 +24,19 @@ public abstract class Function implements IValue
         this.args = values;
     }
 
+    /**
+     * Get the value of nth argument 
+     */
+    public double getArg(int index)
+    {
+        if (index < 0 || index >= this.args.length)
+        {
+            return 0;
+        }
+
+        return this.args[index].get();
+    }
+
     @Override
     public String toString()
     {

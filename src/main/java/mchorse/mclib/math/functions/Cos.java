@@ -24,6 +24,6 @@ public class Cos extends Function
     @Override
     public double get()
     {
-        return Math.cos(this.args[0].get());
+        return Math.cos(this.getArg(0));
     }
 }

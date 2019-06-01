@@ -24,6 +24,6 @@ public class Sin extends Function
     @Override
     public double get()
     {
-        return Math.sin(this.args[0].get());
+        return Math.sin(this.getArg(0));
     }
 }
