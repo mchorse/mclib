@@ -27,6 +27,6 @@ public class Abs extends Function
     @Override
     public double get()
     {
-        return Math.abs(this.args[0].get());
+        return Math.abs(this.getArg(0));
     }
 }
