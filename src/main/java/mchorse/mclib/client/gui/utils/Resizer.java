@@ -187,7 +187,11 @@ public class Resizer
     {
         int value = (int) this.w.value;
 
-        if (this.parent != null && this.w.unit == Measure.RELATIVE)
+        if (this.relative != null && this.w.unit == Measure.RELATIVE)
+        {
+            value = (int) (this.relative.getW() * this.w.value);
+        }
+        else if (this.parent != null && this.w.unit == Measure.RELATIVE)
         {
             value = (int) (this.parent.w * this.w.value);
         }
@@ -206,7 +210,11 @@ public class Resizer
     {
         int value = (int) this.h.value;
 
-        if (this.parent != null && this.h.unit == Measure.RELATIVE)
+        if (this.relative != null && this.h.unit == Measure.RELATIVE)
+        {
+            value = (int) (this.relative.getH() * this.h.value);
+        }
+        else if (this.parent != null && this.h.unit == Measure.RELATIVE)
         {
             value = (int) (this.parent.h * this.h.value);
         }
