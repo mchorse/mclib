@@ -14,6 +14,8 @@ public class Resizer
     public Unit y = new Unit();
     public Unit w = new Unit();
     public Unit h = new Unit();
+    public int maxW = -1;
+    public int maxH = -1;
     public float anchorX;
     public float anchorY;
 
@@ -87,6 +89,20 @@ public class Resizer
     public Resizer h(float value, int padding)
     {
         this.h.set(value, Measure.RELATIVE, padding);
+
+        return this;
+    }
+
+    public Resizer maxW(int max)
+    {
+        this.maxW = max;
+
+        return this;
+    }
+
+    public Resizer maxH(int max)
+    {
+        this.maxH = max;
 
         return this;
     }
