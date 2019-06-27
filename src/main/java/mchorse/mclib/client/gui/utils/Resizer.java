@@ -14,8 +14,8 @@ public class Resizer
     public Unit y = new Unit();
     public Unit w = new Unit();
     public Unit h = new Unit();
-    public int maxW = -1;
-    public int maxH = -1;
+    public int maxW;
+    public int maxH;
     public float anchorX;
     public float anchorY;
 
@@ -192,7 +192,14 @@ public class Resizer
             value = (int) (this.parent.w * this.w.value);
         }
 
-        return value + this.w.padding;
+        value = value + this.w.padding;
+
+        if (this.maxW > 0)
+        {
+            value = Math.min(value, this.maxW);
+        }
+
+        return value;
     }
 
     public int getH()
@@ -204,7 +211,14 @@ public class Resizer
             value = (int) (this.parent.h * this.h.value);
         }
 
-        return value + this.h.padding;
+        value = value + this.h.padding;
+
+        if (this.maxH > 0)
+        {
+            value = Math.min(value, this.maxH);
+        }
+
+        return value;
     }
 
     /**
