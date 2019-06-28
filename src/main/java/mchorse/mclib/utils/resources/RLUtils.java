@@ -146,6 +146,8 @@ public class RLUtils
                     {
                         location.children.add(create(array.get(i)));
                     }
+
+                    return location;
                 }
             }
         }

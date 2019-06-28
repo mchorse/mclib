@@ -14,6 +14,8 @@ public class Resizer
     public Unit y = new Unit();
     public Unit w = new Unit();
     public Unit h = new Unit();
+    public int maxW;
+    public int maxH;
     public float anchorX;
     public float anchorY;
 
@@ -87,6 +89,20 @@ public class Resizer
     public Resizer h(float value, int padding)
     {
         this.h.set(value, Measure.RELATIVE, padding);
+
+        return this;
+    }
+
+    public Resizer maxW(int max)
+    {
+        this.maxW = max;
+
+        return this;
+    }
+
+    public Resizer maxH(int max)
+    {
+        this.maxH = max;
 
         return this;
     }
@@ -171,24 +187,46 @@ public class Resizer
     {
         int value = (int) this.w.value;
 
-        if (this.parent != null && this.w.unit == Measure.RELATIVE)
+        if (this.relative != null && this.w.unit == Measure.RELATIVE)
+        {
+            value = (int) (this.relative.getW() * this.w.value);
+        }
+        else if (this.parent != null && this.w.unit == Measure.RELATIVE)
         {
             value = (int) (this.parent.w * this.w.value);
         }
 
-        return value + this.w.padding;
+        value = value + this.w.padding;
+
+        if (this.maxW > 0)
+        {
+            value = Math.min(value, this.maxW);
+        }
+
+        return value;
     }
 
     public int getH()
     {
         int value = (int) this.h.value;
 
-        if (this.parent != null && this.h.unit == Measure.RELATIVE)
+        if (this.relative != null && this.h.unit == Measure.RELATIVE)
+        {
+            value = (int) (this.relative.getH() * this.h.value);
+        }
+        else if (this.parent != null && this.h.unit == Measure.RELATIVE)
         {
             value = (int) (this.parent.h * this.h.value);
         }
 
-        return value + this.h.padding;
+        value = value + this.h.padding;
+
+        if (this.maxH > 0)
+        {
+            value = Math.min(value, this.maxH);
+        }
+
+        return value;
     }
 
     /**
