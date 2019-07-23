@@ -2,6 +2,17 @@
 
 McLib's change log.
 
+## Version 1.0.3
+
+A small patch update which is accompanied by Aperture 1.3.2 release.
+
+* Added max values for width and height of `Resizer` class
+* Added scrollable base GUI element
+* Added support for relative width and height for `Resizer` class
+* Added `double` variants of interpolation functions
+* Added `Interpolation` enum
+* Fixed issue with JSON multi resource location
+
 ## Version 1.0.2
 
 A small patch update that features a couple of fixes, and one small feature.
