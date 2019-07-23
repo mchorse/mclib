@@ -1,26 +1,29 @@
 {
     "homepage": "https://minecraft.curseforge.com/projects/mchorses-mclib",
     "1.10.2": {
+        "1.0.3": "A small patch update which is accompanied by Aperture 1.3.2 release.",
         "1.0.2": "A small patch update that features a couple of fixes, and one small feature.",
         "1.0.1": "Second update. Mostly provides new code for Blockbuster, Aperture and Metamorph.",
     	"1.0": "Initial release. This bad boy contains so much useful code."
     },
     "1.11.2": {
+        "1.0.3": "A small patch update which is accompanied by Aperture 1.3.2 release.",
         "1.0.2": "A small patch update that features a couple of fixes, and one small feature.",
         "1.0.1": "Second update. Mostly provides new code for Blockbuster, Aperture and Metamorph.",
     	"1.0": "Initial release. This bad boy contains so much useful code."
     },
     "1.12.2": {
+        "1.0.3": "A small patch update which is accompanied by Aperture 1.3.2 release.",
         "1.0.2": "A small patch update that features a couple of fixes, and one small feature.",
         "1.0.1": "Second update. Mostly provides new code for Blockbuster, Aperture and Metamorph.",
     	"1.0": "Initial release. This bad boy contains so much useful code."
     },
     "promos": {
-        "1.10.2-latest": "1.0.2",
+        "1.10.2-latest": "1.0.3",
         "1.10.2-recommended": "1.0.2",
-        "1.11.2-latest": "1.0.2",
+        "1.11.2-latest": "1.0.3",
         "1.11.2-recommended": "1.0.2",
-        "1.12.2-latest": "1.0.2",
+        "1.12.2-latest": "1.0.3",
         "1.12.2-recommended": "1.0.2"
     }
 }
