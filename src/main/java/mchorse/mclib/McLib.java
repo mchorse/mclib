@@ -1,9 +1,12 @@
 package mchorse.mclib;
 
+import java.util.Map;
+
 import mchorse.mclib.utils.files.GlobalTree;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,5 +27,11 @@ public class McLib
     public static void onGuiOpen(GuiOpenEvent event)
     {
         GlobalTree.TREE.needsRebuild();
+    }
+
+    @NetworkCheckHandler
+    public boolean checkModDependencies(Map<String, String> map, Side side)
+    {
+        return true;
     }
 }
