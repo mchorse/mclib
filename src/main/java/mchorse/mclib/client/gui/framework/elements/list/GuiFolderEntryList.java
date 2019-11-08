@@ -21,6 +21,7 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
 {
     public Consumer<FileEntry> fileCallback;
     public ResourceLocation rl;
+    public FolderEntry parent;
 
     public GuiFolderEntryList(Minecraft mc, Consumer<FileEntry> fileCallback)
     {
@@ -69,6 +70,7 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
             }
         }
 
+        this.parent = folder;
         this.setList(folder.entries);
         this.current = -1;
         this.setCurrent(this.rl);
