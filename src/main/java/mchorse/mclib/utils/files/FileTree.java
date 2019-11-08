@@ -48,7 +48,7 @@ public abstract class FileTree
      */
     public void addBackEntry(FolderEntry entry)
     {
-        FolderEntry top = new FolderEntry("../", entry);
+        FolderEntry top = new FolderEntry("../", entry, entry.parent != null ? entry.parent.file : null);
 
         top.entries = entry.parent.entries;
         entry.entries.add(0, top);

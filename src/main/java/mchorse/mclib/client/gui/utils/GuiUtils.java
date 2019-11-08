@@ -15,6 +15,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 
+import java.net.URI;
+import java.net.URL;
+
 /**
  * GUI utilities
  */
@@ -221,7 +224,7 @@ public class GuiUtils
 
     /**
      * Draws a rectangle with a horizontal gradient between with specified
-     * colors, the code is borrowed form {@link #drawGradientRect(int, int, int, int, int, int)}
+     * colors, the code is borrowed form drawGradient()
      */
     public static void drawHorizontalGradientRect(int left, int top, int right, int bottom, int startColor, int endColor, float zLevel)
     {
@@ -253,5 +256,21 @@ public class GuiUtils
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.enableTexture2D();
+    }
+
+    /**
+     * Open a URL
+     */
+    public static void openWebLink(URI uri)
+    {
+        try
+        {
+            Class<?> clazz = Class.forName("java.awt.Desktop");
+            Object object = clazz.getMethod("getDesktop", new Class[0]).invoke(null);
+
+            clazz.getMethod("browse", new Class[] {URI.class}).invoke(object, new Object[] {uri});
+        }
+        catch (Throwable t)
+        {}
     }
 }
