@@ -35,7 +35,8 @@ import net.minecraftforge.fml.client.config.GuiUtils;
 public class GuiTexturePicker extends GuiElement
 {
     public GuiTextElement text;
-    public GuiButtonElement<GuiButton> pick;
+    public GuiButtonElement<GuiButton> close;
+    public GuiButtonElement<GuiButton> folder;
     public GuiFolderEntryList picker;
 
     public GuiButtonElement<GuiButton> multi;
@@ -54,14 +55,23 @@ public class GuiTexturePicker extends GuiElement
         super(mc);
 
         this.text = new GuiTextElement(mc, 1000, (str) -> this.selectCurrent(str.isEmpty() ? null : RLUtils.create(str)));
-        this.pick = GuiButtonElement.button(mc, "X", (b) -> this.setVisible(false));
+        this.close = GuiButtonElement.button(mc, "X", (b) -> this.setVisible(false));
+        this.folder = GuiButtonElement.button(mc, I18n.format("mclib.gui.open_folder"), (b) -> this.openFolder());
         this.picker = new GuiFolderEntryList(mc, (entry) ->
         {
             ResourceLocation rl = entry.resource;
 
             this.selectCurrent(rl);
             this.text.setText(rl == null ? "" : rl.toString());
-        });
+        })  {
+            @Override
+            public void setFolder(FolderEntry folder)
+            {
+                super.setFolder(folder);
+
+                GuiTexturePicker.this.updateFolderButton();
+            }
+        };
 
         this.multi = GuiButtonElement.button(mc, I18n.format("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
         this.multiList = new GuiResourceLocationList(mc, (rl) -> this.displayCurrent(rl));
@@ -70,7 +80,8 @@ public class GuiTexturePicker extends GuiElement
 
         this.createChildren();
         this.text.resizer().set(115, 5, 0, 20).parent(this.area).w(1, -145);
-        this.pick.resizer().set(0, 5, 20, 20).parent(this.area).x(1, -25);
+        this.close.resizer().set(0, 5, 20, 20).parent(this.area).x(1, -25);
+        this.folder.resizer().set(0, 0, 80, 20).parent(this.area).x(1, -90).y(1, - 30);
         this.picker.resizer().set(115, 30, 0, 0).parent(this.area).w(1, -120).h(1, -30);
 
         this.multi.resizer().parent(this.area).set(5, 5, 100, 20);
@@ -78,7 +89,7 @@ public class GuiTexturePicker extends GuiElement
         this.remove.resizer().relative(this.add.resizer()).set(20, 0, 16, 16);
         this.multiList.resizer().set(5, 35, 100, 0).parent(this.area).h(1, -40);
 
-        this.children.add(this.text, this.pick, this.picker, this.multi, this.multiList, this.add, this.remove);
+        this.children.add(this.picker, this.multi, this.multiList, this.text, this.close, this.folder, this.add, this.remove);
         this.callback = callback;
     }
 
@@ -90,6 +101,20 @@ public class GuiTexturePicker extends GuiElement
         }
 
         this.picker.update();
+        this.updateFolderButton();
+    }
+
+    public void openFolder()
+    {
+        if (this.picker.parent != null && this.picker.parent.file != null)
+        {
+            mchorse.mclib.client.gui.utils.GuiUtils.openWebLink(this.picker.parent.file.toURI());
+        }
+    }
+
+    public void updateFolderButton()
+    {
+        this.folder.setEnabled(this.picker.parent != null && this.picker.parent.file != null);
     }
 
     public void fill(ResourceLocation skin)
@@ -150,9 +175,11 @@ public class GuiTexturePicker extends GuiElement
             if (folder != this.tree.root || this.picker.getList().isEmpty())
             {
                 this.picker.setList(folder.entries);
-                this.picker.sort();
+                this.picker.parent = folder;
                 this.picker.setCurrent(rl);
                 this.picker.update();
+
+                this.updateFolderButton();
             }
         }
     }
@@ -253,6 +280,7 @@ public class GuiTexturePicker extends GuiElement
 
         this.picker.resize(screen.width, screen.height);
         this.multi.resize(screen.width, screen.height);
+        this.updateFolderButton();
     }
 
     @Override
@@ -313,7 +341,7 @@ public class GuiTexturePicker extends GuiElement
             }
 
             x -= fw + 10;
-            y -= fh + 10;
+            y -= fh + 40;
 
             this.mc.renderEngine.bindTexture(GuiBase.ICONS);
             GuiUtils.drawContinuousTexturedBox(x, y, 0, 96, fw, fh, 32, 32, 0, 0);

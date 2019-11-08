@@ -1,5 +1,6 @@
 package mchorse.mclib.utils.files;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public abstract class AbstractEntry
     /**
      * Displayable title 
      */
-    public String title = "";
+    public String title;
 
     public AbstractEntry(String title)
     {
@@ -29,6 +30,7 @@ public abstract class AbstractEntry
 
     public static class FolderEntry extends AbstractEntry
     {
+        public File file;
         public FolderEntry parent;
         public List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
 
@@ -37,6 +39,13 @@ public abstract class AbstractEntry
             super(title);
 
             this.parent = parent;
+        }
+
+        public FolderEntry(String title, FolderEntry parent, File file)
+        {
+            this(title, parent);
+
+            this.file = file;
         }
 
         public boolean isTop()
