@@ -186,6 +186,29 @@ public class Interpolations
         return b;
     }
 
+    /**
+     * Envelope function allows to create simple attack, sustain and release function.
+     *
+     * This version only goes from 0 to duration with fade in/out being the same
+     */
+    public static float envelope(float x, float duration, float fades)
+    {
+        return envelope(x, 0, fades, duration - fades, duration);
+    }
+
+    /**
+     * Envelope function allows to create simple attack, sustain and release function.
+     *
+     * This advanced version allows you to specify a more customized range
+     */
+    public static float envelope(float x, float lowIn, float lowOut, float highIn, float highOut)
+    {
+        if (x < lowOut) return (x - lowIn) / (lowOut - lowIn);
+        if (x > highIn) return 1 - (x - highIn) / (highOut - highIn);
+
+        return 1;
+    }
+
     /* --- Double versions of the functions --- */
 
     /**
@@ -322,5 +345,28 @@ public class Interpolations
         }
 
         return b;
+    }
+
+    /**
+     * Envelope function allows to create simple attack, sustain and release function.
+     *
+     * This version only goes from 0 to duration with fade in/out being the same
+     */
+    public static double envelope(double x, double duration, double fades)
+    {
+        return envelope(x, 0, fades, duration - fades, duration);
+    }
+
+    /**
+     * Envelope function allows to create simple attack, sustain and release function.
+     *
+     * This advanced version allows you to specify a more customized range
+     */
+    public static double envelope(double x, double lowIn, double lowOut, double highIn, double highOut)
+    {
+        if (x < lowOut) return (x - lowIn) / (lowOut - lowIn);
+        if (x > highIn) return 1 - (x - highIn) / (highOut - highIn);
+
+        return 1;
     }
 }
