@@ -41,11 +41,30 @@ public abstract class GuiListElement<T> extends GuiElement
      */
     public int current = -1;
 
+    public boolean background = false;
+    public int color = 0x88000000;
+
     public GuiListElement(Minecraft mc, Consumer<T> callback)
     {
         super(mc);
 
         this.callback = callback;
+    }
+
+    public void setBackground()
+    {
+        this.background = true;
+    }
+
+    public void setBackground(int color)
+    {
+        this.setBackground(true, color);
+    }
+
+    public void setBackground(boolean background, int color)
+    {
+        this.background = background;
+        this.color = color;
     }
 
     public void clear()
@@ -101,6 +120,12 @@ public abstract class GuiListElement<T> extends GuiElement
     public void setCurrent(T element)
     {
         this.current = this.list.indexOf(element);
+    }
+
+    public void setCurrentScroll(T element)
+    {
+        this.setCurrent(element);
+        this.scroll.scrollTo(this.current * this.scroll.scrollItemSize);
     }
 
     public void remove(T element)
@@ -170,6 +195,11 @@ public abstract class GuiListElement<T> extends GuiElement
     public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
     {
         this.scroll.drag(mouseX, mouseY);
+
+        if (this.background)
+        {
+            this.area.draw(this.color);
+        }
 
         GuiScreen screen = this.mc.currentScreen;
         int i = 0;
