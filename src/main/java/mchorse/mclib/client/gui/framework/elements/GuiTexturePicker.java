@@ -9,7 +9,7 @@ import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.list.GuiFolderEntryList;
 import mchorse.mclib.client.gui.framework.elements.list.GuiResourceLocationList;
 import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
-import mchorse.mclib.utils.files.AbstractEntry.FolderEntry;
+import mchorse.mclib.utils.files.entries.FolderEntry;
 import mchorse.mclib.utils.files.FileTree;
 import mchorse.mclib.utils.files.GlobalTree;
 import mchorse.mclib.utils.resources.MultiResourceLocation;
@@ -49,6 +49,8 @@ public class GuiTexturePicker extends GuiElement
     public MultiResourceLocation multiRL;
     public ResourceLocation current;
     public FileTree tree = GlobalTree.TREE;
+
+    private long lastChecked;
 
     public GuiTexturePicker(Minecraft mc, Consumer<ResourceLocation> callback)
     {
@@ -95,11 +97,6 @@ public class GuiTexturePicker extends GuiElement
 
     public void refresh()
     {
-        if (this.tree != null)
-        {
-            this.tree.rebuild();
-        }
-
         this.picker.update();
         this.updateFolderButton();
     }
@@ -174,7 +171,7 @@ public class GuiTexturePicker extends GuiElement
 
             if (folder != this.tree.root || this.picker.getList().isEmpty())
             {
-                this.picker.setList(folder.entries);
+                this.picker.setList(folder.getEntries());
                 this.picker.parent = folder;
                 this.picker.setCurrent(rl);
                 this.picker.update();
@@ -294,6 +291,27 @@ public class GuiTexturePicker extends GuiElement
     @Override
     public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
     {
+        /* Refresh the list */
+        long time = System.currentTimeMillis();
+
+        if (this.lastChecked + 1000 < time)
+        {
+            this.lastChecked = time;
+
+            FolderEntry folder = this.picker.parent;
+
+            if (folder != null && folder.isTop())
+            {
+                folder = folder.top;
+            }
+
+            if (folder != null && folder.hasChanged())
+            {
+                this.picker.setDirectFolder(folder);
+            }
+        }
+
+        /* Draw the GUI */
         drawGradientRect(this.area.x, this.area.y, this.area.getX(1), this.area.getY(1), 0x88000000, 0xff000000);
 
         if (this.multiList.isVisible())

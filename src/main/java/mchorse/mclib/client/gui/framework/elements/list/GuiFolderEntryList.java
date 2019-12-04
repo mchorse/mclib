@@ -3,9 +3,9 @@ package mchorse.mclib.client.gui.framework.elements.list;
 import java.util.function.Consumer;
 
 import mchorse.mclib.client.gui.framework.GuiBase;
-import mchorse.mclib.utils.files.AbstractEntry;
-import mchorse.mclib.utils.files.AbstractEntry.FileEntry;
-import mchorse.mclib.utils.files.AbstractEntry.FolderEntry;
+import mchorse.mclib.utils.files.entries.AbstractEntry;
+import mchorse.mclib.utils.files.entries.FileEntry;
+import mchorse.mclib.utils.files.entries.FolderEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -52,9 +52,9 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
     public void setFolder(FolderEntry folder)
     {
         /* Quick jump to children folder that has only one folder */
-        if (folder.entries.size() <= 2 && !folder.isTop())
+        if (folder.getEntries().size() <= 2 && !folder.isTop())
         {
-            for (AbstractEntry subEntry : folder.entries)
+            for (AbstractEntry subEntry : folder.getEntries())
             {
                 if (subEntry.isFolder())
                 {
@@ -70,8 +70,13 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
             }
         }
 
+        this.setDirectFolder(folder);
+    }
+
+    public void setDirectFolder(FolderEntry folder)
+    {
         this.parent = folder;
-        this.setList(folder.entries);
+        this.setList(folder.getEntries());
         this.current = -1;
         this.setCurrent(this.rl);
     }
