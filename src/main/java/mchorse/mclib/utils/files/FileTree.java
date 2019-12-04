@@ -3,7 +3,8 @@ package mchorse.mclib.utils.files;
 import java.util.Comparator;
 
 import mchorse.mclib.client.gui.framework.elements.GuiTexturePicker;
-import mchorse.mclib.utils.files.AbstractEntry.FolderEntry;
+import mchorse.mclib.utils.files.entries.AbstractEntry;
+import mchorse.mclib.utils.files.entries.FolderEntry;
 
 /**
  * File tree
@@ -14,44 +15,30 @@ import mchorse.mclib.utils.files.AbstractEntry.FolderEntry;
 public abstract class FileTree
 {
     /**
-     * Abstract entry sorter. Sorts folders on top first, and then by 
+     * Abstract entry sorter. Sorts folders on top first, and then by
      * the display title name   
      */
     public static Comparator<AbstractEntry> SORTER = new EntrySorter();
 
     /**
-     * Root entry, this top folder should be populated in 
-     * {@link #rebuild()} method.
+     * Root entry, this top folder should be populated in
      */
-    public FolderEntry root = new FolderEntry("root", null);
-
-    /**
-     * Does the tree needs a rebuild 
-     */
-    protected boolean needsRebuild = true;
-
-    /**
-     * Make needs rebuild dirty 
-     */
-    public void needsRebuild()
-    {
-        this.needsRebuild = true;
-    }
-
-    /**
-     * Rebuild the file tree 
-     */
-    public abstract void rebuild();
+    public FolderEntry root = new FolderEntry("root", null, null);
 
     /**
      * Adds a "back to parent directory" entry 
      */
-    public void addBackEntry(FolderEntry entry)
+    public static void addBackEntry(FolderEntry entry)
     {
-        FolderEntry top = new FolderEntry("../", entry, entry.parent != null ? entry.parent.file : null);
+        if (entry.parent == null)
+        {
+            return;
+        }
 
-        top.entries = entry.parent.entries;
-        entry.entries.add(0, top);
+        FolderEntry top = new FolderEntry("../", entry.parent != null ? entry.parent.file : null, entry);
+
+        top.setTop(entry.parent);
+        entry.getRawEntries().add(0, top);
     }
 
     /**
@@ -59,16 +46,11 @@ public abstract class FileTree
      */
     public FolderEntry getEntryForName(String name)
     {
-        for (AbstractEntry entry : this.root.entries)
+        for (AbstractEntry entry : this.root.getEntries())
         {
-            if (entry instanceof FolderEntry)
+            if (entry instanceof FolderEntry && entry.title.equalsIgnoreCase(name))
             {
-                FolderEntry folder = (FolderEntry) entry;
-
-                if (folder.title.equalsIgnoreCase(name))
-                {
-                    return folder;
-                }
+                return (FolderEntry) entry;
             }
         }
 
@@ -90,16 +72,18 @@ public abstract class FileTree
     public FolderEntry getByPath(String path, FolderEntry orDefault)
     {
         FolderEntry entry = this.root;
+        String[] segments = path.trim().split("/");
 
-        for (String segment : path.trim().split("/"))
+        for (String segment : segments)
         {
-            for (AbstractEntry folder : entry.entries)
+            for (AbstractEntry folder : entry.getEntries())
             {
                 if (folder.isFolder() && folder.title.equalsIgnoreCase(segment))
                 {
                     entry = (FolderEntry) folder;
                 }
             }
+
         }
 
         return this.root == entry ? orDefault : entry;
