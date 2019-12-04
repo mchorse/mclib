@@ -22,13 +22,6 @@ public class McLib
     public static final String MOD_ID = "mclib";
     public static final String VERSION = "%VERSION%";
 
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public static void onGuiOpen(GuiOpenEvent event)
-    {
-        GlobalTree.TREE.needsRebuild();
-    }
-
     @NetworkCheckHandler
     public boolean checkModDependencies(Map<String, String> map, Side side)
     {

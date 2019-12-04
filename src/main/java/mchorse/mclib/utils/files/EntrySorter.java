@@ -1,9 +1,10 @@
 package mchorse.mclib.utils.files;
 
-import java.util.Comparator;
+import mchorse.mclib.utils.files.entries.AbstractEntry;
+import mchorse.mclib.utils.files.entries.FileEntry;
+import mchorse.mclib.utils.files.entries.FolderEntry;
 
-import mchorse.mclib.utils.files.AbstractEntry.FileEntry;
-import mchorse.mclib.utils.files.AbstractEntry.FolderEntry;
+import java.util.Comparator;
 
 /**
  * Abstract entry sorter
