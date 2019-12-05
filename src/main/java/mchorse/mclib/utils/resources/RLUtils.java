@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -32,6 +34,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class RLUtils
 {
+    private static List<IResourceTransformer> transformers = new ArrayList<IResourceTransformer>();
+
     /**
      * Get stream for multi resource location 
      */
@@ -81,11 +85,16 @@ public class RLUtils
         }
     }
 
+    public static void register(IResourceTransformer transformer)
+    {
+        transformers.add(transformer);
+    }
+
     public static ResourceLocation create(String path)
     {
-        if (path.startsWith("blockbuster.actors:"))
+        for (IResourceTransformer transformer : transformers)
         {
-            path = "b.a" + path.substring(18);
+            path = transformer.transform(path);
         }
 
         return new ResourceLocation(path);
@@ -93,9 +102,10 @@ public class RLUtils
 
     public static ResourceLocation create(String domain, String path)
     {
-        if (domain.equals("blockbuster.actors"))
+        for (IResourceTransformer transformer : transformers)
         {
-            domain = "b.a";
+            domain = transformer.transformDomain(domain);
+            path = transformer.transformPath(path);
         }
 
         return new ResourceLocation(domain, path);
@@ -113,7 +123,7 @@ public class RLUtils
 
                 for (int i = 1; i < list.tagCount(); i++)
                 {
-                    multi.children.add(RLUtils.create(list.getStringTagAt(i)));
+                    multi.children.add(create(list.getStringTagAt(i)));
                 }
 
                 return multi;
@@ -221,46 +231,5 @@ public class RLUtils
         }
 
         return null;
-    }
-
-    /**
-     * Get resource location from actor's model and skin strings
-     */
-    public static ResourceLocation fromString(String skin, String model)
-    {
-        if (skin.isEmpty())
-        {
-            return null;
-        }
-
-        if (skin.indexOf(":") == -1)
-        {
-            String prefix = (skin.indexOf("/") == -1 ? model + "/" : "");
-
-            return create("b.a", prefix + skin);
-        }
-
-        return create(skin);
-    }
-
-    /**
-     * Get string from resource location in human readable format
-     */
-    public static String fromResource(ResourceLocation skin)
-    {
-        if (skin == null)
-        {
-            return "";
-        }
-
-        if (skin.getResourceDomain().equals("b.a"))
-        {
-            String[] splits = skin.getResourcePath().split("/");
-
-            /* Returns name of the skin ("$model/$skin") */
-            return splits[splits.length - 1];
-        }
-
-        return skin.toString();
     }
 }
