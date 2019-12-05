@@ -48,8 +48,6 @@ public class FolderEntry extends AbstractEntry
         {
             if (this.hasChanged())
             {
-                System.out.println(this.getPrefix() + "/" + this.title + " " + this.lastModified);
-
                 this.populateEntries();
             }
 
