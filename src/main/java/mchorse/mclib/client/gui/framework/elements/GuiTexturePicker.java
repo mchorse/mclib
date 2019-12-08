@@ -2,6 +2,9 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import java.util.function.Consumer;
 
+import mchorse.mclib.utils.files.entries.AbstractEntry;
+import mchorse.mclib.utils.files.entries.FileEntry;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import mchorse.mclib.client.gui.framework.GuiBase;
@@ -51,6 +54,8 @@ public class GuiTexturePicker extends GuiElement
     public FileTree tree = GlobalTree.TREE;
 
     private long lastChecked;
+    private long lastTyped;
+    private String typed = "";
 
     public GuiTexturePicker(Minecraft mc, Consumer<ResourceLocation> callback)
     {
@@ -286,6 +291,81 @@ public class GuiTexturePicker extends GuiElement
         /* Necessary measure to avoid triggering buttons when you press 
          * on a text field, for example */
         return super.mouseClicked(mouseX, mouseY, mouseButton) || (this.isVisible() && this.area.isInside(mouseX, mouseY));
+    }
+
+    @Override
+    public void keyTyped(char typedChar, int keyCode)
+    {
+        if (this.hasActiveTextfields() || !this.pickByTyping(typedChar))
+        {
+            super.keyTyped(typedChar, keyCode);
+        }
+        else if (keyCode == Keyboard.KEY_RETURN)
+        {
+            AbstractEntry entry = this.picker.getCurrent();
+
+            if (entry instanceof FolderEntry)
+            {
+                this.picker.setFolder((FolderEntry) entry);
+                this.lastTyped = 0;
+            }
+        }
+        else if (keyCode == Keyboard.KEY_UP)
+        {
+            this.moveCurrent(-1);
+        }
+        else if (keyCode == Keyboard.KEY_DOWN)
+        {
+            this.moveCurrent(1);
+        }
+    }
+
+    protected void moveCurrent(int factor)
+    {
+        int index = this.picker.current + factor;
+        int length = this.picker.getList().size();
+
+        if (index < 0) index = length - 1;
+        if (index >= length) index = 0;
+
+        this.picker.current = index;
+
+        AbstractEntry entry = this.picker.getCurrent();
+
+        if (entry instanceof FileEntry)
+        {
+            this.selectCurrent(((FileEntry) entry).resource);
+        }
+    }
+
+    protected boolean pickByTyping(char typedChar)
+    {
+        long diff = System.currentTimeMillis() - this.lastTyped;
+
+        if (diff > 500)
+        {
+            this.typed = "";
+        }
+
+        this.typed += Character.toString(typedChar);
+        this.lastTyped = System.currentTimeMillis();
+
+        for (AbstractEntry entry : this.picker.getList())
+        {
+            if (entry.title.startsWith(this.typed))
+            {
+                this.picker.setCurrentScroll(entry);
+
+                if (entry instanceof FileEntry)
+                {
+                    this.selectCurrent(((FileEntry) entry).resource);
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
