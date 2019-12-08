@@ -4,6 +4,8 @@ import java.util.function.Consumer;
 
 import mchorse.mclib.utils.files.entries.AbstractEntry;
 import mchorse.mclib.utils.files.entries.FileEntry;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -307,16 +309,21 @@ public class GuiTexturePicker extends GuiElement
             if (entry instanceof FolderEntry)
             {
                 this.picker.setFolder((FolderEntry) entry);
-                this.lastTyped = 0;
             }
+            else if (entry instanceof FileEntry)
+            {
+                this.selectCurrent(((FileEntry) entry).resource);
+            }
+
+            this.typed = "";
         }
         else if (keyCode == Keyboard.KEY_UP)
         {
-            this.moveCurrent(-1);
+            this.moveCurrent(-1, GuiScreen.isShiftKeyDown());
         }
         else if (keyCode == Keyboard.KEY_DOWN)
         {
-            this.moveCurrent(1);
+            this.moveCurrent(1, GuiScreen.isShiftKeyDown());
         }
         else if (!this.pickByTyping(typedChar))
         {
@@ -324,29 +331,31 @@ public class GuiTexturePicker extends GuiElement
         }
     }
 
-    protected void moveCurrent(int factor)
+    protected void moveCurrent(int factor, boolean top)
     {
         int index = this.picker.current + factor;
         int length = this.picker.getList().size();
 
         if (index < 0) index = length - 1;
-        if (index >= length) index = 0;
+        else if (index >= length) index = 0;
+
+        if (top) index = factor > 0 ? length - 1 : 0;
 
         this.picker.current = index;
-
-        AbstractEntry entry = this.picker.getCurrent();
-
-        if (entry instanceof FileEntry)
-        {
-            this.selectCurrent(((FileEntry) entry).resource);
-        }
+        this.picker.scroll.scrollIntoView(index * this.picker.scroll.scrollItemSize);
+        this.typed = "";
     }
 
     protected boolean pickByTyping(char typedChar)
     {
+        if (!ChatAllowedCharacters.isAllowedCharacter(typedChar))
+        {
+            return false;
+        }
+
         long diff = System.currentTimeMillis() - this.lastTyped;
 
-        if (diff > 500)
+        if (diff > 1000)
         {
             this.typed = "";
         }
@@ -359,11 +368,6 @@ public class GuiTexturePicker extends GuiElement
             if (entry.title.startsWith(this.typed))
             {
                 this.picker.setCurrentScroll(entry);
-
-                if (entry instanceof FileEntry)
-                {
-                    this.selectCurrent(((FileEntry) entry).resource);
-                }
 
                 return true;
             }
@@ -412,6 +416,16 @@ public class GuiTexturePicker extends GuiElement
         }
 
         super.draw(tooltip, mouseX, mouseY, partialTicks);
+
+        if (System.currentTimeMillis() - this.lastTyped < 1000)
+        {
+            int w = this.font.getStringWidth(this.typed);
+            int x = this.text.area.x;
+            int y = this.text.area.getY(1);
+
+            Gui.drawRect(x, y, x + w + 4, y + 4 + this.font.FONT_HEIGHT, 0x880088ff);
+            this.font.drawStringWithShadow(this.typed, x + 2, y + 2, 0xffffff);
+        }
 
         ResourceLocation loc = this.current;
 

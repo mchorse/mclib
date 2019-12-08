@@ -69,6 +69,23 @@ public class ScrollArea extends Area
         this.clamp();
     }
 
+    public void scrollIntoView(int x)
+    {
+        this.scrollIntoView(x, this.scrollItemSize);
+    }
+
+    public void scrollIntoView(int x, int bottomOffset)
+    {
+        if (this.scroll > x)
+        {
+            this.scrollTo(x);
+        }
+        else if (x > this.scroll + this.direction.getSide(this) - bottomOffset)
+        {
+            this.scrollTo(x - this.direction.getSide(this) + bottomOffset);
+        }
+    }
+
     /**
      * Clamp scroll to the bounds of the scroll size; 
      */
