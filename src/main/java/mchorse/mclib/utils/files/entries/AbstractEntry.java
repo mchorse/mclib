@@ -43,7 +43,7 @@ public abstract class AbstractEntry
         {
             AbstractEntry entry = (AbstractEntry) obj;
 
-            return Objects.equals(this.title, entry.title) && Objects.equals(this.file, entry.file) && this.getClass() == entry.getClass();
+            return Objects.equals(this.title, entry.title) && Objects.equals(this.file, entry.file);
         }
 
         return super.equals(obj);
