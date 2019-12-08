@@ -296,7 +296,7 @@ public class GuiTexturePicker extends GuiElement
     @Override
     public void keyTyped(char typedChar, int keyCode)
     {
-        if (this.hasActiveTextfields() || !this.pickByTyping(typedChar))
+        if (this.hasActiveTextfields())
         {
             super.keyTyped(typedChar, keyCode);
         }
@@ -317,6 +317,10 @@ public class GuiTexturePicker extends GuiElement
         else if (keyCode == Keyboard.KEY_DOWN)
         {
             this.moveCurrent(1);
+        }
+        else if (!this.pickByTyping(typedChar))
+        {
+            super.keyTyped(typedChar, keyCode);
         }
     }
 
