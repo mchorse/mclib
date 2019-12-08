@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements.list;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import mchorse.mclib.client.gui.framework.GuiBase;
@@ -75,10 +76,17 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
 
     public void setDirectFolder(FolderEntry folder)
     {
+        List<AbstractEntry> entries = folder.getEntries();
+        AbstractEntry current = this.getCurrent();
+
         this.parent = folder;
-        this.setList(folder.getEntries());
-        this.current = -1;
-        this.setCurrent(this.rl);
+        this.setList(entries);
+        this.current = current == null ? -1 : entries.indexOf(current);
+
+        if (this.current == -1)
+        {
+            this.setCurrent(this.rl);
+        }
     }
 
     public ResourceLocation getCurrentResource()
