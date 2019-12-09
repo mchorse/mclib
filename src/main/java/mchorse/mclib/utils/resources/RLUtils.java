@@ -104,8 +104,11 @@ public class RLUtils
     {
         for (IResourceTransformer transformer : transformers)
         {
-            domain = transformer.transformDomain(domain);
-            path = transformer.transformPath(path);
+            String newDomain = transformer.transformDomain(domain, path);
+            String newPath = transformer.transformPath(domain, path);
+
+            domain = newDomain;
+            path = newPath;
         }
 
         return new ResourceLocation(domain, path);
