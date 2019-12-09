@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework;
 
 import java.io.IOException;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import mchorse.mclib.McLib;
@@ -128,6 +129,8 @@ public class GuiBase extends GuiScreen
         {
             this.mc.setIngameFocus();
         }
+
+        Keyboard.enableRepeatEvents(false);
     }
 
     @Override
