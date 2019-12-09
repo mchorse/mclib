@@ -6,6 +6,7 @@ import mchorse.mclib.client.gui.framework.GuiTooltip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
 import net.minecraft.client.gui.GuiTextField;
+import org.lwjgl.input.Keyboard;
 
 /**
  * GUI text element
@@ -93,7 +94,14 @@ public class GuiTextElement extends GuiElement implements GuiResponder
             return true;
         }
 
+        boolean wasFocused = this.field.isFocused();
+
         this.field.mouseClicked(mouseX, mouseY, mouseButton);
+
+        if (wasFocused != this.field.isFocused())
+        {
+            Keyboard.enableRepeatEvents(this.field.isFocused());
+        }
 
         return false;
     }
@@ -109,6 +117,8 @@ public class GuiTextElement extends GuiElement implements GuiResponder
     {
         super.unfocus();
         this.field.setFocused(false);
+
+        Keyboard.enableRepeatEvents(this.field.isFocused());
     }
 
     @Override
