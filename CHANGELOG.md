@@ -2,6 +2,19 @@
 
 McLib's change log.
 
+## Version 1.0.4
+
+This is a patch update which reworks file tree system, improves texture picker GUI and a couple of other neat features.
+
+* Added key repeating (`Keyboard.enableRepeatEvents(true);`) (suggested by Tschipp)
+* Added "Open folder" to texture picker to open current folder 
+* Added `Interpolations.envelope()` methods which allow to easily make fade in/out factor calculations based on given time value, and durations of fade in, sustain and fade out
+* Added background option for list elemenet
+* Added refreshing of current folder in texture picker
+* Added `IResourceTransformer` to allow fixing any resource locations created via `RLUtils`
+* Added keyboard control to texture picker. You can now use arrows up/down to go up and down in the list, shift + arrow up/down to jump in the beginning/end of the list, type in the name to select the closest matching and enter to select the file/enter the folder
+* Changed the way file tree system works to allow lazy loading (instead of full tree generation) and check for changes
+
 ## Version 1.0.3
 
 A small patch update which is accompanied by Aperture 1.3.2 release.
