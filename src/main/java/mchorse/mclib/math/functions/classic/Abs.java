@@ -1,21 +1,16 @@
-package mchorse.mclib.math.functions;
+package mchorse.mclib.math.functions.classic;
 
 import mchorse.mclib.math.IValue;
+import mchorse.mclib.math.functions.Function;
 
 /**
  * Absolute value function 
  */
 public class Abs extends Function
 {
-    public Abs(IValue[] values) throws Exception
+    public Abs(IValue[] values, String name) throws Exception
     {
-        super(values);
-    }
-
-    @Override
-    public String getName()
-    {
-        return "abs";
+        super(values, name);
     }
 
     @Override

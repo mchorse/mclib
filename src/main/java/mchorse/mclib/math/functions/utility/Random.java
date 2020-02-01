@@ -1,14 +1,15 @@
-package mchorse.mclib.math.functions;
+package mchorse.mclib.math.functions.utility;
 
 import mchorse.mclib.math.IValue;
+import mchorse.mclib.math.functions.Function;
 
 public class Random extends Function
 {
     public java.util.Random random;
 
-    public Random(IValue[] values) throws Exception
+    public Random(IValue[] values, String name) throws Exception
     {
-        super(values);
+        super(values, name);
 
         this.random = new java.util.Random();
     }
@@ -44,11 +45,5 @@ public class Random extends Function
         }
 
         return random;
-    }
-
-    @Override
-    public String getName()
-    {
-        return "random";
     }
 }

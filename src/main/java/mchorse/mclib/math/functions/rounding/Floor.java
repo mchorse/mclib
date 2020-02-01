@@ -1,18 +1,13 @@
-package mchorse.mclib.math.functions;
+package mchorse.mclib.math.functions.rounding;
 
 import mchorse.mclib.math.IValue;
+import mchorse.mclib.math.functions.Function;
 
 public class Floor extends Function
 {
-    public Floor(IValue[] values) throws Exception
+    public Floor(IValue[] values, String name) throws Exception
     {
-        super(values);
-    }
-
-    @Override
-    public String getName()
-    {
-        return "floor";
+        super(values, name);
     }
 
     @Override
