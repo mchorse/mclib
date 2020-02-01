@@ -1,18 +1,13 @@
-package mchorse.mclib.math.functions;
+package mchorse.mclib.math.functions.classic;
 
 import mchorse.mclib.math.IValue;
+import mchorse.mclib.math.functions.Function;
 
 public class Sin extends Function
 {
-    public Sin(IValue[] values) throws Exception
+    public Sin(IValue[] values, String name) throws Exception
     {
-        super(values);
-    }
-
-    @Override
-    public String getName()
-    {
-        return "sin";
+        super(values, name);
     }
 
     @Override

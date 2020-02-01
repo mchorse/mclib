@@ -1,18 +1,13 @@
-package mchorse.mclib.math.functions;
+package mchorse.mclib.math.functions.classic;
 
 import mchorse.mclib.math.IValue;
+import mchorse.mclib.math.functions.Function;
 
 public class Cos extends Function
 {
-    public Cos(IValue[] values) throws Exception
+    public Cos(IValue[] values, String name) throws Exception
     {
-        super(values);
-    }
-
-    @Override
-    public String getName()
-    {
-        return "cos";
+        super(values, name);
     }
 
     @Override

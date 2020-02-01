@@ -6,13 +6,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mchorse.mclib.math.functions.Abs;
-import mchorse.mclib.math.functions.Clamp;
-import mchorse.mclib.math.functions.Cos;
-import mchorse.mclib.math.functions.Floor;
+import mchorse.mclib.math.functions.classic.Abs;
+import mchorse.mclib.math.functions.classic.Mod;
+import mchorse.mclib.math.functions.classic.Pow;
+import mchorse.mclib.math.functions.rounding.Ceil;
+import mchorse.mclib.math.functions.limit.Clamp;
+import mchorse.mclib.math.functions.classic.Cos;
+import mchorse.mclib.math.functions.classic.Exp;
+import mchorse.mclib.math.functions.rounding.Floor;
 import mchorse.mclib.math.functions.Function;
-import mchorse.mclib.math.functions.Random;
-import mchorse.mclib.math.functions.Sin;
+import mchorse.mclib.math.functions.utility.Lerp;
+import mchorse.mclib.math.functions.classic.Ln;
+import mchorse.mclib.math.functions.limit.Max;
+import mchorse.mclib.math.functions.limit.Min;
+import mchorse.mclib.math.functions.utility.Random;
+import mchorse.mclib.math.functions.rounding.Round;
+import mchorse.mclib.math.functions.classic.Sin;
+import mchorse.mclib.math.functions.classic.Sqrt;
+import mchorse.mclib.math.functions.rounding.Trunc;
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -48,12 +59,29 @@ public class MathBuilder
         this.register(new Variable("PI", Math.PI));
         this.register(new Variable("E", Math.E));
 
-        /* Some default functions */
-        this.functions.put("abs", Abs.class);
-        this.functions.put("clamp", Clamp.class);
-        this.functions.put("cos", Cos.class);
+        /* Rounding functions */
         this.functions.put("floor", Floor.class);
+        this.functions.put("round", Round.class);
+        this.functions.put("ceil", Ceil.class);
+        this.functions.put("trunc", Trunc.class);
+
+        /* Selection and limit functions */
+        this.functions.put("clamp", Clamp.class);
+        this.functions.put("max", Max.class);
+        this.functions.put("min", Min.class);
+
+        /* Classical functions */
+        this.functions.put("abs", Abs.class);
+        this.functions.put("cos", Cos.class);
         this.functions.put("sin", Sin.class);
+        this.functions.put("exp", Exp.class);
+        this.functions.put("ln", Ln.class);
+        this.functions.put("sqrt", Sqrt.class);
+        this.functions.put("mod", Mod.class);
+        this.functions.put("pow", Pow.class);
+
+        /* Utility functions */
+        this.functions.put("lerp", Lerp.class);
         this.functions.put("random", Random.class);
     }
 
@@ -72,7 +100,7 @@ public class MathBuilder
     public IValue parse(String expression) throws Exception
     {
         /* If given string have illegal characters, then it can't be parsed */
-        if (!expression.matches("^[\\w\\d\\s_+-/*%^.,()]+$"))
+        if (!expression.matches("^[\\w\\d\\s_+-/*%^&|<>=!?:.,()]+$"))
         {
             throw new Exception("Given expression '" + expression + "' contains illegal characters!");
         }
@@ -123,8 +151,9 @@ public class MathBuilder
         for (int i = 0; i < len; i++)
         {
             String s = chars[i];
+            boolean longOperator = i > 0 && this.isOperator(chars[i - 1] + s);
 
-            if (this.isOperator(s) || s.equals(","))
+            if (this.isOperator(s) || longOperator || s.equals(","))
             {
                 /* Taking care of a special case of using minus sign to 
                  * invert the positive value */
@@ -141,6 +170,12 @@ public class MathBuilder
 
                         continue;
                     }
+                }
+
+                if (longOperator)
+                {
+                    s = chars[i - 1] + s;
+                    buffer = buffer.substring(0, buffer.length() - 1);
                 }
 
                 /* Push buffer and operator */
@@ -220,6 +255,13 @@ public class MathBuilder
     @SuppressWarnings("unchecked")
     public IValue parseSymbols(List<Object> symbols) throws Exception
     {
+        IValue ternary = this.tryTernary(symbols);
+
+        if (ternary != null)
+        {
+            return ternary;
+        }
+
         int size = symbols.size();
 
         /* Constant, variable or group (parenthesis) */
@@ -294,6 +336,60 @@ public class MathBuilder
     }
 
     /**
+     * Try parsing a ternary expression
+     *
+     * From what we know, with ternary expressions, we should have only one ? and :,
+     * and some elements from beginning till ?, in between ? and :, and also some
+     * remaining elements after :.
+     */
+    protected IValue tryTernary(List<Object> symbols) throws Exception
+    {
+        int question = -1;
+        int questions = 0;
+        int colon = -1;
+        int colons = 0;
+        int size = symbols.size();
+
+        for (int i = 0; i < size; i ++)
+        {
+            Object object = symbols.get(i);
+
+            if (object instanceof String)
+            {
+                if (object.equals("?"))
+                {
+                    if (question == -1)
+                    {
+                        question = i;
+                    }
+
+                    questions ++;
+                }
+                else if (object.equals(":"))
+                {
+                    if (colons + 1 == questions && colon == -1)
+                    {
+                        colon = i;
+                    }
+
+                    colons ++;
+                }
+            }
+        }
+
+        if (questions == colons && question > 0 && question + 1 < colon && colon < size - 1)
+        {
+            return new Ternary(
+                this.parseSymbols(symbols.subList(0, question)),
+                this.parseSymbols(symbols.subList(question + 1, colon)),
+                this.parseSymbols(symbols.subList(colon + 1, size))
+            );
+        }
+
+        return null;
+    }
+
+    /**
      * Create a function value
      * 
      * This method in comparison to {@link #valueFromObject(Object)} 
@@ -304,8 +400,19 @@ public class MathBuilder
      * mixed with operators, groups, values and commas. And then plug it 
      * in to a class constructor with given name. 
      */
-    private IValue createFunction(String first, List<Object> args) throws Exception
+    protected IValue createFunction(String first, List<Object> args) throws Exception
     {
+        /* Handle special cases with negation */
+        if (first.equals("!"))
+        {
+            return new Negate(this.parseSymbols(args));
+        }
+
+        if (first.startsWith("!") && first.length() > 1)
+        {
+            return new Negate(this.createFunction(first.substring(1), args));
+        }
+
         if (!this.functions.containsKey(first))
         {
             throw new Exception("Function '" + first + "' couldn't be found!");
@@ -333,8 +440,8 @@ public class MathBuilder
         }
 
         Class<? extends Function> function = this.functions.get(first);
-        Constructor<? extends Function> ctor = function.getConstructor(IValue[].class);
-        Function func = ctor.newInstance(new Object[] {values.toArray(new IValue[values.size()])});
+        Constructor<? extends Function> ctor = function.getConstructor(IValue[].class, String.class);
+        Function func = ctor.newInstance(values.toArray(new IValue[values.size()]), first);
 
         return func;
     }
@@ -352,6 +459,12 @@ public class MathBuilder
         if (object instanceof String)
         {
             String symbol = (String) object;
+
+            /* Variable and constant negation */
+            if (symbol.startsWith("!"))
+            {
+                return new Negate(this.valueFromObject(symbol.substring(1)));
+            }
 
             if (this.isDecimal(symbol))
             {
@@ -393,7 +506,7 @@ public class MathBuilder
     /**
      * Get operation for given operator strings 
      */
-    private Operation operationForOperator(String op) throws Exception
+    protected Operation operationForOperator(String op) throws Exception
     {
         for (Operation operation : Operation.values())
         {
@@ -409,12 +522,12 @@ public class MathBuilder
     /**
      * Whether given object is a variable 
      */
-    private boolean isVariable(Object o)
+    protected boolean isVariable(Object o)
     {
         return o instanceof String && !this.isDecimal((String) o) && !this.isOperator((String) o);
     }
 
-    private boolean isOperator(Object o)
+    protected boolean isOperator(Object o)
     {
         return o instanceof String && this.isOperator((String) o);
     }
@@ -422,16 +535,16 @@ public class MathBuilder
     /**
      * Whether string is an operator 
      */
-    private boolean isOperator(String s)
+    protected boolean isOperator(String s)
     {
-        return s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/") || s.equals("%") || s.equals("^");
+        return Operation.OPERATORS.contains(s) || s.equals("?") || s.equals(":");
     }
 
     /**
      * Whether string is numeric (including whether it's a floating 
      * number) 
      */
-    private boolean isDecimal(String s)
+    protected boolean isDecimal(String s)
     {
         return s.matches("^-?\\d+(\\.\\d+)?$");
     }

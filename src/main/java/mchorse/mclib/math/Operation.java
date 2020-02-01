@@ -1,5 +1,8 @@
 package mchorse.mclib.math;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Operation enumeration
  * 
@@ -59,7 +62,86 @@ public enum Operation
         {
             return Math.pow(a, b);
         }
+    },
+    AND("&&", 5)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return a != 0 && b != 0 ? 1 : 0;
+        }
+    },
+    OR("||", 5)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return a != 0 || b != 0 ? 1 : 0;
+        }
+    },
+    LESS("<", 5)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return a < b ? 1 : 0;
+        }
+    },
+    LESS_THAN("<=", 5)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return a <= b ? 1 : 0;
+        }
+    },
+    GREATER_THAN(">=", 5)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return a >= b ? 1 : 0;
+        }
+    },
+    GREATER(">", 5)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return a > b ? 1 : 0;
+        }
+    },
+    EQUALS("==", 5)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return equals(a, b) ? 1 : 0;
+        }
+    },
+    NOT_EQUALS("!=", 5)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return !equals(a, b) ? 1 : 0;
+        }
     };
+
+    public final static Set<String> OPERATORS = new HashSet<String>();
+
+    public static boolean equals(double a, double b)
+    {
+        return Math.abs(a - b) < 0.00001;
+    }
+
+    static
+    {
+        for (Operation op : values())
+        {
+            OPERATORS.add(op.sign);
+        }
+    }
 
     /**
      * String-ified name of this operation  
