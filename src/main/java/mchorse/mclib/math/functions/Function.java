@@ -11,8 +11,9 @@ import mchorse.mclib.math.IValue;
 public abstract class Function implements IValue
 {
     protected IValue[] args;
+    protected String name;
 
-    public Function(IValue[] values) throws Exception
+    public Function(IValue[] values, String name) throws Exception
     {
         if (values.length < this.getRequiredArguments())
         {
@@ -22,6 +23,7 @@ public abstract class Function implements IValue
         }
 
         this.args = values;
+        this.name = name;
     }
 
     /**
@@ -58,7 +60,10 @@ public abstract class Function implements IValue
     /**
      * Get name of this function 
      */
-    public abstract String getName();
+    public String getName()
+    {
+        return this.name;
+    }
 
     /**
      * Get minimum count of arguments this function needs

@@ -1,19 +1,14 @@
-package mchorse.mclib.math.functions;
+package mchorse.mclib.math.functions.limit;
 
 import mchorse.mclib.math.IValue;
+import mchorse.mclib.math.functions.Function;
 import net.minecraft.util.math.MathHelper;
 
 public class Clamp extends Function
 {
-    public Clamp(IValue[] values) throws Exception
+    public Clamp(IValue[] values, String name) throws Exception
     {
-        super(values);
-    }
-
-    @Override
-    public String getName()
-    {
-        return "clamp";
+        super(values, name);
     }
 
     @Override
