@@ -3,7 +3,7 @@ package mchorse.mclib.math;
 /**
  * Negate operator class
  *
- * This class is responsible for negating the given value
+ * This class is responsible for negating given value
  */
 public class Negate implements IValue
 {
