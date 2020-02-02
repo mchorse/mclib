@@ -19,6 +19,7 @@ import mchorse.mclib.math.functions.utility.Lerp;
 import mchorse.mclib.math.functions.classic.Ln;
 import mchorse.mclib.math.functions.limit.Max;
 import mchorse.mclib.math.functions.limit.Min;
+import mchorse.mclib.math.functions.utility.LerpRotate;
 import mchorse.mclib.math.functions.utility.Random;
 import mchorse.mclib.math.functions.rounding.Round;
 import mchorse.mclib.math.functions.classic.Sin;
@@ -46,7 +47,7 @@ public class MathBuilder
      * Named variables that can be used in math expression by this 
      * builder
      */
-    public Map<String, IValue> variables = new HashMap<String, IValue>();
+    public Map<String, Variable> variables = new HashMap<String, Variable>();
 
     /**
      * Map of functions which can be used in the math expressions
@@ -82,15 +83,16 @@ public class MathBuilder
 
         /* Utility functions */
         this.functions.put("lerp", Lerp.class);
+        this.functions.put("lerprotate", LerpRotate.class);
         this.functions.put("random", Random.class);
     }
 
     /**
      * Register a variable 
      */
-    public void register(Variable var)
+    public void register(Variable variable)
     {
-        this.variables.put(var.getName(), var);
+        this.variables.put(variable.getName(), variable);
     }
 
     /**
@@ -98,6 +100,14 @@ public class MathBuilder
      * used to execute math.
      */
     public IValue parse(String expression) throws Exception
+    {
+        return this.parseSymbols(this.breakdownChars(this.breakdown(expression)));
+    }
+
+    /**
+     * Breakdown an expression
+     */
+    public String[] breakdown(String expression) throws Exception
     {
         /* If given string have illegal characters, then it can't be parsed */
         if (!expression.matches("^[\\w\\d\\s_+-/*%^&|<>=!?:.,()]+$"))
@@ -136,7 +146,7 @@ public class MathBuilder
             throw new Exception("Given expression '" + expression + "' has more uneven amount of parenthesis, there are " + left + " open and " + right + " closed!");
         }
 
-        return this.parseSymbols(this.breakdownChars(chars));
+        return chars;
     }
 
     /**
@@ -276,7 +286,7 @@ public class MathBuilder
             Object first = symbols.get(0);
             Object second = symbols.get(1);
 
-            if (this.isVariable(first) && second instanceof List)
+            if ((this.isVariable(first) || first.equals("-")) && second instanceof List)
             {
                 return this.createFunction((String) first, (List<Object>) second);
             }
@@ -413,6 +423,17 @@ public class MathBuilder
             return new Negate(this.createFunction(first.substring(1), args));
         }
 
+        /* Handle inversion of the value */
+        if (first.equals("-"))
+        {
+            return new Negative(this.parseSymbols(args));
+        }
+
+        if (first.startsWith("-") && first.length() > 1)
+        {
+            return new Negative(this.createFunction(first.substring(1), args));
+        }
+
         if (!this.functions.containsKey(first))
         {
             throw new Exception("Function '" + first + "' couldn't be found!");
@@ -473,10 +494,10 @@ public class MathBuilder
             else if (this.isVariable(symbol))
             {
                 /* Need to account for a negative value variable */
-                if (symbol.indexOf("-") == 0)
+                if (symbol.startsWith("-"))
                 {
                     symbol = symbol.substring(1);
-                    IValue value = this.variables.get(symbol);
+                    IValue value = this.getVariable(symbol);
 
                     if (value instanceof Variable)
                     {
@@ -485,7 +506,7 @@ public class MathBuilder
                 }
                 else
                 {
-                    IValue value = this.variables.get(symbol);
+                    IValue value = this.getVariable(symbol);
 
                     /* Avoid NPE */
                     if (value != null)
@@ -501,6 +522,14 @@ public class MathBuilder
         }
 
         throw new Exception("Given object couldn't be converted to value! " + object);
+    }
+
+    /**
+     * Get variable
+     */
+    protected Variable getVariable(String name)
+    {
+        return this.variables.get(name);
     }
 
     /**

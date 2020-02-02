@@ -30,21 +30,4 @@ public class McLib
     {
         return true;
     }
-
-    public static void main(String[] args)
-    {
-        MathBuilder builder = new MathBuilder();
-        builder.register(new Variable("hacks", 11));
-
-        try {
-            IValue value = builder.parse("!sqrt(4) - trunc(-1.75)");
-
-            int i = 10 > 5 ? 16 < 5 ? 15 : 6 : 50 == 5 ? 5 : 7;
-
-            System.out.println(value.get());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
