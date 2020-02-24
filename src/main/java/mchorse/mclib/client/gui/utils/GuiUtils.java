@@ -259,6 +259,19 @@ public class GuiUtils
     }
 
     /**
+     * Open web link
+     */
+    public static void openWebLink(String address)
+    {
+        try
+        {
+            openWebLink(new URI(address));
+        }
+        catch (Exception e)
+        {}
+    }
+
+    /**
      * Open a URL
      */
     public static void openWebLink(URI uri)
