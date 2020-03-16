@@ -95,6 +95,7 @@ public abstract class GuiScrollElement extends GuiElement
 
         this.scroll.drawScrollbar();
         context.mouseY -= this.scroll.scroll;
+        context.tooltip.area.y -= this.scroll.scroll;
     }
 
     protected void preDraw(GuiContext context)

@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import mchorse.mclib.client.gui.widgets.GuiTrackpad;
 import mchorse.mclib.client.gui.widgets.GuiTrackpad.ITrackpadListener;
 import net.minecraft.client.Minecraft;
+import org.lwjgl.input.Keyboard;
 
 public class GuiTrackpadElement extends GuiElement implements ITrackpadListener, IFocusedGuiElement
 {
@@ -84,13 +85,14 @@ public class GuiTrackpadElement extends GuiElement implements ITrackpadListener,
     public void focus(GuiContext context)
     {
         this.trackpad.text.setFocused(true);
-
+        Keyboard.enableRepeatEvents(true);
     }
 
     @Override
     public void unfocus(GuiContext context)
     {
-
+        this.trackpad.text.setFocused(false);
+        Keyboard.enableRepeatEvents(false);
     }
 
     @Override

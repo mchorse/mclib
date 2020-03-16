@@ -38,12 +38,12 @@ public class GuiElement extends Gui implements IGuiElement
     /**
      * Parent GUI element
      */
-    private GuiElement parent;
+    protected GuiElement parent;
 
     /**
      * Children elements
      */
-    private GuiElements<IGuiElement> children;
+    protected GuiElements<IGuiElement> children;
 
     /**
      * Cached children unmodifiable list
@@ -87,7 +87,7 @@ public class GuiElement extends Gui implements IGuiElement
 
     public List<IGuiElement> getChildren()
     {
-        if (this.children == null)
+        if (this.children == null || this.children.elements.isEmpty())
         {
             return Collections.emptyList();
         }
