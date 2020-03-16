@@ -21,14 +21,12 @@ public abstract class GuiScrollElement extends GuiElement
     public GuiScrollElement(Minecraft mc)
     {
         super(mc);
-
-        this.createChildren();
     }
 
     @Override
-    public void resize(int width, int height)
+    public void resize()
     {
-        super.resize(width, height);
+        super.resize();
 
         this.scroll.copy(this.area);
     }

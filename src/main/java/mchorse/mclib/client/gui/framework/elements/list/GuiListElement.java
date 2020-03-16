@@ -142,9 +142,9 @@ public abstract class GuiListElement<T> extends GuiElement
     }
 
     @Override
-    public void resize(int width, int height)
+    public void resize()
     {
-        super.resize(width, height);
+        super.resize();
 
         this.scroll.copy(this.area);
         this.scroll.clamp();

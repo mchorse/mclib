@@ -48,9 +48,9 @@ public class GuiTrackpadElement extends GuiElement implements ITrackpadListener
     }
 
     @Override
-    public void resize(int width, int height)
+    public void resize()
     {
-        super.resize(width, height);
+        super.resize();
 
         this.trackpad.update(this.area.x, this.area.y, this.area.w, this.area.h);
     }
@@ -92,5 +92,7 @@ public class GuiTrackpadElement extends GuiElement implements ITrackpadListener
     public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
     {
         this.trackpad.draw(mouseX, mouseY, partialTicks);
+
+        super.draw(tooltip, mouseX, mouseY, partialTicks);
     }
 }

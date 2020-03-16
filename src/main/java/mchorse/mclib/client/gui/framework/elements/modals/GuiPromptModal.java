@@ -33,7 +33,7 @@ public class GuiPromptModal extends GuiModal
         this.cancel = GuiButtonElement.button(mc, I18n.format("mclib.gui.cancel"), (b) -> this.parent.setDelegate(null));
         this.cancel.resizer().parent(this.area).set(10, 0, 0, 20).x(0.5F, 5).y(1, -30).w(0.5F, -15);
 
-        this.children.add(this.text, this.confirm, this.cancel);
+        this.add(this.text, this.confirm, this.cancel);
     }
 
     public GuiPromptModal setValue(String value)

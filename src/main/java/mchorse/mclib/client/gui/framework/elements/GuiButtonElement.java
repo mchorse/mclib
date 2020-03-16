@@ -15,7 +15,6 @@ public class GuiButtonElement<T extends GuiButton> extends GuiElement
 {
     public T button;
     public Consumer<GuiButtonElement<T>> callback;
-    public Tooltip tooltip;
 
     public static GuiButtonElement<GuiCheckBox> checkbox(Minecraft mc, String label, boolean value, Consumer<GuiButtonElement<GuiCheckBox>> callback)
     {
@@ -39,13 +38,6 @@ public class GuiButtonElement<T extends GuiButton> extends GuiElement
         this.callback = callback;
     }
 
-    public GuiButtonElement<T> tooltip(String label, TooltipDirection direction)
-    {
-        this.tooltip = new Tooltip(label, direction);
-
-        return this;
-    }
-
     @Override
     public void setEnabled(boolean enabled)
     {
@@ -61,9 +53,9 @@ public class GuiButtonElement<T extends GuiButton> extends GuiElement
     }
 
     @Override
-    public void resize(int width, int height)
+    public void resize()
     {
-        super.resize(width, height);
+        super.resize();
 
         this.button.xPosition = this.area.x;
         this.button.yPosition = this.area.y;
@@ -98,11 +90,8 @@ public class GuiButtonElement<T extends GuiButton> extends GuiElement
     @Override
     public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
     {
-        if (this.area.isInside(mouseX, mouseY) && this.enabled && this.tooltip != null)
-        {
-            tooltip.set(this, this.tooltip);
-        }
-
         this.button.drawButton(this.mc, mouseX, mouseY);
+
+        super.draw(tooltip, mouseX, mouseY, partialTicks);
     }
 }

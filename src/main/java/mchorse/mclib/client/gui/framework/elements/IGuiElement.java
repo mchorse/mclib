@@ -8,9 +8,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IGuiElement
 {
     /**
-     * Should be called by the screen when it was resized 
+     * Should be called when position has to be recalculated
      */
-    public void resize(int width, int height);
+    public void resize();
 
     /**
      * Whether this element is enabled (and can accept any input) 

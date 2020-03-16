@@ -28,7 +28,7 @@ public abstract class GuiSearchListElement<T> extends GuiElement
         this.list = this.createList(mc, callback);
         this.list.resizer().parent(this.area).set(0, 20, 0, 0).w(1, 0).h(1, -20);
 
-        this.createChildren().children.add(this.search, this.list);
+        this.add(this.search, this.list);
     }
 
     protected abstract GuiListElement<T> createList(Minecraft mc, Consumer<T> callback);

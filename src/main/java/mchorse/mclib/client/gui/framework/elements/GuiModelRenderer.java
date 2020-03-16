@@ -112,9 +112,9 @@ public abstract class GuiModelRenderer extends GuiElement
     @Override
     public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
     {
-        super.draw(tooltip, mouseX, mouseY, partialTicks);
         this.update();
         this.drawModel(mouseX, mouseY, partialTicks);
+        super.draw(tooltip, mouseX, mouseY, partialTicks);
     }
 
     /**

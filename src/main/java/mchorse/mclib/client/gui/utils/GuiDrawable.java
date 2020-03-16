@@ -15,7 +15,7 @@ public class GuiDrawable implements IGuiElement
     }
 
     @Override
-    public void resize(int width, int height)
+    public void resize()
     {}
 
     @Override

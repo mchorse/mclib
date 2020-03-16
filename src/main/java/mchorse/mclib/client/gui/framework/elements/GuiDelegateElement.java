@@ -24,14 +24,8 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implem
 
     public void setDelegate(T element)
     {
-        GuiScreen screen = this.mc.currentScreen;
-
         this.delegate = element;
-
-        if (screen != null)
-        {
-            this.resize(screen.width, screen.height);
-        }
+        this.resize();
     }
 
     @Override
@@ -47,7 +41,7 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implem
     }
 
     @Override
-    public void resize(int width, int height)
+    public void resize()
     {
         if (this.delegate instanceof GuiElement)
         {
@@ -56,7 +50,7 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implem
 
         if (this.delegate != null)
         {
-            this.delegate.resize(width, height);
+            this.delegate.resize();
         }
     }
 

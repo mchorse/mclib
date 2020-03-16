@@ -87,7 +87,6 @@ public class GuiTexturePicker extends GuiElement
         this.add = GuiButtonElement.icon(mc, GuiBase.ICONS, 32, 32, 32, 48, (b) -> this.addMultiSkin());
         this.remove = GuiButtonElement.icon(mc, GuiBase.ICONS, 64, 32, 64, 48, (b) -> this.removeMultiSkin());
 
-        this.createChildren();
         this.text.resizer().set(115, 5, 0, 20).parent(this.area).w(1, -145);
         this.close.resizer().set(0, 5, 20, 20).parent(this.area).x(1, -25);
         this.folder.resizer().set(0, 0, 80, 20).parent(this.area).x(1, -90).y(1, - 30);
@@ -98,7 +97,7 @@ public class GuiTexturePicker extends GuiElement
         this.remove.resizer().relative(this.add.resizer()).set(20, 0, 16, 16);
         this.multiList.resizer().set(5, 35, 100, 0).parent(this.area).h(1, -40);
 
-        this.children.add(this.picker, this.multi, this.multiList, this.text, this.close, this.folder, this.add, this.remove);
+        this.add(this.picker, this.multi, this.multiList, this.text, this.close, this.folder, this.add, this.remove);
         this.callback = callback;
     }
 
@@ -280,10 +279,8 @@ public class GuiTexturePicker extends GuiElement
         this.add.setVisible(show);
         this.remove.setVisible(show);
 
-        GuiScreen screen = this.mc.currentScreen;
-
-        this.picker.resize(screen.width, screen.height);
-        this.multi.resize(screen.width, screen.height);
+        this.picker.resize();
+        this.multi.resize();
         this.updateFolderButton();
     }
 

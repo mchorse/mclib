@@ -33,7 +33,7 @@ public class GuiBase extends GuiScreen
     public void initGui()
     {
         this.area.set(0, 0, this.width, this.height);
-        this.elements.resize(this.width, this.height);
+        this.elements.resize();
     }
 
     @Override

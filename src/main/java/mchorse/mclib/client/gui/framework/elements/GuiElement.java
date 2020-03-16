@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements;
 
+import com.google.common.collect.ImmutableList;
 import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Resizer;
@@ -8,6 +9,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class GuiElement extends Gui implements IGuiElement
@@ -23,9 +28,29 @@ public class GuiElement extends Gui implements IGuiElement
     public Resizer resizer;
 
     /**
+     * Tooltip instance
+     */
+    public GuiTooltip.Tooltip tooltip;
+
+    /**
+     * Hide tooltip
+     */
+    public boolean hideTooltip;
+
+    /**
+     * Parent GUI element
+     */
+    private GuiElement parent;
+
+    /**
      * Children elements
      */
-    public GuiElements<IGuiElement> children;
+    private GuiElements<IGuiElement> children;
+
+    /**
+     * Cached children unmodifiable list
+     */
+    private List<IGuiElement> cachedChilden;
 
     /**
      * Whether this element is enabled (can handle any input) 
@@ -50,13 +75,94 @@ public class GuiElement extends Gui implements IGuiElement
         this.font = mc.fontRendererObj;
     }
 
-    public GuiElement createChildren()
+    /* Hierarchy management */
+
+    public GuiElement getParent()
     {
-        /* Create children only if they're absent */
+        return this.parent;
+    }
+
+    public boolean hasParent()
+    {
+        return this.parent != null;
+    }
+
+    public List<IGuiElement> getChildren()
+    {
+        if (this.children == null)
+        {
+            return Collections.emptyList();
+        }
+
+        if (this.cachedChilden == null)
+        {
+            this.cachedChilden = Collections.unmodifiableList(this.children.elements);
+        }
+
+        return this.cachedChilden;
+    }
+
+    public void add(IGuiElement element)
+    {
         if (this.children == null)
         {
             this.children = new GuiElements<IGuiElement>();
         }
+
+        this.addChild(element);
+    }
+
+    public void add(IGuiElement... elements)
+    {
+        if (this.children == null)
+        {
+            this.children = new GuiElements<IGuiElement>();
+        }
+
+        for (IGuiElement element : elements)
+        {
+            this.addChild(element);
+        }
+    }
+
+    private void addChild(IGuiElement element)
+    {
+        if (element instanceof GuiElement)
+        {
+            ((GuiElement) element).parent = this;
+        }
+
+        this.children.add(element);
+    }
+
+    public void removeFromParent()
+    {
+        if (this.hasParent())
+        {
+            this.parent.remove(this);
+        }
+    }
+
+    public void remove(GuiElement element)
+    {
+        if (this.children.elements.remove(element))
+        {
+            element.parent = null;
+        }
+    }
+
+    /* Tooltip */
+
+    public GuiElement tooltip(String label, GuiTooltip.TooltipDirection direction)
+    {
+        this.tooltip = new GuiTooltip.Tooltip(label, direction);
+
+        return this;
+    }
+
+    public GuiElement hideTooltip()
+    {
+        this.hideTooltip = true;
 
         return this;
     }
@@ -113,7 +219,7 @@ public class GuiElement extends Gui implements IGuiElement
      * override only needed methods in subclasses */
 
     @Override
-    public void resize(int width, int height)
+    public void resize()
     {
         if (this.resizer != null)
         {
@@ -122,7 +228,7 @@ public class GuiElement extends Gui implements IGuiElement
 
         if (this.children != null)
         {
-            this.children.resize(width, height);
+            this.children.resize();
         }
     }
 
@@ -189,6 +295,15 @@ public class GuiElement extends Gui implements IGuiElement
     @Override
     public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
     {
+        if (this.tooltip != null && this.area.isInside(mouseX, mouseY))
+        {
+            tooltip.set(this, this.tooltip);
+        }
+        else if (this.hideTooltip && this.area.isInside(mouseX, mouseY))
+        {
+            tooltip.set(null, null);
+        }
+
         if (this.children != null)
         {
             this.children.draw(tooltip, mouseX, mouseY, partialTicks);

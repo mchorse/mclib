@@ -18,6 +18,6 @@ public class GuiMessageModal extends GuiModal
         this.button = GuiButtonElement.button(mc, I18n.format("mclib.gui.ok"), (b) -> parent.setDelegate(null));
         this.button.resizer().parent(this.area).set(10, 0, 0, 20).y(1, -30).w(1, -20);
 
-        this.children.add(this.button);
+        this.add(this.button);
     }
 }

@@ -139,6 +139,7 @@ public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
         this.mc.renderEngine.bindTexture(GuiBase.ICONS);
 
         GlStateManager.color(1, 1, 1, hover ? 0.8F : 0.6F);
+
         if (element instanceof FolderEntry)
         {
             Gui.drawScaledCustomSizeModalRect(x + 2, y, 112, 64, 16, 16, 16, 16, 256, 256);

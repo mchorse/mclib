@@ -43,11 +43,11 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
     }
 
     @Override
-    public void resize(int width, int height)
+    public void resize()
     {
         for (T element : this.elements)
         {
-            element.resize(width, height);
+            element.resize();
         }
     }
 

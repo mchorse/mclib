@@ -28,7 +28,6 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
     {
         super(mc);
 
-        this.createChildren();
         this.view = new GuiDelegateElement<T>(mc, null);
         this.view.resizer().parent(this.area).set(0, 0, 1, 1, Measure.RELATIVE).h(1, -20);
 
@@ -46,7 +45,7 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
             }
         });
 
-        this.children.add(drawable, this.buttons, this.view);
+        this.add(drawable, this.buttons, this.view);
     }
 
     /**

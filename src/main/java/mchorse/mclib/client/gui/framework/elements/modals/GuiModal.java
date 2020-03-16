@@ -22,7 +22,6 @@ public abstract class GuiModal extends GuiElement
     {
         super(mc);
 
-        this.createChildren();
         this.parent = parent;
         this.label = label;
     }
