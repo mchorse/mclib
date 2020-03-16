@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import org.lwjgl.opengl.GL11;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.GuiUtils;
 import mchorse.mclib.client.gui.utils.ScrollArea;
@@ -151,8 +151,11 @@ public abstract class GuiListElement<T> extends GuiElement
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
+        int mouseX = context.mouseX;
+        int mouseY = context.mouseY;
+
         if (this.scroll.mouseClicked(mouseX, mouseY))
         {
             return true;
@@ -180,20 +183,23 @@ public abstract class GuiListElement<T> extends GuiElement
     }
 
     @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, int scroll)
+    public boolean mouseScrolled(GuiContext context)
     {
-        return this.scroll.mouseScroll(mouseX, mouseY, scroll);
+        return this.scroll.mouseScroll(context.mouseX, context.mouseY, context.mouseWheel);
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int state)
+    public void mouseReleased(GuiContext context)
     {
-        this.scroll.mouseReleased(mouseX, mouseY);
+        this.scroll.mouseReleased(context.mouseX, context.mouseY);
     }
 
     @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
+    public void draw(GuiContext context)
     {
+        int mouseX = context.mouseX;
+        int mouseY = context.mouseY;
+
         this.scroll.drag(mouseX, mouseY);
 
         if (this.background)
@@ -234,7 +240,7 @@ public abstract class GuiListElement<T> extends GuiElement
 
         this.scroll.drawScrollbar();
 
-        super.draw(tooltip, mouseX, mouseY, partialTicks);
+        super.draw(context);
     }
 
     /**

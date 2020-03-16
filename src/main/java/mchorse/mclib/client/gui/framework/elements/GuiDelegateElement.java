@@ -2,9 +2,7 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import java.io.IOException;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,13 +29,13 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implem
     @Override
     public boolean isEnabled()
     {
-        return this.delegate == null ? false : this.delegate.isEnabled();
+        return this.delegate != null && this.delegate.isEnabled();
     }
 
     @Override
     public boolean isVisible()
     {
-        return this.delegate == null ? true : this.delegate.isVisible();
+        return this.delegate == null || this.delegate.isVisible();
     }
 
     @Override
@@ -66,48 +64,23 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implem
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
-        if (this.delegate != null)
-        {
-            return this.delegate.mouseClicked(mouseX, mouseY, mouseButton);
-        }
-
-        return false;
+        return this.delegate != null && this.delegate.mouseClicked(context);
     }
 
     @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, int scroll)
+    public boolean mouseScrolled(GuiContext context)
     {
-        if (this.delegate != null)
-        {
-            return this.delegate.mouseScrolled(mouseX, mouseY, scroll);
-        }
-
-        return false;
+        return this.delegate != null && this.delegate.mouseScrolled(context);
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int state)
+    public void mouseReleased(GuiContext context)
     {
         if (this.delegate != null)
         {
-            this.delegate.mouseReleased(mouseX, mouseY, state);
-        }
-    }
-
-    @Override
-    public boolean hasActiveTextfields()
-    {
-        return this.delegate != null ? this.delegate.hasActiveTextfields() : false;
-    }
-
-    @Override
-    public void unfocus()
-    {
-        if (this.delegate != null)
-        {
-            this.delegate.unfocus();
+            this.delegate.mouseReleased(context);
         }
     }
 
@@ -123,20 +96,17 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implem
     }
 
     @Override
-    public void keyTyped(char typedChar, int keyCode)
+    public boolean keyTyped(GuiContext context)
     {
-        if (this.delegate != null)
-        {
-            this.delegate.keyTyped(typedChar, keyCode);
-        }
+        return this.delegate != null && this.delegate.keyTyped(context);
     }
 
     @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
+    public void draw(GuiContext context)
     {
         if (this.delegate != null)
         {
-            this.delegate.draw(tooltip, mouseX, mouseY, partialTicks);
+            this.delegate.draw(context);
         }
     }
 }

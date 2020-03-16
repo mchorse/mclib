@@ -3,7 +3,6 @@ package mchorse.mclib.client.gui.framework.elements;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.utils.DummyEntity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -56,39 +55,42 @@ public abstract class GuiModelRenderer extends GuiElement
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
-        if (super.mouseClicked(mouseX, mouseY, mouseButton))
+        if (super.mouseClicked(context))
         {
             return true;
         }
 
         this.dragging = true;
-        this.lastX = mouseX;
-        this.lastY = mouseY;
+        this.lastX = context.mouseX;
+        this.lastY = context.mouseY;
 
-        this.position = GuiScreen.isShiftKeyDown() || mouseButton == 2;
+        this.position = GuiScreen.isShiftKeyDown() || context.mouseButton == 2;
 
         return false;
     }
 
     @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, int scroll)
+    public boolean mouseScrolled(GuiContext context)
     {
-        if (super.mouseScrolled(mouseX, mouseY, scroll))
+        if (super.mouseScrolled(context))
         {
             return true;
         }
 
-        this.scale += Math.copySign(0.25F, scroll);
+        this.scale += Math.copySign(0.25F, context.mouseWheel);
         this.scale = MathHelper.clamp_float(this.scale, -1.5F, 30);
 
         return false;
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int state)
+    public void mouseReleased(GuiContext context)
     {
+        int mouseX = context.mouseX;
+        int mouseY = context.mouseY;
+
         if (this.dragging)
         {
             if (this.position)
@@ -106,15 +108,15 @@ public abstract class GuiModelRenderer extends GuiElement
         this.dragging = false;
         this.position = false;
 
-        super.mouseReleased(mouseX, mouseY, state);
+        super.mouseReleased(context);
     }
 
     @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
+    public void draw(GuiContext context)
     {
         this.update();
-        this.drawModel(mouseX, mouseY, partialTicks);
-        super.draw(tooltip, mouseX, mouseY, partialTicks);
+        this.drawModel(context.mouseX, context.mouseY, context.partialTicks);
+        super.draw(context);
     }
 
     /**

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip;
-
 /**
  * GUI elements collection
  * 
@@ -33,7 +31,6 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
         if (element != null) this.elements.add(element);
     }
 
-    @SuppressWarnings("unchecked")
     public void add(T... elements)
     {
         for (T element : elements)
@@ -91,13 +88,13 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
         for (int i = this.elements.size() - 1; i >= 0; i--)
         {
             T element = this.elements.get(i);
 
-            if (element.isEnabled() && element.mouseClicked(mouseX, mouseY, mouseButton))
+            if (element.isEnabled() && element.mouseClicked(context))
             {
                 return true;
             }
@@ -107,13 +104,13 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
     }
 
     @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, int scroll)
+    public boolean mouseScrolled(GuiContext context)
     {
         for (int i = this.elements.size() - 1; i >= 0; i--)
         {
             T element = this.elements.get(i);
 
-            if (element.isEnabled() && element.mouseScrolled(mouseX, mouseY, scroll))
+            if (element.isEnabled() && element.mouseScrolled(context))
             {
                 return true;
             }
@@ -123,7 +120,7 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int state)
+    public void mouseReleased(GuiContext context)
     {
         for (int i = this.elements.size() - 1; i >= 0; i--)
         {
@@ -131,34 +128,8 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
 
             if (element.isEnabled())
             {
-                element.mouseReleased(mouseX, mouseY, state);
+                element.mouseReleased(context);
             }
-        }
-    }
-
-    @Override
-    public boolean hasActiveTextfields()
-    {
-        if (this.isEnabled())
-        {
-            for (T element : this.elements)
-            {
-                if (element.isEnabled() && element.hasActiveTextfields())
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public void unfocus()
-    {
-        for (T element : this.elements)
-        {
-            element.unfocus();
         }
     }
 
@@ -180,25 +151,29 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
     }
 
     @Override
-    public void keyTyped(char typedChar, int keyCode)
+    public boolean keyTyped(GuiContext context)
     {
-        for (T element : this.elements)
+        for (int i = this.elements.size() - 1; i >= 0; i--)
         {
-            if (element.isEnabled())
+            T element = this.elements.get(i);
+
+            if (element.isEnabled() && element.keyTyped(context))
             {
-                element.keyTyped(typedChar, keyCode);
+                return true;
             }
         }
+
+        return false;
     }
 
     @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
+    public void draw(GuiContext context)
     {
         for (T element : this.elements)
         {
             if (element.isVisible())
             {
-                element.draw(tooltip, mouseX, mouseY, partialTicks);
+                element.draw(context);
             }
         }
     }

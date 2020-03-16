@@ -2,7 +2,6 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import java.util.function.Consumer;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
 import net.minecraft.client.gui.GuiTextField;
@@ -13,7 +12,7 @@ import org.lwjgl.input.Keyboard;
  * 
  * This element is a wrapper for the text field class
  */
-public class GuiTextElement extends GuiElement implements GuiResponder
+public class GuiTextElement extends GuiElement implements GuiResponder, IFocusedGuiElement
 {
     public GuiTextField field;
     public Consumer<String> callback;
@@ -87,53 +86,56 @@ public class GuiTextElement extends GuiElement implements GuiResponder
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
-        if (super.mouseClicked(mouseX, mouseY, mouseButton))
+        if (super.mouseClicked(context))
         {
             return true;
         }
 
         boolean wasFocused = this.field.isFocused();
 
-        this.field.mouseClicked(mouseX, mouseY, mouseButton);
+        this.field.mouseClicked(context.mouseX, context.mouseY, context.mouseButton);
 
         if (wasFocused != this.field.isFocused())
         {
-            Keyboard.enableRepeatEvents(this.field.isFocused());
+            context.focus(wasFocused ? null : this);
         }
 
         return false;
     }
 
     @Override
-    public boolean hasActiveTextfields()
+    public boolean isFocused()
     {
-        return this.isEnabled() && this.field.isFocused();
+        return this.field.isFocused();
     }
 
     @Override
-    public void unfocus()
+    public void focus(GuiContext context)
     {
-        super.unfocus();
+        this.field.setFocused(true);
+        Keyboard.enableRepeatEvents(true);
+    }
+
+    @Override
+    public void unfocus(GuiContext context)
+    {
         this.field.setFocused(false);
-
-        Keyboard.enableRepeatEvents(this.field.isFocused());
+        Keyboard.enableRepeatEvents(false);
     }
 
     @Override
-    public void keyTyped(char typedChar, int keyCode)
+    public boolean keyTyped(GuiContext context)
     {
-        super.keyTyped(typedChar, keyCode);
-
-        this.field.textboxKeyTyped(typedChar, keyCode);
+        return super.keyTyped(context) || this.field.textboxKeyTyped(context.typedChar, context.keyCode);
     }
 
     @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
+    public void draw(GuiContext context)
     {
         this.field.drawTextBox();
 
-        super.draw(tooltip, mouseX, mouseY, partialTicks);
+        super.draw(context);
     }
 }

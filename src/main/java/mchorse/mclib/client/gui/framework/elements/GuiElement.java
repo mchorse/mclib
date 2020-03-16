@@ -1,6 +1,5 @@
 package mchorse.mclib.client.gui.framework.elements;
 
-import com.google.common.collect.ImmutableList;
 import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Resizer;
@@ -10,7 +9,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -233,80 +231,47 @@ public class GuiElement extends Gui implements IGuiElement
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
-        if (this.children != null)
-        {
-            return this.children.mouseClicked(mouseX, mouseY, mouseButton);
-        }
-
-        return false;
+        return this.children != null && this.children.mouseClicked(context);
     }
 
     @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, int scroll)
+    public boolean mouseScrolled(GuiContext context)
     {
-        if (this.children != null)
-        {
-            return this.children.mouseScrolled(mouseX, mouseY, scroll);
-        }
-
-        return false;
+        return this.children != null && this.children.mouseScrolled(context);
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int state)
+    public void mouseReleased(GuiContext context)
     {
         if (this.children != null)
         {
-            this.children.mouseReleased(mouseX, mouseY, state);
+            this.children.mouseReleased(context);
         }
     }
 
     @Override
-    public boolean hasActiveTextfields()
+    public boolean keyTyped(GuiContext context)
     {
-        if (this.children != null)
-        {
-            return this.children.hasActiveTextfields();
-        }
-
-        return false;
+        return this.children != null && this.children.keyTyped(context);
     }
 
     @Override
-    public void unfocus()
+    public void draw(GuiContext context)
     {
-        if (this.children != null)
+        if (this.tooltip != null && this.area.isInside(context.mouseX, context.mouseY))
         {
-            this.children.unfocus();
+            context.tooltip.set(this, this.tooltip);
         }
-    }
-
-    @Override
-    public void keyTyped(char typedChar, int keyCode)
-    {
-        if (this.children != null)
+        else if (this.hideTooltip && this.area.isInside(context.mouseX, context.mouseY))
         {
-            this.children.keyTyped(typedChar, keyCode);
-        }
-    }
-
-    @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
-    {
-        if (this.tooltip != null && this.area.isInside(mouseX, mouseY))
-        {
-            tooltip.set(this, this.tooltip);
-        }
-        else if (this.hideTooltip && this.area.isInside(mouseX, mouseY))
-        {
-            tooltip.set(null, null);
+            context.tooltip.set(null, null);
         }
 
         if (this.children != null)
         {
-            this.children.draw(tooltip, mouseX, mouseY, partialTicks);
+            this.children.draw(context);
         }
     }
 }

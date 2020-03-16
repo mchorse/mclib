@@ -10,7 +10,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import mchorse.mclib.client.gui.framework.GuiBase;
-import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.list.GuiFolderEntryList;
 import mchorse.mclib.client.gui.framework.elements.list.GuiResourceLocationList;
 import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
@@ -285,21 +284,24 @@ public class GuiTexturePicker extends GuiElement
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
         /* Necessary measure to avoid triggering buttons when you press 
          * on a text field, for example */
-        return super.mouseClicked(mouseX, mouseY, mouseButton) || (this.isVisible() && this.area.isInside(mouseX, mouseY));
+        return super.mouseClicked(context) || (this.isVisible() && this.area.isInside(context.mouseX, context.mouseY));
     }
 
     @Override
-    public void keyTyped(char typedChar, int keyCode)
+    public boolean keyTyped(GuiContext context)
     {
-        if (this.hasActiveTextfields())
+        if (super.keyTyped(context))
         {
-            super.keyTyped(typedChar, keyCode);
+            return true;
         }
-        else if (keyCode == Keyboard.KEY_RETURN)
+
+        int keyCode = context.keyCode;
+
+        if (keyCode == Keyboard.KEY_RETURN)
         {
             AbstractEntry entry = this.picker.getCurrent();
 
@@ -313,22 +315,22 @@ public class GuiTexturePicker extends GuiElement
             }
 
             this.typed = "";
+
+            return true;
         }
         else if (keyCode == Keyboard.KEY_UP)
         {
-            this.moveCurrent(-1, GuiScreen.isShiftKeyDown());
+            return this.moveCurrent(-1, GuiScreen.isShiftKeyDown());
         }
         else if (keyCode == Keyboard.KEY_DOWN)
         {
-            this.moveCurrent(1, GuiScreen.isShiftKeyDown());
+            return this.moveCurrent(1, GuiScreen.isShiftKeyDown());
         }
-        else if (!this.pickByTyping(typedChar))
-        {
-            super.keyTyped(typedChar, keyCode);
-        }
+
+        return this.pickByTyping(context.typedChar);
     }
 
-    protected void moveCurrent(int factor, boolean top)
+    protected boolean moveCurrent(int factor, boolean top)
     {
         int index = this.picker.current + factor;
         int length = this.picker.getList().size();
@@ -341,6 +343,8 @@ public class GuiTexturePicker extends GuiElement
         this.picker.current = index;
         this.picker.scroll.scrollIntoView(index * this.picker.scroll.scrollItemSize);
         this.typed = "";
+
+        return true;
     }
 
     protected boolean pickByTyping(char typedChar)
@@ -374,7 +378,7 @@ public class GuiTexturePicker extends GuiElement
     }
 
     @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
+    public void draw(GuiContext context)
     {
         /* Refresh the list */
         long time = System.currentTimeMillis();
@@ -412,7 +416,7 @@ public class GuiTexturePicker extends GuiElement
             this.drawCenteredString(this.font, I18n.format("mclib.gui.no_data"), this.area.getX(0.5F), this.area.getY(0.5F), 0xffffff);
         }
 
-        super.draw(tooltip, mouseX, mouseY, partialTicks);
+        super.draw(context);
 
         if (System.currentTimeMillis() - this.lastTyped < 1000)
         {

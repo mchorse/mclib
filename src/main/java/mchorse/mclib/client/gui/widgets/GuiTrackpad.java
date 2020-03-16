@@ -124,12 +124,10 @@ public class GuiTrackpad
     /**
      * Handle key pressed event
      */
-    public void keyTyped(char typedChar, int keyCode)
+    public boolean keyTyped(char typedChar, int keyCode)
     {
         String old = this.text.getText();
-
-        this.text.textboxKeyTyped(typedChar, keyCode);
-
+        boolean result = this.text.textboxKeyTyped(typedChar, keyCode);
         String text = this.text.getText();
 
         if (this.text.isFocused() && !text.equals(old))
@@ -146,6 +144,8 @@ public class GuiTrackpad
             catch (Exception e)
             {}
         }
+
+        return result;
     }
 
     /**

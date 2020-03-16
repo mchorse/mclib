@@ -2,12 +2,11 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import java.util.function.Consumer;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.widgets.GuiTrackpad;
 import mchorse.mclib.client.gui.widgets.GuiTrackpad.ITrackpadListener;
 import net.minecraft.client.Minecraft;
 
-public class GuiTrackpadElement extends GuiElement implements ITrackpadListener
+public class GuiTrackpadElement extends GuiElement implements ITrackpadListener, IFocusedGuiElement
 {
     public GuiTrackpad trackpad;
     public Consumer<Float> callback;
@@ -56,43 +55,49 @@ public class GuiTrackpadElement extends GuiElement implements ITrackpadListener
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
-        this.trackpad.mouseClicked(mouseX, mouseY, mouseButton);
+        this.trackpad.mouseClicked(context.mouseX, context.mouseY, context.mouseButton);
 
         return this.trackpad.isDragging();
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int state)
+    public void mouseReleased(GuiContext context)
     {
-        this.trackpad.mouseReleased(mouseX, mouseY, state);
+        this.trackpad.mouseReleased(context.mouseX, context.mouseY, context.mouseButton);
     }
 
     @Override
-    public boolean hasActiveTextfields()
+    public boolean keyTyped(GuiContext context)
     {
-        return super.hasActiveTextfields() || this.trackpad.text.isFocused();
+        return super.keyTyped(context) || this.trackpad.keyTyped(context.typedChar, context.keyCode);
     }
 
     @Override
-    public void unfocus()
+    public boolean isFocused()
     {
-        super.unfocus();
-        this.trackpad.text.setFocused(false);
+        return this.trackpad.text.isFocused();
     }
 
     @Override
-    public void keyTyped(char typedChar, int keyCode)
+    public void focus(GuiContext context)
     {
-        this.trackpad.keyTyped(typedChar, keyCode);
+        this.trackpad.text.setFocused(true);
+
     }
 
     @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
+    public void unfocus(GuiContext context)
     {
-        this.trackpad.draw(mouseX, mouseY, partialTicks);
 
-        super.draw(tooltip, mouseX, mouseY, partialTicks);
+    }
+
+    @Override
+    public void draw(GuiContext context)
+    {
+        this.trackpad.draw(context.mouseX, context.mouseY, context.partialTicks);
+
+        super.draw(context);
     }
 }

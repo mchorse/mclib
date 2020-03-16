@@ -2,6 +2,8 @@ package mchorse.mclib.client.gui.framework;
 
 import java.io.IOException;
 
+import mchorse.mclib.client.gui.framework.elements.GuiContext;
+import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -26,7 +28,7 @@ public class GuiBase extends GuiScreen
     public static final ResourceLocation ICONS = new ResourceLocation(McLib.MOD_ID, "textures/gui/icons.png");
 
     public GuiElements<IGuiElement> elements = new GuiElements<IGuiElement>();
-    public GuiTooltip tooltip = new GuiTooltip();
+    public GuiContext context = new GuiContext(this);
     public Area area = new Area();
 
     @Override
@@ -60,26 +62,32 @@ public class GuiBase extends GuiScreen
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
+        this.context.setMouse(mouseX, mouseY, mouseButton);
+
         if (this.elements.isEnabled())
         {
-            this.elements.mouseClicked(mouseX, mouseY, mouseButton);
+            this.elements.mouseClicked(this.context);
         }
     }
 
     protected void mouseScrolled(int x, int y, int scroll)
     {
+        this.context.setMouseWheel(x, y, scroll);
+
         if (this.elements.isEnabled())
         {
-            this.elements.mouseScrolled(x, y, scroll);
+            this.elements.mouseScrolled(this.context);
         }
     }
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state)
     {
+        this.context.setMouse(mouseX, mouseY, state);
+
         if (this.elements.isEnabled())
         {
-            this.elements.mouseReleased(mouseX, mouseY, state);
+            this.elements.mouseReleased(this.context);
         }
     }
 
@@ -95,15 +103,12 @@ public class GuiBase extends GuiScreen
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
-        if (this.elements.isEnabled())
+        if (this.elements.isEnabled() && this.elements.keyTyped(this.context))
         {
-            this.elements.keyTyped(typedChar, keyCode);
+            return;
         }
 
-        if (!this.elements.hasActiveTextfields())
-        {
-            this.keyPressed(typedChar, keyCode);
-        }
+        this.keyPressed(typedChar, keyCode);
 
         if (keyCode == 1)
         {
@@ -136,11 +141,14 @@ public class GuiBase extends GuiScreen
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
+        this.context.setMouse(mouseX, mouseY);
+        this.context.partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+
         if (this.elements.isVisible())
         {
-            this.tooltip.set(null, null);
-            this.elements.draw(this.tooltip, mouseX, mouseY, partialTicks);
-            this.tooltip.draw(this.fontRendererObj, this.width, this.height);
+            this.context.tooltip.set(null, null);
+            this.elements.draw(this.context);
+            this.context.tooltip.draw(this.fontRendererObj, this.width, this.height);
         }
     }
 }

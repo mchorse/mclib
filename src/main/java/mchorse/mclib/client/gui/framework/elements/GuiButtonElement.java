@@ -2,9 +2,6 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import java.util.function.Consumer;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip;
-import mchorse.mclib.client.gui.framework.GuiTooltip.Tooltip;
-import mchorse.mclib.client.gui.framework.GuiTooltip.TooltipDirection;
 import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -64,9 +61,9 @@ public class GuiButtonElement<T extends GuiButton> extends GuiElement
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
-        if (this.button.mousePressed(this.mc, mouseX, mouseY))
+        if (this.button.mousePressed(this.mc, context.mouseX, context.mouseY))
         {
             this.button.playPressSound(this.mc.getSoundHandler());
 
@@ -82,16 +79,16 @@ public class GuiButtonElement<T extends GuiButton> extends GuiElement
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int state)
+    public void mouseReleased(GuiContext context)
     {
-        this.button.mouseReleased(mouseX, mouseY);
+        this.button.mouseReleased(context.mouseX, context.mouseY);
     }
 
     @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
+    public void draw(GuiContext context)
     {
-        this.button.drawButton(this.mc, mouseX, mouseY);
+        this.button.drawButton(this.mc, context.mouseX, context.mouseY);
 
-        super.draw(tooltip, mouseX, mouseY, partialTicks);
+        super.draw(context);
     }
 }

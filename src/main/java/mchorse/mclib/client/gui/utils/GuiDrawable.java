@@ -2,14 +2,14 @@ package mchorse.mclib.client.gui.utils;
 
 import java.util.function.Consumer;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip;
+import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 
 public class GuiDrawable implements IGuiElement
 {
-    public Consumer<Void> callback;
+    public Consumer<GuiContext> callback;
 
-    public GuiDrawable(Consumer<Void> callback)
+    public GuiDrawable(Consumer<GuiContext> callback)
     {
         this.callback = callback;
     }
@@ -31,41 +31,33 @@ public class GuiDrawable implements IGuiElement
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
         return false;
     }
 
     @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, int scroll)
+    public boolean mouseScrolled(GuiContext context)
     {
         return false;
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int state)
+    public void mouseReleased(GuiContext context)
     {}
 
     @Override
-    public boolean hasActiveTextfields()
+    public boolean keyTyped(GuiContext context)
     {
         return false;
     }
 
     @Override
-    public void unfocus()
-    {}
-
-    @Override
-    public void keyTyped(char typedChar, int keyCode)
-    {}
-
-    @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
+    public void draw(GuiContext context)
     {
         if (this.callback != null)
         {
-            this.callback.accept(null);
+            this.callback.accept(context);
         }
     }
 }

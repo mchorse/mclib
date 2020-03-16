@@ -2,7 +2,6 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import org.lwjgl.opengl.GL11;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.utils.GuiUtils;
 import mchorse.mclib.client.gui.utils.ScrollArea;
 import net.minecraft.client.Minecraft;
@@ -29,43 +28,78 @@ public abstract class GuiScrollElement extends GuiElement
         super.resize();
 
         this.scroll.copy(this.area);
+        this.scroll.clamp();
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
-        return super.mouseClicked(mouseX, mouseY + this.scroll.scroll, mouseButton) || this.scroll.mouseClicked(mouseX, mouseY);
+        if (!this.area.isInside(context.mouseX, context.mouseY))
+        {
+            return false;
+        }
+
+        boolean result = this.scroll.mouseClicked(context.mouseX, context.mouseY);
+
+        context.mouseY += this.scroll.scroll;
+        result = result || super.mouseClicked(context);
+        context.mouseY -= this.scroll.scroll;
+
+        return result;
     }
 
     @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, int scroll)
+    public boolean mouseScrolled(GuiContext context)
     {
-        return super.mouseScrolled(mouseX, mouseY + this.scroll.scroll, scroll) || this.scroll.mouseScroll(mouseX, mouseY, scroll);
+        if (!this.area.isInside(context.mouseX, context.mouseY))
+        {
+            return false;
+        }
+
+        boolean result = this.scroll.mouseScroll(context.mouseX, context.mouseY, context.mouseWheel);
+
+        context.mouseY += this.scroll.scroll;
+        result = result || super.mouseScrolled(context);
+        context.mouseY -= this.scroll.scroll;
+
+        return result;
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int state)
+    public void mouseReleased(GuiContext context)
     {
-        super.mouseReleased(mouseX, mouseY + this.scroll.scroll, state);
-        this.scroll.mouseReleased(mouseX, mouseY);
+        this.scroll.mouseReleased(context.mouseX, context.mouseY);
+
+        context.mouseY += this.scroll.scroll;
+        super.mouseReleased(context);
+        context.mouseY -= this.scroll.scroll;
     }
 
     @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
+    public void draw(GuiContext context)
     {
-        this.scroll.drag(mouseX, mouseY);
+        this.scroll.drag(context.mouseX, context.mouseY);
 
-        GuiScreen screen = this.mc.currentScreen;
+        context.mouseY += this.scroll.scroll;
 
-        GuiUtils.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, screen.width, screen.height);
+        GuiUtils.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context.screen.width, context.screen.height);
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, -this.scroll.scroll, 0);
 
-        super.draw(tooltip, mouseX, mouseY, partialTicks);
+        this.preDraw(context);
+        super.draw(context);
+        this.postDraw(context);
 
         GlStateManager.popMatrix();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         this.scroll.drawScrollbar();
+        context.mouseY -= this.scroll.scroll;
     }
+
+    protected void preDraw(GuiContext context)
+    {}
+
+    protected void postDraw(GuiContext context)
+    {}
 }
