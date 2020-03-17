@@ -1,20 +1,17 @@
 package mchorse.mclib.client.gui.framework;
 
-import java.io.IOException;
-
 import mchorse.mclib.client.gui.framework.elements.GuiContext;
-import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
-import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiElements;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.utils.Area;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
+import java.io.IOException;
 
 /**
  * Base class for GUI screens using this framework
@@ -22,11 +19,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiBase extends GuiScreen
 {
-    /**
-     * Icons texture used across all dashboard panels 
-     */
-    public static final ResourceLocation ICONS = new ResourceLocation(McLib.MOD_ID, "textures/gui/icons.png");
-
     public GuiElements<IGuiElement> elements = new GuiElements<IGuiElement>();
     public GuiContext context = new GuiContext(this);
     public Area area = new Area();

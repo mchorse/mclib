@@ -1,4 +1,4 @@
-package mchorse.mclib.client.gui.utils;
+package mchorse.mclib.client.gui.framework.elements.utils;
 
 import java.util.function.Consumer;
 

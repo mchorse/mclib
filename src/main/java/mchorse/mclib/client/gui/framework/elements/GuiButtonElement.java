@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import java.util.function.Consumer;
 
+import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -18,9 +19,14 @@ public class GuiButtonElement<T extends GuiButton> extends GuiElement
         return new GuiButtonElement<GuiCheckBox>(mc, new GuiCheckBox(0, 0, 0, label, value), callback);
     }
 
-    public static GuiButtonElement<GuiTextureButton> icon(Minecraft mc, ResourceLocation texture, int tx, int ty, int ax, int ay, Consumer<GuiButtonElement<GuiTextureButton>> callback)
+    public static GuiButtonElement<GuiTextureButton> icon(Minecraft mc, Icon active, Icon hovered, Consumer<GuiButtonElement<GuiTextureButton>> callback)
     {
-        return new GuiButtonElement<GuiTextureButton>(mc, new GuiTextureButton(0, 0, 0, texture).setTexPos(tx, ty).setActiveTexPos(ax, ay), callback);
+        return new GuiButtonElement<GuiTextureButton>(mc, new GuiTextureButton(0, 0, 0, active).setHovered(hovered), callback);
+    }
+
+    public static GuiButtonElement<GuiTextureButton> icon(Minecraft mc, Icon icon, Consumer<GuiButtonElement<GuiTextureButton>> callback)
+    {
+        return icon(mc, icon, icon, callback);
     }
 
     public static GuiButtonElement<GuiButton> button(Minecraft mc, String label, Consumer<GuiButtonElement<GuiButton>> callback)

@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import java.util.function.Consumer;
 
+import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.utils.files.entries.AbstractEntry;
 import mchorse.mclib.utils.files.entries.FileEntry;
 import net.minecraft.client.gui.Gui;
@@ -83,8 +84,8 @@ public class GuiTexturePicker extends GuiElement
 
         this.multi = GuiButtonElement.button(mc, I18n.format("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
         this.multiList = new GuiResourceLocationList(mc, (rl) -> this.displayCurrent(rl));
-        this.add = GuiButtonElement.icon(mc, GuiBase.ICONS, 32, 32, 32, 48, (b) -> this.addMultiSkin());
-        this.remove = GuiButtonElement.icon(mc, GuiBase.ICONS, 64, 32, 64, 48, (b) -> this.removeMultiSkin());
+        this.add = GuiButtonElement.icon(mc, Icons.ADD, (b) -> this.addMultiSkin());
+        this.remove = GuiButtonElement.icon(mc, Icons.REMOVE, (b) -> this.removeMultiSkin());
 
         this.text.resizer().set(115, 5, 0, 20).parent(this.area).w(1, -145);
         this.close.resizer().set(0, 5, 20, 20).parent(this.area).x(1, -25);

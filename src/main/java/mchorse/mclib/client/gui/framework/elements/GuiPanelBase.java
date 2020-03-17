@@ -5,7 +5,8 @@ import java.util.List;
 
 import mchorse.mclib.client.gui.framework.GuiTooltip.TooltipDirection;
 import mchorse.mclib.client.gui.utils.Area;
-import mchorse.mclib.client.gui.utils.GuiDrawable;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDrawable;
+import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Resizer.Measure;
 import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
 import net.minecraft.client.Minecraft;
@@ -51,9 +52,9 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
     /**
      * Register a panel with given texture and tooltip 
      */
-    public void registerPanel(T panel, ResourceLocation texture, String tooltip, int x, int y, int ax, int ay)
+    public GuiButtonElement<GuiTextureButton> registerPanel(T panel, String tooltip, Icon icon)
     {
-        GuiButtonElement<GuiTextureButton> button = GuiButtonElement.icon(this.mc, texture, x, y, ax, ay, (b) -> this.setPanel(panel));
+        GuiButtonElement<GuiTextureButton> button = GuiButtonElement.icon(this.mc, icon, (b) -> this.setPanel(panel));
 
         if (tooltip != null && !tooltip.isEmpty())
         {
@@ -63,6 +64,8 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
         this.setupButtonResizer(button);
         this.panels.add(panel);
         this.buttons.add(button);
+
+        return button;
     }
 
     /**
