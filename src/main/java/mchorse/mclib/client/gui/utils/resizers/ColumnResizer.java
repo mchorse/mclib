@@ -45,8 +45,8 @@ public class ColumnResizer implements IResizer
 
 		if (this.y + h > this.parent.h - this.padding * 2)
 		{
+			this.x += this.w + this.margin * 2;
 			this.y = this.w = 0;
-			this.x += this.w;
 		}
 
 		int x = this.parent.x + this.x + this.padding;

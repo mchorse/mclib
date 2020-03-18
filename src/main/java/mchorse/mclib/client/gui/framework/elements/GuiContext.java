@@ -44,6 +44,12 @@ public class GuiContext
 		this.mouseWheel = mouseWheel;
 	}
 
+	public void setKey(char typedChar, int keyCode)
+	{
+		this.typedChar = typedChar;
+		this.keyCode = keyCode;
+	}
+
 	public boolean isFocused()
 	{
 		return this.activeElement != null;
@@ -69,7 +75,7 @@ public class GuiContext
 		}
 	}
 
-	public void umfocus()
+	public void unfocus()
 	{
 		this.focus(null);
 	}

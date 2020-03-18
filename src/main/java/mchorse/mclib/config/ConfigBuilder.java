@@ -1,8 +1,10 @@
 package mchorse.mclib.config;
 
+import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueDouble;
 import mchorse.mclib.config.values.ValueFloat;
 import mchorse.mclib.config.values.ValueInt;
+import mchorse.mclib.config.values.ValueString;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -89,6 +91,24 @@ public class ConfigBuilder
 	public ValueDouble getDouble(String id, double defaultValue, double min, double max)
 	{
 		ValueDouble value = new ValueDouble(id, defaultValue, min, max);
+
+		this.category.values.put(id, value);
+
+		return value;
+	}
+
+	public ValueBoolean getBoolean(String id, boolean defaultValue)
+	{
+		ValueBoolean value = new ValueBoolean(id, defaultValue);
+
+		this.category.values.put(id, value);
+
+		return value;
+	}
+
+	public ValueString getString(String id, String defaultValue)
+	{
+		ValueString value = new ValueString(id, defaultValue);
 
 		this.category.values.put(id, value);
 

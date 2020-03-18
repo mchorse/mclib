@@ -1,6 +1,7 @@
 package mchorse.mclib.config.gui;
 
 import mchorse.mclib.McLib;
+import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiStringListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
@@ -10,6 +11,7 @@ import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -84,5 +86,14 @@ public class GuiConfig extends GuiElement
 		this.column.reset();
 
 		super.resize();
+	}
+
+	@Override
+	public void draw(GuiContext context)
+	{
+		this.area.draw(0x88000000);
+		Gui.drawRect(this.area.x, this.area.y, this.area.x + 100, this.area.getY(1), 0x88000000);
+
+		super.draw(context);
 	}
 }

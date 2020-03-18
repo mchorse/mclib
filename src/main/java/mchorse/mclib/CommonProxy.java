@@ -1,5 +1,7 @@
 package mchorse.mclib;
 
+import mchorse.mclib.config.values.ValueBoolean;
+import mchorse.mclib.config.values.ValueString;
 import mchorse.mclib.events.RegisterConfigEvent;
 import mchorse.mclib.config.ConfigBuilder;
 import mchorse.mclib.config.ConfigManager;
@@ -38,6 +40,12 @@ public class CommonProxy
 		ValueFloat value = builder.getFloat("value", 0F, -1F, 1F);
 
 		ValueInt test = builder.category("textures").getInt("test", 0, -10, 10);
+		ValueString name = builder.getString("name", "Bob");
+		ValueString lastname = builder.getString("lastname", "Cool");
+		ValueBoolean enabled = builder.getBoolean("enabled", false);
+
+		ValueString id = builder.category("new").getString("id", "123456");
+		ValueBoolean cool = builder.getBoolean("cool", true);
 
 		event.modules.add(builder.build());
 	}

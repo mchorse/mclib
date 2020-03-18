@@ -13,8 +13,22 @@ mclib.config.comments.general.delay=Changes delay of something
 mclib.config.general.value=Value
 mclib.config.comments.general.value=Value can be whatever you want
 mclib.config.general.frequency=Frequency
-mclib.config.comments.general.frequency=Frequency of update can be chaned here
+mclib.config.comments.general.frequency=Frequency of update can be changed here
+
 mclib.config.textures.title=Textures
 mclib.config.textures.tooltip=Textures options
 mclib.config.textures.test=Test
 mclib.config.comments.textures.test=Changes test
+mclib.config.textures.name=Name
+mclib.config.comments.textures.name=Enter your name
+mclib.config.textures.lastname=Last name
+mclib.config.comments.textures.lastname=Enter your lastname
+mclib.config.textures.enabled=Enabled
+mclib.config.comments.textures.enabled=Is this module enabled?
+
+mclib.config.new.title=New
+mclib.config.new.tooltip=New options here haha
+mclib.config.new.id=ID
+mclib.config.comments.new.id=We need your papers, please
+mclib.config.new.cool=Cool
+mclib.config.comments.new.cool=Check, if you're cool

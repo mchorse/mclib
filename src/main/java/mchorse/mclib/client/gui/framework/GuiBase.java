@@ -96,6 +96,8 @@ public class GuiBase extends GuiScreen
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
+        this.context.setKey(typedChar, keyCode);
+
         if (this.elements.isEnabled() && this.elements.keyTyped(this.context))
         {
             return;

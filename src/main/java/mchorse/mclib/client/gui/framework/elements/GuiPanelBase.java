@@ -106,7 +106,9 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
             }
             else
             {
-                button.resizer().parent(this.area).set(0, 0, 16, 16).x(1, -18).y(1, -18);
+                boolean bottom = this.direction == Direction.BOTTOM;
+
+                button.resizer().parent(this.area).set(0, 0, 16, 16).x(1, -18).y(bottom ? 1 : 0, bottom ? -18 : 2);
             }
         }
         else
@@ -127,4 +129,30 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
     {
         this.view.setDelegate(panel);
     }
+
+    @Override
+    public void draw(GuiContext context)
+    {
+        if (this.direction == Direction.TOP)
+        {
+            this.drawBackground(context, this.area.x, this.area.y, this.area.w, 20);
+        }
+        else if (this.direction == Direction.BOTTOM)
+        {
+            this.drawBackground(context, this.area.x, this.area.getY(1) - 20, this.area.w, 20);
+        }
+        else if (this.direction == Direction.LEFT)
+        {
+            this.drawBackground(context, this.area.x, this.area.y, 20, this.area.h);
+        }
+        else
+        {
+            this.drawBackground(context, this.area.getX(1) - 20, this.area.y, 20, this.area.h);
+        }
+
+        super.draw(context);
+    }
+
+    protected void drawBackground(GuiContext context, int x, int y, int w, int h)
+    {}
 }
