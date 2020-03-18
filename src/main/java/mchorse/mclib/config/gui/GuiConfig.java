@@ -3,10 +3,12 @@ package mchorse.mclib.config.gui;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.GuiScrollElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiLabelListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.ScrollArea;
 import mchorse.mclib.client.gui.utils.resizers.ColumnResizer;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
@@ -22,7 +24,7 @@ public class GuiConfig extends GuiElement
 {
 	public GuiIconElement reload;
 	public GuiLabelListElement<String> mods;
-	public GuiElement options;
+	public GuiScrollElement options;
 	public ColumnResizer column;
 
 	private Config config;
@@ -33,7 +35,7 @@ public class GuiConfig extends GuiElement
 
 		this.reload = new GuiIconElement(mc, Icons.REFRESH, (button) -> this.reload());
 		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.value));
-		this.options = new GuiElement(mc);
+		this.options = new GuiScrollElement(mc, ScrollArea.ScrollDirection.HORIZONTAL);
 		this.column = new ColumnResizer(this.options, 5, 10);
 
 		this.reload.resizer().parent(this.area).set(110 - 14, 12, 16, 16);
@@ -96,6 +98,15 @@ public class GuiConfig extends GuiElement
 		}
 
 		this.resize();
+	}
+
+	@Override
+	public void resize()
+	{
+		super.resize();
+
+		this.options.scroll.scrollSize = this.column.getW();
+		this.options.scroll.clamp();
 	}
 
 	@Override

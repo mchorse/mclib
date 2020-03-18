@@ -73,7 +73,7 @@ public class ColumnResizer extends DecoratedResizer
 	@Override
 	public int getW()
 	{
-		return this.x + this.w;
+		return this.x + this.w + this.padding * 2;
 	}
 
 	@Override

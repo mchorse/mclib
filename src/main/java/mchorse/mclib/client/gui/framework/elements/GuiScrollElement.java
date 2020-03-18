@@ -13,13 +13,45 @@ import net.minecraft.client.renderer.GlStateManager;
  * 
  * This bad boy allows to scroll stuff
  */
-public abstract class GuiScrollElement extends GuiElement
+public class GuiScrollElement extends GuiElement
 {
     public ScrollArea scroll = new ScrollArea(0);
 
     public GuiScrollElement(Minecraft mc)
     {
+        this(mc, ScrollArea.ScrollDirection.VERTICAL);
+    }
+
+    public GuiScrollElement(Minecraft mc, ScrollArea.ScrollDirection direction)
+    {
         super(mc);
+
+        this.scroll.direction = direction;
+        this.scroll.scrollSpeed = 20;
+    }
+
+    private void apply(GuiContext context)
+    {
+        if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
+        {
+            context.mouseY += this.scroll.scroll;
+        }
+        else
+        {
+            context.mouseX += this.scroll.scroll;
+        }
+    }
+
+    private void unapply(GuiContext context)
+    {
+        if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
+        {
+            context.mouseY -= this.scroll.scroll;
+        }
+        else
+        {
+            context.mouseX -= this.scroll.scroll;
+        }
     }
 
     @Override
@@ -41,9 +73,9 @@ public abstract class GuiScrollElement extends GuiElement
 
         boolean result = this.scroll.mouseClicked(context.mouseX, context.mouseY);
 
-        context.mouseY += this.scroll.scroll;
+        this.apply(context);
         result = result || super.mouseClicked(context);
-        context.mouseY -= this.scroll.scroll;
+        this.unapply(context);
 
         return result;
     }
@@ -58,9 +90,9 @@ public abstract class GuiScrollElement extends GuiElement
 
         boolean result = this.scroll.mouseScroll(context.mouseX, context.mouseY, context.mouseWheel);
 
-        context.mouseY += this.scroll.scroll;
+        this.apply(context);
         result = result || super.mouseScrolled(context);
-        context.mouseY -= this.scroll.scroll;
+        this.unapply(context);
 
         return result;
     }
@@ -70,9 +102,9 @@ public abstract class GuiScrollElement extends GuiElement
     {
         this.scroll.mouseReleased(context.mouseX, context.mouseY);
 
-        context.mouseY += this.scroll.scroll;
+        this.apply(context);
         super.mouseReleased(context);
-        context.mouseY -= this.scroll.scroll;
+        this.unapply(context);
     }
 
     @Override
@@ -80,11 +112,19 @@ public abstract class GuiScrollElement extends GuiElement
     {
         this.scroll.drag(context.mouseX, context.mouseY);
 
-        context.mouseY += this.scroll.scroll;
+        this.apply(context);
 
         GuiUtils.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context.screen.width, context.screen.height);
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0, -this.scroll.scroll, 0);
+
+        if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
+        {
+            GlStateManager.translate(0, -this.scroll.scroll, 0);
+        }
+        else
+        {
+            GlStateManager.translate(-this.scroll.scroll, 0, 0);
+        }
 
         this.preDraw(context);
         super.draw(context);
@@ -94,8 +134,16 @@ public abstract class GuiScrollElement extends GuiElement
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         this.scroll.drawScrollbar();
-        context.mouseY -= this.scroll.scroll;
-        context.tooltip.area.y -= this.scroll.scroll;
+        this.unapply(context);
+
+        if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
+        {
+            context.tooltip.area.y -= this.scroll.scroll;
+        }
+        else
+        {
+            context.tooltip.area.x -= this.scroll.scroll;
+        }
     }
 
     protected void preDraw(GuiContext context)
