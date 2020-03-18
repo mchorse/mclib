@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.utils.Direction;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.math.MathHelper;
@@ -27,16 +28,16 @@ public class GuiTooltip
             int y = this.area.getY(0.5F) - font.FONT_HEIGHT / 2;
             int w = font.getStringWidth(this.tooltip.label);
 
-            if (this.tooltip.direction == TooltipDirection.TOP)
+            if (this.tooltip.direction == Direction.TOP)
             {
                 x = this.area.getX(0.5F) - w / 2;
                 y = this.area.y - font.FONT_HEIGHT - 6;
             }
-            else if (this.tooltip.direction == TooltipDirection.LEFT)
+            else if (this.tooltip.direction == Direction.LEFT)
             {
                 x = this.area.x - 6 - w;
             }
-            else if (this.tooltip.direction == TooltipDirection.BOTTOM)
+            else if (this.tooltip.direction == Direction.BOTTOM)
             {
                 x = this.area.getX(0.5F) - w / 2;
                 y = this.area.getY(1) + 6;
@@ -50,17 +51,12 @@ public class GuiTooltip
         }
     }
 
-    public static enum TooltipDirection
-    {
-        TOP, LEFT, BOTTOM, RIGHT;
-    }
-
     public static class Tooltip
     {
         public String label;
-        public TooltipDirection direction;
+        public Direction direction;
 
-        public Tooltip(String label, TooltipDirection direction)
+        public Tooltip(String label, Direction direction)
         {
             this.label = label;
             this.direction = direction;

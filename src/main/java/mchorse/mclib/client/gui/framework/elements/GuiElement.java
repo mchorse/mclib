@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements;
 import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Resizer;
+import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -151,7 +152,7 @@ public class GuiElement extends Gui implements IGuiElement
 
     /* Tooltip */
 
-    public GuiElement tooltip(String label, GuiTooltip.TooltipDirection direction)
+    public GuiElement tooltip(String label, Direction direction)
     {
         this.tooltip = new GuiTooltip.Tooltip(label, direction);
 

@@ -3,7 +3,7 @@ package mchorse.mclib.client.gui.framework.elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip.TooltipDirection;
+import mchorse.mclib.utils.Direction;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDrawable;
 import mchorse.mclib.client.gui.utils.Icon;
@@ -11,7 +11,6 @@ import mchorse.mclib.client.gui.utils.Resizer.Measure;
 import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.util.ResourceLocation;
 
 /**
  * Panel base GUI
@@ -24,11 +23,18 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
     public GuiDelegateElement<T> view;
     public GuiElements<GuiButtonElement<GuiTextureButton>> buttons;
     public List<T> panels = new ArrayList<T>();
+    public Direction direction;
 
     public GuiPanelBase(Minecraft mc)
     {
+        this(mc, Direction.BOTTOM);
+    }
+
+    public GuiPanelBase(Minecraft mc, Direction direction)
+    {
         super(mc);
 
+        this.direction = direction == null ? Direction.BOTTOM : direction;
         this.view = new GuiDelegateElement<T>(mc, null);
         this.view.resizer().parent(this.area).set(0, 0, 1, 1, Measure.RELATIVE).h(1, -20);
 
@@ -58,7 +64,7 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
 
         if (tooltip != null && !tooltip.isEmpty())
         {
-            button.tooltip(tooltip, TooltipDirection.TOP);
+            button.tooltip(tooltip, this.direction.opposite());
         }
 
         this.setupButtonResizer(button);
@@ -76,13 +82,28 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
     {
         if (this.buttons.elements.isEmpty())
         {
-            button.resizer().parent(this.area).set(0, 0, 16, 16).x(1, -18).y(1, -18);
+            if (this.direction.isHorizontal())
+            {
+                button.resizer().parent(this.area).set(2, 2, 16, 16);
+
+                if (this.direction == Direction.RIGHT)
+                {
+                    button.resizer().x(1, -18);
+                }
+            }
+            else
+            {
+                button.resizer().parent(this.area).set(0, 0, 16, 16).x(1, -18).y(1, -18);
+            }
         }
         else
         {
             GuiButtonElement<GuiTextureButton> last = this.buttons.elements.get(this.buttons.elements.size() - 1);
 
-            button.resizer().relative(last.resizer()).set(-20, 0, 16, 16);
+            int x = this.direction.isHorizontal() ? -20 : 0;
+            int y = this.direction.isVertical() ? -20 : 0;
+
+            button.resizer().relative(last.resizer()).set(x, y, 16, 16);
         }
     }
 
