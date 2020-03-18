@@ -18,6 +18,8 @@ public class GuiDashboard extends GuiBase
 
 	public GuiDashboard(Minecraft mc)
 	{
+		GuiConfig config = new GuiConfig(mc);
+
 		this.panels = new GuiPanelBase<GuiElement>(mc, Direction.LEFT)
 		{
 			@Override
@@ -27,9 +29,9 @@ public class GuiDashboard extends GuiBase
 			}
 		};
 		this.panels.resizer().parent(this.area).w(1, 0).h(1, 0);
-
-		this.panels.registerPanel(new GuiConfig(mc), "Mods configuration", Icons.GEAR);
+		this.panels.registerPanel(config, "Mods configuration", Icons.GEAR);
 		McLib.EVENT_BUS.post(new RegisterDashboardPanels(this));
+		this.panels.setPanel(config);
 
 		this.elements.add(this.panels);
 	}

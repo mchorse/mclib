@@ -7,6 +7,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.List;
+
 public class GuiTooltip
 {
     public GuiElement element;
@@ -28,18 +30,27 @@ public class GuiTooltip
     {
         if (this.element != null)
         {
+            List<String> strings = font.listFormattedStringToWidth(this.tooltip.label, this.tooltip.width);
+
+            if (strings.isEmpty())
+            {
+                return;
+            }
+
+            int w = strings.size() == 1 ? font.getStringWidth(strings.get(0)) : this.tooltip.width;
+            int h = (font.FONT_HEIGHT + 3) * strings.size() - 3;
+
             int x = this.area.getX(1) + 6;
-            int y = this.area.getY(0.5F) - font.FONT_HEIGHT / 2;
-            int w = font.getStringWidth(this.tooltip.label);
+            int y = this.area.getY(0.5F) - h / 2;
 
             if (this.tooltip.direction == Direction.TOP)
             {
                 x = this.area.getX(0.5F) - w / 2;
-                y = this.area.y - font.FONT_HEIGHT - 6;
+                y = this.area.y - h - 6;
             }
             else if (this.tooltip.direction == Direction.LEFT)
             {
-                x = this.area.x - 6 - w;
+                x = this.area.x - w - 6;
             }
             else if (this.tooltip.direction == Direction.BOTTOM)
             {
@@ -47,23 +58,35 @@ public class GuiTooltip
                 y = this.area.getY(1) + 6;
             }
 
-            x = MathHelper.clamp_int(x, 6, width - w - 6);
-            y = MathHelper.clamp_int(y, 6, height - font.FONT_HEIGHT - 6);
+            x = MathHelper.clamp_int(x, 0, width - w);
+            y = MathHelper.clamp_int(y, 0, height - h);
 
-            Gui.drawRect(x - 3, y - 3, x + w + 3, y + font.FONT_HEIGHT + 3, 0xffffffff);
-            font.drawString(this.tooltip.label, x, y + 1, 0x000000);
+            Gui.drawRect(x - 3, y - 3, x + w + 3, y + h + 3, 0xffffffff);
+
+            for (String line : strings)
+            {
+                font.drawString(line, x, y, 0x000000);
+                y += font.FONT_HEIGHT + 3;
+            }
         }
     }
 
     public static class Tooltip
     {
         public String label;
+        public int width = 200;
         public Direction direction;
 
         public Tooltip(String label, Direction direction)
         {
             this.label = label;
             this.direction = direction;
+        }
+
+        public Tooltip(String label, int width, Direction direction)
+        {
+            this(label, direction);
+            this.width = width;
         }
     }
 }

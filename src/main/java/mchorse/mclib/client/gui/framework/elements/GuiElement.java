@@ -178,6 +178,13 @@ public class GuiElement extends Gui implements IGuiElement
         return this;
     }
 
+    public GuiElement tooltip(String label, int width, Direction direction)
+    {
+        this.tooltip = new GuiTooltip.Tooltip(label, width, direction);
+
+        return this;
+    }
+
     public GuiElement hideTooltip()
     {
         this.hideTooltip = true;

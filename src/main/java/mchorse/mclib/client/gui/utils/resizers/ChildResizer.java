@@ -2,21 +2,20 @@ package mchorse.mclib.client.gui.utils.resizers;
 
 import mchorse.mclib.client.gui.utils.Area;
 
-public class ChildResizer implements IResizer
+public class ChildResizer extends DecoratedResizer
 {
 	public DecoratedResizer parent;
-	public IResizer element;
 
-	public ChildResizer(DecoratedResizer parent, IResizer element)
+	public ChildResizer(DecoratedResizer parent, IResizer resizer)
 	{
+		super(resizer);
 		this.parent = parent;
-		this.element = element;
 	}
 
 	@Override
 	public void apply(Area area)
 	{
-		this.parent.apply(area, this.element);
+		this.parent.apply(area, this.resizer);
 	}
 
 	@Override
