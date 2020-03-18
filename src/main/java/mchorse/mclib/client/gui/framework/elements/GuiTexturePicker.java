@@ -1,34 +1,34 @@
 package mchorse.mclib.client.gui.framework.elements;
 
-import java.util.function.Consumer;
-
-import mchorse.mclib.client.gui.utils.Icons;
-import mchorse.mclib.utils.files.entries.AbstractEntry;
-import mchorse.mclib.utils.files.entries.FileEntry;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.util.ChatAllowedCharacters;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiFolderEntryListElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiResourceLocationListElement;
-import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
-import mchorse.mclib.utils.files.entries.FolderEntry;
+import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.utils.files.FileTree;
 import mchorse.mclib.utils.files.GlobalTree;
+import mchorse.mclib.utils.files.entries.AbstractEntry;
+import mchorse.mclib.utils.files.entries.FileEntry;
+import mchorse.mclib.utils.files.entries.FolderEntry;
 import mchorse.mclib.utils.resources.MultiResourceLocation;
 import mchorse.mclib.utils.resources.RLUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiUtils;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import java.util.function.Consumer;
 
 /**
  * Texture picker GUI
@@ -40,13 +40,13 @@ import net.minecraftforge.fml.client.config.GuiUtils;
 public class GuiTexturePicker extends GuiElement
 {
     public GuiTextElement text;
-    public GuiButtonElement<GuiButton> close;
-    public GuiButtonElement<GuiButton> folder;
+    public GuiButtonElement close;
+    public GuiButtonElement folder;
     public GuiFolderEntryListElement picker;
 
-    public GuiButtonElement<GuiButton> multi;
-    public GuiButtonElement<GuiTextureButton> add;
-    public GuiButtonElement<GuiTextureButton> remove;
+    public GuiButtonElement multi;
+    public GuiIconElement add;
+    public GuiIconElement remove;
     public GuiResourceLocationListElement multiList;
 
     public Consumer<ResourceLocation> callback;
@@ -64,8 +64,8 @@ public class GuiTexturePicker extends GuiElement
         super(mc);
 
         this.text = new GuiTextElement(mc, 1000, (str) -> this.selectCurrent(str.isEmpty() ? null : RLUtils.create(str)));
-        this.close = GuiButtonElement.button(mc, "X", (b) -> this.setVisible(false));
-        this.folder = GuiButtonElement.button(mc, I18n.format("mclib.gui.open_folder"), (b) -> this.openFolder());
+        this.close = new GuiButtonElement(mc, "X", (b) -> this.setVisible(false));
+        this.folder = new GuiButtonElement(mc, I18n.format("mclib.gui.open_folder"), (b) -> this.openFolder());
         this.picker = new GuiFolderEntryListElement(mc, (entry) ->
         {
             ResourceLocation rl = entry.resource;
@@ -82,10 +82,10 @@ public class GuiTexturePicker extends GuiElement
             }
         };
 
-        this.multi = GuiButtonElement.button(mc, I18n.format("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
+        this.multi = new GuiButtonElement(mc, I18n.format("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
         this.multiList = new GuiResourceLocationListElement(mc, (rl) -> this.displayCurrent(rl));
-        this.add = GuiButtonElement.icon(mc, Icons.ADD, (b) -> this.addMultiSkin());
-        this.remove = GuiButtonElement.icon(mc, Icons.REMOVE, (b) -> this.removeMultiSkin());
+        this.add = new GuiIconElement(mc, Icons.ADD, (b) -> this.addMultiSkin());
+        this.remove = new GuiIconElement(mc, Icons.REMOVE, (b) -> this.removeMultiSkin());
 
         this.text.resizer().set(115, 5, 0, 20).parent(this.area).w(1, -145);
         this.close.resizer().set(0, 5, 20, 20).parent(this.area).x(1, -25);
@@ -425,7 +425,7 @@ public class GuiTexturePicker extends GuiElement
             int x = this.text.area.x;
             int y = this.text.area.getY(1);
 
-            Gui.drawRect(x, y, x + w + 4, y + 4 + this.font.FONT_HEIGHT, 0x880088ff);
+            Gui.drawRect(x, y, x + w + 4, y + 4 + this.font.FONT_HEIGHT, 0x88000000 + McLib.primaryColor.get());
             this.font.drawStringWithShadow(this.typed, x + 2, y + 2, 0xffffff);
         }
 

@@ -3,8 +3,10 @@ package mchorse.mclib.config.gui;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiLabelListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
+import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.resizers.ColumnResizer;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
@@ -18,6 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiConfig extends GuiElement
 {
+	public GuiIconElement reload;
 	public GuiLabelListElement<String> mods;
 	public GuiElement options;
 	public ColumnResizer column;
@@ -28,12 +31,15 @@ public class GuiConfig extends GuiElement
 	{
 		super(mc);
 
+		this.reload = new GuiIconElement(mc, Icons.REFRESH, (button) -> this.reload());
 		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.value));
 		this.options = new GuiElement(mc);
-		this.column = new ColumnResizer(this.options.area, 5, 10);
+		this.column = new ColumnResizer(this.options, 5, 10);
 
-		this.mods.resizer().parent(this.area).set(10, 10, 100, 0).h(1, -20);
+		this.reload.resizer().parent(this.area).set(110 - 14, 12, 16, 16);
+		this.mods.resizer().parent(this.area).set(10, 35, 100, 0).h(1, -45);
 		this.options.resizer().parent(this.area).set(120, 0, 0, 0).w(1, -120).h(1, 0);
+		this.options.setResizer(this.column);
 
 		for (Config config : McLib.proxy.configs.modules.values())
 		{
@@ -41,16 +47,26 @@ public class GuiConfig extends GuiElement
 		}
 
 		this.mods.sort();
-		this.add(this.mods, this.options);
+		this.add(this.reload, this.mods, this.options);
 		this.selectConfig("mclib");
+	}
+
+	private void reload()
+	{
+		McLib.proxy.configs.reload();
+		this.refresh();
 	}
 
 	private void selectConfig(String mod)
 	{
 		this.mods.setCurrentValue(mod);
-		this.options.clear();
-
 		this.config = McLib.proxy.configs.modules.get(mod);
+		this.refresh();
+	}
+
+	public void refresh()
+	{
+		this.options.clear();
 
 		boolean first = true;
 
@@ -83,18 +99,11 @@ public class GuiConfig extends GuiElement
 	}
 
 	@Override
-	public void resize()
-	{
-		this.column.reset();
-
-		super.resize();
-	}
-
-	@Override
 	public void draw(GuiContext context)
 	{
-		this.area.draw(0x88000000);
-		Gui.drawRect(this.area.x, this.area.y, this.area.x + this.mods.area.w + 20, this.area.getY(1), 0x88000000);
+		this.area.draw(0xaa000000);
+		Gui.drawRect(this.area.x, this.area.y, this.area.x + this.mods.area.w + 20, this.area.getY(1), 0xdd000000);
+		this.font.drawStringWithShadow("Mods", this.area.x + 10, this.area.y + 20 - this.font.FONT_HEIGHT / 2, 0xffffff);
 
 		super.draw(context);
 	}

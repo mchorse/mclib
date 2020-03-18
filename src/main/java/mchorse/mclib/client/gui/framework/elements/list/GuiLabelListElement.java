@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements.list;
 
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.utils.Label;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -64,7 +65,7 @@ public class GuiLabelListElement <T> extends GuiListElement<Label<T>>
 	{
 		if (this.current == i)
 		{
-			Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x880088ff);
+			Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
 		}
 
 		this.font.drawStringWithShadow(element.title, x + 4, y + 4, hover ? 16777120 : 0xffffff);

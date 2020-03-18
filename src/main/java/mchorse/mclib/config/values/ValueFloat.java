@@ -42,6 +42,11 @@ public class ValueFloat extends Value
 		this.reset();
 	}
 
+	public float get()
+	{
+		return this.value;
+	}
+
 	public void setValue(float value)
 	{
 		this.value = MathUtils.clamp(value, this.min, this.max);

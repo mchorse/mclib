@@ -23,7 +23,7 @@ public class GuiDashboard extends GuiBase
 			@Override
 			protected void drawBackground(GuiContext context, int x, int y, int w, int h)
 			{
-				Gui.drawRect(x, y, x + w, y + h, 0xaa000000);
+				Gui.drawRect(x, y, x + w, y + h, 0xff111111);
 			}
 		};
 		this.panels.resizer().parent(this.area).w(1, 0).h(1, 0);

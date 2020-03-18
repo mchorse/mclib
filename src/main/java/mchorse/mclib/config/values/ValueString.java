@@ -29,6 +29,11 @@ public class ValueString extends Value
 		this.reset();
 	}
 
+	public String get()
+	{
+		return this.value;
+	}
+
 	public void setValue(String value)
 	{
 		this.value = value;
@@ -44,14 +49,18 @@ public class ValueString extends Value
 	@SideOnly(Side.CLIENT)
 	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category)
 	{
-		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id));
+		GuiElement element = new GuiElement(mc);
+		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
 		GuiTextElement textbox = new GuiTextElement(mc, this::setValue);
 
-		label.resizer().set(0, 0, 180, 8);
-		textbox.resizer().set(0, 0, 180, 20);
+		element.resizer().set(0, 0, 180, 20);
+		label.resizer().parent(element.area).set(0, 0, 90, 20);
+		textbox.resizer().parent(element.area).set(90, 0, 90, 20);
 		textbox.setText(this.value);
 
-		return Arrays.asList(label, textbox.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
+		element.add(label, textbox);
+
+		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
 	}
 
 	@Override

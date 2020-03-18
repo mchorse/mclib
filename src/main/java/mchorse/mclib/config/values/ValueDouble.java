@@ -42,6 +42,11 @@ public class ValueDouble extends Value
 		this.reset();
 	}
 
+	public double get()
+	{
+		return this.value;
+	}
+
 	public void setValue(double value)
 	{
 		this.value = MathUtils.clamp(value, this.min, this.max);

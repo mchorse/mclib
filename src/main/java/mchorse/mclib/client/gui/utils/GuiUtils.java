@@ -44,16 +44,6 @@ public class GuiUtils
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
     }
 
-    public static void bindColor(int color)
-    {
-        float r = ((color >> 16) & 0xff) / 255F;
-        float g = ((color >> 8) & 0xff) / 255F;
-        float b = ((color >> 0) & 0xff) / 255F;
-        float a = ((color >> 24) & 0xff) / 255F;
-
-        GlStateManager.color(r, g, b, a);
-    }
-
     public static void drawModel(ModelBase model, EntityPlayer player, int x, int y, float scale)
     {
         drawModel(model, player, x, y, scale, 1.0F);

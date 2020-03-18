@@ -3,14 +3,18 @@ package mchorse.mclib.config.values;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +25,7 @@ public class ValueInt extends Value
 	private int defaultValue;
 	private int min = Integer.MIN_VALUE;
 	private int max = Integer.MAX_VALUE;
+	private boolean color;
 
 	public ValueInt(String id, int defaultValue)
 	{
@@ -42,9 +47,29 @@ public class ValueInt extends Value
 		this.reset();
 	}
 
+	public int get()
+	{
+		return this.value;
+	}
+
 	public void setValue(int value)
 	{
 		this.value = MathUtils.clamp(value, this.min, this.max);
+	}
+
+	public void setColorValue(String value)
+	{
+		int v = ColorUtils.parseColor(value);
+
+		if (v != 0)
+		{
+			this.setValue(v);
+		}
+	}
+
+	public void color()
+	{
+		this.color = true;
 	}
 
 	@Override
@@ -57,6 +82,22 @@ public class ValueInt extends Value
 	@SideOnly(Side.CLIENT)
 	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category)
 	{
+		if (this.color)
+		{
+			GuiElement element = new GuiElement(mc);
+			GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
+			GuiTextElement textbox = new GuiTextElement(mc, 7, (value) -> this.setColorValue(value));
+
+			element.resizer().set(0, 0, 180, 20);
+			label.resizer().parent(element.area).set(0, 0, 90, 20);
+			textbox.resizer().parent(element.area).set(90, 0, 90, 20);
+			textbox.setText("#" + StringUtils.leftPad(Integer.toHexString(this.value), 6, '0'));
+
+			element.add(label, textbox);
+
+			return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
+		}
+
 		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, config.getValueTitle(category.id, this.id), (value) -> this.setValue(value.intValue()));
 
 		trackpad.resizer().set(0, 0, 180, 20);

@@ -3,7 +3,7 @@ package mchorse.mclib.client.gui.utils.resizers;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.Area;
 
-public class ColumnResizer implements IResizer
+public class ColumnResizer extends DecoratedResizer
 {
 	public Area parent;
 	public int x;
@@ -13,18 +13,13 @@ public class ColumnResizer implements IResizer
 	public int margin;
 	public int padding;
 
-	public ColumnResizer(Area parent, int margin, int padding)
+	public ColumnResizer(GuiElement element, int margin, int padding)
 	{
-		this.parent = parent;
+		super(element.resizer());
+
+		this.parent = element.area;
 		this.margin = margin;
 		this.padding = padding;
-	}
-
-	public void reset()
-	{
-		this.x = 0;
-		this.y = 0;
-		this.w = 0;
 	}
 
 	public IResizer child(GuiElement element)
@@ -35,9 +30,14 @@ public class ColumnResizer implements IResizer
 	@Override
 	public void apply(Area area)
 	{
-		throw new IllegalStateException("Can't be used with this resizer class!");
+		this.resizer.apply(area);
+
+		this.x = 0;
+		this.y = 0;
+		this.w = 0;
 	}
 
+	@Override
 	public void apply(Area area, IResizer resizer)
 	{
 		int w = resizer.getW();
@@ -82,44 +82,4 @@ public class ColumnResizer implements IResizer
 		return this.parent.h;
 	}
 
-	public static class ChildResizer implements IResizer
-	{
-		public ColumnResizer parent;
-		public IResizer element;
-
-		public ChildResizer(ColumnResizer parent, IResizer element)
-		{
-			this.parent = parent;
-			this.element = element;
-		}
-
-		@Override
-		public void apply(Area area)
-		{
-			this.parent.apply(area, this.element);
-		}
-
-		@Override
-		public int getX()
-		{
-			return 0;
-		}
-
-		@Override
-		public int getY()
-		{
-			return 0;
-		}
-
-		@Override
-		public int getW() {
-			return 0;
-		}
-
-		@Override
-		public int getH()
-		{
-			return 0;
-		}
-	}
 }

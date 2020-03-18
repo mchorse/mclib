@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.list;
 import java.util.List;
 import java.util.function.Consumer;
 
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.utils.files.entries.AbstractEntry;
 import mchorse.mclib.utils.files.entries.FileEntry;
@@ -131,7 +132,7 @@ public class GuiFolderEntryListElement extends GuiListElement<AbstractEntry>
     {
         if (this.current == i)
         {
-            Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x880088ff);
+            Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
         }
 
         GlStateManager.enableAlpha();

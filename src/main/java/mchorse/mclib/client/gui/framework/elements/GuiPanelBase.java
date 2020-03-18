@@ -1,16 +1,17 @@
 package mchorse.mclib.client.gui.framework.elements;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import mchorse.mclib.utils.Direction;
-import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.McLib;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDrawable;
+import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.resizers.Resizer.Measure;
-import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
+import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Panel base GUI
@@ -21,7 +22,7 @@ import net.minecraft.client.gui.Gui;
 public class GuiPanelBase<T extends IGuiElement> extends GuiElement
 {
     public GuiDelegateElement<T> view;
-    public GuiElements<GuiButtonElement<GuiTextureButton>> buttons;
+    public GuiElements<GuiIconElement> buttons;
     public List<T> panels = new ArrayList<T>();
     public Direction direction;
 
@@ -51,7 +52,7 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
             this.view.resizer().w(1, -20).h(1, 0);
         }
 
-        this.buttons = new GuiElements<GuiButtonElement<GuiTextureButton>>();
+        this.buttons = new GuiElements<GuiIconElement>();
         GuiDrawable drawable = new GuiDrawable((v) ->
         {
             for (int i = 0, c = this.panels.size(); i < c; i++)
@@ -60,7 +61,7 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
                 {
                     Area area = this.buttons.elements.get(i).area;
 
-                    Gui.drawRect(area.x - 2, area.y - 2, area.getX(1) + 2, area.getY(1) + 2, 0x880088ff);
+                    Gui.drawRect(area.x - 2, area.y - 2, area.getX(1) + 2, area.getY(1) + 2, 0x88000000 + McLib.primaryColor.get());
                 }
             }
         });
@@ -71,9 +72,9 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
     /**
      * Register a panel with given texture and tooltip 
      */
-    public GuiButtonElement<GuiTextureButton> registerPanel(T panel, String tooltip, Icon icon)
+    public GuiIconElement registerPanel(T panel, String tooltip, Icon icon)
     {
-        GuiButtonElement<GuiTextureButton> button = GuiButtonElement.icon(this.mc, icon, (b) -> this.setPanel(panel));
+        GuiIconElement button = new GuiIconElement(this.mc, icon, (b) -> this.setPanel(panel));
 
         if (tooltip != null && !tooltip.isEmpty())
         {
@@ -91,7 +92,7 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
      * Here subclasses can override the logic for how the buttons should 
      * be setup 
      */
-    protected void setupButtonResizer(GuiButtonElement<GuiTextureButton> button)
+    protected void setupButtonResizer(GuiIconElement button)
     {
         if (this.buttons.elements.isEmpty())
         {
@@ -113,7 +114,7 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
         }
         else
         {
-            GuiButtonElement<GuiTextureButton> last = this.buttons.elements.get(this.buttons.elements.size() - 1);
+            GuiIconElement last = this.buttons.elements.get(this.buttons.elements.size() - 1);
 
             int x = this.direction.isHorizontal() ? -20 : 0;
             int y = this.direction.isVertical() ? -20 : 0;

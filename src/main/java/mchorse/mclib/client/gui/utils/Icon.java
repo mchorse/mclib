@@ -52,8 +52,6 @@ public class Icon
 
 		GlStateManager.enableAlpha();
 		Minecraft.getMinecraft().renderEngine.bindTexture(this.location);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
 		GuiUtils.drawBillboard(x, y, this.x, this.y, this.w, this.h, this.textureW, this.textureH);
 		GlStateManager.disableAlpha();
 	}

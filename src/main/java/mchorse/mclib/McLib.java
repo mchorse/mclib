@@ -1,7 +1,14 @@
 package mchorse.mclib;
 
+import java.io.File;
 import java.util.Map;
 
+import mchorse.mclib.config.ConfigBuilder;
+import mchorse.mclib.config.values.ValueBoolean;
+import mchorse.mclib.config.values.ValueFloat;
+import mchorse.mclib.config.values.ValueInt;
+import mchorse.mclib.config.values.ValueString;
+import mchorse.mclib.events.RegisterConfigEvent;
 import mchorse.mclib.math.IValue;
 import mchorse.mclib.math.MathBuilder;
 import mchorse.mclib.math.Variable;
@@ -38,10 +45,27 @@ public class McLib
 
     public static final EventBus EVENT_BUS = new EventBus();
 
+    /* Configuration */
+    public static ValueInt primaryColor;
+    public static ValueBoolean enableBorders;
+
+    @SubscribeEvent
+    public void onConfigRegister(RegisterConfigEvent event)
+    {
+        ConfigBuilder builder = new ConfigBuilder("mclib", new File(proxy.configFolder, "mclib/config.json"));
+
+        primaryColor = builder.category("appearance").getColor("primary_color", 0x0088ff);
+        enableBorders = builder.getBoolean("enable_borders", true);
+
+        event.modules.add(builder.build());
+    }
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         proxy.preInit(event);
+
+        EVENT_BUS.register(this);
     }
 
     @Mod.EventHandler
