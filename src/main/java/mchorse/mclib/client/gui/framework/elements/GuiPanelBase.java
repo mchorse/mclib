@@ -7,7 +7,7 @@ import mchorse.mclib.utils.Direction;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDrawable;
 import mchorse.mclib.client.gui.utils.Icon;
-import mchorse.mclib.client.gui.utils.Resizer.Measure;
+import mchorse.mclib.client.gui.utils.resizers.Resizer.Measure;
 import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -37,6 +37,19 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
         this.direction = direction == null ? Direction.BOTTOM : direction;
         this.view = new GuiDelegateElement<T>(mc, null);
         this.view.resizer().parent(this.area).set(0, 0, 1, 1, Measure.RELATIVE).h(1, -20);
+
+        if (this.direction == Direction.TOP)
+        {
+            this.view.resizer().y(20);
+        }
+        else if (this.direction == Direction.LEFT)
+        {
+            this.view.resizer().x(20).w(1, -20).h(1, 0);
+        }
+        else if (this.direction == Direction.RIGHT)
+        {
+            this.view.resizer().w(1, -20).h(1, 0);
+        }
 
         this.buttons = new GuiElements<GuiButtonElement<GuiTextureButton>>();
         GuiDrawable drawable = new GuiDrawable((v) ->

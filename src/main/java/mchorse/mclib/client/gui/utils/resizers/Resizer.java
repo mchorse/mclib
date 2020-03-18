@@ -1,6 +1,7 @@
-package mchorse.mclib.client.gui.utils;
+package mchorse.mclib.client.gui.utils.resizers;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.utils.Area;
 
 /**
  * Resizer class
@@ -8,7 +9,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
  * This class is used to define resizing behavior for a 
  * {@link GuiElement}. 
  */
-public class Resizer
+public class Resizer implements IResizer
 {
     public Unit x = new Unit();
     public Unit y = new Unit();
@@ -16,6 +17,7 @@ public class Resizer
     public Unit h = new Unit();
     public int maxW;
     public int maxH;
+    /* TODO: implement anchoring */
     public float anchorX;
     public float anchorY;
 
@@ -123,6 +125,7 @@ public class Resizer
         return this;
     }
 
+    @Override
     public void apply(Area area)
     {
         if (this.w.enabled) area.w = this.getW();

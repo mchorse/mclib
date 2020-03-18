@@ -2,7 +2,8 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.utils.Area;
-import mchorse.mclib.client.gui.utils.Resizer;
+import mchorse.mclib.client.gui.utils.resizers.IResizer;
+import mchorse.mclib.client.gui.utils.resizers.Resizer;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -24,7 +25,7 @@ public class GuiElement extends Gui implements IGuiElement
     /**
      * Resizer of this class
      */
-    public Resizer resizer;
+    protected IResizer resizer;
 
     /**
      * Tooltip instance
@@ -44,7 +45,7 @@ public class GuiElement extends Gui implements IGuiElement
     /**
      * Children elements
      */
-    protected GuiElements<IGuiElement> children;
+    private GuiElements<IGuiElement> children;
 
     /**
      * Cached children unmodifiable list
@@ -99,6 +100,24 @@ public class GuiElement extends Gui implements IGuiElement
         }
 
         return this.cachedChilden;
+    }
+
+    public void clear()
+    {
+        if (this.children == null)
+        {
+            return;
+        }
+
+        for (IGuiElement element : this.children.elements)
+        {
+            if (element instanceof GuiElement)
+            {
+                ((GuiElement) element).parent = null;
+            }
+        }
+
+        this.children.clear();
     }
 
     public void add(IGuiElement element)
@@ -175,10 +194,15 @@ public class GuiElement extends Gui implements IGuiElement
             this.resizer = new Resizer();
         }
 
+        return this.resizer instanceof Resizer ? (Resizer) this.resizer : null;
+    }
+
+    public IResizer getResizer()
+    {
         return this.resizer;
     }
 
-    public GuiElement setResizer(Resizer resizer)
+    public GuiElement setResizer(IResizer resizer)
     {
         this.resizer = resizer;
 

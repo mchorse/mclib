@@ -11,8 +11,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import mchorse.mclib.client.gui.framework.GuiBase;
-import mchorse.mclib.client.gui.framework.elements.list.GuiFolderEntryList;
-import mchorse.mclib.client.gui.framework.elements.list.GuiResourceLocationList;
+import mchorse.mclib.client.gui.framework.elements.list.GuiFolderEntryListElement;
+import mchorse.mclib.client.gui.framework.elements.list.GuiResourceLocationListElement;
 import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
 import mchorse.mclib.utils.files.entries.FolderEntry;
 import mchorse.mclib.utils.files.FileTree;
@@ -42,12 +42,12 @@ public class GuiTexturePicker extends GuiElement
     public GuiTextElement text;
     public GuiButtonElement<GuiButton> close;
     public GuiButtonElement<GuiButton> folder;
-    public GuiFolderEntryList picker;
+    public GuiFolderEntryListElement picker;
 
     public GuiButtonElement<GuiButton> multi;
     public GuiButtonElement<GuiTextureButton> add;
     public GuiButtonElement<GuiTextureButton> remove;
-    public GuiResourceLocationList multiList;
+    public GuiResourceLocationListElement multiList;
 
     public Consumer<ResourceLocation> callback;
 
@@ -66,7 +66,7 @@ public class GuiTexturePicker extends GuiElement
         this.text = new GuiTextElement(mc, 1000, (str) -> this.selectCurrent(str.isEmpty() ? null : RLUtils.create(str)));
         this.close = GuiButtonElement.button(mc, "X", (b) -> this.setVisible(false));
         this.folder = GuiButtonElement.button(mc, I18n.format("mclib.gui.open_folder"), (b) -> this.openFolder());
-        this.picker = new GuiFolderEntryList(mc, (entry) ->
+        this.picker = new GuiFolderEntryListElement(mc, (entry) ->
         {
             ResourceLocation rl = entry.resource;
 
@@ -83,7 +83,7 @@ public class GuiTexturePicker extends GuiElement
         };
 
         this.multi = GuiButtonElement.button(mc, I18n.format("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
-        this.multiList = new GuiResourceLocationList(mc, (rl) -> this.displayCurrent(rl));
+        this.multiList = new GuiResourceLocationListElement(mc, (rl) -> this.displayCurrent(rl));
         this.add = GuiButtonElement.icon(mc, Icons.ADD, (b) -> this.addMultiSkin());
         this.remove = GuiButtonElement.icon(mc, Icons.REMOVE, (b) -> this.removeMultiSkin());
 

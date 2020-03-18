@@ -72,7 +72,7 @@ public class GuiTrackpadElement extends GuiElement implements ITrackpadListener,
     @Override
     public boolean keyTyped(GuiContext context)
     {
-        return super.keyTyped(context) || this.trackpad.keyTyped(context.typedChar, context.keyCode);
+        return this.trackpad.keyTyped(context.typedChar, context.keyCode) || super.keyTyped(context);
     }
 
     @Override

@@ -4,3 +4,17 @@ mclib.gui.cancel=Cancel
 mclib.gui.multi_skin=Multi-skin
 mclib.gui.no_data=No data available...
 mclib.gui.open_folder=Open folder
+
+# Config
+mclib.config.general.title=General
+mclib.config.general.tooltip=General options
+mclib.config.general.delay=Delay
+mclib.config.comments.general.delay=Changes delay of something
+mclib.config.general.value=Value
+mclib.config.comments.general.value=Value can be whatever you want
+mclib.config.general.frequency=Frequency
+mclib.config.comments.general.frequency=Frequency of update can be chaned here
+mclib.config.textures.title=Textures
+mclib.config.textures.tooltip=Textures options
+mclib.config.textures.test=Test
+mclib.config.comments.textures.test=Changes test

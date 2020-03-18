@@ -282,10 +282,10 @@ public class GuiUtils
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexbuffer = tessellator.getBuffer();
         
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos(x, y + h, z).tex(u * tw, (v + h) * th).endVertex();
-        vertexbuffer.pos(x + w, y, z).tex((u + w) * tw, (v + h) * th).endVertex();
-        vertexbuffer.pos(x + w, y, z).tex((u + w) * tw, (v + 0) * th).endVertex();
+        vertexbuffer.pos(x + w, y + h, z).tex((u + w) * tw, (v + h) * th).endVertex();
+        vertexbuffer.pos(x + w, y, z).tex((u + w) * tw, v * th).endVertex();
         vertexbuffer.pos(x, y, z).tex(u * tw, v * th).endVertex();
 
         tessellator.draw();

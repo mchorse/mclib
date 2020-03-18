@@ -18,13 +18,13 @@ import net.minecraft.util.ResourceLocation;
  * This GUI list element allows to navigate through the file tree 
  * entries. 
  */
-public class GuiFolderEntryList extends GuiListElement<AbstractEntry>
+public class GuiFolderEntryListElement extends GuiListElement<AbstractEntry>
 {
     public Consumer<FileEntry> fileCallback;
     public ResourceLocation rl;
     public FolderEntry parent;
 
-    public GuiFolderEntryList(Minecraft mc, Consumer<FileEntry> fileCallback)
+    public GuiFolderEntryListElement(Minecraft mc, Consumer<FileEntry> fileCallback)
     {
         super(mc, null);
 

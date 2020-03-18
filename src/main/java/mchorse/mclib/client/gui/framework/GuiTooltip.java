@@ -17,7 +17,11 @@ public class GuiTooltip
     {
         this.element = element;
         this.tooltip = tooltip;
-        this.area.copy(element.area);
+
+        if (element != null)
+        {
+            this.area.copy(element.area);
+        }
     }
 
     public void draw(FontRenderer font, int width, int height)
@@ -47,7 +51,7 @@ public class GuiTooltip
             y = MathHelper.clamp_int(y, 6, height - font.FONT_HEIGHT - 6);
 
             Gui.drawRect(x - 3, y - 3, x + w + 3, y + font.FONT_HEIGHT + 3, 0xffffffff);
-            font.drawStringWithShadow(this.tooltip.label, x, y, 0x000000);
+            font.drawString(this.tooltip.label, x, y + 1, 0x000000);
         }
     }
 

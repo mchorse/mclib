@@ -128,7 +128,7 @@ public class GuiTextElement extends GuiElement implements GuiResponder, IFocused
     @Override
     public boolean keyTyped(GuiContext context)
     {
-        return super.keyTyped(context) || this.field.textboxKeyTyped(context.typedChar, context.keyCode);
+        return this.field.textboxKeyTyped(context.typedChar, context.keyCode) || super.keyTyped(context);
     }
 
     @Override

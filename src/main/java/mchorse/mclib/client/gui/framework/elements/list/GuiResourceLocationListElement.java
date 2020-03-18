@@ -13,9 +13,9 @@ import net.minecraft.util.ResourceLocation;
 /**
  * Similar to {@link GuiStringListElement}, but uses {@link ResourceLocation}s 
  */
-public class GuiResourceLocationList extends GuiListElement<ResourceLocation>
+public class GuiResourceLocationListElement extends GuiListElement<ResourceLocation>
 {
-    public GuiResourceLocationList(Minecraft mc, Consumer<ResourceLocation> callback)
+    public GuiResourceLocationListElement(Minecraft mc, Consumer<ResourceLocation> callback)
     {
         super(mc, callback);
 

@@ -26,6 +26,11 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
      */
     protected boolean visible = true;
 
+    public void clear()
+    {
+        this.elements.clear();
+    }
+
     public void add(T element)
     {
         if (element != null) this.elements.add(element);
