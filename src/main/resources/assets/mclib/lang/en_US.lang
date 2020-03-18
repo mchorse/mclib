@@ -6,6 +6,8 @@ mclib.gui.no_data=No data available...
 mclib.gui.open_folder=Open folder
 
 # Config
+mclib.config.title=McLib
+
 mclib.config.general.title=General
 mclib.config.general.tooltip=General options
 mclib.config.general.delay=Delay
