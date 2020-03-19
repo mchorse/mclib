@@ -68,7 +68,7 @@ public class GuiDashboard extends GuiBase
 
 			GuiTrackpadElement trackpadElement = new GuiTrackpadElement(mc, (v) -> {});
 
-			trackpadElement.resizer().parent(this.area).set(10, 70, 80, 20);
+			trackpadElement.resizer().parent(this.area).set(10, 70, 80, 20).x(0.5F, 0).y(0.5F, 0).anchor(0.5F, 0.5F);
 
 			this.add(this.button);
 			this.add(this.circulate);

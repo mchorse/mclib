@@ -76,6 +76,11 @@ public class GuiConfig extends GuiElement
 
 		for (ConfigCategory category : this.config.categories.values())
 		{
+			if (!category.isVisible())
+			{
+				continue;
+			}
+
 			GuiLabel label = new GuiLabel(this.mc, this.config.getCategoryTitle(category.id)).anchor(0, 1);
 			label.resizer().set(0, 0, this.font.getStringWidth(label.label), 20);
 
@@ -89,6 +94,11 @@ public class GuiConfig extends GuiElement
 
 			for (IConfigValue value : category.values.values())
 			{
+				if (!value.isVisible())
+				{
+					continue;
+				}
+
 				for (GuiElement element : value.getFields(this.mc, this.config, category))
 				{
 					this.options.add(element);

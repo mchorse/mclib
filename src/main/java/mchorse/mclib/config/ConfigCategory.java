@@ -17,6 +17,19 @@ public class ConfigCategory
 		this.id = id;
 	}
 
+	public boolean isVisible()
+	{
+		for (IConfigValue value : this.values.values())
+		{
+			if (value.isVisible())
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public JsonObject toJSON()
 	{
 		JsonObject object = new JsonObject();

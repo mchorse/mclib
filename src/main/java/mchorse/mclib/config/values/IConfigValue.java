@@ -16,6 +16,8 @@ public interface IConfigValue
 
 	public void reset();
 
+	public boolean isVisible();
+
 	@SideOnly(Side.CLIENT)
 	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category);
 

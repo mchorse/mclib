@@ -15,11 +15,6 @@ public class Resizer implements IResizer
     public Unit y = new Unit();
     public Unit w = new Unit();
     public Unit h = new Unit();
-    public int maxW;
-    public int maxH;
-    /* TODO: implement anchoring */
-    public float anchorX;
-    public float anchorY;
 
     public Resizer relative;
     public Area parent;
@@ -97,14 +92,22 @@ public class Resizer implements IResizer
 
     public Resizer maxW(int max)
     {
-        this.maxW = max;
+        this.w.max = max;
 
         return this;
     }
 
     public Resizer maxH(int max)
     {
-        this.maxH = max;
+        this.h.max = max;
+
+        return this;
+    }
+
+    public Resizer anchor(float x, float y)
+    {
+        this.x.anchor = x;
+        this.y.anchor = y;
 
         return this;
     }
@@ -130,8 +133,26 @@ public class Resizer implements IResizer
     {
         if (this.w.enabled) area.w = this.getW();
         if (this.h.enabled) area.h = this.getH();
-        if (this.x.enabled) area.x = this.getX();
-        if (this.y.enabled) area.y = this.getY();
+
+        if (this.x.enabled)
+        {
+            area.x = this.getX();
+
+            if (this.w.enabled)
+            {
+                area.x -= area.w * this.x.anchor;
+            }
+        }
+
+        if (this.y.enabled)
+        {
+            area.y = this.getY();
+
+            if (this.h.enabled)
+            {
+                area.y -= area.h * this.y.anchor;
+            }
+        }
     }
 
     public int getX()
@@ -201,9 +222,9 @@ public class Resizer implements IResizer
 
         value = value + this.w.padding;
 
-        if (this.maxW > 0)
+        if (this.w.max > 0)
         {
-            value = Math.min(value, this.maxW);
+            value = Math.min(value, this.w.max);
         }
 
         return value;
@@ -224,9 +245,9 @@ public class Resizer implements IResizer
 
         value = value + this.h.padding;
 
-        if (this.maxH > 0)
+        if (this.h.max > 0)
         {
-            value = Math.min(value, this.maxH);
+            value = Math.min(value, this.h.max);
         }
 
         return value;
@@ -239,6 +260,8 @@ public class Resizer implements IResizer
     {
         public float value;
         public int padding;
+        public int max;
+        public float anchor;
         public boolean enabled = true;
         public Measure unit = Measure.PIXELS;
 
