@@ -70,7 +70,7 @@ public class ValueDouble extends Value
 		element.resizer().set(0, 0, 180, 20);
 		element.add(label);
 
-		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, config.getValueTitle(category.id, this.id), (v) -> this.setValue(v));
+		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (v) -> this.setValue(v));
 
 		trackpad.resizer().parent(element.area).set(90, 0, 90, 20);
 		trackpad.setLimit((float) this.min, (float) this.max);

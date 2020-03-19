@@ -72,7 +72,7 @@ public class ValueFloat extends Value
 		element.resizer().set(0, 0, 180, 20);
 		element.add(label);
 
-		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, config.getValueTitle(category.id, this.id), this::setValue);
+		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this::setValue);
 
 		trackpad.resizer().parent(element.area).set(90, 0, 90, 20);
 		trackpad.setLimit(this.min, this.max);

@@ -66,7 +66,7 @@ public class GuiDashboard extends GuiBase
 			this.circulate.addLabel("Very Test");
 			this.circulate.resizer().parent(this.area).set(10, 40, 80, 20);
 
-			GuiTrackpadElement trackpadElement = new GuiTrackpadElement(mc, "test", (v) -> {});
+			GuiTrackpadElement trackpadElement = new GuiTrackpadElement(mc, (v) -> {});
 
 			trackpadElement.resizer().parent(this.area).set(10, 70, 80, 20);
 

@@ -16,7 +16,6 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     public Consumer<Float> callback;
     public GuiTextField text;
 
-    public String title = "";
     public float value;
     public float amplitude = 0.25F;
     public float min = Float.NEGATIVE_INFINITY;
@@ -29,25 +28,14 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     private int lastY;
     private float lastValue;
 
-    public GuiTrackpadElement(Minecraft mc, String label, Consumer<Float> callback)
+    public GuiTrackpadElement(Minecraft mc, Consumer<Float> callback)
     {
         super(mc);
 
         this.callback = callback;
-        this.setTitle(label);
 
         this.text = new GuiTextField(0, font, 0, 0, 0, 0);
         this.text.setEnableBackgroundDrawing(false);
-    }
-
-    /**
-     * Set the title of this trackpad
-     */
-    public GuiTrackpadElement setTitle(String title)
-    {
-        this.title = title;
-
-        return this;
     }
 
     public void setLimit(float min, float max)
