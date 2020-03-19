@@ -37,4 +37,6 @@ public class Icons
 	public static final Icon IMAGE = new Icon(ICONS, 64, 16);
 	public static final Icon EDIT = new Icon(ICONS, 80, 16);
 	public static final Icon MATERIAL = new Icon(ICONS, 96, 16);
+	public static final Icon MOVE_LEFT = new Icon(ICONS, 144, 16, 8, 16);
+	public static final Icon MOVE_RIGHT = new Icon(ICONS, 152, 16, 8, 16);
 }

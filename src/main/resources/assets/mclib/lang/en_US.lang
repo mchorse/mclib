@@ -5,6 +5,10 @@ mclib.gui.multi_skin=Multi-skin
 mclib.gui.no_data=No data available...
 mclib.gui.open_folder=Open folder
 
+mclib.gui.config.title=Configuration
+mclib.gui.config.tooltip=Mods configuration
+mclib.gui.config.reload_tooltip=Reload configuration from file...
+
 # Config
 mclib.config.title=McLib
 
@@ -15,3 +19,5 @@ mclib.config.appearance.primary_color=Primary color
 mclib.config.comments.appearance.primary_color=The color which is used everywhere in the GUI system
 mclib.config.appearance.enable_borders=Button borders
 mclib.config.comments.appearance.enable_borders=Should buttons and other elements have borders?
+mclib.config.appearance.opacity=Opacity
+mclib.config.comments.appearance.opacity=General opacity of background GUI elements

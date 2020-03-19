@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.utils.Direction;
@@ -62,13 +63,21 @@ public class ValueDouble extends Value
 	@SideOnly(Side.CLIENT)
 	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category)
 	{
-		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, config.getValueTitle(category.id, this.id), (value) -> this.setValue(value.doubleValue()));
+		GuiElement element = new GuiElement(mc);
+		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
 
-		trackpad.resizer().set(0, 0, 180, 20);
+		label.resizer().parent(element.area).set(0, 0, 90, 20);
+		element.resizer().set(0, 0, 180, 20);
+		element.add(label);
+
+		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, config.getValueTitle(category.id, this.id), (v) -> this.setValue(v));
+
+		trackpad.resizer().parent(element.area).set(90, 0, 90, 20);
 		trackpad.setLimit((float) this.min, (float) this.max);
 		trackpad.setValue((float) this.value);
+		element.add(trackpad);
 
-		return Arrays.asList(trackpad.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
+		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
 	}
 
 	@Override

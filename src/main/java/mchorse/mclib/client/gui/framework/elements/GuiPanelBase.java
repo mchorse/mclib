@@ -116,8 +116,8 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
         {
             GuiIconElement last = this.buttons.elements.get(this.buttons.elements.size() - 1);
 
-            int x = this.direction.isHorizontal() ? -20 : 0;
-            int y = this.direction.isVertical() ? -20 : 0;
+            int x = this.direction.isVertical() ? -20 : 0;
+            int y = this.direction.isHorizontal() ? 20 : 0;
 
             button.resizer().relative(last.resizer()).set(x, y, 16, 16);
         }

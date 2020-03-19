@@ -84,11 +84,27 @@ public class Area
     }
 
     /**
+     * Calculate X based on anchor value with additional value
+     */
+    public int getX(float anchor, int value)
+    {
+        return this.x + (int) ((this.w + value) * anchor);
+    }
+
+    /**
      * Calculate Y based on anchor value
      */
     public int getY(float anchor)
     {
         return this.y + (int) (this.h * anchor);
+    }
+
+    /**
+     * Calculate Y based on anchor value
+     */
+    public int getY(float anchor, int value)
+    {
+        return this.y + (int) ((this.h + value) * anchor);
     }
 
     /**

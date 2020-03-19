@@ -16,6 +16,7 @@ import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -34,10 +35,10 @@ public class GuiConfig extends GuiElement
 		super(mc);
 
 		this.reload = new GuiIconElement(mc, Icons.REFRESH, (button) -> this.reload());
-		this.reload.tooltip("Reload configuration from file...", Direction.BOTTOM);
+		this.reload.tooltip(I18n.format("mclib.gui.config.reload_tooltip"), Direction.BOTTOM);
 		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.value));
 		this.options = new GuiScrollElement(mc, ScrollArea.ScrollDirection.HORIZONTAL);
-		this.column = new ColumnResizer(this.options, 5, 10);
+		this.column = new ColumnResizer(this.options, 5, 15);
 
 		this.reload.resizer().parent(this.area).set(110 - 14, 12, 16, 16);
 		this.mods.resizer().parent(this.area).set(10, 35, 100, 0).h(1, -45);
@@ -115,7 +116,7 @@ public class GuiConfig extends GuiElement
 	{
 		this.area.draw(0xaa000000);
 		Gui.drawRect(this.area.x, this.area.y, this.area.x + this.mods.area.w + 20, this.area.getY(1), 0xdd000000);
-		this.font.drawStringWithShadow("Configuration", this.area.x + 10, this.area.y + 20 - this.font.FONT_HEIGHT / 2, 0xffffff);
+		this.font.drawStringWithShadow(I18n.format("mclib.gui.config.title"), this.area.x + 10, this.area.y + 20 - this.font.FONT_HEIGHT / 2, 0xffffff);
 
 		super.draw(context);
 	}

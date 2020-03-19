@@ -4,6 +4,20 @@ import net.minecraft.client.renderer.GlStateManager;
 
 public class ColorUtils
 {
+	public static int multiplyColor(int color, float factor)
+	{
+		float r = ((color >> 16) & 0xff) / 255F;
+		float g = ((color >> 8) & 0xff) / 255F;
+		float b = ((color >> 0) & 0xff) / 255F;
+		float a = ((color >> 24) & 0xff) / 255F;
+
+		r *= factor;
+		g *= factor;
+		b *= factor;
+
+		return rgbaToInt(MathUtils.clamp(r, 0, 1), MathUtils.clamp(g, 0, 1), MathUtils.clamp(b, 0, 1), a);
+	}
+
 	public static void bindColor(int color)
 	{
 		float r = ((color >> 16) & 0xff) / 255F;

@@ -3,7 +3,9 @@ package mchorse.mclib.config.values;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.utils.Direction;
@@ -11,6 +13,7 @@ import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -62,13 +65,21 @@ public class ValueFloat extends Value
 	@SideOnly(Side.CLIENT)
 	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category)
 	{
+		GuiElement element = new GuiElement(mc);
+		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
+
+		label.resizer().parent(element.area).set(0, 0, 90, 20);
+		element.resizer().set(0, 0, 180, 20);
+		element.add(label);
+
 		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, config.getValueTitle(category.id, this.id), this::setValue);
 
-		trackpad.resizer().set(0, 0, 180, 20);
+		trackpad.resizer().parent(element.area).set(90, 0, 90, 20);
 		trackpad.setLimit(this.min, this.max);
 		trackpad.setValue(this.value);
+		element.add(trackpad);
 
-		return Arrays.asList(trackpad.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
+		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
 	}
 
 	@Override

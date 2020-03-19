@@ -82,29 +82,32 @@ public class ValueInt extends Value
 	@SideOnly(Side.CLIENT)
 	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category)
 	{
+		GuiElement element = new GuiElement(mc);
+		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
+
+		label.resizer().parent(element.area).set(0, 0, 90, 20);
+		element.resizer().set(0, 0, 180, 20);
+		element.add(label);
+
 		if (this.color)
 		{
-			GuiElement element = new GuiElement(mc);
-			GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
 			GuiTextElement textbox = new GuiTextElement(mc, 7, (value) -> this.setColorValue(value));
 
-			element.resizer().set(0, 0, 180, 20);
-			label.resizer().parent(element.area).set(0, 0, 90, 20);
 			textbox.resizer().parent(element.area).set(90, 0, 90, 20);
 			textbox.setText("#" + StringUtils.leftPad(Integer.toHexString(this.value), 6, '0'));
+			element.add(textbox);
+		}
+		else
+		{
+			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, config.getValueTitle(category.id, this.id), (value) -> this.setValue(value.intValue()));
 
-			element.add(label, textbox);
-
-			return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
+			trackpad.resizer().parent(element.area).set(90, 0, 90, 20);
+			trackpad.setLimit(this.min, this.max, true);
+			trackpad.setValue(this.value);
+			element.add(trackpad);
 		}
 
-		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, config.getValueTitle(category.id, this.id), (value) -> this.setValue(value.intValue()));
-
-		trackpad.resizer().set(0, 0, 180, 20);
-		trackpad.setLimit(this.min, this.max, true);
-		trackpad.setValue(this.value);
-
-		return Arrays.asList(trackpad.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
+		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
 	}
 
 	@Override
