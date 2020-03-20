@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.utils.resizers;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
+import mchorse.mclib.client.gui.utils.Area;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,12 @@ public abstract class AutomaticResizer extends DecoratedResizer
 		}
 
 		return child;
+	}
+
+	@Override
+	public void apply(Area area)
+	{
+		this.resizer.apply(area);
 	}
 
 	@Override

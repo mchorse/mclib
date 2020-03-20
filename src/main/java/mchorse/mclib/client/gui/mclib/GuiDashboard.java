@@ -10,6 +10,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.resizers.GridResizer;
 import mchorse.mclib.client.gui.utils.resizers.RowResizer;
 import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.events.RegisterDashboardPanels;
@@ -59,20 +60,17 @@ public class GuiDashboard extends GuiBase
 			super(mc);
 
 			this.element = new GuiElement(mc);
-			GuiButtonElement one = new GuiButtonElement(mc, "One", (b) -> {});
-			GuiTextElement two = new GuiTextElement(mc, (b) -> {});
-			GuiTrackpadElement three = new GuiTrackpadElement(mc, (b) -> {});
-			GuiIconElement iconElement = new GuiIconElement(mc, Icons.POSE, (b) -> {});
-			iconElement.tooltip("Beach", Direction.BOTTOM);
 
-			one.resizer().set(0, 0, 40, 20);
-			two.resizer().set(0, 0, 100, 20);
-			three.resizer().set(0, 0, 40, 20);
-			iconElement.resizer().set(0, 0, 20, 20);
+			for (int i = 0; i < 20; i ++)
+			{
+				GuiButtonElement button = new GuiButtonElement(mc, "Test " + i, (b) -> {});
 
-			this.element.resizer().parent(this.area).set(0, 0, 400, 40);
-			this.element.add(one, two, three, iconElement);
-			this.element.setResizer(new RowResizer(this.element, 5).padding(10));
+				button.resizer().set(0, 0, 0, 20);
+				this.element.add(button);
+			}
+
+			this.element.resizer().parent(this.area).set(0, 0, 400, 400);
+			this.element.setResizer(new GridResizer(this.element, 0).items(4).padding(10));
 
 			this.add(this.element);
 		}

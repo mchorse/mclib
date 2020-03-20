@@ -18,7 +18,7 @@ public class RowResizer extends AutomaticResizer
 	@Override
 	public void apply(Area area)
 	{
-		this.resizer.apply(area);
+		super.apply(area);
 
 		this.i = this.x = this.w = 0;
 		this.count = this.resizers.size();
@@ -44,8 +44,8 @@ public class RowResizer extends AutomaticResizer
 		int x = this.parent.area.x + this.padding + this.x;
 
 		/* If resizer specifies its custom width, use that one instead */
-		int cw = resizer.getW();
-		int ch = resizer.getH();
+		int cw = resizer == null ? 0 : resizer.getW();
+		int ch = resizer == null ? 0 : resizer.getH();
 
 		cw = cw > 0 ? cw : w;
 

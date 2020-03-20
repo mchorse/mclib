@@ -17,7 +17,7 @@ public class ColumnResizer extends AutomaticResizer
 	@Override
 	public void apply(Area area)
 	{
-		this.resizer.apply(area);
+		super.apply(area);
 
 		this.x = 0;
 		this.y = 0;
@@ -27,8 +27,8 @@ public class ColumnResizer extends AutomaticResizer
 	@Override
 	public void apply(Area area, IResizer resizer)
 	{
-		int w = resizer.getW();
-		int h = resizer.getH();
+		int w = resizer == null ? 0 : resizer.getW();
+		int h = resizer == null ? 0 : resizer.getH();
 
 		if (this.y + h > this.parent.area.h - this.padding * 2)
 		{
