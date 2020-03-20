@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements;
 
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
@@ -7,6 +8,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 
 import java.util.function.Consumer;
@@ -36,6 +38,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
         this.text = new GuiTextField(0, font, 0, 0, 0, 0);
         this.text.setEnableBackgroundDrawing(false);
+        this.setValue(0);
     }
 
     public void setLimit(float min, float max)
@@ -201,13 +204,24 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         int h = this.area.h;
 
         Gui.drawRect(x, y, x + w, y + h, 0xff000000);
+
+        if (this.dragging)
+        {
+            /* Draw filling background */
+            int color = McLib.primaryColor.get();
+
+            int fx = MathUtils.clamp(context.mouseX, this.area.x, this.area.getX(1));
+
+            Gui.drawRect(Math.min(fx, this.lastX), this.area.y, Math.max(fx, this.lastX), this.area.getY(1F), 0xff000000 + color);
+        }
+
         GlStateManager.color(1, 1, 1, 1);
         Icons.MOVE_LEFT.render(x + 4, y + (h - 16) / 2);
         Icons.MOVE_RIGHT.render(x + w - 12, y + (h - 16) / 2);
 
         int width = MathUtils.clamp(this.font.getStringWidth(this.text.getText()), 0, w - 16);
 
-        this.text.xPosition = this.area.getX(0.5F, -width);
+        this.text.xPosition = this.area.getX(0.5F, width);
         this.text.yPosition = this.area.getY(0.5F) - 4;
         this.text.width = width + 6;
         this.text.height = 9;
@@ -240,8 +254,22 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
                 {
                     this.setValueAndNotify(MathHelper.clamp_float(newValue, this.min, this.max));
                 }
+
+                String format;
+
+                if (amp == (long) amp)
+                {
+                    format = String.format("%d", (long) amp);
+                }
+                else
+                {
+                    format = String.valueOf(amp);
+                }
+
+                this.font.drawString("x" + format, this.lastX + 5, this.lastY + 4 - this.font.FONT_HEIGHT + 2, 0xffffff);
             }
 
+            /* Draw active element */
             Gui.drawRect(this.lastX - 4, this.lastY - 4, this.lastX - 3, this.lastY + 4, 0xffffffff);
             Gui.drawRect(this.lastX + 3, this.lastY - 4, this.lastX + 4, this.lastY + 4, 0xffffffff);
             Gui.drawRect(this.lastX - 3, this.lastY - 4, this.lastX + 3, this.lastY - 3, 0xffffffff);

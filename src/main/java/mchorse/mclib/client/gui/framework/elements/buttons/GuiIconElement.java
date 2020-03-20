@@ -33,8 +33,10 @@ public class GuiIconElement extends GuiClickElement<GuiIconElement>
 	{
 		if (this.visible)
 		{
+			Icon icon = this.hover ? this.iconHover : this.icon;
+
 			ColorUtils.bindColor(this.hover ? 0xffaaaaaa : 0xffffffff);
-			(this.hover ? this.iconHover : this.icon).render(this.area.x, this.area.y);
+			icon.render(this.area.getX(0.5F, icon.w), this.area.getY(0.5F, icon.h));
 		}
 	}
 }

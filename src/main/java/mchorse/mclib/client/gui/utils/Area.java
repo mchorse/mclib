@@ -88,7 +88,7 @@ public class Area
      */
     public int getX(float anchor, int value)
     {
-        return this.x + (int) ((this.w + value) * anchor);
+        return this.x + (int) ((this.w - value) * anchor);
     }
 
     /**
@@ -104,7 +104,7 @@ public class Area
      */
     public int getY(float anchor, int value)
     {
-        return this.y + (int) ((this.h + value) * anchor);
+        return this.y + (int) ((this.h - value) * anchor);
     }
 
     /**
