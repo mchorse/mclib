@@ -38,11 +38,13 @@ public class GuiConfig extends GuiElement
 		this.reload.tooltip(I18n.format("mclib.gui.config.reload_tooltip"), Direction.BOTTOM);
 		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.value));
 		this.options = new GuiScrollElement(mc, ScrollArea.ScrollDirection.HORIZONTAL);
-		this.column = new ColumnResizer(this.options, 5, 15);
 
 		this.reload.resizer().parent(this.area).set(110 - 14, 12, 16, 16);
 		this.mods.resizer().parent(this.area).set(10, 35, 100, 0).h(1, -45);
 		this.options.resizer().parent(this.area).set(120, 0, 0, 0).w(1, -120).h(1, 0);
+
+		this.column = new ColumnResizer(this.options, 5);
+		this.column.dontCollect().padding(15);
 		this.options.setResizer(this.column);
 
 		for (Config config : McLib.proxy.configs.modules.values())
@@ -117,7 +119,7 @@ public class GuiConfig extends GuiElement
 	{
 		super.resize();
 
-		this.options.scroll.scrollSize = this.column.getW();
+		this.options.scroll.scrollSize = this.column.getSize();
 		this.options.scroll.clamp();
 	}
 

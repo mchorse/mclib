@@ -5,10 +5,12 @@ import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
+import mchorse.mclib.client.gui.framework.elements.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
-import mchorse.mclib.client.gui.framework.elements.buttons.GuiCirculateElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.resizers.RowResizer;
 import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.events.RegisterDashboardPanels;
 import mchorse.mclib.utils.Direction;
@@ -50,29 +52,37 @@ public class GuiDashboard extends GuiBase
 
 	public static class GuiTest extends GuiElement
 	{
-		public GuiButtonElement button;
-		public GuiCirculateElement circulate;
+		public GuiElement element;
 
 		public GuiTest(Minecraft mc)
 		{
 			super(mc);
 
-			this.button = new GuiButtonElement(mc, "Test", (v) -> {});
-			this.button.resizer().parent(this.area).set(10, 10, 80, 20);
+			this.element = new GuiElement(mc);
+			GuiButtonElement one = new GuiButtonElement(mc, "One", (b) -> {});
+			GuiTextElement two = new GuiTextElement(mc, (b) -> {});
+			GuiTrackpadElement three = new GuiTrackpadElement(mc, (b) -> {});
+			GuiIconElement iconElement = new GuiIconElement(mc, Icons.POSE, (b) -> {});
+			iconElement.tooltip("Beach", Direction.BOTTOM);
 
-			this.circulate = new GuiCirculateElement(mc, (v) -> {});
-			this.circulate.addLabel("Test");
-			this.circulate.addLabel("Not Test");
-			this.circulate.addLabel("Very Test");
-			this.circulate.resizer().parent(this.area).set(10, 40, 80, 20);
+			one.resizer().set(0, 0, 40, 20);
+			two.resizer().set(0, 0, 100, 20);
+			three.resizer().set(0, 0, 40, 20);
+			iconElement.resizer().set(0, 0, 20, 20);
 
-			GuiTrackpadElement trackpadElement = new GuiTrackpadElement(mc, (v) -> {});
+			this.element.resizer().parent(this.area).set(0, 0, 400, 40);
+			this.element.add(one, two, three, iconElement);
+			this.element.setResizer(new RowResizer(this.element, 5).padding(10));
 
-			trackpadElement.resizer().parent(this.area).set(10, 70, 80, 20).x(0.5F, 0).y(0.5F, 0).anchor(0.5F, 0.5F);
+			this.add(this.element);
+		}
 
-			this.add(this.button);
-			this.add(this.circulate);
-			this.add(trackpadElement);
+		@Override
+		public void draw(GuiContext context)
+		{
+			this.element.area.draw(0x88000000);
+
+			super.draw(context);
 		}
 	}
 }

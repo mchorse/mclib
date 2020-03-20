@@ -58,8 +58,8 @@ public class GuiTooltip
                 y = this.area.getY(1) + 6;
             }
 
-            x = MathHelper.clamp_int(x, 0, width - w);
-            y = MathHelper.clamp_int(y, 0, height - h);
+            x = MathHelper.clamp_int(x, 3, width - w - 3);
+            y = MathHelper.clamp_int(y, 3, height - h - 3);
 
             Gui.drawRect(x - 3, y - 3, x + w + 3, y + h + 3, 0xffffffff);
 

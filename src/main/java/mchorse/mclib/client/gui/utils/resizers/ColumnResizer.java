@@ -3,28 +3,15 @@ package mchorse.mclib.client.gui.utils.resizers;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.Area;
 
-public class ColumnResizer extends DecoratedResizer
+public class ColumnResizer extends AutomaticResizer
 {
-	public Area parent;
-	public int x;
-	public int y;
-	public int w;
+	private int x;
+	private int y;
+	private int w;
 
-	public int margin;
-	public int padding;
-
-	public ColumnResizer(GuiElement element, int margin, int padding)
+	public ColumnResizer(GuiElement element, int margin)
 	{
-		super(element.resizer());
-
-		this.parent = element.area;
-		this.margin = margin;
-		this.padding = padding;
-	}
-
-	public IResizer child(GuiElement element)
-	{
-		return new ChildResizer(this, element.getResizer());
+		super(element, margin);
 	}
 
 	@Override
@@ -43,14 +30,14 @@ public class ColumnResizer extends DecoratedResizer
 		int w = resizer.getW();
 		int h = resizer.getH();
 
-		if (this.y + h > this.parent.h - this.padding * 2)
+		if (this.y + h > this.parent.area.h - this.padding * 2)
 		{
 			this.x += this.w + this.margin * 2;
 			this.y = this.w = 0;
 		}
 
-		int x = this.parent.x + this.x + this.padding;
-		int y = this.parent.y + this.y + this.padding;
+		int x = this.parent.area.x + this.x + this.padding;
+		int y = this.parent.area.y + this.y + this.padding;
 
 		area.set(x, y, w, h);
 
@@ -58,28 +45,8 @@ public class ColumnResizer extends DecoratedResizer
 		this.y += h + this.margin;
 	}
 
-	@Override
-	public int getX()
-	{
-		return this.parent.x;
-	}
-
-	@Override
-	public int getY()
-	{
-		return this.parent.y;
-	}
-
-	@Override
-	public int getW()
+	public int getSize()
 	{
 		return this.x + this.w + this.padding * 2;
 	}
-
-	@Override
-	public int getH()
-	{
-		return this.parent.h;
-	}
-
 }
