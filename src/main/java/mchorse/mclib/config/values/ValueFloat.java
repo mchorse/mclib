@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ValueFloat extends Value
 {
@@ -61,7 +62,7 @@ public class ValueFloat extends Value
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category)
+	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category, Consumer<IConfigValue> save)
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
@@ -70,7 +71,11 @@ public class ValueFloat extends Value
 		element.resizer().set(0, 0, 180, 20);
 		element.add(label);
 
-		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this::setValue);
+		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (value) ->
+		{
+			this.setValue(value);
+			save.accept(this);
+		});
 
 		trackpad.resizer().parent(element.area).set(90, 0, 90, 20);
 		trackpad.limit(this.min, this.max);

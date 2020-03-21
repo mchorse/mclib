@@ -9,6 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface IConfigValue
 {
@@ -19,7 +20,7 @@ public interface IConfigValue
 	public boolean isVisible();
 
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category);
+	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category, Consumer<IConfigValue> save);
 
 	public void fromJSON(JsonElement element);
 

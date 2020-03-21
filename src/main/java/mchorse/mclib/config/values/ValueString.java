@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ValueString extends Value
 {
@@ -47,11 +48,15 @@ public class ValueString extends Value
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category)
+	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category, Consumer<IConfigValue> save)
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
-		GuiTextElement textbox = new GuiTextElement(mc, this::setValue);
+		GuiTextElement textbox = new GuiTextElement(mc, (value) ->
+		{
+			this.setValue(value);
+			save.accept(this);
+		});
 
 		element.resizer().set(0, 0, 180, 20);
 		label.resizer().parent(element.area).set(0, 0, 90, 20);

@@ -29,6 +29,8 @@ public class GuiConfig extends GuiElement
 	public ColumnResizer column;
 
 	private Config config;
+	private boolean save;
+	private long saveTime;
 
 	public GuiConfig(Minecraft mc)
 	{
@@ -101,7 +103,7 @@ public class GuiConfig extends GuiElement
 					continue;
 				}
 
-				for (GuiElement element : value.getFields(this.mc, this.config, category))
+				for (GuiElement element : value.getFields(this.mc, this.config, category, this::save))
 				{
 					this.options.add(element);
 					element.setResizer(this.column.child(element));
@@ -112,6 +114,12 @@ public class GuiConfig extends GuiElement
 		}
 
 		this.resize();
+	}
+
+	public void save(IConfigValue value)
+	{
+		this.save = true;
+		this.saveTime = System.currentTimeMillis() + 500;
 	}
 
 	@Override
@@ -126,6 +134,12 @@ public class GuiConfig extends GuiElement
 	@Override
 	public void draw(GuiContext context)
 	{
+		if (this.save && System.currentTimeMillis() > this.saveTime)
+		{
+			this.save = false;
+			this.config.save();
+		}
+
 		this.area.draw(0xaa000000);
 		Gui.drawRect(this.area.x, this.area.y, this.area.x + this.mods.area.w + 20, this.area.getY(1), 0xdd000000);
 		this.font.drawStringWithShadow(I18n.format("mclib.gui.config.title"), this.area.x + 10, this.area.y + 20 - this.font.FONT_HEIGHT / 2, 0xffffff);

@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ValueInt extends Value
 {
@@ -80,7 +81,7 @@ public class ValueInt extends Value
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category)
+	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category, Consumer<IConfigValue> save)
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
@@ -91,7 +92,11 @@ public class ValueInt extends Value
 
 		if (this.color)
 		{
-			GuiTextElement textbox = new GuiTextElement(mc, 7, (value) -> this.setColorValue(value));
+			GuiTextElement textbox = new GuiTextElement(mc, 7, (value) ->
+			{
+				this.setColorValue(value);
+				save.accept(this);
+			});
 
 			textbox.resizer().parent(element.area).set(90, 0, 90, 20);
 			textbox.setText("#" + StringUtils.leftPad(Integer.toHexString(this.value), 6, '0'));
@@ -99,7 +104,11 @@ public class ValueInt extends Value
 		}
 		else
 		{
-			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (value) -> this.setValue(value.intValue()));
+			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (value) ->
+			{
+				this.setValue(value.intValue());
+				save.accept(this);
+			});
 
 			trackpad.resizer().parent(element.area).set(90, 0, 90, 20);
 			trackpad.limit(this.min, this.max, true);

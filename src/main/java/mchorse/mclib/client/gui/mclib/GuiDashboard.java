@@ -25,7 +25,7 @@ public class GuiDashboard extends GuiBase
 	{
 		GuiConfig config = new GuiConfig(mc);
 
-		this.panels = new GuiPanelBase<GuiElement>(mc, Direction.RIGHT)
+		this.panels = new GuiPanelBase<GuiElement>(mc, Direction.LEFT)
 		{
 			@Override
 			protected void drawBackground(GuiContext context, int x, int y, int w, int h)
