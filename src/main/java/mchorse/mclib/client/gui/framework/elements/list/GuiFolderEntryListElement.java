@@ -126,10 +126,6 @@ public class GuiFolderEntryListElement extends GuiListElement<AbstractEntry>
     }
 
     @Override
-    public void sort()
-    {}
-
-    @Override
     public void drawElement(AbstractEntry element, int i, int x, int y, boolean hover, boolean selected)
     {
         if (selected)

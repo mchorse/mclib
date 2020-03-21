@@ -25,7 +25,7 @@ public class GuiDashboard extends GuiBase
 	{
 		GuiConfig config = new GuiConfig(mc);
 
-		this.panels = new GuiPanelBase<GuiElement>(mc, Direction.LEFT)
+		this.panels = new GuiPanelBase<GuiElement>(mc, Direction.RIGHT)
 		{
 			@Override
 			protected void drawBackground(GuiContext context, int x, int y, int w, int h)
@@ -76,20 +76,22 @@ public class GuiDashboard extends GuiBase
 				this.element.add(element);
 			}
 
-			this.element.resizer().parent(this.area).set(0, 0, 400, 400);
-			this.element.setResizer(new GridResizer(this.element, 0).items(4).padding(10));
-
 			GuiStringListElement string = new GuiStringListElement(mc, (list) -> System.out.println(list.size()));
 
-			string.multi();
-			string.resizer().relative(this.element.getResizer()).set(0, 0, 80, 100).y(1, 0);
+			string.multi().sorting().setBackground(0xff000000);
+			string.resizer().relative(this.element.getResizer()).set(0, 0, 120, 200).y(1, 0);
 
 			for (int i = 0; i < 20; i ++)
 			{
 				string.add("Test " + i);
 			}
 
-			this.add(this.element, string);
+			this.element.add(string);
+
+			this.element.resizer().parent(this.area).set(0, 0, 400, 400);
+			this.element.setResizer(new GridResizer(this.element, 0).items(4).padding(10));
+
+			this.add(this.element);
 		}
 
 		@Override

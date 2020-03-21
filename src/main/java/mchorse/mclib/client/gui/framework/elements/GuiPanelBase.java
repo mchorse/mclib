@@ -53,20 +53,7 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
         }
 
         this.buttons = new GuiElements<GuiIconElement>();
-        GuiDrawable drawable = new GuiDrawable((v) ->
-        {
-            for (int i = 0, c = this.panels.size(); i < c; i++)
-            {
-                if (this.view.delegate == this.panels.get(i))
-                {
-                    Area area = this.buttons.elements.get(i).area;
-
-                    Gui.drawRect(area.x - 2, area.y - 2, area.getX(1) + 2, area.getY(1) + 2, 0x88000000 + McLib.primaryColor.get());
-                }
-            }
-        });
-
-        this.add(drawable, this.buttons, this.view);
+        this.add(this.buttons, this.view);
     }
 
     /**
@@ -149,6 +136,16 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
         else
         {
             this.drawBackground(context, this.area.getX(1) - 20, this.area.y, 20, this.area.h);
+        }
+
+        for (int i = 0, c = this.panels.size(); i < c; i++)
+        {
+            if (this.view.delegate == this.panels.get(i))
+            {
+                Area area = this.buttons.elements.get(i).area;
+
+                Gui.drawRect(area.x - 2, area.y - 2, area.getX(1) + 2, area.getY(1) + 2, 0xaa000000 + McLib.primaryColor.get());
+            }
         }
 
         super.draw(context);

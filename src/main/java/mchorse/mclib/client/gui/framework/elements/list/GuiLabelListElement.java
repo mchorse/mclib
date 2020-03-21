@@ -50,9 +50,11 @@ public class GuiLabelListElement <T> extends GuiListElement<Label<T>>
 	}
 
 	@Override
-	protected void sortElements()
+	protected boolean sortElements()
 	{
 		Collections.sort(this.list, (a, b) -> a.title.compareToIgnoreCase(b.title));
+
+		return true;
 	}
 
 	@Override

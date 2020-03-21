@@ -18,9 +18,11 @@ public class GuiStringListElement extends GuiListElement<String>
     }
 
     @Override
-    protected void sortElements()
+    protected boolean sortElements()
     {
         Collections.sort(this.list);
+
+        return true;
     }
 
     @Override

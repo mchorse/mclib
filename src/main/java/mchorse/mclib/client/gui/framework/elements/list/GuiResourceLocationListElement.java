@@ -25,9 +25,11 @@ public class GuiResourceLocationListElement extends GuiListElement<ResourceLocat
     }
 
     @Override
-    protected void sortElements()
+    protected boolean sortElements()
     {
         Collections.sort(this.list, (a, b) -> a.toString().compareToIgnoreCase(b.toString()));
+
+        return true;
     }
 
     @Override
