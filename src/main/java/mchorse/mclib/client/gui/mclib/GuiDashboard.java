@@ -7,6 +7,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
 import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
+import mchorse.mclib.client.gui.framework.elements.list.GuiStringListElement;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.resizers.GridResizer;
 import mchorse.mclib.config.gui.GuiConfig;
@@ -78,7 +79,17 @@ public class GuiDashboard extends GuiBase
 			this.element.resizer().parent(this.area).set(0, 0, 400, 400);
 			this.element.setResizer(new GridResizer(this.element, 0).items(4).padding(10));
 
-			this.add(this.element);
+			GuiStringListElement string = new GuiStringListElement(mc, (list) -> System.out.println(list.size()));
+
+			string.multi();
+			string.resizer().relative(this.element.getResizer()).set(0, 0, 80, 100).y(1, 0);
+
+			for (int i = 0; i < 20; i ++)
+			{
+				string.add("Test " + i);
+			}
+
+			this.add(this.element, string);
 		}
 
 		@Override

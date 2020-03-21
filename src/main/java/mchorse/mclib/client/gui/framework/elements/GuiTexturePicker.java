@@ -28,6 +28,7 @@ import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -83,7 +84,7 @@ public class GuiTexturePicker extends GuiElement
         };
 
         this.multi = new GuiButtonElement(mc, I18n.format("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
-        this.multiList = new GuiResourceLocationListElement(mc, (rl) -> this.displayCurrent(rl));
+        this.multiList = new GuiResourceLocationListElement(mc, (list) -> this.displayCurrent(list.get(0)));
         this.add = new GuiIconElement(mc, Icons.ADD, (b) -> this.addMultiSkin());
         this.remove = new GuiIconElement(mc, Icons.REMOVE, (b) -> this.removeMultiSkin());
 
@@ -138,8 +139,8 @@ public class GuiTexturePicker extends GuiElement
         }
 
         this.multiList.add(rl);
-        this.multiList.current = this.multiList.getList().size() - 1;
-        this.displayCurrent(this.multiList.getCurrent());
+        this.multiList.setIndex(this.multiList.getList().size() - 1);
+        this.displayCurrent(this.multiList.getCurrent().get(0));
     }
 
     /**
@@ -147,15 +148,17 @@ public class GuiTexturePicker extends GuiElement
      */
     private void removeMultiSkin()
     {
-        if (this.multiList.current >= 0 && this.multiList.getList().size() > 1)
-        {
-            this.multiList.getList().remove(this.multiList.current);
-            this.multiList.update();
-            this.multiList.current--;
+        int index = this.multiList.getIndex();
 
-            if (this.multiList.current >= 0)
+        if (index >= 0 && this.multiList.getList().size() > 1)
+        {
+            this.multiList.getList().remove(index);
+            this.multiList.update();
+            this.multiList.setIndex(index - 1);
+
+            if (this.multiList.getIndex() >= 0)
             {
-                this.displayCurrent(this.multiList.getCurrent());
+                this.displayCurrent(this.multiList.getCurrent().get(0));
             }
         }
     }
@@ -209,9 +212,11 @@ public class GuiTexturePicker extends GuiElement
 
         if (this.multiRL != null)
         {
-            if (this.multiList.current != -1 && rl != null)
+            int index = this.multiList.getIndex();
+
+            if (index != -1 && rl != null)
             {
-                this.multiList.getList().set(this.multiList.current, rl);
+                this.multiList.getList().set(index, rl);
             }
 
             rl = this.multiRL;
@@ -253,7 +258,7 @@ public class GuiTexturePicker extends GuiElement
             this.multiRL = (MultiResourceLocation) skin;
             this.displayCurrent(this.multiRL.children.get(0));
 
-            this.multiList.current = this.multiRL.children.isEmpty() ? -1 : 0;
+            this.multiList.setIndex(this.multiRL.children.isEmpty() ? -1 : 0);;
             this.multiList.setList(this.multiRL.children);
 
             this.picker.resizer().set(115, 30, 0, 0).parent(this.area).w(1, -120).h(1, -30);
@@ -304,7 +309,8 @@ public class GuiTexturePicker extends GuiElement
 
         if (keyCode == Keyboard.KEY_RETURN)
         {
-            AbstractEntry entry = this.picker.getCurrent();
+            List<AbstractEntry> selected = this.picker.getCurrent();
+            AbstractEntry entry = selected.isEmpty() ? null : selected.get(0);
 
             if (entry instanceof FolderEntry)
             {
@@ -333,7 +339,7 @@ public class GuiTexturePicker extends GuiElement
 
     protected boolean moveCurrent(int factor, boolean top)
     {
-        int index = this.picker.current + factor;
+        int index = this.picker.getIndex() + factor;
         int length = this.picker.getList().size();
 
         if (index < 0) index = length - 1;
@@ -341,7 +347,7 @@ public class GuiTexturePicker extends GuiElement
 
         if (top) index = factor > 0 ? length - 1 : 0;
 
-        this.picker.current = index;
+        this.picker.setIndex(index);
         this.picker.scroll.scrollIntoView(index * this.picker.scroll.scrollItemSize);
         this.typed = "";
 

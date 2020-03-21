@@ -6,11 +6,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class GuiLabelListElement <T> extends GuiListElement<Label<T>>
 {
-	public GuiLabelListElement(Minecraft mc, Consumer<Label<T>> callback)
+	public GuiLabelListElement(Minecraft mc, Consumer<List<Label<T>>> callback)
 	{
 		super(mc, callback);
 
@@ -28,7 +29,7 @@ public class GuiLabelListElement <T> extends GuiListElement<Label<T>>
 		{
 			if (this.list.get(i).title.equals(title))
 			{
-				this.current = i;
+				this.setIndex(i);
 
 				return;
 			}
@@ -41,29 +42,23 @@ public class GuiLabelListElement <T> extends GuiListElement<Label<T>>
 		{
 			if (this.list.get(i).value.equals(value))
 			{
-				this.current = i;
+				this.setIndex(i);
 
 				return;
 			}
 		}
 	}
 
-	public void sort()
+	@Override
+	protected void sortElements()
 	{
-		Label current = this.getCurrent();
-
 		Collections.sort(this.list, (a, b) -> a.title.compareToIgnoreCase(b.title));
-
-		if (current != null)
-		{
-			this.setCurrent(current);
-		}
 	}
 
 	@Override
-	public void drawElement(Label<T> element, int i, int x, int y, boolean hover)
+	public void drawElement(Label<T> element, int i, int x, int y, boolean hover, boolean selected)
 	{
-		if (this.current == i)
+		if (selected)
 		{
 			Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
 		}

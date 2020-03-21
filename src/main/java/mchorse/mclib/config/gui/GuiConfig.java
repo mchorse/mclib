@@ -36,7 +36,7 @@ public class GuiConfig extends GuiElement
 
 		this.reload = new GuiIconElement(mc, Icons.REFRESH, (button) -> this.reload());
 		this.reload.tooltip(I18n.format("mclib.gui.config.reload_tooltip"), Direction.BOTTOM);
-		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.value));
+		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.get(0).value));
 		this.options = new GuiScrollElement(mc, ScrollArea.ScrollDirection.HORIZONTAL);
 
 		this.reload.resizer().parent(this.area).set(110 - 14, 12, 16, 16);

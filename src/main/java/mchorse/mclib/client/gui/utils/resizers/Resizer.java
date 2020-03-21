@@ -16,7 +16,7 @@ public class Resizer implements IResizer
     public Unit w = new Unit();
     public Unit h = new Unit();
 
-    public Resizer relative;
+    public IResizer relative;
     public Area parent;
 
     public Resizer set(float x, float y, float w, float h)
@@ -112,7 +112,7 @@ public class Resizer implements IResizer
         return this;
     }
 
-    public Resizer relative(Resizer relative)
+    public Resizer relative(IResizer relative)
     {
         this.relative = relative;
         this.parent = null;

@@ -29,8 +29,10 @@ public class GuiFolderEntryListElement extends GuiListElement<AbstractEntry>
     {
         super(mc, null);
 
-        this.callback = (entry) ->
+        this.callback = (list) ->
         {
+            AbstractEntry entry = list.get(0);
+
             if (entry instanceof FileEntry)
             {
                 if (this.fileCallback != null)
@@ -78,13 +80,13 @@ public class GuiFolderEntryListElement extends GuiListElement<AbstractEntry>
     public void setDirectFolder(FolderEntry folder)
     {
         List<AbstractEntry> entries = folder.getEntries();
-        AbstractEntry current = this.getCurrent();
+        List<AbstractEntry> current = this.getCurrent();
 
         this.parent = folder;
         this.setList(entries);
-        this.current = current == null ? -1 : entries.indexOf(current);
+        this.setCurrent(current.isEmpty() ? null : current.get(0));
 
-        if (this.current == -1)
+        if (this.current.isEmpty())
         {
             this.setCurrent(this.rl);
         }
@@ -92,11 +94,11 @@ public class GuiFolderEntryListElement extends GuiListElement<AbstractEntry>
 
     public ResourceLocation getCurrentResource()
     {
-        AbstractEntry entry = this.getCurrent();
+        List<AbstractEntry> entry = this.getCurrent();
 
-        if (entry != null && entry instanceof FileEntry)
+        if (!entry.isEmpty() && entry.get(0) instanceof FileEntry)
         {
-            return ((FileEntry) entry).resource;
+            return ((FileEntry) entry.get(0)).resource;
         }
 
         return null;
@@ -104,7 +106,7 @@ public class GuiFolderEntryListElement extends GuiListElement<AbstractEntry>
 
     public void setCurrent(ResourceLocation rl)
     {
-        this.current = -1;
+        this.setIndex(-1);
 
         if (rl == null)
         {
@@ -117,7 +119,7 @@ public class GuiFolderEntryListElement extends GuiListElement<AbstractEntry>
 
             if (entry instanceof FileEntry && ((FileEntry) entry).resource.equals(rl))
             {
-                this.current = i;
+                this.setIndex(i);
                 break;
             }
         }
@@ -128,9 +130,9 @@ public class GuiFolderEntryListElement extends GuiListElement<AbstractEntry>
     {}
 
     @Override
-    public void drawElement(AbstractEntry element, int i, int x, int y, boolean hover)
+    public void drawElement(AbstractEntry element, int i, int x, int y, boolean hover, boolean selected)
     {
-        if (this.current == i)
+        if (selected)
         {
             Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
         }

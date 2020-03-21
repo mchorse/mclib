@@ -2,6 +2,8 @@ package mchorse.mclib.client.gui.framework.elements.list;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -27,6 +29,11 @@ public abstract class GuiListElement<T> extends GuiElement
     protected List<T> list = new ArrayList<T>();
 
     /**
+     * List for copying
+     */
+    private List<T> copy = new ArrayList<T>();
+
+    /**
      * Scrolling area
      */
     public ScrollArea scroll = new ScrollArea(20);
@@ -34,21 +41,30 @@ public abstract class GuiListElement<T> extends GuiElement
     /**
      * Callback which gets invoked when user selects an element
      */
-    public Consumer<T> callback;
+    public Consumer<List<T>> callback;
 
     /**
-     * Current index of selected element 
+     * Selected elements
      */
-    public int current = -1;
+    public List<Integer> current = new ArrayList<Integer>();
 
+    /**
+     * Whether this list supports multi selection
+     */
+    public boolean multi;
     public boolean background = false;
     public int color = 0x88000000;
 
-    public GuiListElement(Minecraft mc, Consumer<T> callback)
+    public GuiListElement(Minecraft mc, Consumer<List<T>> callback)
     {
         super(mc);
 
         this.callback = callback;
+    }
+
+    public boolean exists(int index)
+    {
+        return index >= 0 && index < this.list.size();
     }
 
     public void setBackground()
@@ -67,9 +83,14 @@ public abstract class GuiListElement<T> extends GuiElement
         this.color = color;
     }
 
+    public void multi()
+    {
+        this.multi = true;
+    }
+
     public void clear()
     {
-        this.current = -1;
+        this.current.clear();
         this.list.clear();
         this.update();
     }
@@ -90,9 +111,9 @@ public abstract class GuiListElement<T> extends GuiElement
     {
         int size = this.list.size();
 
-        if (this.current >= 0 && this.current < size)
+        if (this.current.size() == 1 && this.exists(this.current.get(0)))
         {
-            this.list.set(this.current, element);
+            this.list.set(this.current.get(0), element);
         }
     }
 
@@ -107,25 +128,56 @@ public abstract class GuiListElement<T> extends GuiElement
         return this.list;
     }
 
-    public T getCurrent()
+    public List<T> getCurrent()
     {
-        if (this.current >= 0 && this.current < this.list.size())
+        this.copy.clear();
+
+        for (Integer integer : this.current)
         {
-            return this.list.get(this.current);
+            if (this.exists(integer))
+            {
+                this.copy.add(this.list.get(integer));
+            }
         }
 
-        return null;
+        return this.copy;
+    }
+
+    public int getIndex()
+    {
+        return this.current.isEmpty() ? -1 : this.current.get(0);
+    }
+
+    public void setIndex(int index)
+    {
+        this.current.clear();
+
+        if (this.exists(index))
+        {
+            this.current.add(index);
+        }
     }
 
     public void setCurrent(T element)
     {
-        this.current = this.list.indexOf(element);
+        this.current.clear();
+
+        int index = this.list.indexOf(element);
+
+        if (this.exists(index))
+        {
+            this.current.add(index);
+        }
     }
 
     public void setCurrentScroll(T element)
     {
         this.setCurrent(element);
-        this.scroll.scrollTo(this.current * this.scroll.scrollItemSize);
+
+        if (!this.current.isEmpty())
+        {
+            this.scroll.scrollTo(this.current.get(0) * this.scroll.scrollItemSize);
+        }
     }
 
     public void remove(T element)
@@ -133,7 +185,21 @@ public abstract class GuiListElement<T> extends GuiElement
         this.list.remove(element);
     }
 
-    public abstract void sort();
+    public void sort()
+    {
+        List<T> current = this.getCurrent();
+
+        this.sortElements();
+        this.current.clear();
+
+        for (T string : current)
+        {
+            this.current.add(this.list.indexOf(string));
+        }
+    }
+
+    protected void sortElements()
+    {}
 
     public void update()
     {
@@ -164,15 +230,22 @@ public abstract class GuiListElement<T> extends GuiElement
         if (this.scroll.isInside(mouseX, mouseY))
         {
             int index = this.scroll.getIndex(mouseX, mouseY);
-            int size = this.list.size();
 
-            if (index >= 0 && index < size)
+            if (this.exists(index))
             {
-                this.current = index;
+                if (this.multi && GuiScreen.isShiftKeyDown())
+                {
+                    this.current.add(index);
+                }
+                else
+                {
+                    this.current.clear();
+                    this.current.add(index);
+                }
 
                 if (this.callback != null)
                 {
-                    this.callback.accept(this.list.get(index));
+                    this.callback.accept(this.getCurrent());
 
                     return true;
                 }
@@ -207,11 +280,10 @@ public abstract class GuiListElement<T> extends GuiElement
             this.area.draw(this.color);
         }
 
-        GuiScreen screen = this.mc.currentScreen;
         int i = 0;
         int h = this.scroll.scrollItemSize;
 
-        GuiUtils.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, screen.width, screen.height);
+        GuiUtils.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
 
         for (T element : this.list)
         {
@@ -230,21 +302,21 @@ public abstract class GuiListElement<T> extends GuiElement
             }
 
             boolean hover = mouseX >= x && mouseY >= y && mouseX < x + this.scroll.w && mouseY < y + this.scroll.scrollItemSize;
+            boolean selected = this.current.indexOf(i) != -1;
 
-            this.drawElement(element, i, x, y, hover);
+            this.drawElement(element, i, x, y, hover, selected);
 
             i++;
         }
 
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        GuiUtils.unscissor();
 
         this.scroll.drawScrollbar();
-
         super.draw(context);
     }
 
     /**
      * Draw individual element 
      */
-    public abstract void drawElement(T element, int i, int x, int y, boolean hover);
+    public abstract void drawElement(T element, int i, int x, int y, boolean hover, boolean selected);
 }

@@ -18,7 +18,7 @@ public abstract class GuiSearchListElement<T> extends GuiElement
     public String label;
     public boolean background;
 
-    public GuiSearchListElement(Minecraft mc, Consumer<T> callback)
+    public GuiSearchListElement(Minecraft mc, Consumer<List<T>> callback)
     {
         super(mc);
 
@@ -31,7 +31,7 @@ public abstract class GuiSearchListElement<T> extends GuiElement
         this.add(this.search, this.list);
     }
 
-    protected abstract GuiListElement<T> createList(Minecraft mc, Consumer<T> callback);
+    protected abstract GuiListElement<T> createList(Minecraft mc, Consumer<List<T>> callback);
 
     public void filter(String str, boolean fill)
     {

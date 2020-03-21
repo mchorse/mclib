@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.utils;
 
+import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -23,6 +24,11 @@ import java.net.URL;
  */
 public class GuiUtils
 {
+    public static void scissor(int x, int y, int w, int h, GuiContext context)
+    {
+        scissor(x, y, w, h, context.screen.width, context.screen.height);
+    }
+
     /**
      * Scissor (clip) the screen 
      */
@@ -42,6 +48,11 @@ public class GuiUtils
 
         GL11.glScissor(xx, yy, ww, hh);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
+    }
+
+    public static void unscissor()
+    {
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
     }
 
     public static void drawModel(ModelBase model, EntityPlayer player, int x, int y, float scale)

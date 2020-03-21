@@ -38,6 +38,15 @@ public class Area
     }
 
     /**
+     * Check whether given rect intersects this rect
+     */
+    public boolean intersects(Area area)
+    {
+        return this.x < area.x + area.w && this.y < area.y + area.h
+            && area.x < this.x + this.w && area.y < this.y + this.h;
+    }
+
+    /**
      * Set all values
      */
     public void set(int x, int y, int w, int h)

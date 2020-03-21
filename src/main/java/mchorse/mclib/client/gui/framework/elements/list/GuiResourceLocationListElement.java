@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements.list;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.function.Consumer;
 
 import mchorse.mclib.McLib;
@@ -16,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class GuiResourceLocationListElement extends GuiListElement<ResourceLocation>
 {
-    public GuiResourceLocationListElement(Minecraft mc, Consumer<ResourceLocation> callback)
+    public GuiResourceLocationListElement(Minecraft mc, Consumer<List<ResourceLocation>> callback)
     {
         super(mc, callback);
 
@@ -24,15 +25,15 @@ public class GuiResourceLocationListElement extends GuiListElement<ResourceLocat
     }
 
     @Override
-    public void sort()
+    protected void sortElements()
     {
         Collections.sort(this.list, (a, b) -> a.toString().compareToIgnoreCase(b.toString()));
     }
 
     @Override
-    public void drawElement(ResourceLocation element, int i, int x, int y, boolean hover)
+    public void drawElement(ResourceLocation element, int i, int x, int y, boolean hover, boolean seleted)
     {
-        if (this.current == i)
+        if (seleted)
         {
             Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
         }

@@ -114,7 +114,7 @@ public class GuiScrollElement extends GuiElement
 
         this.apply(context);
 
-        GuiUtils.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context.screen.width, context.screen.height);
+        GuiUtils.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
         GlStateManager.pushMatrix();
 
         if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
@@ -131,7 +131,7 @@ public class GuiScrollElement extends GuiElement
         this.postDraw(context);
 
         GlStateManager.popMatrix();
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        GuiUtils.unscissor();
 
         this.scroll.drawScrollbar();
         this.unapply(context);
