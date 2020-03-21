@@ -1,6 +1,7 @@
 package mchorse.mclib.client.gui.framework;
 
 import mchorse.mclib.client.gui.framework.elements.GuiContext;
+import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiElements;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.utils.Area;
@@ -19,15 +20,21 @@ import java.io.IOException;
 @SideOnly(Side.CLIENT)
 public class GuiBase extends GuiScreen
 {
-    public GuiElements<IGuiElement> elements = new GuiElements<IGuiElement>();
+    public GuiElement root;
     public GuiContext context = new GuiContext(this);
-    public Area area = new Area();
+    public Area viewport = new Area();
+
+    public GuiBase()
+    {
+        this.root = new GuiElement(Minecraft.getMinecraft());
+        this.root.resizer().w(1, 0).h(1, 0);
+    }
 
     @Override
     public void initGui()
     {
-        this.area.set(0, 0, this.width, this.height);
-        this.elements.resize();
+        this.viewport.set(0, 0, this.width, this.height);
+        this.root.resize();
     }
 
     @Override
@@ -36,10 +43,7 @@ public class GuiBase extends GuiScreen
         int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
 
-        if (!this.elements.handleMouseInput(x, y))
-        {
-            super.handleMouseInput();
-        }
+        super.handleMouseInput();
 
         int scroll = -Mouse.getEventDWheel();
 
@@ -56,9 +60,9 @@ public class GuiBase extends GuiScreen
     {
         this.context.setMouse(mouseX, mouseY, mouseButton);
 
-        if (this.elements.isEnabled())
+        if (this.root.isEnabled())
         {
-            this.elements.mouseClicked(this.context);
+            this.root.mouseClicked(this.context);
         }
     }
 
@@ -66,9 +70,9 @@ public class GuiBase extends GuiScreen
     {
         this.context.setMouseWheel(x, y, scroll);
 
-        if (this.elements.isEnabled())
+        if (this.root.isEnabled())
         {
-            this.elements.mouseScrolled(this.context);
+            this.root.mouseScrolled(this.context);
         }
     }
 
@@ -77,18 +81,9 @@ public class GuiBase extends GuiScreen
     {
         this.context.setMouse(mouseX, mouseY, state);
 
-        if (this.elements.isEnabled())
+        if (this.root.isEnabled())
         {
-            this.elements.mouseReleased(this.context);
-        }
-    }
-
-    @Override
-    public void handleKeyboardInput() throws IOException
-    {
-        if (!this.elements.handleKeyboardInput())
-        {
-            super.handleKeyboardInput();
+            this.root.mouseReleased(this.context);
         }
     }
 
@@ -97,7 +92,7 @@ public class GuiBase extends GuiScreen
     {
         this.context.setKey(typedChar, keyCode);
 
-        if (this.elements.isEnabled() && this.elements.keyTyped(this.context))
+        if (this.root.isEnabled() && this.root.keyTyped(this.context))
         {
             return;
         }
@@ -138,10 +133,10 @@ public class GuiBase extends GuiScreen
         this.context.setMouse(mouseX, mouseY);
         this.context.partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
 
-        if (this.elements.isVisible())
+        if (this.root.isVisible())
         {
             this.context.tooltip.set(null, null);
-            this.elements.draw(this.context);
+            this.root.draw(this.context);
             this.context.tooltip.draw(this.fontRendererObj, this.width, this.height);
         }
     }

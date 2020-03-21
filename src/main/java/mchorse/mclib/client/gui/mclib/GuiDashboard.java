@@ -34,13 +34,13 @@ public class GuiDashboard extends GuiBase
 			}
 		};
 
-		this.panels.resizer().parent(this.area).w(1, 0).h(1, 0);
+		this.panels.resizer().parent(this.viewport).w(1, 0).h(1, 0);
 		this.panels.registerPanel(config, I18n.format("mclib.gui.config.tooltip"), Icons.GEAR);
 		this.panels.registerPanel(new GuiTest(mc), "Test", Icons.POSE);
 		McLib.EVENT_BUS.post(new RegisterDashboardPanels(this));
 		this.panels.setPanel(config);
 
-		this.elements.add(this.panels);
+		this.root.add(this.panels);
 	}
 
 	@Override

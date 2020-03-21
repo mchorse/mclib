@@ -52,7 +52,7 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
             this.view.resizer().w(1, -20).h(1, 0);
         }
 
-        this.buttons = new GuiElements<GuiIconElement>();
+        this.buttons = new GuiElements<GuiIconElement>(this);
         this.add(this.buttons, this.view);
     }
 

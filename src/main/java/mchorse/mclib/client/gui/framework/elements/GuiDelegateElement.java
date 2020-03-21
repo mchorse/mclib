@@ -1,7 +1,5 @@
 package mchorse.mclib.client.gui.framework.elements;
 
-import java.io.IOException;
-
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -10,7 +8,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * Delegated {@link IGuiElement}
  */
 @SideOnly(Side.CLIENT)
-public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implements IGuiLegacy
+public class GuiDelegateElement<T extends IGuiElement> extends GuiElement
 {
     public T delegate;
 
@@ -53,17 +51,6 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implem
     }
 
     @Override
-    public boolean handleMouseInput(int mouseX, int mouseY) throws IOException
-    {
-        if (this.delegate instanceof IGuiLegacy)
-        {
-            return ((IGuiLegacy) this.delegate).handleMouseInput(mouseX, mouseY);
-        }
-
-        return false;
-    }
-
-    @Override
     public boolean mouseClicked(GuiContext context)
     {
         return this.delegate != null && this.delegate.mouseClicked(context);
@@ -82,17 +69,6 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implem
         {
             this.delegate.mouseReleased(context);
         }
-    }
-
-    @Override
-    public boolean handleKeyboardInput() throws IOException
-    {
-        if (this.delegate instanceof IGuiLegacy)
-        {
-            return ((IGuiLegacy) this.delegate).handleKeyboardInput();
-        }
-
-        return false;
     }
 
     @Override

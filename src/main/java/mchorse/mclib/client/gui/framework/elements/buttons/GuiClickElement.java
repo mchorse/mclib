@@ -25,7 +25,12 @@ public abstract class GuiClickElement<T extends GuiClickElement> extends GuiElem
     @Override
     public boolean mouseClicked(GuiContext context)
     {
-        if (this.area.isInside(context.mouseX, context.mouseY))
+        if (super.mouseClicked(context))
+        {
+            return true;
+        }
+
+        if (context.mouseButton == 0 && this.area.isInside(context.mouseX, context.mouseY))
         {
             this.pressed = true;
             this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));

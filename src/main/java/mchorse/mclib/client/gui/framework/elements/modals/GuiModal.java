@@ -16,7 +16,8 @@ import net.minecraft.client.renderer.GlStateManager;
 public abstract class GuiModal extends GuiElement
 {
     public GuiDelegateElement<IGuiElement> parent;
-    public String label = "";
+    public String label;
+    public int y;
 
     public GuiModal(Minecraft mc, GuiDelegateElement<IGuiElement> parent, String label)
     {
@@ -37,7 +38,15 @@ public abstract class GuiModal extends GuiElement
     {
         Gui.drawRect(this.area.x, this.area.y, this.area.getX(1), this.area.getY(1), 0xcc000000);
         GlStateManager.enableAlpha();
-        this.font.drawSplitString(this.label, this.area.x + 10, this.area.y + 10, this.area.w - 20, 0xffffff);
+
+        this.y = 0;
+        int y = this.area.y + 10;
+
+        for (String line : this.font.listFormattedStringToWidth(this.label, this.area.w - 20))
+        {
+            this.font.drawStringWithShadow(line, this.area.x + 10, y + this.y, 0xffffff);
+            this.y += 11;
+        }
 
         super.draw(context);
     }

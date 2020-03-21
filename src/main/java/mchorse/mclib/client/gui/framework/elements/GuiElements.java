@@ -1,6 +1,5 @@
 package mchorse.mclib.client.gui.framework.elements;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,7 @@ import java.util.List;
  * 
  * This class is responsible for handling a collection of elements
  */
-public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLegacy
+public class GuiElements<T extends IGuiElement> implements IGuiElement
 {
     /**
      * List of elements 
@@ -25,6 +24,16 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
      * Whether this element is visible 
      */
     protected boolean visible = true;
+
+    /**
+     * Parent of this elements collection
+     */
+    private GuiElement parent;
+
+    public GuiElements(GuiElement parent)
+    {
+        this.parent = parent;
+    }
 
     public void clear()
     {
@@ -76,23 +85,6 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
     }
 
     @Override
-    public boolean handleMouseInput(int mouseX, int mouseY) throws IOException
-    {
-        for (T element : this.elements)
-        {
-            if (element instanceof IGuiLegacy)
-            {
-                if (((IGuiLegacy) element).handleMouseInput(mouseX, mouseY))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    @Override
     public boolean mouseClicked(GuiContext context)
     {
         for (int i = this.elements.size() - 1; i >= 0; i--)
@@ -136,23 +128,6 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement, IGuiLega
                 element.mouseReleased(context);
             }
         }
-    }
-
-    @Override
-    public boolean handleKeyboardInput() throws IOException
-    {
-        for (T element : this.elements)
-        {
-            if (element instanceof IGuiLegacy)
-            {
-                if (((IGuiLegacy) element).handleKeyboardInput())
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     @Override

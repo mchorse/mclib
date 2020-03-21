@@ -124,7 +124,7 @@ public class GuiElement extends Gui implements IGuiElement
     {
         if (this.children == null)
         {
-            this.children = new GuiElements<IGuiElement>();
+            this.children = new GuiElements<IGuiElement>(this);
         }
 
         this.addChild(element);
@@ -134,7 +134,7 @@ public class GuiElement extends Gui implements IGuiElement
     {
         if (this.children == null)
         {
-            this.children = new GuiElements<IGuiElement>();
+            this.children = new GuiElements<IGuiElement>(this);
         }
 
         for (IGuiElement element : elements)
