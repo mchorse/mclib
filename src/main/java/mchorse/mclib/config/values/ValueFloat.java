@@ -3,7 +3,6 @@ package mchorse.mclib.config.values;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.config.Config;
@@ -13,7 +12,6 @@ import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -75,7 +73,7 @@ public class ValueFloat extends Value
 		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this::setValue);
 
 		trackpad.resizer().parent(element.area).set(90, 0, 90, 20);
-		trackpad.setLimit(this.min, this.max);
+		trackpad.limit(this.min, this.max);
 		trackpad.setValue(this.value);
 		element.add(trackpad);
 

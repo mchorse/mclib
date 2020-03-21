@@ -5,13 +5,10 @@ import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
-import mchorse.mclib.client.gui.framework.elements.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
-import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.resizers.GridResizer;
-import mchorse.mclib.client.gui.utils.resizers.RowResizer;
 import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.events.RegisterDashboardPanels;
 import mchorse.mclib.utils.Direction;
@@ -63,10 +60,19 @@ public class GuiDashboard extends GuiBase
 
 			for (int i = 0; i < 20; i ++)
 			{
-				GuiButtonElement button = new GuiButtonElement(mc, "Test " + i, (b) -> {});
+				GuiElement element;
 
-				button.resizer().set(0, 0, 0, 20);
-				this.element.add(button);
+				if (Math.random() > 0.5)
+				{
+					element = new GuiButtonElement(mc, "Test " + i, (b) -> {});
+				}
+				else
+				{
+					element = new GuiTrackpadElement(mc, (v) -> {});
+				}
+
+				element.resizer().set(0, 0, 0, 20);
+				this.element.add(element);
 			}
 
 			this.element.resizer().parent(this.area).set(0, 0, 400, 400);

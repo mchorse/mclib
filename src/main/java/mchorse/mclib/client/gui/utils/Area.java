@@ -112,6 +112,30 @@ public class Area
      */
     public void draw(int color)
     {
-        Gui.drawRect(this.x, this.y, this.getX(1), this.getY(1), color);
+        this.draw(color, 0, 0, 0, 0);
+    }
+
+    /**
+     * Draw a rect within the bound of this rect
+     */
+    public void draw(int color, int offset)
+    {
+        this.draw(color, offset, offset, offset, offset);
+    }
+
+    /**
+     * Draw a rect within the bound of this rect
+     */
+    public void draw(int color, int horizontal, int vertical)
+    {
+        this.draw(color, horizontal, vertical, horizontal, vertical);
+    }
+
+    /**
+     * Draw a rect within the bound of this rect
+     */
+    public void draw(int color, int lx, int ty, int rx, int by)
+    {
+        Gui.drawRect(this.x + lx, this.y + ty, this.getX(1) - rx, this.getY(1) - by, color);
     }
 }

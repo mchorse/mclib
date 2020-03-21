@@ -1,14 +1,15 @@
 package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.McLib;
+import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 
 import java.util.function.Consumer;
@@ -20,6 +21,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
     public float value;
     public float amplitude = 0.25F;
+    public float increment = 1;
     public float min = Float.NEGATIVE_INFINITY;
     public float max = Float.POSITIVE_INFINITY;
     public boolean integer;
@@ -29,6 +31,9 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     private int lastX;
     private int lastY;
     private float lastValue;
+
+    private Area plusOne = new Area();
+    private Area minusOne = new Area();
 
     public GuiTrackpadElement(Minecraft mc, Consumer<Float> callback)
     {
@@ -41,16 +46,40 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         this.setValue(0);
     }
 
-    public void setLimit(float min, float max)
+    public GuiTrackpadElement limit(float min, float max)
     {
         this.min = min;
         this.max = max;
+
+        return this;
     }
 
-    public void setLimit(float min, float max, boolean integer)
+    public GuiTrackpadElement limit(float min, float max, boolean integer)
     {
-        this.setLimit(min, max);
         this.integer = integer;
+
+        return this.limit(min, max);
+    }
+
+    public GuiTrackpadElement integer()
+    {
+        this.integer = true;
+
+        return this;
+    }
+
+    public GuiTrackpadElement increment(int increment)
+    {
+        this.increment = increment;
+
+        return this;
+    }
+
+    public GuiTrackpadElement amp(float amp)
+    {
+        this.amplitude = amp;
+
+        return this;
     }
 
     /**
@@ -103,6 +132,10 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         super.resize();
 
         this.text.setCursorPositionZero();
+        this.plusOne.copy(this.area);
+        this.minusOne.copy(this.area);
+        this.plusOne.w = this.minusOne.w = 20;
+        this.plusOne.x = this.area.getX(1) - 20;
     }
 
     /**
@@ -114,12 +147,28 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     {
         int mouseX = context.mouseX;
         int mouseY = context.mouseY;
+        boolean control = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
+
+        if (!control)
+        {
+            if (this.plusOne.isInside(mouseX, mouseY))
+            {
+                this.setValue(this.value + this.increment);
+
+                return true;
+            } else if (this.minusOne.isInside(mouseX, mouseY))
+            {
+                this.setValue(this.value - this.increment);
+
+                return true;
+            }
+        }
 
         this.text.mouseClicked(mouseX, mouseY, context.mouseButton);
 
         if (!this.text.isFocused() && this.area.isInside(mouseX, mouseY))
         {
-            if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
+            if (control)
             {
                 this.setValueAndNotify(Math.round(this.value));
             }
@@ -202,22 +251,36 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         int y = this.area.y;
         int w = this.area.w;
         int h = this.area.h;
+        int padding = McLib.enableBorders.get() ? 1 : 0;
 
         Gui.drawRect(x, y, x + w, y + h, 0xff000000);
+
+        boolean plus = !this.dragging && this.plusOne.isInside(context.mouseX, context.mouseY);
+        boolean minus = !this.dragging && this.minusOne.isInside(context.mouseX, context.mouseY);
 
         if (this.dragging)
         {
             /* Draw filling background */
             int color = McLib.primaryColor.get();
+            int fx = MathUtils.clamp(context.mouseX, this.area.x + padding, this.area.getX(1) - padding);
 
-            int fx = MathUtils.clamp(context.mouseX, this.area.x, this.area.getX(1));
-
-            Gui.drawRect(Math.min(fx, this.lastX), this.area.y, Math.max(fx, this.lastX), this.area.getY(1F), 0xff000000 + color);
+            Gui.drawRect(Math.min(fx, this.lastX), this.area.y + padding, Math.max(fx, this.lastX), this.area.getY(1F) - padding, 0xff000000 + color);
+        }
+        else if (plus)
+        {
+            this.plusOne.draw(0x22ffffff, padding);
+        }
+        else if (minus)
+        {
+            this.minusOne.draw(0x22ffffff, padding);
         }
 
-        GlStateManager.color(1, 1, 1, 1);
-        Icons.MOVE_LEFT.render(x + 4, y + (h - 16) / 2);
-        Icons.MOVE_RIGHT.render(x + w - 12, y + (h - 16) / 2);
+        GlStateManager.enableBlend();
+        ColorUtils.bindColor(minus ? 0xffffffff : 0x80ffffff);
+        Icons.MOVE_LEFT.render(x + 5, y + (h - 16) / 2);
+        ColorUtils.bindColor(plus ? 0xffffffff : 0x80ffffff);
+        Icons.MOVE_RIGHT.render(x + w - 13, y + (h - 16) / 2);
+        GlStateManager.disableBlend();
 
         int width = MathUtils.clamp(this.font.getStringWidth(this.text.getText()), 0, w - 16);
 

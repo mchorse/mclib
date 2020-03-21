@@ -102,7 +102,7 @@ public class ValueInt extends Value
 			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (value) -> this.setValue(value.intValue()));
 
 			trackpad.resizer().parent(element.area).set(90, 0, 90, 20);
-			trackpad.setLimit(this.min, this.max, true);
+			trackpad.limit(this.min, this.max, true);
 			trackpad.setValue(this.value);
 			element.add(trackpad);
 		}
