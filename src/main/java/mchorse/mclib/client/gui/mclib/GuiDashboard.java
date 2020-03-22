@@ -7,6 +7,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
 import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
+import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.list.GuiStringListElement;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.resizers.GridResizer;
@@ -51,54 +52,25 @@ public class GuiDashboard extends GuiBase
 
 	public static class GuiTest extends GuiElement
 	{
-		public GuiElement element;
-
 		public GuiTest(Minecraft mc)
 		{
 			super(mc);
 
-			this.element = new GuiElement(mc);
+			GuiButtonElement button = new GuiButtonElement(mc, "Context", (b) -> System.out.println("Click!"));
 
-			for (int i = 0; i < 20; i ++)
-			{
-				GuiElement element;
+			button.resizer().parent(this.area).set(10, 10, 100, 20);
+			button.context(() -> new GuiSimpleContextMenu(mc)
+				.action(Icons.ADD, "Add", () -> System.out.println("Add"))
+				.action(Icons.REMOVE, "Remove", () -> System.out.println("Remove, hehe..."))
+				.action(Icons.NONE, "Space...", () -> System.out.println("Boo hoo"))
+				.action(Icons.LOCKED, "SECRET", () -> System.out.println("Secret!")));
 
-				if (Math.random() > 0.5)
-				{
-					element = new GuiButtonElement(mc, "Test " + i, (b) -> {});
-				}
-				else
-				{
-					element = new GuiTrackpadElement(mc, (v) -> {});
-				}
-
-				element.resizer().set(0, 0, 0, 20);
-				this.element.add(element);
-			}
-
-			GuiStringListElement string = new GuiStringListElement(mc, (list) -> System.out.println(list.size()));
-
-			string.multi().sorting().setBackground(0xff000000);
-			string.resizer().relative(this.element.getResizer()).set(0, 0, 120, 200).y(1, 0);
-
-			for (int i = 0; i < 20; i ++)
-			{
-				string.add("Test " + i);
-			}
-
-			this.element.add(string);
-
-			this.element.resizer().parent(this.area).set(0, 0, 400, 400);
-			this.element.setResizer(new GridResizer(this.element, 0).items(4).padding(10));
-
-			this.add(this.element);
+			this.add(button);
 		}
 
 		@Override
 		public void draw(GuiContext context)
 		{
-			this.element.area.draw(0x88000000);
-
 			super.draw(context);
 		}
 	}

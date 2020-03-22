@@ -15,11 +15,11 @@ import net.minecraft.client.renderer.GlStateManager;
  */
 public abstract class GuiModal extends GuiElement
 {
-    public GuiDelegateElement<IGuiElement> parent;
+    public GuiDelegateElement<GuiElement> parent;
     public String label;
     public int y;
 
-    public GuiModal(Minecraft mc, GuiDelegateElement<IGuiElement> parent, String label)
+    public GuiModal(Minecraft mc, GuiDelegateElement<GuiElement> parent, String label)
     {
         super(mc);
 

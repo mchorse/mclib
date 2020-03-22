@@ -19,7 +19,7 @@ import java.util.List;
  * With this base class, you can add multi panel elements which could be 
  * switched between using buttons.
  */
-public class GuiPanelBase<T extends IGuiElement> extends GuiElement
+public class GuiPanelBase<T extends GuiElement> extends GuiElement
 {
     public GuiDelegateElement<T> view;
     public GuiElements<GuiIconElement> buttons;

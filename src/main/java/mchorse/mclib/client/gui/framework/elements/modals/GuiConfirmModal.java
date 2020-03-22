@@ -1,6 +1,7 @@
 package mchorse.mclib.client.gui.framework.elements.modals;
 
 import mchorse.mclib.client.gui.framework.elements.GuiDelegateElement;
+import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import net.minecraft.client.Minecraft;
@@ -15,7 +16,7 @@ public class GuiConfirmModal extends GuiModal
 
     public Consumer<Boolean> callback;
 
-    public GuiConfirmModal(Minecraft mc, GuiDelegateElement<IGuiElement> parent, String label, Consumer<Boolean> callback)
+    public GuiConfirmModal(Minecraft mc, GuiDelegateElement<GuiElement> parent, String label, Consumer<Boolean> callback)
     {
         super(mc, parent, label);
 

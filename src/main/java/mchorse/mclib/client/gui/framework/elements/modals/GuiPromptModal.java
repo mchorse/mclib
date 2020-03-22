@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements.modals;
 
 import java.util.function.Consumer;
 
+import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiClickElement;
 import mchorse.mclib.client.gui.framework.elements.GuiDelegateElement;
@@ -19,7 +20,7 @@ public class GuiPromptModal extends GuiModal
     public GuiButtonElement confirm;
     public GuiButtonElement cancel;
 
-    public GuiPromptModal(Minecraft mc, GuiDelegateElement<IGuiElement> parent, String label, Consumer<String> callback)
+    public GuiPromptModal(Minecraft mc, GuiDelegateElement<GuiElement> parent, String label, Consumer<String> callback)
     {
         super(mc, parent, label);
 

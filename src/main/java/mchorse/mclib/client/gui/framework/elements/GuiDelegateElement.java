@@ -1,14 +1,19 @@
 package mchorse.mclib.client.gui.framework.elements;
 
+import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Delegated {@link IGuiElement}
  */
 @SideOnly(Side.CLIENT)
-public class GuiDelegateElement<T extends IGuiElement> extends GuiElement
+public class GuiDelegateElement<T extends GuiElement> extends GuiElement
 {
     public T delegate;
 
@@ -16,12 +21,62 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement
     {
         super(mc);
         this.delegate = element;
+
+        if (this.delegate != null)
+        {
+            this.delegate.parent = this;
+        }
     }
 
     public void setDelegate(T element)
     {
         this.delegate = element;
+
+        if (this.delegate != null)
+        {
+            this.delegate.parent = this;
+        }
+
         this.resize();
+    }
+
+    private void unsupported()
+    {
+        throw new IllegalStateException("Following method is unsupported by delegate element!");
+    }
+
+    @Override
+    public List<IGuiElement> getChildren()
+    {
+        return this.delegate == null ? Collections.emptyList() : Arrays.asList(this.delegate);
+    }
+
+    @Override
+    public void clear()
+    {
+        this.unsupported();
+    }
+
+    @Override
+    public void add(IGuiElement element)
+    {
+        this.unsupported();
+    }
+
+    @Override
+    public void add(IGuiElement... elements)
+    {
+        this.unsupported();
+    }
+
+    @Override
+    public void remove(GuiElement element)
+    {
+        if (this.delegate != null && this.delegate == element)
+        {
+            this.delegate.parent = null;
+            this.delegate = null;
+        }
     }
 
     @Override
@@ -39,13 +94,9 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement
     @Override
     public void resize()
     {
-        if (this.delegate instanceof GuiElement)
-        {
-            ((GuiElement) this.delegate).resizer = this.resizer;
-        }
-
         if (this.delegate != null)
         {
+            this.delegate.resizer = this.resizer;
             this.delegate.resize();
         }
     }
@@ -54,6 +105,11 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement
     public boolean mouseClicked(GuiContext context)
     {
         return this.delegate != null && this.delegate.mouseClicked(context);
+    }
+
+    @Override
+    protected GuiContextMenu createContextMenu() {
+        return this.delegate == null ? super.createContextMenu() : this.delegate.createContextMenu();
     }
 
     @Override

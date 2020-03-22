@@ -1,18 +1,16 @@
 package mchorse.mclib.client.gui.framework.elements.modals;
 
-import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
-import mchorse.mclib.client.gui.framework.elements.buttons.GuiClickElement;
 import mchorse.mclib.client.gui.framework.elements.GuiDelegateElement;
-import mchorse.mclib.client.gui.framework.elements.IGuiElement;
+import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 
 public class GuiMessageModal extends GuiModal
 {
     public GuiButtonElement button;
 
-    public GuiMessageModal(Minecraft mc, GuiDelegateElement<IGuiElement> parent, String label)
+    public GuiMessageModal(Minecraft mc, GuiDelegateElement<GuiElement> parent, String label)
     {
         super(mc, parent, label);
 

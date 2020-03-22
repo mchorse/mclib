@@ -1,6 +1,7 @@
 package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.client.gui.framework.GuiTooltip;
+import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.resizers.IResizer;
 import mchorse.mclib.client.gui.utils.resizers.Resizer;
@@ -13,6 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 @SideOnly(Side.CLIENT)
 public class GuiElement extends Gui implements IGuiElement
@@ -31,6 +33,11 @@ public class GuiElement extends Gui implements IGuiElement
      * Tooltip instance
      */
     public GuiTooltip.Tooltip tooltip;
+
+    /**
+     * Context menu supplier
+     */
+    public Supplier<GuiContextMenu> contextMenu;
 
     /**
      * Hide tooltip
@@ -169,7 +176,7 @@ public class GuiElement extends Gui implements IGuiElement
         }
     }
 
-    /* Tooltip */
+    /* Setters */
 
     public GuiElement tooltip(String label, Direction direction)
     {
@@ -188,6 +195,13 @@ public class GuiElement extends Gui implements IGuiElement
     public GuiElement hideTooltip()
     {
         this.hideTooltip = true;
+
+        return this;
+    }
+
+    public GuiElement context(Supplier<GuiContextMenu> supplier)
+    {
+        this.contextMenu = supplier;
 
         return this;
     }
@@ -265,7 +279,38 @@ public class GuiElement extends Gui implements IGuiElement
     @Override
     public boolean mouseClicked(GuiContext context)
     {
-        return this.children != null && this.children.mouseClicked(context);
+        if (this.children != null && this.children.mouseClicked(context))
+        {
+            return true;
+        }
+
+        if (this.area.isInside(context.mouseX, context.mouseY) && context.mouseButton == 1)
+        {
+            if (!context.hasContextMenu())
+            {
+                GuiContextMenu menu = this.createContextMenu();
+
+                if (menu != null)
+                {
+                    context.setContextMenu(menu);
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Create a context menu instance
+     *
+     * Some subclasses of GuiElement might want to override this method in order to create their
+     * own context menus.
+     */
+    protected GuiContextMenu createContextMenu()
+    {
+        return this.contextMenu == null ? null : this.contextMenu.get();
     }
 
     @Override

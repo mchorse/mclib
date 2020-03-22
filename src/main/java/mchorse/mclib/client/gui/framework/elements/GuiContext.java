@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.GuiTooltip;
+import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 
 public class GuiContext
 {
@@ -19,6 +20,7 @@ public class GuiContext
 	public float partialTicks;
 
 	public IFocusedGuiElement activeElement;
+	public GuiContextMenu contextMenu;
 
 	public GuiContext(GuiBase screen)
 	{
@@ -78,5 +80,34 @@ public class GuiContext
 	public void unfocus()
 	{
 		this.focus(null);
+	}
+
+	public boolean hasContextMenu()
+	{
+		if (this.contextMenu == null)
+		{
+			return false;
+		}
+
+		if (!this.contextMenu.hasParent())
+		{
+			this.contextMenu = null;
+		}
+
+		return this.contextMenu != null;
+	}
+
+	public void setContextMenu(GuiContextMenu menu)
+	{
+		if (this.hasContextMenu() || menu == null)
+		{
+			return;
+		}
+
+		menu.setMouse(this);
+		menu.resize();
+
+		this.contextMenu = menu;
+		this.screen.root.add(menu);
 	}
 }
