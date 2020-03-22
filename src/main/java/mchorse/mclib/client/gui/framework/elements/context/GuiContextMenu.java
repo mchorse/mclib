@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 
 public abstract class GuiContextMenu extends GuiElement
 {
+	private boolean close = false;
+
 	public GuiContextMenu(Minecraft mc)
 	{
 		super(mc);
@@ -25,10 +27,12 @@ public abstract class GuiContextMenu extends GuiElement
 	{
 		super.mouseReleased(context);
 
-		if (!this.area.isInside(context.mouseX, context.mouseY))
+		if (!this.area.isInside(context.mouseX, context.mouseY) && this.close)
 		{
 			this.removeFromParent();
 		}
+
+		this.close = true;
 	}
 
 	@Override

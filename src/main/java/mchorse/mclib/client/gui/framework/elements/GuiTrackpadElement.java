@@ -7,6 +7,7 @@ import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
@@ -196,6 +197,13 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     @Override
     public boolean keyTyped(GuiContext context)
     {
+        if (this.isFocused() && context.keyCode == Keyboard.KEY_TAB)
+        {
+            context.focus(this, -1, GuiScreen.isShiftKeyDown() ? -1 : 1);
+
+            return true;
+        }
+
         String old = this.text.getText();
         boolean result = this.text.textboxKeyTyped(context.typedChar, context.keyCode);
         String text = this.text.getText();

@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Keyboard;
 
@@ -128,6 +129,13 @@ public class GuiTextElement extends GuiElement implements GuiResponder, IFocused
     @Override
     public boolean keyTyped(GuiContext context)
     {
+        if (this.isFocused() && context.keyCode == Keyboard.KEY_TAB)
+        {
+            context.focus(this, -1, GuiScreen.isShiftKeyDown() ? -1 : 1);
+
+            return true;
+        }
+
         return this.field.textboxKeyTyped(context.typedChar, context.keyCode) || super.keyTyped(context);
     }
 

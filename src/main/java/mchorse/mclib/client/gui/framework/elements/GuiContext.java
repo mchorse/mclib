@@ -3,6 +3,9 @@ package mchorse.mclib.client.gui.framework.elements;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
+import mchorse.mclib.utils.MathUtils;
+
+import java.util.List;
 
 public class GuiContext
 {
@@ -80,6 +83,41 @@ public class GuiContext
 	public void unfocus()
 	{
 		this.focus(null);
+	}
+
+	/**
+	 * Focus next focusable GUI element
+	 */
+	public void focus(GuiElement parent, int index, int factor)
+	{
+		List<IGuiElement> children = parent.getChildren();
+		boolean stop = factor == 0;
+
+		factor = factor >= 0 ? 1 : -1;
+		index += factor;
+
+		for (; index >= 0 && index < children.size(); index += factor)
+		{
+			IGuiElement child = children.get(index);
+
+			if (child instanceof IFocusedGuiElement && child.isEnabled())
+			{
+				this.focus((IFocusedGuiElement) child);
+
+				return;
+			}
+			else if (child instanceof GuiElement)
+			{
+				this.focus((GuiElement) child, -1, 0);
+			}
+		}
+
+		GuiElement grandparent = parent.getParent();
+
+		if (grandparent != null && !stop)
+		{
+			this.focus(grandparent, grandparent.getChildren().indexOf(parent), factor);
+		}
 	}
 
 	public boolean hasContextMenu()
