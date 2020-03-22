@@ -9,6 +9,9 @@ import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.list.GuiStringListElement;
+import mchorse.mclib.client.gui.framework.elements.modals.GuiConfirmModal;
+import mchorse.mclib.client.gui.framework.elements.modals.GuiMessageModal;
+import mchorse.mclib.client.gui.framework.elements.modals.GuiPromptModal;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.resizers.GridResizer;
 import mchorse.mclib.config.gui.GuiConfig;
@@ -56,7 +59,15 @@ public class GuiDashboard extends GuiBase
 		{
 			super(mc);
 
-			GuiButtonElement button = new GuiButtonElement(mc, "Context", (b) -> System.out.println("Click!"));
+			GuiButtonElement button = new GuiButtonElement(mc, "Context", (b) ->
+			{
+				GuiConfirmModal modal = new GuiConfirmModal(mc, "Hello dude, I heard you like jokes?\n\nMy favorite joke is about some kind of nonesense. It's very cool, right?", (bool) -> {});
+				
+				modal.resizer().parent(this.area).set(10, 30, 200, 300);
+				modal.resize();
+
+				this.add(modal);
+			});
 
 			button.resizer().parent(this.area).set(10, 10, 100, 20);
 			button.context(() -> new GuiSimpleContextMenu(mc)

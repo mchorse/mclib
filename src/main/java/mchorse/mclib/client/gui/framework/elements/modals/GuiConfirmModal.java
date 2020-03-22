@@ -16,9 +16,9 @@ public class GuiConfirmModal extends GuiModal
 
     public Consumer<Boolean> callback;
 
-    public GuiConfirmModal(Minecraft mc, GuiDelegateElement<GuiElement> parent, String label, Consumer<Boolean> callback)
+    public GuiConfirmModal(Minecraft mc, String label, Consumer<Boolean> callback)
     {
-        super(mc, parent, label);
+        super(mc, label);
 
         this.callback = callback;
         this.confirm = new GuiButtonElement(mc, I18n.format("mclib.gui.ok"), (b) -> this.close(true));
@@ -37,6 +37,6 @@ public class GuiConfirmModal extends GuiModal
             this.callback.accept(confirmed);
         }
 
-        this.parent.setDelegate(null);
+        this.removeFromParent();
     }
 }

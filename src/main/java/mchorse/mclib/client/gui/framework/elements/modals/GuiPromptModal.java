@@ -20,9 +20,9 @@ public class GuiPromptModal extends GuiModal
     public GuiButtonElement confirm;
     public GuiButtonElement cancel;
 
-    public GuiPromptModal(Minecraft mc, GuiDelegateElement<GuiElement> parent, String label, Consumer<String> callback)
+    public GuiPromptModal(Minecraft mc, String label, Consumer<String> callback)
     {
-        super(mc, parent, label);
+        super(mc, label);
 
         this.callback = callback;
         this.text = new GuiTextElement(mc, null);
@@ -32,7 +32,7 @@ public class GuiPromptModal extends GuiModal
         this.confirm = new GuiButtonElement(mc, I18n.format("mclib.gui.ok"), (b) -> this.send());
         this.confirm.resizer().parent(this.area).set(10, 0, 0, 20).y(1, -30).w(0.5F, -15);
 
-        this.cancel = new GuiButtonElement(mc, I18n.format("mclib.gui.cancel"), (b) -> this.parent.setDelegate(null));
+        this.cancel = new GuiButtonElement(mc, I18n.format("mclib.gui.cancel"), (b) -> this.removeFromParent());
         this.cancel.resizer().parent(this.area).set(10, 0, 0, 20).x(0.5F, 5).y(1, -30).w(0.5F, -15);
 
         this.add(this.text, this.confirm, this.cancel);
@@ -51,8 +51,12 @@ public class GuiPromptModal extends GuiModal
 
         if (!text.isEmpty())
         {
-            this.parent.setDelegate(null);
-            this.callback.accept(text);
+            this.removeFromParent();
+
+            if (this.callback != null)
+            {
+                this.callback.accept(text);
+            }
         }
     }
 }

@@ -15,16 +15,15 @@ import net.minecraft.client.renderer.GlStateManager;
  */
 public abstract class GuiModal extends GuiElement
 {
-    public GuiDelegateElement<GuiElement> parent;
     public String label;
     public int y;
 
-    public GuiModal(Minecraft mc, GuiDelegateElement<GuiElement> parent, String label)
+    public GuiModal(Minecraft mc, String label)
     {
         super(mc);
 
-        this.parent = parent;
         this.label = label;
+        this.hideTooltip();
     }
 
     @Override
