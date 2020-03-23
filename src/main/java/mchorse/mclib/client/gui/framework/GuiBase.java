@@ -4,6 +4,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiElements;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
 import mchorse.mclib.client.gui.utils.Area;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -135,9 +136,11 @@ public class GuiBase extends GuiScreen
 
         if (this.root.isVisible())
         {
-            this.context.tooltip.set(null, null);
+            this.context.reset();
             this.root.draw(this.context);
             this.context.tooltip.draw(this.fontRendererObj, this.width, this.height);
+
+            GuiInventoryElement.drawItemTooltip(this.context.tooltipStack, this.mc.thePlayer, this.fontRendererObj, this.context.mouseX, this.context.mouseY);
         }
     }
 }

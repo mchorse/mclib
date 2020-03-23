@@ -90,6 +90,38 @@ public class Resizer implements IResizer
         return this;
     }
 
+    public Resizer xy(int x, int y)
+    {
+        this.x.set(x, Measure.PIXELS);
+        this.y.set(y, Measure.PIXELS);
+
+        return this;
+    }
+
+    public Resizer xy(float x, float y)
+    {
+        this.x.set(x, Measure.RELATIVE);
+        this.y.set(y, Measure.RELATIVE);
+
+        return this;
+    }
+
+    public Resizer wh(int w, int h)
+    {
+        this.w.set(w, Measure.PIXELS);
+        this.h.set(h, Measure.PIXELS);
+
+        return this;
+    }
+
+    public Resizer wh(float w, float h)
+    {
+        this.w.set(w, Measure.RELATIVE);
+        this.h.set(h, Measure.RELATIVE);
+
+        return this;
+    }
+
     public Resizer maxW(int max)
     {
         this.w.max = max;

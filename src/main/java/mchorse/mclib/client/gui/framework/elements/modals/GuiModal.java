@@ -3,7 +3,6 @@ package mchorse.mclib.client.gui.framework.elements.modals;
 import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiDelegateElement;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;

@@ -333,7 +333,7 @@ public class GuiElement extends Gui implements IGuiElement
         }
         else if (this.hideTooltip && this.area.isInside(context.mouseX, context.mouseY))
         {
-            context.tooltip.set(null, null);
+            context.reset();
         }
 
         if (this.children != null)

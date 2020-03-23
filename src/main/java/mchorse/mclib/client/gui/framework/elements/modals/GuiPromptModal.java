@@ -1,16 +1,11 @@
 package mchorse.mclib.client.gui.framework.elements.modals;
 
-import java.util.function.Consumer;
-
-import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
-import mchorse.mclib.client.gui.framework.elements.buttons.GuiClickElement;
-import mchorse.mclib.client.gui.framework.elements.GuiDelegateElement;
 import mchorse.mclib.client.gui.framework.elements.GuiTextElement;
-import mchorse.mclib.client.gui.framework.elements.IGuiElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
+
+import java.util.function.Consumer;
 
 public class GuiPromptModal extends GuiModal
 {

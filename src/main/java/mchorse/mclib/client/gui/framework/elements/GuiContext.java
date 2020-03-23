@@ -3,26 +3,31 @@ package mchorse.mclib.client.gui.framework.elements;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
+import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
 public class GuiContext
 {
+	/* GUI elements */
 	public final GuiBase screen;
 	public final GuiTooltip tooltip;
+	public IFocusedGuiElement activeElement;
+	public GuiContextMenu contextMenu;
+	public ItemStack tooltipStack;
 
+	/* Mouse states */
 	public int mouseX;
 	public int mouseY;
 	public int mouseButton;
 	public int mouseWheel;
 
+	/* Keyboard states */
 	public char typedChar;
 	public int keyCode;
 
+	/* Render states */
 	public float partialTicks;
-
-	public IFocusedGuiElement activeElement;
-	public GuiContextMenu contextMenu;
 
 	public GuiContext(GuiBase screen)
 	{
@@ -53,6 +58,14 @@ public class GuiContext
 		this.typedChar = typedChar;
 		this.keyCode = keyCode;
 	}
+
+	public void reset()
+	{
+		this.tooltip.set(null, null);
+		this.tooltipStack = null;
+	}
+
+	/* Element focusing */
 
 	public boolean isFocused()
 	{
@@ -119,6 +132,8 @@ public class GuiContext
 		}
 	}
 
+	/* Context menu */
+
 	public boolean hasContextMenu()
 	{
 		if (this.contextMenu == null)
@@ -146,5 +161,12 @@ public class GuiContext
 
 		this.contextMenu = menu;
 		this.screen.root.add(menu);
+	}
+
+	/* Active stack */
+
+	public void setTooltipStack(ItemStack stack)
+	{
+		this.tooltipStack = stack;
 	}
 }
