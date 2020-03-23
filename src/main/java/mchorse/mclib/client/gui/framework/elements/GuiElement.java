@@ -55,11 +55,6 @@ public class GuiElement extends Gui implements IGuiElement
     private GuiElements<IGuiElement> children;
 
     /**
-     * Cached children unmodifiable list
-     */
-    private List<IGuiElement> cachedChilden;
-
-    /**
      * Whether this element is enabled (can handle any input) 
      */
     protected boolean enabled = true;
@@ -96,17 +91,12 @@ public class GuiElement extends Gui implements IGuiElement
 
     public List<IGuiElement> getChildren()
     {
-        if (this.children == null || this.children.elements.isEmpty())
+        if (this.children == null)
         {
             return Collections.emptyList();
         }
 
-        if (this.cachedChilden == null)
-        {
-            this.cachedChilden = Collections.unmodifiableList(this.children.elements);
-        }
-
-        return this.cachedChilden;
+        return this.children.elements;
     }
 
     public void clear()
