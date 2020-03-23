@@ -30,6 +30,11 @@ public class ColorUtils
 
 	public static int rgbaToInt(float r, float g, float b, float a)
 	{
+		r = MathUtils.clamp(r, 0, 1);
+		g = MathUtils.clamp(g, 0, 1);
+		b = MathUtils.clamp(b, 0, 1);
+		a = MathUtils.clamp(a, 0, 1);
+
 		return ((int) (a * 255) << 24) | ((int) (r * 255) << 16) | ((int) (g * 255) << 8) | (int) (b * 255);
 	}
 

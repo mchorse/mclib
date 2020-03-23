@@ -28,7 +28,7 @@ public class GuiBase extends GuiScreen
     public GuiBase()
     {
         this.root = new GuiElement(Minecraft.getMinecraft());
-        this.root.resizer().w(1, 0).h(1, 0);
+        this.root.markContainer().resizer().w(1, 0).h(1, 0);
     }
 
     @Override

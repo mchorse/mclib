@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.GuiTextElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 

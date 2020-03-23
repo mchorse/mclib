@@ -2,16 +2,13 @@ package mchorse.mclib.client.gui.framework.elements.list;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
 import mchorse.mclib.client.gui.framework.elements.GuiContext;
-import org.lwjgl.opengl.GL11;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.utils.GuiUtils;
 import mchorse.mclib.client.gui.utils.ScrollArea;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -362,7 +359,7 @@ public abstract class GuiListElement<T> extends GuiElement
         int h = this.scroll.scrollItemSize;
         boolean dragging = isDragging();
 
-        GuiUtils.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
+        GuiDraw.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
 
         for (T element : this.list)
         {
@@ -388,7 +385,7 @@ public abstract class GuiListElement<T> extends GuiElement
             i++;
         }
 
-        GuiUtils.unscissor();
+        GuiDraw.unscissor();
 
         this.scroll.drawScrollbar();
         super.draw(context);

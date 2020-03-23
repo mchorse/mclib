@@ -3,7 +3,7 @@ package mchorse.mclib.config.values;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;

@@ -1,6 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements.modals;
 
-import mchorse.mclib.client.gui.framework.elements.GuiTextElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;

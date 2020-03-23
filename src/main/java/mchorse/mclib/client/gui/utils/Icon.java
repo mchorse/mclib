@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.utils;
 
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -52,7 +53,7 @@ public class Icon
 
 		GlStateManager.enableAlpha();
 		Minecraft.getMinecraft().renderEngine.bindTexture(this.location);
-		GuiUtils.drawBillboard(x, y, this.x, this.y, this.w, this.h, this.textureW, this.textureH);
+		GuiDraw.drawBillboard(x, y, this.x, this.y, this.w, this.h, this.textureW, this.textureH);
 		GlStateManager.disableAlpha();
 	}
 }

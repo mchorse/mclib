@@ -1,11 +1,9 @@
 package mchorse.mclib.client.gui.framework.elements;
 
-import org.lwjgl.opengl.GL11;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 
-import mchorse.mclib.client.gui.utils.GuiUtils;
 import mchorse.mclib.client.gui.utils.ScrollArea;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 
 /**
@@ -114,7 +112,7 @@ public class GuiScrollElement extends GuiElement
 
         this.apply(context);
 
-        GuiUtils.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
+        GuiDraw.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
         GlStateManager.pushMatrix();
 
         if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
@@ -131,7 +129,7 @@ public class GuiScrollElement extends GuiElement
         this.postDraw(context);
 
         GlStateManager.popMatrix();
-        GuiUtils.unscissor();
+        GuiDraw.unscissor();
 
         this.scroll.drawScrollbar();
         this.unapply(context);

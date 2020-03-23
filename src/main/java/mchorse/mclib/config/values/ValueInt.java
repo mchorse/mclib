@@ -3,8 +3,9 @@ package mchorse.mclib.config.values;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.GuiTextElement;
-import mchorse.mclib.client.gui.framework.elements.GuiTrackpadElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
@@ -92,15 +93,16 @@ public class ValueInt extends Value
 
 		if (this.color)
 		{
-			GuiTextElement textbox = new GuiTextElement(mc, 7, (value) ->
+			GuiColorElement color = new GuiColorElement(mc, (value) ->
 			{
-				this.setColorValue(value);
+				this.setValue(value);
 				save.accept(this);
 			});
 
-			textbox.resizer().parent(element.area).set(90, 0, 90, 20);
-			textbox.setText("#" + StringUtils.leftPad(Integer.toHexString(this.value), 6, '0'));
-			element.add(textbox);
+			color.picker.setColor(this.value);
+			color.resizer().parent(element.area).wh(30, 20).x(1, 0).anchor(1, 0);
+
+			element.add(color);
 		}
 		else
 		{

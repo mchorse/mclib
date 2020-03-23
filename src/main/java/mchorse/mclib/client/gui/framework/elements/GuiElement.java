@@ -45,6 +45,11 @@ public class GuiElement extends Gui implements IGuiElement
     public boolean hideTooltip;
 
     /**
+     * Whether this element is a container
+     */
+    protected boolean container;
+
+    /**
      * Parent GUI element
      */
     protected GuiElement parent;
@@ -189,6 +194,32 @@ public class GuiElement extends Gui implements IGuiElement
         return this;
     }
 
+    /* Container stuff */
+
+    public GuiElement markContainer()
+    {
+        this.container = true;
+
+        return this;
+    }
+
+    public boolean isContainer()
+    {
+        return this.container;
+    }
+
+    public GuiElement getParentContainer()
+    {
+        GuiElement element = this.getParent();
+
+        while (element != null && !element.isContainer())
+        {
+            element = element.getParent();
+        }
+
+        return element;
+    }
+
     public GuiElement context(Supplier<GuiContextMenu> supplier)
     {
         this.contextMenu = supplier;
@@ -331,7 +362,7 @@ public class GuiElement extends Gui implements IGuiElement
         {
             context.tooltip.set(this, this.tooltip);
         }
-        else if (this.hideTooltip && this.area.isInside(context.mouseX, context.mouseY))
+        else if ((this.hideTooltip || this.container) && this.area.isInside(context.mouseX, context.mouseY))
         {
             context.reset();
         }

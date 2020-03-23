@@ -17,7 +17,6 @@ import mchorse.mclib.events.RegisterDashboardPanels;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.resources.I18n;
 
 public class GuiDashboard extends GuiBase

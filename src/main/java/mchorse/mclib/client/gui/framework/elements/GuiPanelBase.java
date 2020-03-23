@@ -68,6 +68,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
             button.tooltip(tooltip, this.direction.opposite());
         }
 
+        panel.markContainer();
         this.setupButtonResizer(button);
         this.panels.add(panel);
         this.buttons.add(button);
