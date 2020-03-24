@@ -1,6 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements.buttons;
 
-import mchorse.mclib.client.gui.framework.elements.GuiContext;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;

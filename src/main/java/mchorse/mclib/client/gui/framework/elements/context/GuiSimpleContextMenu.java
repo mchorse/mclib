@@ -1,7 +1,7 @@
 package mchorse.mclib.client.gui.framework.elements.context;
 
 import mchorse.mclib.McLib;
-import mchorse.mclib.client.gui.framework.elements.GuiContext;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.list.GuiListElement;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Icons;

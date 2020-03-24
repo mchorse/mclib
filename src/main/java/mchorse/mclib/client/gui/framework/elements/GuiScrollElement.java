@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements;
 
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 
 import mchorse.mclib.client.gui.utils.ScrollArea;

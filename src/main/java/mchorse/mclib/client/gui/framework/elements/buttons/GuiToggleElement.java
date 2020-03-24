@@ -1,7 +1,7 @@
 package mchorse.mclib.client.gui.framework.elements.buttons;
 
 import mchorse.mclib.McLib;
-import mchorse.mclib.client.gui.framework.elements.GuiContext;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;

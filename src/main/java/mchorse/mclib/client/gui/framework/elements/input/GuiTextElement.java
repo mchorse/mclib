@@ -2,7 +2,7 @@ package mchorse.mclib.client.gui.framework.elements.input;
 
 import java.util.function.Consumer;
 
-import mchorse.mclib.client.gui.framework.elements.GuiContext;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
 import net.minecraft.client.Minecraft;

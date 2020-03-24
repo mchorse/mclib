@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.resizers.IResizer;
 import mchorse.mclib.client.gui.utils.resizers.Resizer;

@@ -2,7 +2,6 @@ package mchorse.mclib.client.gui.framework.elements.utils;
 
 import java.util.function.Consumer;
 
-import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 
 public class GuiDrawable implements IGuiElement

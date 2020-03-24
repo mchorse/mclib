@@ -1,5 +1,7 @@
 package mchorse.mclib.client.gui.framework.elements;
 
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+
 import java.util.ArrayList;
 import java.util.List;
 

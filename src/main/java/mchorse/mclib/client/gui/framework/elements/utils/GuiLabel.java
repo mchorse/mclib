@@ -1,6 +1,5 @@
 package mchorse.mclib.client.gui.framework.elements.utils;
 
-import mchorse.mclib.client.gui.framework.elements.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import net.minecraft.client.Minecraft;
 

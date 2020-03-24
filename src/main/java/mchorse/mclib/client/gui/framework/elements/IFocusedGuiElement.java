@@ -1,5 +1,7 @@
 package mchorse.mclib.client.gui.framework.elements;
 
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+
 public interface IFocusedGuiElement
 {
 	public boolean isFocused();
