@@ -19,6 +19,30 @@ public class Color
 		return this;
 	}
 
+	public Color set(float value, int component)
+	{
+		switch (component)
+		{
+			case 1:
+				this.r = value;
+			break;
+
+			case 2:
+				this.g = value;
+			break;
+
+			case 3:
+				this.b = value;
+			break;
+
+			default:
+				this.a = value;
+			break;
+		}
+
+		return this;
+	}
+
 	public Color set(int color)
 	{
 		return this.set(color, true);

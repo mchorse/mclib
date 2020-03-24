@@ -81,6 +81,8 @@ public class GuiColorElement extends GuiElement
 		public Area green = new Area();
 		public Area blue = new Area();
 
+		public int dragging = -1;
+
 		public GuiColorPickerElement(Minecraft mc, Consumer<Integer> callback)
 		{
 			super(mc);
@@ -139,29 +141,21 @@ public class GuiColorElement extends GuiElement
 			int x = context.mouseX;
 			int y = context.mouseY;
 
-			float factor = (x - this.red.x) / (float) (this.red.w - 1);
-
 			if (this.red.isInside(x, y))
 			{
-				this.color.r = factor;
-				this.setColor(this.color.getRGBColor());
-				this.callback();
+				this.dragging = 1;
 
 				return true;
 			}
 			else if (this.green.isInside(x, y))
 			{
-				this.color.g = factor;
-				this.setColor(this.color.getRGBColor());
-				this.callback();
+				this.dragging = 2;
 
 				return true;
 			}
 			else if (this.blue.isInside(x, y))
 			{
-				this.color.b = factor;
-				this.setColor(this.color.getRGBColor());
-				this.callback();
+				this.dragging = 3;
 
 				return true;
 			}
@@ -179,8 +173,24 @@ public class GuiColorElement extends GuiElement
 		}
 
 		@Override
+		public void mouseReleased(GuiContext context)
+		{
+			super.mouseReleased(context);
+			this.dragging = -1;
+		}
+
+		@Override
 		public void draw(GuiContext context)
 		{
+			if (this.dragging >= 0)
+			{
+				float factor = (context.mouseX - (this.red.x + 7)) / (float) (this.red.w - 14);
+
+				this.color.set(factor, this.dragging);
+				this.setColor(this.color.getRGBColor());
+				this.callback();
+			}
+
 			int padding = GuiDraw.drawBorder(this.area, 0xffffffff);
 
 			this.area.draw(0xffc6c6c6, padding + 1);
@@ -214,9 +224,9 @@ public class GuiColorElement extends GuiElement
 			GuiDraw.drawHorizontalGradientRect(this.blue.x, this.blue.y, this.blue.getX(1F), this.blue.getY(1F), left, right, 0);
 			GuiDraw.drawOutline(this.red.x, this.red.y, this.red.getX(1F), this.blue.getY(1F), 0x44000000);
 
-			this.drawMarker(this.red.x + 5 + (int) ((this.red.w - 10) * this.color.r), this.red.getY(0.5F));
-			this.drawMarker(this.green.x + 5 + (int) ((this.green.w - 10) * this.color.g), this.green.getY(0.5F));
-			this.drawMarker(this.blue.x + 5 + (int) ((this.blue.w - 10) * this.color.b), this.blue.getY(0.5F));
+			this.drawMarker(this.red.x + 7 + (int) ((this.red.w - 14) * this.color.r), this.red.getY(0.5F));
+			this.drawMarker(this.green.x + 7 + (int) ((this.green.w - 14) * this.color.g), this.green.getY(0.5F));
+			this.drawMarker(this.blue.x + 7 + (int) ((this.blue.w - 14) * this.color.b), this.blue.getY(0.5F));
 
 			super.draw(context);
 		}
