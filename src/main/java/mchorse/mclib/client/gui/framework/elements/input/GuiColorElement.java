@@ -4,7 +4,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
-import mchorse.mclib.client.gui.utils.Color;
+import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -204,7 +204,7 @@ public class GuiColorElement extends GuiElement
 			color.copy(this.color).r = 1;
 			int right = color.getRGBAColor();
 
-			GuiDraw.drawHorizontalGradientRect(this.red.x, this.red.y, this.red.getX(1F), this.red.getY(1F), left, right, 0);
+			GuiDraw.drawHorizontalGradientRect(this.red.x, this.red.y, this.red.getX(1F), this.red.getY(1F), left, right);
 
 			/* Draw green slider */
 			color.copy(this.color).g = 0;
@@ -212,7 +212,7 @@ public class GuiColorElement extends GuiElement
 			color.copy(this.color).g = 1;
 			right = color.getRGBAColor();
 
-			GuiDraw.drawHorizontalGradientRect(this.green.x, this.green.y, this.green.getX(1F), this.green.getY(1F), left, right, 0);
+			GuiDraw.drawHorizontalGradientRect(this.green.x, this.green.y, this.green.getX(1F), this.green.getY(1F), left, right);
 
 			/* Draw blue slider */
 			color.copy(this.color).b = 0;
@@ -220,7 +220,7 @@ public class GuiColorElement extends GuiElement
 			color.copy(this.color).b = 1;
 			right = color.getRGBAColor();
 
-			GuiDraw.drawHorizontalGradientRect(this.blue.x, this.blue.y, this.blue.getX(1F), this.blue.getY(1F), left, right, 0);
+			GuiDraw.drawHorizontalGradientRect(this.blue.x, this.blue.y, this.blue.getX(1F), this.blue.getY(1F), left, right);
 			GuiDraw.drawOutline(this.red.x, this.red.y, this.red.getX(1F), this.blue.getY(1F), 0x44000000);
 
 			this.drawMarker(this.red.x + 7 + (int) ((this.red.w - 14) * this.color.r), this.red.getY(0.5F));

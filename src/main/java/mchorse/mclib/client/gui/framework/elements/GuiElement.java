@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements;
 import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.utils.KeybindManager;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.resizers.IResizer;
 import mchorse.mclib.client.gui.utils.resizers.Resizer;
@@ -34,6 +35,11 @@ public class GuiElement extends Gui implements IGuiElement
      * Tooltip instance
      */
     public GuiTooltip.Tooltip tooltip;
+
+    /**
+     * Keybind manager
+     */
+    public KeybindManager keybinds;
 
     /**
      * Context menu supplier
@@ -195,6 +201,18 @@ public class GuiElement extends Gui implements IGuiElement
         return this;
     }
 
+    /* Keybind manager */
+
+    public KeybindManager keys()
+    {
+        if (this.keybinds == null)
+        {
+            this.keybinds = new KeybindManager();
+        }
+
+        return this.keybinds;
+    }
+
     /* Container stuff */
 
     public GuiElement markContainer()
@@ -353,12 +371,27 @@ public class GuiElement extends Gui implements IGuiElement
     @Override
     public boolean keyTyped(GuiContext context)
     {
-        return this.children != null && this.children.keyTyped(context);
+        if (this.children != null && this.children.keyTyped(context))
+        {
+            return true;
+        }
+
+        if (this.keybinds != null && this.keybinds.check(context.keyCode, this.area.isInside(context.mouseX, context.mouseY)))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     @Override
     public void draw(GuiContext context)
     {
+        if (this.keybinds != null)
+        {
+            this.keybinds.add(context.keybinds, this.area.isInside(context.mouseX, context.mouseY));
+        }
+
         if (this.tooltip != null && this.area.isInside(context.mouseX, context.mouseY))
         {
             context.tooltip.set(this, this.tooltip);

@@ -2,13 +2,13 @@ package mchorse.mclib.client.gui.mclib;
 
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
-import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
 import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.modals.GuiConfirmModal;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.resizers.RowResizer;
@@ -18,6 +18,7 @@ import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.resources.I18n;
+import org.lwjgl.input.Keyboard;
 
 public class GuiDashboard extends GuiBase
 {
@@ -70,6 +71,13 @@ public class GuiDashboard extends GuiBase
 				this.add(modal);
 			});
 
+			button.keys().register("To pay respect", Keyboard.KEY_F, () ->
+			{
+				System.out.println("F");
+
+				return false;
+			}, Keyboard.KEY_LCONTROL);
+
 			button.resizer().parent(this.area).set(10, 10, 100, 20);
 			button.context(() -> new GuiSimpleContextMenu(mc)
 				.action(Icons.ADD, "Add", () -> System.out.println("Add"))
@@ -105,6 +113,13 @@ public class GuiDashboard extends GuiBase
 				this.current.selected = false;
 				this.current = null;
 				this.inve.setVisible(false);
+			});
+
+			this.inve.keys().registerInside("To clear inventory", Keyboard.KEY_0, () ->
+			{
+				System.out.println("Clear!");
+
+				return true;
 			});
 
 			this.inve.resizer().relative(slots.getResizer()).y(1, 0).x(0.5F, 0).wh(10 * 20, 5 * 20).anchor(0.5F, 0);

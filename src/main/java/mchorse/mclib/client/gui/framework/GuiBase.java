@@ -27,11 +27,26 @@ public class GuiBase extends GuiScreen
     {
         this.root = new GuiElement(Minecraft.getMinecraft());
         this.root.markContainer().resizer().w(1, 0).h(1, 0);
+        this.root.keys().register("Keybinds list", Keyboard.KEY_F9, () ->
+        {
+            this.context.keybinds.toggleVisible();
+
+            return true;
+        });
+
+        this.context.keybinds.resizer().parent(this.viewport).wh(0.5F, 1F);
+
+        Keyboard.enableRepeatEvents(false);
     }
 
     @Override
     public void initGui()
     {
+        if (!this.context.keybinds.hasParent())
+        {
+            this.root.add(this.context.keybinds);
+        }
+
         this.viewport.set(0, 0, this.width, this.height);
         this.root.resize();
     }

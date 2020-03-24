@@ -6,6 +6,8 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
+import mchorse.mclib.client.gui.framework.elements.input.GuiKeybinds;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
@@ -15,6 +17,7 @@ public class GuiContext
 	/* GUI elements */
 	public final GuiBase screen;
 	public final GuiTooltip tooltip;
+	public final GuiKeybinds keybinds;
 	public IFocusedGuiElement activeElement;
 	public GuiContextMenu contextMenu;
 	public ItemStack tooltipStack;
@@ -36,6 +39,8 @@ public class GuiContext
 	{
 		this.screen = screen;
 		this.tooltip = new GuiTooltip();
+		this.keybinds = new GuiKeybinds(Minecraft.getMinecraft());
+		this.keybinds.setVisible(false);
 	}
 
 	public void setMouse(int mouseX, int mouseY)

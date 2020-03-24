@@ -43,6 +43,11 @@ public class GuiDraw
 	    GL11.glDisable(GL11.GL_SCISSOR_TEST);
 	}
 
+	public static void drawHorizontalGradientRect(int left, int top, int right, int bottom, int startColor, int endColor)
+	{
+		drawHorizontalGradientRect(left, top, right, bottom, startColor, endColor, 0);
+	}
+
 	/**
 	 * Draws a rectangle with a horizontal gradient between with specified
 	 * colors, the code is borrowed form drawGradient()

@@ -1,6 +1,4 @@
-package mchorse.mclib.client.gui.utils;
-
-import mchorse.mclib.utils.ColorUtils;
+package mchorse.mclib.utils;
 
 public class Color
 {
