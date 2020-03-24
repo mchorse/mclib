@@ -160,7 +160,8 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
                 this.setValue(this.value + this.increment);
 
                 return true;
-            } else if (this.minusOne.isInside(mouseX, mouseY))
+            }
+            else if (this.minusOne.isInside(mouseX, mouseY))
             {
                 this.setValue(this.value - this.increment);
 
@@ -168,7 +169,14 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             }
         }
 
-        this.text.mouseClicked(mouseX, mouseY, context.mouseButton);
+        boolean wasFocused = this.text.isFocused();
+
+        this.text.mouseClicked(context.mouseX, context.mouseY, context.mouseButton);
+
+        if (wasFocused != this.text.isFocused())
+        {
+            context.focus(wasFocused ? null : this);
+        }
 
         if (!this.text.isFocused() && this.area.isInside(mouseX, mouseY))
         {
