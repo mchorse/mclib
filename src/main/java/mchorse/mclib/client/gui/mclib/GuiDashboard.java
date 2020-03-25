@@ -159,7 +159,6 @@ public class GuiDashboard extends GuiBase
 
 			this.inve.resizer().relative(slots.getResizer()).y(1, 0).x(0.5F, 0).wh(10 * 20, 5 * 20).anchor(0.5F, 0);
 			this.inve.setVisible(false);
-			this.inve.setEnabled(false);
 
 			this.add(slots, this.inve);
 		}

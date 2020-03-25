@@ -1,18 +1,24 @@
 package mchorse.mclib.client.gui.framework.elements.utils;
 
 import mchorse.mclib.McLib;
+import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.utils.ColorUtils;
+import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 public class GuiDraw
 {
@@ -93,6 +99,9 @@ public class GuiDraw
 	    drawBillboard(x, y, u, v, w, h, textureW, textureH, 0);
 	}
 
+	/**
+	 * Draw a textured quad with given UV, dimensions and custom texture size
+	 */
 	public static void drawBillboard(int x, int y, int u, int v, int w, int h, int textureW, int textureH, float z)
 	{
 	    float tw = 1F / textureW;
@@ -130,6 +139,9 @@ public class GuiDraw
 		drawOutline(left, top, right, bottom, color, 1);
 	}
 
+	/**
+	 * Draw rectangle outline with given border
+	 */
 	public static void drawOutline(int left, int top, int right, int bottom, int color, int border)
 	{
 		Gui.drawRect(left, top, left + border, bottom, color);
@@ -143,6 +155,9 @@ public class GuiDraw
 		drawOutlinedIcon(icon, x, y, color, 0F, 0F);
 	}
 
+	/**
+	 * Draw an icon with a black outline
+	 */
 	public static void drawOutlinedIcon(Icon icon, int x, int y, int color, float ax, float ay)
 	{
 		GlStateManager.color(0, 0, 0, 1);
@@ -159,6 +174,10 @@ public class GuiDraw
 		drawLockedArea(element, 0);
 	}
 
+	/**
+	 * Generic method for drawing locked (disabled) state of
+	 * an input field
+	 */
 	public static void drawLockedArea(GuiElement element, int padding)
 	{
 		if (!element.isEnabled())

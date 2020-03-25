@@ -34,7 +34,10 @@ public class GuiBase extends GuiScreen
     {
         current = this.context;
 
-        this.root = new GuiElement(Minecraft.getMinecraft());
+        this.context.mc = Minecraft.getMinecraft();
+        this.context.font = this.context.mc.fontRendererObj;
+
+        this.root = new GuiElement(this.context.mc);
         this.root.markContainer().resizer().w(1, 0).h(1, 0);
         this.root.keys().register("Keybinds list", Keyboard.KEY_F9, () ->
         {
@@ -162,9 +165,7 @@ public class GuiBase extends GuiScreen
         {
             this.context.reset();
             this.root.draw(this.context);
-            this.context.tooltip.draw(this.fontRendererObj, this.width, this.height);
-
-            GuiInventoryElement.drawItemTooltip(this.context.tooltipStack, this.mc.thePlayer, this.fontRendererObj, this.context.mouseX, this.context.mouseY);
+            this.context.drawTooltip();
         }
     }
 }

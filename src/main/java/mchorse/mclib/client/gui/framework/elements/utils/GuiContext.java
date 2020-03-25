@@ -8,19 +8,21 @@ import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.input.GuiKeybinds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.gui.FontRenderer;
 
 import java.util.List;
 
 public class GuiContext
 {
+	public Minecraft mc;
+	public FontRenderer font;
+
 	/* GUI elements */
 	public final GuiBase screen;
 	public final GuiTooltip tooltip;
 	public final GuiKeybinds keybinds;
 	public IFocusedGuiElement activeElement;
 	public GuiContextMenu contextMenu;
-	public ItemStack tooltipStack;
 
 	/* Mouse states */
 	public int mouseX;
@@ -69,8 +71,14 @@ public class GuiContext
 
 	public void reset()
 	{
-		this.tooltip.set(null, null);
-		this.tooltipStack = null;
+		this.tooltip.set(null);
+	}
+
+	/* Tooltip */
+
+	public void drawTooltip()
+	{
+		this.tooltip.drawTooltip(this);
 	}
 
 	/* Element focusing */
@@ -169,12 +177,5 @@ public class GuiContext
 
 		this.contextMenu = menu;
 		this.screen.root.add(menu);
-	}
-
-	/* Active stack */
-
-	public void setTooltipStack(ItemStack stack)
-	{
-		this.tooltipStack = stack;
 	}
 }

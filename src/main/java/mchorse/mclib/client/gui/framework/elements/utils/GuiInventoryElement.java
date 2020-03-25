@@ -25,6 +25,63 @@ public class GuiInventoryElement extends GuiElement
 	protected Area inventory = new Area();
 	protected Area hotbar = new Area();
 
+	private ItemStack active;
+
+	/**
+	 * Draws an ItemStack.
+	 *
+	 * The z index is increased by 32 (and not decreased afterwards), and the item is then rendered at z=200.
+	 */
+	public static void drawItemStack(ItemStack stack, int x, int y, String altText)
+	{
+		RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
+
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0.0F, 0.0F, 32.0F);
+		itemRender.zLevel = 200.0F;
+
+		FontRenderer font = null;
+		if (stack != null) font = stack.getItem().getFontRenderer(stack);
+		if (font == null) font = Minecraft.getMinecraft().fontRendererObj;
+
+		itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+		itemRender.renderItemOverlayIntoGUI(font, stack, x, y, altText);
+		itemRender.zLevel = 0.0F;
+		GlStateManager.popMatrix();
+	}
+
+	/**
+	 * Draw item tooltip
+	 */
+	public static void drawItemTooltip(ItemStack stack, EntityPlayerSP player, FontRenderer providedFont, int x, int y)
+	{
+		if (stack == null)
+		{
+			return;
+		}
+
+		List<String> list = stack.getTooltip(player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
+		FontRenderer font = stack.getItem().getFontRenderer(stack);
+
+		for (int i = 0; i < list.size(); ++i)
+		{
+			if (i == 0)
+			{
+				list.set(i, stack.getRarity().rarityColor + list.get(i));
+			}
+			else
+			{
+				list.set(i, TextFormatting.GRAY + list.get(i));
+			}
+		}
+
+		GuiScreen screen = Minecraft.getMinecraft().currentScreen;
+
+		net.minecraftforge.fml.client.config.GuiUtils.preItemToolTip(stack);
+		net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText(list, x, y, screen.width, screen.height, -1, font == null ? providedFont : font);
+		net.minecraftforge.fml.client.config.GuiUtils.postItemToolTip();
+	}
+
 	public GuiInventoryElement(Minecraft mc, Consumer<ItemStack> callback)
 	{
 		super(mc);
@@ -96,6 +153,8 @@ public class GuiInventoryElement extends GuiElement
 	@Override
 	public void draw(GuiContext context)
 	{
+		this.active = null;
+
 		/* Background rendering */
 		int border = 0xffffffff;
 		int fourth = this.area.y(0.75F);
@@ -127,7 +186,8 @@ public class GuiInventoryElement extends GuiElement
 
 		if (index != -1)
 		{
-			context.setTooltipStack(inventory[index]);
+			context.tooltip.set(this);
+			this.active = inventory[index];
 		}
 
 		GlStateManager.disableDepth();
@@ -170,58 +230,11 @@ public class GuiInventoryElement extends GuiElement
 		return index;
 	}
 
-	/**
-	 * Draws an ItemStack.
-	 *
-	 * The z index is increased by 32 (and not decreased afterwards), and the item is then rendered at z=200.
-	 */
-	public static void drawItemStack(ItemStack stack, int x, int y, String altText)
+	@Override
+	public void drawTooltip(GuiContext context, Area area)
 	{
-		RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
+		super.drawTooltip(context, area);
 
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(0.0F, 0.0F, 32.0F);
-		itemRender.zLevel = 200.0F;
-
-		FontRenderer font = null;
-		if (stack != null) font = stack.getItem().getFontRenderer(stack);
-		if (font == null) font = Minecraft.getMinecraft().fontRendererObj;
-
-		itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-		itemRender.renderItemOverlayIntoGUI(font, stack, x, y, altText);
-		itemRender.zLevel = 0.0F;
-		GlStateManager.popMatrix();
-	}
-
-	/**
-	 * Draw item tooltip
-	 */
-	public static void drawItemTooltip(ItemStack stack, EntityPlayerSP player, FontRenderer providedFont, int x, int y)
-	{
-		if (stack == null)
-		{
-			return;
-		}
-
-		List<String> list = stack.getTooltip(player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
-		FontRenderer font = stack.getItem().getFontRenderer(stack);
-
-		for (int i = 0; i < list.size(); ++i)
-		{
-			if (i == 0)
-			{
-				list.set(i, stack.getRarity().rarityColor + list.get(i));
-			}
-			else
-			{
-				list.set(i, TextFormatting.GRAY + list.get(i));
-			}
-		}
-
-		GuiScreen screen = Minecraft.getMinecraft().currentScreen;
-
-		net.minecraftforge.fml.client.config.GuiUtils.preItemToolTip(stack);
-		net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText(list, x, y, screen.width, screen.height, -1, font == null ? providedFont : font);
-		net.minecraftforge.fml.client.config.GuiUtils.postItemToolTip();
+		GuiInventoryElement.drawItemTooltip(this.active, this.mc.thePlayer, this.font, context.mouseX, context.mouseY);
 	}
 }

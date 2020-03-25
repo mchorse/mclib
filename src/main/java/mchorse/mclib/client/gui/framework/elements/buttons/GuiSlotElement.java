@@ -6,6 +6,7 @@ import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
+import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -37,7 +38,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 	}
 
 	@Override
-	protected GuiContextMenu createContextMenu()
+	public GuiContextMenu createContextMenu()
 	{
 		if (this.contextMenu == null)
 		{
@@ -111,7 +112,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 
 			if (this.area.isInside(context.mouseX, context.mouseY))
 			{
-				context.setTooltipStack(this.stack);
+				context.tooltip.set(this);
 			}
 
 			GlStateManager.disableDepth();
@@ -119,5 +120,13 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 		}
 
 		GuiDraw.drawLockedArea(this, McLib.enableBorders.get() ? 1 : 0);
+	}
+
+	@Override
+	public void drawTooltip(GuiContext context, Area area)
+	{
+		super.drawTooltip(context, area);
+
+		GuiInventoryElement.drawItemTooltip(this.stack, this.mc.thePlayer, this.font, context.mouseX, context.mouseY);
 	}
 }

@@ -348,7 +348,7 @@ public class GuiElement extends Gui implements IGuiElement
      * Some subclasses of GuiElement might want to override this method in order to create their
      * own context menus.
      */
-    protected GuiContextMenu createContextMenu()
+    public GuiContextMenu createContextMenu()
     {
         return this.contextMenu == null ? null : this.contextMenu.get();
     }
@@ -394,7 +394,7 @@ public class GuiElement extends Gui implements IGuiElement
 
         if (this.tooltip != null && this.area.isInside(context.mouseX, context.mouseY))
         {
-            context.tooltip.set(this, this.tooltip);
+            context.tooltip.set(this);
         }
         else if ((this.hideTooltip || this.container) && this.area.isInside(context.mouseX, context.mouseY))
         {
@@ -405,5 +405,10 @@ public class GuiElement extends Gui implements IGuiElement
         {
             this.children.draw(context);
         }
+    }
+
+	public void drawTooltip(GuiContext context, Area area)
+    {
+        context.tooltip.draw(this.tooltip, context);
     }
 }

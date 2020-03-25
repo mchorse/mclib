@@ -109,7 +109,7 @@ public class GuiDelegateElement<T extends GuiElement> extends GuiElement
     }
 
     @Override
-    protected GuiContextMenu createContextMenu() {
+    public GuiContextMenu createContextMenu() {
         return this.delegate == null ? super.createContextMenu() : this.delegate.createContextMenu();
     }
 
