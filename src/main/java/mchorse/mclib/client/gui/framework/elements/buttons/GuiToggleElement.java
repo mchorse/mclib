@@ -7,7 +7,6 @@ import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.function.Consumer;
 
@@ -40,13 +39,13 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 	@Override
 	protected void drawSkin(GuiContext context)
 	{
-		this.font.drawStringWithShadow(this.label, this.area.x, this.area.getY(0.5F) - this.font.FONT_HEIGHT / 2, 0xffffff);
+		this.font.drawStringWithShadow(this.label, this.area.x, this.area.my(this.font.FONT_HEIGHT), 0xffffff);
 
 		/* Draw toggle switch */
 		int w = 16;
 		int h = 10;
-		int x = this.area.getX(1) - w - 2;
-		int y = this.area.getY(0.5F);
+		int x = this.area.ex() - w - 2;
+		int y = this.area.my();
 		int color = McLib.primaryColor.get();
 
 		if (this.hover)
@@ -84,7 +83,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 		{
 			Gui.drawRect(x - 4, y - 8, x + 4, y + 8, 0x88000000);
 
-			GuiDraw.drawOutlinedIcon(Icons.LOCKED, this.area.getX(1) - w / 2 - 2, y, 0xffffffff, 0.5F, 0.5F);
+			GuiDraw.drawOutlinedIcon(Icons.LOCKED, this.area.ex() - w / 2 - 2, y, 0xffffffff, 0.5F, 0.5F);
 		}
 	}
 }

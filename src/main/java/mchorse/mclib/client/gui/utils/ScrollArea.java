@@ -157,7 +157,7 @@ public class ScrollArea extends Area
             }
             else
             {
-                isInside = this.direction == ScrollDirection.VERTICAL ? x >= this.getX(1) - 4 : y >= this.getY(1) - 4;
+                isInside = this.direction == ScrollDirection.VERTICAL ? x >= this.ex() - 4 : y >= this.ey() - 4;
             }
         }
 
@@ -219,14 +219,14 @@ public class ScrollArea extends Area
         }
 
         int h = this.getScrollBar(side / 2);
-        int x = this.opposite ? this.x : this.getX(1) - 4;
+        int x = this.opposite ? this.x : this.ex() - 4;
         /* Sometimes I don't understand how I come up with such clever
          * formulas, but it's all ratios, y'all */
         int y = this.y + (int) ((this.scroll / (float) (this.scrollSize - this.h)) * (this.h - h));
 
         if (this.direction == ScrollDirection.HORIZONTAL)
         {
-            y = this.opposite ? this.y : this.getY(1) - 4;
+            y = this.opposite ? this.y : this.ey() - 4;
             x = this.x + (int) ((this.scroll / (float) (this.scrollSize - this.w)) * (this.w - h));
 
             Gui.drawRect(x, y, x + h, y + 4, -6250336);

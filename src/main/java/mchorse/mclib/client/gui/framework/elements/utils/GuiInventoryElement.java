@@ -3,7 +3,6 @@ package mchorse.mclib.client.gui.framework.elements.utils;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.Area;
-import mchorse.mclib.client.gui.utils.Icons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
@@ -42,8 +41,8 @@ public class GuiInventoryElement extends GuiElement
 		int row = 9 * tile;
 		int fourth = this.area.h / 4;
 
-		this.inventory.set(this.area.getX(0.5F, row), this.area.y + (this.area.h - fourth) / 2 - 30, row, 3 * tile);
-		this.hotbar.set(this.area.getX(0.5F, row), this.area.getY(1) - (fourth + tile) / 2, row, tile);
+		this.inventory.set(this.area.mx(row), this.area.y + (this.area.h - fourth) / 2 - 30, row, 3 * tile);
+		this.hotbar.set(this.area.mx(row), this.area.ey() - (fourth + tile) / 2, row, tile);
 	}
 
 	@Override
@@ -99,21 +98,21 @@ public class GuiInventoryElement extends GuiElement
 	{
 		/* Background rendering */
 		int border = 0xffffffff;
-		int fourth = this.area.getY(0.75F);
+		int fourth = this.area.y(0.75F);
 
 		if (McLib.enableBorders.get())
 		{
-			Gui.drawRect(this.area.x + 1, this.area.y, this.area.getX(1) - 1, this.area.getY(1), 0xff000000);
-			Gui.drawRect(this.area.x, this.area.y + 1, this.area.getX(1), this.area.getY(1) - 1, 0xff000000);
-			Gui.drawRect(this.area.x + 1, this.area.y + 1, this.area.getX(1) - 1, this.area.getY(1) - 1, border);
-			Gui.drawRect(this.area.x + 2, this.area.y + 2, this.area.getX(1) - 2, fourth, 0xffc6c6c6);
-			Gui.drawRect(this.area.x + 1, fourth, this.area.getX(1F) - 1, this.area.getY(1) - 1, 0xff222222);
+			Gui.drawRect(this.area.x + 1, this.area.y, this.area.ex() - 1, this.area.ey(), 0xff000000);
+			Gui.drawRect(this.area.x, this.area.y + 1, this.area.ex(), this.area.ey() - 1, 0xff000000);
+			Gui.drawRect(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, border);
+			Gui.drawRect(this.area.x + 2, this.area.y + 2, this.area.ex() - 2, fourth, 0xffc6c6c6);
+			Gui.drawRect(this.area.x + 1, fourth, this.area.ex() - 1, this.area.ey() - 1, 0xff222222);
 		}
 		else
 		{
-			Gui.drawRect(this.area.x, this.area.y, this.area.getX(1), this.area.getY(1), border);
-			Gui.drawRect(this.area.x + 1, this.area.y + 1, this.area.getX(1) - 1, fourth, 0xffc6c6c6);
-			Gui.drawRect(this.area.x, fourth, this.area.getX(1F), this.area.getY(1), 0xff222222);
+			Gui.drawRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), border);
+			Gui.drawRect(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, fourth, 0xffc6c6c6);
+			Gui.drawRect(this.area.x, fourth, this.area.ex(), this.area.ey(), 0xff222222);
 		}
 
 		GlStateManager.enableDepth();

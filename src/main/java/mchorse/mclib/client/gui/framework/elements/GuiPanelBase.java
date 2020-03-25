@@ -128,7 +128,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
         }
         else if (this.direction == Direction.BOTTOM)
         {
-            this.drawBackground(context, this.area.x, this.area.getY(1) - 20, this.area.w, 20);
+            this.drawBackground(context, this.area.x, this.area.ey() - 20, this.area.w, 20);
         }
         else if (this.direction == Direction.LEFT)
         {
@@ -136,7 +136,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
         }
         else
         {
-            this.drawBackground(context, this.area.getX(1) - 20, this.area.y, 20, this.area.h);
+            this.drawBackground(context, this.area.ex() - 20, this.area.y, 20, this.area.h);
         }
 
         for (int i = 0, c = this.panels.size(); i < c; i++)
@@ -145,7 +145,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
             {
                 Area area = this.buttons.elements.get(i).area;
 
-                Gui.drawRect(area.x - 2, area.y - 2, area.getX(1) + 2, area.getY(1) + 2, 0xaa000000 + McLib.primaryColor.get());
+                Gui.drawRect(area.x - 2, area.y - 2, area.ex() + 2, area.ey() + 2, 0xaa000000 + McLib.primaryColor.get());
             }
         }
 

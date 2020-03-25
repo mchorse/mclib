@@ -27,8 +27,8 @@ public class GuiKeybinds extends GuiScrollElement
 	public void draw(GuiContext context)
 	{
 		int cx = 40;
-		Gui.drawRect(this.area.x, this.area.y, cx, this.area.getY(1F), 0xdd000000);
-		GuiDraw.drawHorizontalGradientRect(cx, this.area.y, this.area.getX(1F), this.area.getY(1F), 0xdd000000, 0);
+		Gui.drawRect(this.area.x, this.area.y, cx, this.area.ey(), 0xdd000000);
+		GuiDraw.drawHorizontalGradientRect(cx, this.area.y, this.area.ex(), this.area.ey(), 0xdd000000, 0);
 
 		super.draw(context);
 	}

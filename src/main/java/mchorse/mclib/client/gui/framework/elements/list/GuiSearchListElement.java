@@ -68,7 +68,7 @@ public abstract class GuiSearchListElement<T> extends GuiElement
     {
         if (this.background)
         {
-            Gui.drawRect(this.area.x, this.area.y, this.area.getX(1), this.area.getY(1), 0x88000000);
+            Gui.drawRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 0x88000000);
         }
 
         super.draw(context);

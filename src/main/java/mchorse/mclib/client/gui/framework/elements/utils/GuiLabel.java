@@ -44,11 +44,8 @@ public class GuiLabel extends GuiElement
 	@Override
 	public void draw(GuiContext context)
 	{
-		int w = this.font.getStringWidth(this.label);
-		int h = this.font.FONT_HEIGHT;
-
-		int x = this.area.getX(this.anchorX) - (int) (w * this.anchorX);
-		int y = this.area.getY(this.anchorY) - (int) (h * this.anchorY);
+		int x = this.area.x(this.anchorX, this.font.getStringWidth(this.label));
+		int y = this.area.y(this.anchorY, this.font.FONT_HEIGHT);
 
 		this.font.drawStringWithShadow(this.label, x, y, this.color);
 

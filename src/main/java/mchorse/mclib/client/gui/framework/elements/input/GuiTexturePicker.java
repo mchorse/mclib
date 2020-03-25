@@ -410,19 +410,19 @@ public class GuiTexturePicker extends GuiElement
         }
 
         /* Draw the GUI */
-        drawGradientRect(this.area.x, this.area.y, this.area.getX(1), this.area.getY(1), 0x88000000, 0xff000000);
+        drawGradientRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 0x88000000, 0xff000000);
 
         if (this.multiList.isVisible())
         {
             this.mc.renderEngine.bindTexture(GuiBase.ICONS);
             GuiUtils.drawContinuousTexturedBox(this.area.x, this.area.y, 0, 32, 110, this.area.h, 32, 32, 0, 0);
             drawRect(this.area.x, this.area.y, this.area.x + 110, this.area.y + 30, 0x44000000);
-            drawGradientRect(this.area.x, this.area.getY(1) - 20, this.area.x + 110, this.area.getY(1), 0x00, 0x44000000);
+            drawGradientRect(this.area.x, this.area.ey() - 20, this.area.x + 110, this.area.ey(), 0x00, 0x44000000);
         }
 
         if (this.picker.getList().isEmpty())
         {
-            this.drawCenteredString(this.font, I18n.format("mclib.gui.no_data"), this.area.getX(0.5F), this.area.getY(0.5F), 0xffffff);
+            this.drawCenteredString(this.font, I18n.format("mclib.gui.no_data"), this.area.mx(), this.area.my(), 0xffffff);
         }
 
         super.draw(context);
@@ -431,7 +431,7 @@ public class GuiTexturePicker extends GuiElement
         {
             int w = this.font.getStringWidth(this.typed);
             int x = this.text.area.x;
-            int y = this.text.area.getY(1);
+            int y = this.text.area.ey();
 
             Gui.drawRect(x, y, x + w + 4, y + 4 + this.font.FONT_HEIGHT, 0x88000000 + McLib.primaryColor.get());
             this.font.drawStringWithShadow(this.typed, x + 2, y + 2, 0xffffff);
@@ -447,8 +447,8 @@ public class GuiTexturePicker extends GuiElement
             int w = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
             int h = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
 
-            int x = this.area.getX(1);
-            int y = this.area.getY(1);
+            int x = this.area.ex();
+            int y = this.area.ey();
             int fw = w;
             int fh = h;
 

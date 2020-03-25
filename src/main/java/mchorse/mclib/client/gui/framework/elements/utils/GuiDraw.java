@@ -165,7 +165,7 @@ public class GuiDraw
 		{
 			element.area.draw(0x88000000, padding);
 
-			GuiDraw.drawOutlinedIcon(Icons.LOCKED, element.area.getX(0.5F), element.area.getY(0.5F), 0xffffffff, 0.5F, 0.5F);
+			GuiDraw.drawOutlinedIcon(Icons.LOCKED, element.area.mx(), element.area.my(), 0xffffffff, 0.5F, 0.5F);
 		}
 	}
 }

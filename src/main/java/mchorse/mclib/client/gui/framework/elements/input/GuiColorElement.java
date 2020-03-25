@@ -1,12 +1,10 @@
 package mchorse.mclib.client.gui.framework.elements.input;
 
-import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
-import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.resizers.BoundsResizer;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
@@ -130,10 +128,12 @@ public class GuiColorElement extends GuiElement
 			super.resize();
 
 			int h = (this.area.h - 35) / 3;
+			int w = this.area.w - 10;
+			int remainder = this.area.h - 35 - h * 3;
 
-			this.red.set(this.area.x + 5, this.area.y + 30, this.area.w - 10, h);
-			this.green.set(this.area.x + 5, this.area.y + 30 + h, this.area.w - 10, h + (this.area.h - 35 - h * 3));
-			this.blue.set(this.area.x + 5, this.area.getY(1F) - 5 - h, this.area.w - 10, h);
+			this.red.set(this.area.x + 5, this.area.y + 30, w, h);
+			this.green.set(this.area.x + 5, this.area.y + 30 + h, w, h + remainder);
+			this.blue.set(this.area.x + 5, this.area.ey() - 5 - h, w, h);
 		}
 
 		@Override
@@ -200,8 +200,8 @@ public class GuiColorElement extends GuiElement
 			int padding = GuiDraw.drawBorder(this.area, 0xffffffff);
 
 			this.area.draw(0xffc6c6c6, padding + 1);
-			Gui.drawRect(this.area.getX(1) - 25, this.area.y + 5, this.area.getX(1) - 5, this.area.y + 25, this.color.getRGBAColor());
-			GuiDraw.drawOutline(this.area.getX(1) - 25, this.area.y + 5, this.area.getX(1) - 5, this.area.y + 25, 0x44000000);
+			Gui.drawRect(this.area.ex() - 25, this.area.y + 5, this.area.ex() - 5, this.area.y + 25, this.color.getRGBAColor());
+			GuiDraw.drawOutline(this.area.ex() - 25, this.area.y + 5, this.area.ex() - 5, this.area.y + 25, 0x44000000);
 
 			Color color = new Color();
 
@@ -211,7 +211,7 @@ public class GuiColorElement extends GuiElement
 			color.copy(this.color).r = 1;
 			int right = color.getRGBAColor();
 
-			GuiDraw.drawHorizontalGradientRect(this.red.x, this.red.y, this.red.getX(1F), this.red.getY(1F), left, right);
+			GuiDraw.drawHorizontalGradientRect(this.red.x, this.red.y, this.red.ex(), this.red.ey(), left, right);
 
 			/* Draw green slider */
 			color.copy(this.color).g = 0;
@@ -219,7 +219,7 @@ public class GuiColorElement extends GuiElement
 			color.copy(this.color).g = 1;
 			right = color.getRGBAColor();
 
-			GuiDraw.drawHorizontalGradientRect(this.green.x, this.green.y, this.green.getX(1F), this.green.getY(1F), left, right);
+			GuiDraw.drawHorizontalGradientRect(this.green.x, this.green.y, this.green.ex(), this.green.ey(), left, right);
 
 			/* Draw blue slider */
 			color.copy(this.color).b = 0;
@@ -227,12 +227,12 @@ public class GuiColorElement extends GuiElement
 			color.copy(this.color).b = 1;
 			right = color.getRGBAColor();
 
-			GuiDraw.drawHorizontalGradientRect(this.blue.x, this.blue.y, this.blue.getX(1F), this.blue.getY(1F), left, right);
-			GuiDraw.drawOutline(this.red.x, this.red.y, this.red.getX(1F), this.blue.getY(1F), 0x44000000);
+			GuiDraw.drawHorizontalGradientRect(this.blue.x, this.blue.y, this.blue.ex(), this.blue.ey(), left, right);
+			GuiDraw.drawOutline(this.red.x, this.red.y, this.red.ex(), this.blue.ey(), 0x44000000);
 
-			this.drawMarker(this.red.x + 7 + (int) ((this.red.w - 14) * this.color.r), this.red.getY(0.5F));
-			this.drawMarker(this.green.x + 7 + (int) ((this.green.w - 14) * this.color.g), this.green.getY(0.5F));
-			this.drawMarker(this.blue.x + 7 + (int) ((this.blue.w - 14) * this.color.b), this.blue.getY(0.5F));
+			this.drawMarker(this.red.x + 7 + (int) ((this.red.w - 14) * this.color.r), this.red.my());
+			this.drawMarker(this.green.x + 7 + (int) ((this.green.w - 14) * this.color.g), this.green.my());
+			this.drawMarker(this.blue.x + 7 + (int) ((this.blue.w - 14) * this.color.b), this.blue.my());
 
 			super.draw(context);
 		}

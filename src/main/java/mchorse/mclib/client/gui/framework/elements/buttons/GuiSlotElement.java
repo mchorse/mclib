@@ -59,19 +59,19 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 
 		if (McLib.enableBorders.get())
 		{
-			Gui.drawRect(this.area.x + 1, this.area.y, this.area.getX(1) - 1, this.area.getY(1), 0xff000000);
-			Gui.drawRect(this.area.x, this.area.y + 1, this.area.getX(1), this.area.getY(1) - 1, 0xff000000);
-			Gui.drawRect(this.area.x + 1, this.area.y + 1, this.area.getX(1) - 1, this.area.getY(1) - 1, border);
-			Gui.drawRect(this.area.x + 2, this.area.y + 2, this.area.getX(1) - 2, this.area.getY(1) - 2, 0xffc6c6c6);
+			Gui.drawRect(this.area.x + 1, this.area.y, this.area.ex() - 1, this.area.ey(), 0xff000000);
+			Gui.drawRect(this.area.x, this.area.y + 1, this.area.ex(), this.area.ey() - 1, 0xff000000);
+			Gui.drawRect(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, border);
+			Gui.drawRect(this.area.x + 2, this.area.y + 2, this.area.ex() - 2, this.area.ey() - 2, 0xffc6c6c6);
 		}
 		else
 		{
-			Gui.drawRect(this.area.x, this.area.y, this.area.getX(1), this.area.getY(1), border);
-			Gui.drawRect(this.area.x + 1, this.area.y + 1, this.area.getX(1) - 1, this.area.getY(1) - 1, 0xffc6c6c6);
+			Gui.drawRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), border);
+			Gui.drawRect(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, 0xffc6c6c6);
 		}
 
-		int x = this.area.getX(0.5F) - 8;
-		int y = this.area.getY(0.5F) - 8;
+		int x = this.area.mx() - 8;
+		int y = this.area.my() - 8;
 
 		if (this.stack == null && this.slot != 0)
 		{

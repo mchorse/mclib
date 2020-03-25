@@ -43,6 +43,6 @@ public class GuiIconElement extends GuiClickElement<GuiIconElement>
 			GlStateManager.color(0, 0, 0, 1F);
 		}
 
-		icon.render(this.area.getX(0.5F, icon.w), this.area.getY(0.5F, icon.h));
+		icon.render(this.area.mx(), this.area.my(), 0.5F, 0.5F);
 	}
 }

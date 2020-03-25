@@ -87,7 +87,7 @@ public class Area
     /**
      * Calculate X based on anchor value
      */
-    public int getX(float anchor)
+    public int x(float anchor)
     {
         return this.x + (int) (this.w * anchor);
     }
@@ -95,15 +95,39 @@ public class Area
     /**
      * Calculate X based on anchor value with additional value
      */
-    public int getX(float anchor, int value)
+    public int x(float anchor, int value)
     {
         return this.x + (int) ((this.w - value) * anchor);
     }
 
     /**
+     * Calculate mid point X value
+     */
+    public int mx()
+    {
+        return this.x + (int) (this.w * 0.5F);
+    }
+
+    /**
+     * Calculate mid point X value
+     */
+    public int mx(int value)
+    {
+        return this.x + (int) ((this.w - value) * 0.5F);
+    }
+
+    /**
+     * Calculate end point X (right) value
+     */
+    public int ex()
+    {
+        return this.x + this.w;
+    }
+
+    /**
      * Calculate Y based on anchor value
      */
-    public int getY(float anchor)
+    public int y(float anchor)
     {
         return this.y + (int) (this.h * anchor);
     }
@@ -111,9 +135,33 @@ public class Area
     /**
      * Calculate Y based on anchor value
      */
-    public int getY(float anchor, int value)
+    public int y(float anchor, int value)
     {
         return this.y + (int) ((this.h - value) * anchor);
+    }
+
+    /**
+     * Calculate mid point Y value
+     */
+    public int my()
+    {
+        return this.y + (int) (this.h * 0.5F);
+    }
+
+    /**
+     * Calculate mid point Y value
+     */
+    public int my(int value)
+    {
+        return this.y + (int) ((this.h - value) * 0.5F);
+    }
+
+    /**
+     * Calculate end point Y (bottom) value
+     */
+    public int ey()
+    {
+        return this.y + this.h;
     }
 
     /**
@@ -145,6 +193,6 @@ public class Area
      */
     public void draw(int color, int lx, int ty, int rx, int by)
     {
-        Gui.drawRect(this.x + lx, this.y + ty, this.getX(1) - rx, this.getY(1) - by, color);
+        Gui.drawRect(this.x + lx, this.y + ty, this.ex() - rx, this.ey() - by, color);
     }
 }

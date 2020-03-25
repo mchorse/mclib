@@ -40,12 +40,12 @@ public class GuiTooltip
             int w = strings.size() == 1 ? font.getStringWidth(strings.get(0)) : this.tooltip.width;
             int h = (font.FONT_HEIGHT + 3) * strings.size() - 3;
 
-            int x = this.area.getX(1) + 6;
-            int y = this.area.getY(0.5F) - h / 2;
+            int x = this.area.ex() + 6;
+            int y = this.area.my() - h / 2;
 
             if (this.tooltip.direction == Direction.TOP)
             {
-                x = this.area.getX(0.5F) - w / 2;
+                x = this.area.mx() - w / 2;
                 y = this.area.y - h - 6;
             }
             else if (this.tooltip.direction == Direction.LEFT)
@@ -54,8 +54,8 @@ public class GuiTooltip
             }
             else if (this.tooltip.direction == Direction.BOTTOM)
             {
-                x = this.area.getX(0.5F) - w / 2;
-                y = this.area.getY(1) + 6;
+                x = this.area.mx() - w / 2;
+                y = this.area.ey() + 6;
             }
 
             x = MathHelper.clamp_int(x, 3, width - w - 3);

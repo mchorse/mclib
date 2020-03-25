@@ -140,7 +140,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         this.plusOne.copy(this.area);
         this.minusOne.copy(this.area);
         this.plusOne.w = this.minusOne.w = 20;
-        this.plusOne.x = this.area.getX(1) - 20;
+        this.plusOne.x = this.area.ex() - 20;
     }
 
     /**
@@ -282,9 +282,9 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         {
             /* Draw filling background */
             int color = McLib.primaryColor.get();
-            int fx = MathUtils.clamp(context.mouseX, this.area.x + padding, this.area.getX(1) - padding);
+            int fx = MathUtils.clamp(context.mouseX, this.area.x + padding, this.area.ex() - padding);
 
-            Gui.drawRect(Math.min(fx, this.lastX), this.area.y + padding, Math.max(fx, this.lastX), this.area.getY(1F) - padding, 0xff000000 + color);
+            Gui.drawRect(Math.min(fx, this.lastX), this.area.y + padding, Math.max(fx, this.lastX), this.area.ey() - padding, 0xff000000 + color);
         }
         else if (plus)
         {
@@ -304,8 +304,8 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
         int width = MathUtils.clamp(this.font.getStringWidth(this.text.getText()), 0, w - 16);
 
-        this.text.xPosition = this.area.getX(0.5F, width);
-        this.text.yPosition = this.area.getY(0.5F) - 4;
+        this.text.xPosition = this.area.mx(width);
+        this.text.yPosition = this.area.my() - 4;
         this.text.width = width + 6;
         this.text.height = 9;
         this.text.drawTextBox();
