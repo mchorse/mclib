@@ -31,9 +31,10 @@ public class GuiButtonElement extends GuiClickElement<GuiButtonElement>
 
 		GuiDraw.drawBorder(this.area, color);
 
-		int w = this.font.getStringWidth(this.label);
+		int x = this.area.mx(this.font.getStringWidth(this.label));
+		int y = this.area.my(this.font.FONT_HEIGHT - 1);
 
-		this.font.drawStringWithShadow(this.label, this.area.mx(w), this.area.my(this.font.FONT_HEIGHT), this.hover ? 16777120 : 0xffffff);
+		this.font.drawStringWithShadow(this.label, x, y, this.hover ? 16777120 : 0xffffff);
 
 		GuiDraw.drawLockedArea(this);
 	}

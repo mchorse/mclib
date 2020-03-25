@@ -100,7 +100,7 @@ public class ValueInt extends Value
 			});
 
 			color.picker.setColor(this.value);
-			color.resizer().parent(element.area).wh(30, 20).x(1, 0).anchor(1, 0);
+			color.resizer().parent(element.area).wh(90, 20).x(1, 0).anchor(1, 0);
 
 			element.add(color);
 		}

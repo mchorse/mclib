@@ -45,13 +45,30 @@ public class ColorUtils
 
 	public static int parseColor(String color, int orDefault)
 	{
-		if (color.startsWith("#") && (color.length() == 7 || color.length() == 9))
+		if (color.startsWith("#"))
+		{
+			color = color.substring(1);
+		}
+
+		if (color.length() == 6 || color.length() == 8)
 		{
 			try
 			{
-				return Integer.parseInt(color.substring(1), 16);
+				if (color.length() == 8)
+				{
+					String alpha = color.substring(0, 2);
+					String rest = color.substring(2);
+
+					int a = Integer.parseInt(alpha, 16) << 24;
+					int rgb = Integer.parseInt(rest, 16);
+
+					return a + rgb;
+				}
+
+				return Integer.parseInt(color, 16);
 			}
-			catch (Exception e) {}
+			catch (Exception e)
+			{}
 		}
 
 		return orDefault;

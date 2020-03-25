@@ -39,7 +39,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 	@Override
 	protected void drawSkin(GuiContext context)
 	{
-		this.font.drawStringWithShadow(this.label, this.area.x, this.area.my(this.font.FONT_HEIGHT), 0xffffff);
+		this.font.drawStringWithShadow(this.label, this.area.x, this.area.my(this.font.FONT_HEIGHT - 1), 0xffffff);
 
 		/* Draw toggle switch */
 		int w = 16;

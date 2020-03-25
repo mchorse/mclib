@@ -114,7 +114,7 @@ public class GuiDashboard extends GuiBase
 
 			GuiColorElement color = new GuiColorElement(mc, (v) -> {});
 
-			color.picker.setColor(0x0088ff);
+			color.picker.editAlpha().setColor(0x880088ff);
 			color.resizer().relative(trackpad.getResizer()).y(1, 5).w(1, 0).h(20);
 			color.setEnabled(true);
 
