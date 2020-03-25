@@ -5,6 +5,8 @@ import java.util.function.Consumer;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.client.gui.utils.Icons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
 import net.minecraft.client.gui.GuiScreen;
@@ -146,6 +148,8 @@ public class GuiTextElement extends GuiElement implements GuiResponder, IFocused
     public void draw(GuiContext context)
     {
         this.field.drawTextBox();
+
+        GuiDraw.drawLockedArea(this);
 
         super.draw(context);
     }

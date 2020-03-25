@@ -4,6 +4,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.function.Consumer;
 
@@ -31,12 +32,17 @@ public class GuiIconElement extends GuiClickElement<GuiIconElement>
 	@Override
 	protected void drawSkin(GuiContext context)
 	{
-		if (this.visible)
-		{
-			Icon icon = this.hover ? this.iconHover : this.icon;
+		Icon icon = this.hover ? this.iconHover : this.icon;
 
+		if (this.isEnabled())
+		{
 			ColorUtils.bindColor(this.hover ? 0xffaaaaaa : 0xffffffff);
-			icon.render(this.area.getX(0.5F, icon.w), this.area.getY(0.5F, icon.h));
 		}
+		else
+		{
+			GlStateManager.color(0, 0, 0, 1F);
+		}
+
+		icon.render(this.area.getX(0.5F, icon.w), this.area.getY(0.5F, icon.h));
 	}
 }

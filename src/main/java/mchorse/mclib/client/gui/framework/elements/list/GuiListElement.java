@@ -5,10 +5,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.ScrollArea;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -388,6 +390,9 @@ public abstract class GuiListElement<T> extends GuiElement
         GuiDraw.unscissor();
 
         this.scroll.drawScrollbar();
+
+        GuiDraw.drawLockedArea(this);
+
         super.draw(context);
 
         if (this.exists(this.dragging) && dragging)

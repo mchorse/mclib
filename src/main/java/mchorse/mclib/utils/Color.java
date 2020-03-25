@@ -1,5 +1,7 @@
 package mchorse.mclib.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class Color
 {
 	public float r;
@@ -68,5 +70,20 @@ public class Color
 	public int getRGBColor()
 	{
 		return this.getRGBAColor() & 0xffffff;
+	}
+
+	public String stringify()
+	{
+		return this.stringify(false);
+	}
+
+	public String stringify(boolean alpha)
+	{
+		if (alpha)
+		{
+			return "#" + StringUtils.leftPad(Integer.toHexString(this.getRGBAColor()), 8, '0');
+		}
+
+		return "#" + StringUtils.leftPad(Integer.toHexString(this.getRGBColor()), 6, '0');
 	}
 }

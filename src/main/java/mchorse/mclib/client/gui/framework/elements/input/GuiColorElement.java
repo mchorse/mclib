@@ -1,14 +1,17 @@
 package mchorse.mclib.client.gui.framework.elements.input;
 
-import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.McLib;
+import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.resizers.BoundsResizer;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Consumer;
 
@@ -34,7 +37,10 @@ public class GuiColorElement extends GuiElement
 			}
 		});
 
-		this.picker.resizer().parent(this.area).x(0.5F, 0).y(1F, 2).anchor(0.5F, 0).wh(200, 80);
+		this.picker.setResizer(new BoundsResizer(
+			this.picker.resizer().parent(this.area).x(0.5F, 0).y(1F, 2).anchor(0.5F, 0).wh(200, 80),
+			GuiBase.getCurrent(), 2
+		));
 	}
 
 	@Override
@@ -60,6 +66,7 @@ public class GuiColorElement extends GuiElement
 	public void draw(GuiContext context)
 	{
 		GuiDraw.drawBorder(this.area, this.picker.color.getRGBAColor());
+		GuiDraw.drawLockedArea(this);
 
 		super.draw(context);
 	}
@@ -109,7 +116,7 @@ public class GuiColorElement extends GuiElement
 		public void setColor(int color)
 		{
 			this.setValue(color);
-			this.input.setText("#" + StringUtils.leftPad(Integer.toHexString(this.color.getRGBColor()), 6, '0'));
+			this.input.setText(this.color.stringify());
 		}
 
 		public void setValue(int color)

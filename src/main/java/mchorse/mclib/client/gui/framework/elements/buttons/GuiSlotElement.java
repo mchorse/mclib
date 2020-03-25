@@ -4,6 +4,7 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
 import mchorse.mclib.client.gui.utils.Icons;
 import net.minecraft.client.Minecraft;
@@ -116,5 +117,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 			GlStateManager.disableDepth();
 			RenderHelper.disableStandardItemLighting();
 		}
+
+		GuiDraw.drawLockedArea(this, McLib.enableBorders.get() ? 1 : 0);
 	}
 }

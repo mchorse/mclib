@@ -387,7 +387,7 @@ public class GuiElement extends Gui implements IGuiElement
     @Override
     public void draw(GuiContext context)
     {
-        if (this.keybinds != null)
+        if (this.keybinds != null && this.isEnabled())
         {
             this.keybinds.add(context.keybinds, this.area.isInside(context.mouseX, context.mouseY));
         }

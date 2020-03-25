@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.utils;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.Icons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
@@ -132,6 +133,8 @@ public class GuiInventoryElement extends GuiElement
 
 		GlStateManager.disableDepth();
 		RenderHelper.disableStandardItemLighting();
+
+		GuiDraw.drawLockedArea(this, McLib.enableBorders.get() ? 1 : 0);
 
 		super.draw(context);
 	}

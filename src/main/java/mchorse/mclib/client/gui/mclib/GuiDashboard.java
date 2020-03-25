@@ -5,8 +5,13 @@ import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
 import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
+import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.modals.GuiConfirmModal;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
@@ -71,6 +76,7 @@ public class GuiDashboard extends GuiBase
 				this.add(modal);
 			});
 
+			button.setEnabled(false);
 			button.keys().register("To pay respect", Keyboard.KEY_F, () ->
 			{
 				System.out.println("F");
@@ -85,7 +91,34 @@ public class GuiDashboard extends GuiBase
 				.action(Icons.NONE, "Space...", () -> System.out.println("Boo hoo"))
 				.action(Icons.LOCKED, "SECRET", () -> System.out.println("Secret!")));
 
-			this.add(button);
+			GuiToggleElement toggle = new GuiToggleElement(mc, "Hello!", (b) -> {});
+
+			toggle.setEnabled(false);
+			toggle.resizer().relative(button.getResizer()).y(1, 5).w(1, 0).h(20);
+
+			GuiIconElement icon = new GuiIconElement(mc, Icons.POSE, (ic) -> {});
+
+			icon.resizer().relative(toggle.getResizer()).x(1, -20).y(1, 5).w(20).h(20);
+			icon.setEnabled(false);
+
+			GuiTextElement input = new GuiTextElement(mc, (v) -> {});
+
+			input.resizer().relative(toggle.getResizer()).y(1, 5).w(1, -25).h(20);
+			input.setEnabled(false);
+			input.setText("Test!");
+
+			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (v) -> {});
+
+			trackpad.resizer().relative(input.getResizer()).y(1, 5).w(1, 25).h(20);
+			trackpad.setEnabled(false);
+
+			GuiColorElement color = new GuiColorElement(mc, (v) -> {});
+
+			color.picker.setColor(0x0088ff);
+			color.resizer().relative(trackpad.getResizer()).y(1, 5).w(1, 0).h(20);
+			color.setEnabled(true);
+
+			this.add(button, toggle, icon, input, trackpad, color);
 
 			GuiElement slots = new GuiElement(mc);
 
@@ -96,10 +129,12 @@ public class GuiDashboard extends GuiBase
 			GuiSlotElement slot3 = new GuiSlotElement(mc, 2, this::setSlot);
 			GuiSlotElement slot4 = new GuiSlotElement(mc, 3, this::setSlot);
 
+			slot1.setEnabled(false);
 			slot1.resizer().wh(0, 30);
 			slot2.resizer().wh(0, 30);
 			slot3.resizer().wh(0, 30);
 			slot4.resizer().wh(0, 30);
+
 			slots.add(slot1, slot2, slot3, slot4);
 			slots.setResizer(new RowResizer(slots, 5).padding(5));
 
@@ -124,6 +159,7 @@ public class GuiDashboard extends GuiBase
 
 			this.inve.resizer().relative(slots.getResizer()).y(1, 0).x(0.5F, 0).wh(10 * 20, 5 * 20).anchor(0.5F, 0);
 			this.inve.setVisible(false);
+			this.inve.setEnabled(false);
 
 			this.add(slots, this.inve);
 		}

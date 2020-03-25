@@ -52,8 +52,10 @@ public class Icon
 		y -= ay * this.h;
 
 		GlStateManager.enableAlpha();
+		GlStateManager.enableBlend();
 		Minecraft.getMinecraft().renderEngine.bindTexture(this.location);
 		GuiDraw.drawBillboard(x, y, this.x, this.y, this.w, this.h, this.textureW, this.textureH);
+		GlStateManager.disableBlend();
 		GlStateManager.disableAlpha();
 	}
 }

@@ -1,7 +1,11 @@
 package mchorse.mclib.client.gui.framework.elements.utils;
 
 import mchorse.mclib.McLib;
+import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.Icon;
+import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -132,5 +136,36 @@ public class GuiDraw
 		Gui.drawRect(right - border, top, right, bottom, color);
 		Gui.drawRect(left + border, top, right - border, top + border, color);
 		Gui.drawRect(left + border, bottom - border, right - border, bottom, color);
+	}
+
+	public static void drawOutlinedIcon(Icon icon, int x, int y, int color)
+	{
+		drawOutlinedIcon(icon, x, y, color, 0F, 0F);
+	}
+
+	public static void drawOutlinedIcon(Icon icon, int x, int y, int color, float ax, float ay)
+	{
+		GlStateManager.color(0, 0, 0, 1);
+		icon.render(x - 1, y, ax, ay);
+		icon.render(x + 1, y, ax, ay);
+		icon.render(x, y - 1, ax, ay);
+		icon.render(x, y + 1, ax, ay);
+		ColorUtils.bindColor(color);
+		icon.render(x, y, ax, ay);
+	}
+
+	public static void drawLockedArea(GuiElement element)
+	{
+		drawLockedArea(element, 0);
+	}
+
+	public static void drawLockedArea(GuiElement element, int padding)
+	{
+		if (!element.isEnabled())
+		{
+			element.area.draw(0x88000000, padding);
+
+			GuiDraw.drawOutlinedIcon(Icons.LOCKED, element.area.getX(0.5F), element.area.getY(0.5F), 0xffffffff, 0.5F, 0.5F);
+		}
 	}
 }

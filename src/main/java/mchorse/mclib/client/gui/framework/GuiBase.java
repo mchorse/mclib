@@ -19,12 +19,21 @@ import java.io.IOException;
 @SideOnly(Side.CLIENT)
 public class GuiBase extends GuiScreen
 {
+    private static GuiContext current;
+
     public GuiElement root;
     public GuiContext context = new GuiContext(this);
     public Area viewport = new Area();
 
+    public static GuiContext getCurrent()
+    {
+        return current;
+    }
+
     public GuiBase()
     {
+        current = this.context;
+
         this.root = new GuiElement(Minecraft.getMinecraft());
         this.root.markContainer().resizer().w(1, 0).h(1, 0);
         this.root.keys().register("Keybinds list", Keyboard.KEY_F9, () ->
@@ -42,6 +51,8 @@ public class GuiBase extends GuiScreen
     @Override
     public void initGui()
     {
+        current = this.context;
+
         if (!this.context.keybinds.hasParent())
         {
             this.root.add(this.context.keybinds);
