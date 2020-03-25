@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.utils;
 
+import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.math.MathHelper;
 
@@ -105,7 +106,7 @@ public class ScrollArea extends Area
         }
         else
         {
-            this.scroll = MathHelper.clamp_int(this.scroll, 0, this.scrollSize - size);
+            this.scroll = MathUtils.clamp(this.scroll, 0, this.scrollSize - size);
         }
     }
 

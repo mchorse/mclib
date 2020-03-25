@@ -25,6 +25,7 @@ import mchorse.mclib.math.functions.rounding.Round;
 import mchorse.mclib.math.functions.classic.Sin;
 import mchorse.mclib.math.functions.classic.Sqrt;
 import mchorse.mclib.math.functions.rounding.Trunc;
+import mchorse.mclib.utils.MathUtils;
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -321,7 +322,7 @@ public class MathBuilder
         if (secondOp == -1)
         {
             IValue left = this.parseSymbols(symbols.subList(0, firstOp));
-            IValue right = this.parseSymbols(symbols.subList(firstOp + 1, MathHelper.clamp_int(firstOp + 3, 0, size)));
+            IValue right = this.parseSymbols(symbols.subList(firstOp + 1, MathUtils.clamp(firstOp + 3, 0, size)));
 
             return new Operator(op, left, right);
         }

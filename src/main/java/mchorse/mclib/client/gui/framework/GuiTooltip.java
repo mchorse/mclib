@@ -4,6 +4,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.utils.Direction;
+import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.math.MathHelper;
 
@@ -59,8 +60,8 @@ public class GuiTooltip
             y = this.area.ey() + 6;
         }
 
-        x = MathHelper.clamp_int(x, 3, context.screen.width - w - 3);
-        y = MathHelper.clamp_int(y, 3, context.screen.height - h - 3);
+        x = MathUtils.clamp(x, 3, context.screen.width - w - 3);
+        y = MathUtils.clamp(y, 3, context.screen.height - h - 3);
 
         Gui.drawRect(x - 3, y - 3, x + w + 3, y + h + 3, 0xffffffff);
 

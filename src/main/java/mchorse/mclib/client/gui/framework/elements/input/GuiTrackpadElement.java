@@ -102,7 +102,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     public void setValue(float value)
     {
         value = Math.round(value * 1000F) / 1000F;
-        value = MathHelper.clamp_float(value, this.min, this.max);
+        value = MathUtils.clamp(value, this.min, this.max);
 
         if (this.integer)
         {
@@ -335,7 +335,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
                 if (this.value != newValue)
                 {
-                    this.setValueAndNotify(MathHelper.clamp_float(newValue, this.min, this.max));
+                    this.setValueAndNotify(MathUtils.clamp(newValue, this.min, this.max));
                 }
 
                 String format;

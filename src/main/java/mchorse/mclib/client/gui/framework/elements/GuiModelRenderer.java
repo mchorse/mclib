@@ -1,6 +1,7 @@
 package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.utils.MathUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
@@ -81,7 +82,7 @@ public abstract class GuiModelRenderer extends GuiElement
         }
 
         this.scale += Math.copySign(0.25F, context.mouseWheel);
-        this.scale = MathHelper.clamp_float(this.scale, -1.5F, 30);
+        this.scale = MathUtils.clamp(this.scale, -1.5F, 30);
 
         return false;
     }
