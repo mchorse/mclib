@@ -76,7 +76,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         return this;
     }
 
-    public GuiTrackpadElement increment(int increment)
+    public GuiTrackpadElement increment(float increment)
     {
         this.increment = increment;
 

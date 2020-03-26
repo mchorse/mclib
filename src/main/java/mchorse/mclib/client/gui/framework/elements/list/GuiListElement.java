@@ -134,9 +134,26 @@ public abstract class GuiListElement<T> extends GuiElement
 
     public void addIndex(int index)
     {
-        if (this.exists(index))
+        if (this.exists(index) && this.current.indexOf(index) == -1)
         {
             this.current.add(index);
+        }
+    }
+
+    public void toggleIndex(int index)
+    {
+        if (this.exists(index))
+        {
+            int i = this.current.indexOf(index);
+
+            if (i == -1)
+            {
+                this.current.add(index);
+            }
+            else
+            {
+                this.current.remove(i);
+            }
         }
     }
 
@@ -309,7 +326,7 @@ public abstract class GuiListElement<T> extends GuiElement
             {
                 if (this.multi && GuiScreen.isShiftKeyDown())
                 {
-                    this.addIndex(index);
+                    this.toggleIndex(index);
                 }
                 else
                 {
