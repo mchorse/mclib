@@ -1,9 +1,9 @@
 package mchorse.mclib.client.gui.framework.elements.input;
 
 import mchorse.mclib.McLib;
-import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icons;
@@ -14,7 +14,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Keyboard;
 
 import java.util.function.Consumer;
@@ -25,7 +24,11 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     public GuiTextField text;
 
     public float value;
-    public float amplitude = 0.25F;
+
+    /* Trackpad options */
+    public float strong = 1F;
+    public float normal = 0.25F;
+    public float weak = 0.05F;
     public float increment = 1;
     public float min = Float.NEGATIVE_INFINITY;
     public float max = Float.POSITIVE_INFINITY;
@@ -80,9 +83,18 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         return this;
     }
 
-    public GuiTrackpadElement amp(float amp)
+    public GuiTrackpadElement values(float normal)
     {
-        this.amplitude = amp;
+        this.normal = normal;
+
+        return this;
+    }
+
+    public GuiTrackpadElement values(float normal, float weak, float strong)
+    {
+        this.normal = normal;
+        this.weak = weak;
+        this.strong = strong;
 
         return this;
     }
@@ -158,13 +170,13 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         {
             if (this.plusOne.isInside(mouseX, mouseY))
             {
-                this.setValue(this.value + this.increment);
+                this.setValueAndNotify(this.value + this.increment);
 
                 return true;
             }
             else if (this.minusOne.isInside(mouseX, mouseY))
             {
-                this.setValue(this.value - this.increment);
+                this.setValueAndNotify(this.value - this.increment);
 
                 return true;
             }
@@ -317,18 +329,18 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
             if (dx != 0 || dy != 0)
             {
-                float amp = 1.0F;
+                float value = this.normal;
 
                 if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
                 {
-                    amp = 5.0F;
+                    value = this.strong;
                 }
                 else if (Keyboard.isKeyDown(Keyboard.KEY_LMENU))
                 {
-                    amp = 0.2F;
+                    value = this.weak;
                 }
 
-                float diff = ((int) Math.sqrt(dx * dx + dy * dy) - 3) * this.amplitude * amp;
+                float diff = ((int) Math.sqrt(dx * dx + dy * dy) - 3) * value;
                 float newValue = this.lastValue + (dx < 0 ? -diff : diff);
 
                 newValue = diff < 0 ? this.lastValue : Math.round(newValue * 1000F) / 1000F;
@@ -337,19 +349,6 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
                 {
                     this.setValueAndNotify(MathUtils.clamp(newValue, this.min, this.max));
                 }
-
-                String format;
-
-                if (amp == (long) amp)
-                {
-                    format = String.format("%d", (long) amp);
-                }
-                else
-                {
-                    format = String.valueOf(amp);
-                }
-
-                this.font.drawString("x" + format, this.lastX + 5, this.lastY + 4 - this.font.FONT_HEIGHT + 2, 0xffffff);
             }
 
             /* Draw active element */
