@@ -364,6 +364,7 @@ public class Interpolations
      */
     public static double envelope(double x, double lowIn, double lowOut, double highIn, double highOut)
     {
+        if (x < lowIn || x > highOut) return 0;
         if (x < lowOut) return (x - lowIn) / (lowOut - lowIn);
         if (x > highIn) return 1 - (x - highIn) / (highOut - highIn);
 

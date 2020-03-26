@@ -38,6 +38,15 @@ public class Area
     }
 
     /**
+     * Check whether given rect intersects this rect
+     */
+    public boolean intersects(Area area)
+    {
+        return this.x < area.x + area.w && this.y < area.y + area.h
+            && area.x < this.x + this.w && area.y < this.y + this.h;
+    }
+
+    /**
      * Set all values
      */
     public void set(int x, int y, int w, int h)
@@ -78,17 +87,81 @@ public class Area
     /**
      * Calculate X based on anchor value
      */
-    public int getX(float anchor)
+    public int x(float anchor)
     {
         return this.x + (int) (this.w * anchor);
     }
 
     /**
+     * Calculate X based on anchor value with additional value
+     */
+    public int x(float anchor, int value)
+    {
+        return this.x + (int) ((this.w - value) * anchor);
+    }
+
+    /**
+     * Calculate mid point X value
+     */
+    public int mx()
+    {
+        return this.x + (int) (this.w * 0.5F);
+    }
+
+    /**
+     * Calculate mid point X value
+     */
+    public int mx(int value)
+    {
+        return this.x + (int) ((this.w - value) * 0.5F);
+    }
+
+    /**
+     * Calculate end point X (right) value
+     */
+    public int ex()
+    {
+        return this.x + this.w;
+    }
+
+    /**
      * Calculate Y based on anchor value
      */
-    public int getY(float anchor)
+    public int y(float anchor)
     {
         return this.y + (int) (this.h * anchor);
+    }
+
+    /**
+     * Calculate Y based on anchor value
+     */
+    public int y(float anchor, int value)
+    {
+        return this.y + (int) ((this.h - value) * anchor);
+    }
+
+    /**
+     * Calculate mid point Y value
+     */
+    public int my()
+    {
+        return this.y + (int) (this.h * 0.5F);
+    }
+
+    /**
+     * Calculate mid point Y value
+     */
+    public int my(int value)
+    {
+        return this.y + (int) ((this.h - value) * 0.5F);
+    }
+
+    /**
+     * Calculate end point Y (bottom) value
+     */
+    public int ey()
+    {
+        return this.y + this.h;
     }
 
     /**
@@ -96,6 +169,30 @@ public class Area
      */
     public void draw(int color)
     {
-        Gui.drawRect(this.x, this.y, this.getX(1), this.getY(1), color);
+        this.draw(color, 0, 0, 0, 0);
+    }
+
+    /**
+     * Draw a rect within the bound of this rect
+     */
+    public void draw(int color, int offset)
+    {
+        this.draw(color, offset, offset, offset, offset);
+    }
+
+    /**
+     * Draw a rect within the bound of this rect
+     */
+    public void draw(int color, int horizontal, int vertical)
+    {
+        this.draw(color, horizontal, vertical, horizontal, vertical);
+    }
+
+    /**
+     * Draw a rect within the bound of this rect
+     */
+    public void draw(int color, int lx, int ty, int rx, int by)
+    {
+        Gui.drawRect(this.x + lx, this.y + ty, this.ex() - rx, this.ey() - by, color);
     }
 }

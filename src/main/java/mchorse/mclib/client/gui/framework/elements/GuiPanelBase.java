@@ -1,16 +1,17 @@
 package mchorse.mclib.client.gui.framework.elements;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import mchorse.mclib.client.gui.framework.GuiTooltip.TooltipDirection;
+import mchorse.mclib.McLib;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Area;
-import mchorse.mclib.client.gui.utils.GuiDrawable;
-import mchorse.mclib.client.gui.utils.Resizer.Measure;
-import mchorse.mclib.client.gui.widgets.buttons.GuiTextureButton;
+import mchorse.mclib.client.gui.utils.Icon;
+import mchorse.mclib.client.gui.utils.resizers.Resizer.Measure;
+import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Panel base GUI
@@ -18,69 +19,95 @@ import net.minecraft.util.ResourceLocation;
  * With this base class, you can add multi panel elements which could be 
  * switched between using buttons.
  */
-public class GuiPanelBase<T extends IGuiElement> extends GuiElement
+public class GuiPanelBase<T extends GuiElement> extends GuiElement
 {
     public GuiDelegateElement<T> view;
-    public GuiElements<GuiButtonElement<GuiTextureButton>> buttons;
+    public GuiElements<GuiIconElement> buttons;
     public List<T> panels = new ArrayList<T>();
+    public Direction direction;
 
     public GuiPanelBase(Minecraft mc)
     {
+        this(mc, Direction.BOTTOM);
+    }
+
+    public GuiPanelBase(Minecraft mc, Direction direction)
+    {
         super(mc);
 
-        this.createChildren();
+        this.direction = direction == null ? Direction.BOTTOM : direction;
         this.view = new GuiDelegateElement<T>(mc, null);
         this.view.resizer().parent(this.area).set(0, 0, 1, 1, Measure.RELATIVE).h(1, -20);
 
-        this.buttons = new GuiElements<GuiButtonElement<GuiTextureButton>>();
-        GuiDrawable drawable = new GuiDrawable((v) ->
+        if (this.direction == Direction.TOP)
         {
-            for (int i = 0, c = this.panels.size(); i < c; i++)
-            {
-                if (this.view.delegate == this.panels.get(i))
-                {
-                    Area area = this.buttons.elements.get(i).area;
+            this.view.resizer().y(20);
+        }
+        else if (this.direction == Direction.LEFT)
+        {
+            this.view.resizer().x(20).w(1, -20).h(1, 0);
+        }
+        else if (this.direction == Direction.RIGHT)
+        {
+            this.view.resizer().w(1, -20).h(1, 0);
+        }
 
-                    Gui.drawRect(area.x - 2, area.y - 2, area.getX(1) + 2, area.getY(1) + 2, 0x880088ff);
-                }
-            }
-        });
-
-        this.children.add(drawable, this.buttons, this.view);
+        this.buttons = new GuiElements<GuiIconElement>(this);
+        this.add(this.buttons, this.view);
     }
 
     /**
      * Register a panel with given texture and tooltip 
      */
-    public void registerPanel(T panel, ResourceLocation texture, String tooltip, int x, int y, int ax, int ay)
+    public GuiIconElement registerPanel(T panel, String tooltip, Icon icon)
     {
-        GuiButtonElement<GuiTextureButton> button = GuiButtonElement.icon(this.mc, texture, x, y, ax, ay, (b) -> this.setPanel(panel));
+        GuiIconElement button = new GuiIconElement(this.mc, icon, (b) -> this.setPanel(panel));
 
         if (tooltip != null && !tooltip.isEmpty())
         {
-            button.tooltip(tooltip, TooltipDirection.TOP);
+            button.tooltip(tooltip, this.direction.opposite());
         }
 
+        panel.markContainer();
         this.setupButtonResizer(button);
         this.panels.add(panel);
         this.buttons.add(button);
+
+        return button;
     }
 
     /**
      * Here subclasses can override the logic for how the buttons should 
      * be setup 
      */
-    protected void setupButtonResizer(GuiButtonElement<GuiTextureButton> button)
+    protected void setupButtonResizer(GuiIconElement button)
     {
         if (this.buttons.elements.isEmpty())
         {
-            button.resizer().parent(this.area).set(0, 0, 16, 16).x(1, -18).y(1, -18);
+            if (this.direction.isHorizontal())
+            {
+                button.resizer().parent(this.area).set(2, 2, 16, 16);
+
+                if (this.direction == Direction.RIGHT)
+                {
+                    button.resizer().x(1, -18);
+                }
+            }
+            else
+            {
+                boolean bottom = this.direction == Direction.BOTTOM;
+
+                button.resizer().parent(this.area).set(0, 0, 16, 16).x(1, -18).y(bottom ? 1 : 0, bottom ? -18 : 2);
+            }
         }
         else
         {
-            GuiButtonElement<GuiTextureButton> last = this.buttons.elements.get(this.buttons.elements.size() - 1);
+            GuiIconElement last = this.buttons.elements.get(this.buttons.elements.size() - 1);
 
-            button.resizer().relative(last.resizer()).set(-20, 0, 16, 16);
+            int x = this.direction.isVertical() ? -20 : 0;
+            int y = this.direction.isHorizontal() ? 20 : 0;
+
+            button.resizer().relative(last.resizer()).set(x, y, 16, 16);
         }
     }
 
@@ -91,4 +118,40 @@ public class GuiPanelBase<T extends IGuiElement> extends GuiElement
     {
         this.view.setDelegate(panel);
     }
+
+    @Override
+    public void draw(GuiContext context)
+    {
+        if (this.direction == Direction.TOP)
+        {
+            this.drawBackground(context, this.area.x, this.area.y, this.area.w, 20);
+        }
+        else if (this.direction == Direction.BOTTOM)
+        {
+            this.drawBackground(context, this.area.x, this.area.ey() - 20, this.area.w, 20);
+        }
+        else if (this.direction == Direction.LEFT)
+        {
+            this.drawBackground(context, this.area.x, this.area.y, 20, this.area.h);
+        }
+        else
+        {
+            this.drawBackground(context, this.area.ex() - 20, this.area.y, 20, this.area.h);
+        }
+
+        for (int i = 0, c = this.panels.size(); i < c; i++)
+        {
+            if (this.view.delegate == this.panels.get(i))
+            {
+                Area area = this.buttons.elements.get(i).area;
+
+                Gui.drawRect(area.x - 2, area.y - 2, area.ex() + 2, area.ey() + 2, 0xaa000000 + McLib.primaryColor.get());
+            }
+        }
+
+        super.draw(context);
+    }
+
+    protected void drawBackground(GuiContext context, int x, int y, int w, int h)
+    {}
 }

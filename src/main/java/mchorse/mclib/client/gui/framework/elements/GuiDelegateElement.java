@@ -1,18 +1,20 @@
 package mchorse.mclib.client.gui.framework.elements;
 
-import java.io.IOException;
-
-import mchorse.mclib.client.gui.framework.GuiTooltip;
+import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Delegated {@link IGuiElement}
  */
 @SideOnly(Side.CLIENT)
-public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implements IGuiLegacy
+public class GuiDelegateElement<T extends GuiElement> extends GuiElement
 {
     public T delegate;
 
@@ -20,129 +22,124 @@ public class GuiDelegateElement<T extends IGuiElement> extends GuiElement implem
     {
         super(mc);
         this.delegate = element;
+
+        if (this.delegate != null)
+        {
+            this.delegate.parent = this;
+        }
     }
 
     public void setDelegate(T element)
     {
-        GuiScreen screen = this.mc.currentScreen;
-
         this.delegate = element;
 
-        if (screen != null)
+        if (this.delegate != null)
         {
-            this.resize(screen.width, screen.height);
+            this.delegate.parent = this;
+        }
+
+        this.resize();
+    }
+
+    private void unsupported()
+    {
+        throw new IllegalStateException("Following method is unsupported by delegate element!");
+    }
+
+    @Override
+    public List<IGuiElement> getChildren()
+    {
+        return this.delegate == null ? Collections.emptyList() : Arrays.asList(this.delegate);
+    }
+
+    @Override
+    public void clear()
+    {
+        this.unsupported();
+    }
+
+    @Override
+    public void add(IGuiElement element)
+    {
+        this.unsupported();
+    }
+
+    @Override
+    public void add(IGuiElement... elements)
+    {
+        this.unsupported();
+    }
+
+    @Override
+    public void remove(GuiElement element)
+    {
+        if (this.delegate != null && this.delegate == element)
+        {
+            this.delegate.parent = null;
+            this.delegate = null;
         }
     }
 
     @Override
     public boolean isEnabled()
     {
-        return this.delegate == null ? false : this.delegate.isEnabled();
+        return this.delegate != null && this.delegate.isEnabled();
     }
 
     @Override
     public boolean isVisible()
     {
-        return this.delegate == null ? true : this.delegate.isVisible();
+        return this.delegate == null || this.delegate.isVisible();
     }
 
     @Override
-    public void resize(int width, int height)
-    {
-        if (this.delegate instanceof GuiElement)
-        {
-            ((GuiElement) this.delegate).resizer = this.resizer;
-        }
-
-        if (this.delegate != null)
-        {
-            this.delegate.resize(width, height);
-        }
-    }
-
-    @Override
-    public boolean handleMouseInput(int mouseX, int mouseY) throws IOException
-    {
-        if (this.delegate instanceof IGuiLegacy)
-        {
-            return ((IGuiLegacy) this.delegate).handleMouseInput(mouseX, mouseY);
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public void resize()
     {
         if (this.delegate != null)
         {
-            return this.delegate.mouseClicked(mouseX, mouseY, mouseButton);
+            this.delegate.resizer = this.resizer;
+            this.delegate.resize();
         }
-
-        return false;
     }
 
     @Override
-    public boolean mouseScrolled(int mouseX, int mouseY, int scroll)
+    public boolean mouseClicked(GuiContext context)
+    {
+        return this.delegate != null && this.delegate.mouseClicked(context);
+    }
+
+    @Override
+    public GuiContextMenu createContextMenu() {
+        return this.delegate == null ? super.createContextMenu() : this.delegate.createContextMenu();
+    }
+
+    @Override
+    public boolean mouseScrolled(GuiContext context)
+    {
+        return this.delegate != null && this.delegate.mouseScrolled(context);
+    }
+
+    @Override
+    public void mouseReleased(GuiContext context)
     {
         if (this.delegate != null)
         {
-            return this.delegate.mouseScrolled(mouseX, mouseY, scroll);
+            this.delegate.mouseReleased(context);
         }
-
-        return false;
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int state)
+    public boolean keyTyped(GuiContext context)
+    {
+        return this.delegate != null && this.delegate.keyTyped(context);
+    }
+
+    @Override
+    public void draw(GuiContext context)
     {
         if (this.delegate != null)
         {
-            this.delegate.mouseReleased(mouseX, mouseY, state);
-        }
-    }
-
-    @Override
-    public boolean hasActiveTextfields()
-    {
-        return this.delegate != null ? this.delegate.hasActiveTextfields() : false;
-    }
-
-    @Override
-    public void unfocus()
-    {
-        if (this.delegate != null)
-        {
-            this.delegate.unfocus();
-        }
-    }
-
-    @Override
-    public boolean handleKeyboardInput() throws IOException
-    {
-        if (this.delegate instanceof IGuiLegacy)
-        {
-            return ((IGuiLegacy) this.delegate).handleKeyboardInput();
-        }
-
-        return false;
-    }
-
-    @Override
-    public void keyTyped(char typedChar, int keyCode)
-    {
-        if (this.delegate != null)
-        {
-            this.delegate.keyTyped(typedChar, keyCode);
-        }
-    }
-
-    @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
-    {
-        if (this.delegate != null)
-        {
-            this.delegate.draw(tooltip, mouseX, mouseY, partialTicks);
+            this.delegate.draw(context);
         }
     }
 }

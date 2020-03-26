@@ -2,7 +2,7 @@ package mchorse.mclib.utils.files;
 
 import java.util.Comparator;
 
-import mchorse.mclib.client.gui.framework.elements.GuiTexturePicker;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTexturePicker;
 import mchorse.mclib.utils.files.entries.AbstractEntry;
 import mchorse.mclib.utils.files.entries.FolderEntry;
 

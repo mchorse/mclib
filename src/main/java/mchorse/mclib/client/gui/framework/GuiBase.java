@@ -1,18 +1,17 @@
 package mchorse.mclib.client.gui.framework;
 
-import java.io.IOException;
-
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
+import mchorse.mclib.client.gui.utils.Area;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import mchorse.mclib.McLib;
-import mchorse.mclib.client.gui.framework.elements.GuiElements;
-import mchorse.mclib.client.gui.framework.elements.IGuiElement;
-import mchorse.mclib.client.gui.utils.Area;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import java.io.IOException;
 
 /**
  * Base class for GUI screens using this framework
@@ -20,20 +19,50 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiBase extends GuiScreen
 {
-    /**
-     * Icons texture used across all dashboard panels 
-     */
-    public static final ResourceLocation ICONS = new ResourceLocation(McLib.MOD_ID, "textures/gui/icons.png");
+    private static GuiContext current;
 
-    public GuiElements<IGuiElement> elements = new GuiElements<IGuiElement>();
-    public GuiTooltip tooltip = new GuiTooltip();
-    public Area area = new Area();
+    public GuiElement root;
+    public GuiContext context = new GuiContext(this);
+    public Area viewport = new Area();
+
+    public static GuiContext getCurrent()
+    {
+        return current;
+    }
+
+    public GuiBase()
+    {
+        current = this.context;
+
+        this.context.mc = Minecraft.getMinecraft();
+        this.context.font = this.context.mc.fontRendererObj;
+
+        this.root = new GuiElement(this.context.mc);
+        this.root.markContainer().resizer().w(1, 0).h(1, 0);
+        this.root.keys().register("Keybinds list", Keyboard.KEY_F9, () ->
+        {
+            this.context.keybinds.toggleVisible();
+
+            return true;
+        });
+
+        this.context.keybinds.resizer().parent(this.viewport).wh(0.5F, 1F);
+
+        Keyboard.enableRepeatEvents(false);
+    }
 
     @Override
     public void initGui()
     {
-        this.area.set(0, 0, this.width, this.height);
-        this.elements.resize(this.width, this.height);
+        current = this.context;
+
+        if (!this.context.keybinds.hasParent())
+        {
+            this.root.add(this.context.keybinds);
+        }
+
+        this.viewport.set(0, 0, this.width, this.height);
+        this.root.resize();
     }
 
     @Override
@@ -42,10 +71,7 @@ public class GuiBase extends GuiScreen
         int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
 
-        if (!this.elements.handleMouseInput(x, y))
-        {
-            super.handleMouseInput();
-        }
+        super.handleMouseInput();
 
         int scroll = -Mouse.getEventDWheel();
 
@@ -60,50 +86,46 @@ public class GuiBase extends GuiScreen
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
-        if (this.elements.isEnabled())
+        this.context.setMouse(mouseX, mouseY, mouseButton);
+
+        if (this.root.isEnabled())
         {
-            this.elements.mouseClicked(mouseX, mouseY, mouseButton);
+            this.root.mouseClicked(this.context);
         }
     }
 
     protected void mouseScrolled(int x, int y, int scroll)
     {
-        if (this.elements.isEnabled())
+        this.context.setMouseWheel(x, y, scroll);
+
+        if (this.root.isEnabled())
         {
-            this.elements.mouseScrolled(x, y, scroll);
+            this.root.mouseScrolled(this.context);
         }
     }
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state)
     {
-        if (this.elements.isEnabled())
-        {
-            this.elements.mouseReleased(mouseX, mouseY, state);
-        }
-    }
+        this.context.setMouse(mouseX, mouseY, state);
 
-    @Override
-    public void handleKeyboardInput() throws IOException
-    {
-        if (!this.elements.handleKeyboardInput())
+        if (this.root.isEnabled())
         {
-            super.handleKeyboardInput();
+            this.root.mouseReleased(this.context);
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
-        if (this.elements.isEnabled())
+        this.context.setKey(typedChar, keyCode);
+
+        if (this.root.isEnabled() && this.root.keyTyped(this.context))
         {
-            this.elements.keyTyped(typedChar, keyCode);
+            return;
         }
 
-        if (!this.elements.hasActiveTextfields())
-        {
-            this.keyPressed(typedChar, keyCode);
-        }
+        this.keyPressed(typedChar, keyCode);
 
         if (keyCode == 1)
         {
@@ -136,11 +158,14 @@ public class GuiBase extends GuiScreen
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        if (this.elements.isVisible())
+        this.context.setMouse(mouseX, mouseY);
+        this.context.partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+
+        if (this.root.isVisible())
         {
-            this.tooltip.set(null, null);
-            this.elements.draw(this.tooltip, mouseX, mouseY, partialTicks);
-            this.tooltip.draw(this.fontRendererObj, this.width, this.height);
+            this.context.reset();
+            this.root.draw(this.context);
+            this.context.drawTooltip();
         }
     }
 }

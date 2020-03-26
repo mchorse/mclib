@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.GuiTextElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
@@ -18,7 +18,7 @@ public abstract class GuiSearchListElement<T> extends GuiElement
     public String label;
     public boolean background;
 
-    public GuiSearchListElement(Minecraft mc, Consumer<T> callback)
+    public GuiSearchListElement(Minecraft mc, Consumer<List<T>> callback)
     {
         super(mc);
 
@@ -28,10 +28,10 @@ public abstract class GuiSearchListElement<T> extends GuiElement
         this.list = this.createList(mc, callback);
         this.list.resizer().parent(this.area).set(0, 20, 0, 0).w(1, 0).h(1, -20);
 
-        this.createChildren().children.add(this.search, this.list);
+        this.add(this.search, this.list);
     }
 
-    protected abstract GuiListElement<T> createList(Minecraft mc, Consumer<T> callback);
+    protected abstract GuiListElement<T> createList(Minecraft mc, Consumer<List<T>> callback);
 
     public void filter(String str, boolean fill)
     {
@@ -58,20 +58,20 @@ public abstract class GuiSearchListElement<T> extends GuiElement
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton)
+    public boolean mouseClicked(GuiContext context)
     {
-        return super.mouseClicked(mouseX, mouseY, mouseButton) || this.isVisible() && this.area.isInside(mouseX, mouseY);
+        return super.mouseClicked(context) || this.isVisible() && this.area.isInside(context.mouseX, context.mouseY);
     }
 
     @Override
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks)
+    public void draw(GuiContext context)
     {
         if (this.background)
         {
-            Gui.drawRect(this.area.x, this.area.y, this.area.getX(1), this.area.getY(1), 0x88000000);
+            Gui.drawRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 0x88000000);
         }
 
-        super.draw(tooltip, mouseX, mouseY, partialTicks);
+        super.draw(context);
 
         if (!this.search.field.isFocused() && this.search.field.getText().isEmpty())
         {
