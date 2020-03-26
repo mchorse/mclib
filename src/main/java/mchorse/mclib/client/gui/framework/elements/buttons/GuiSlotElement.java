@@ -27,7 +27,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 	public static final ResourceLocation HELMET = new ResourceLocation("minecraft:textures/items/empty_armor_slot_helmet.png");
 
 	public int slot;
-	public ItemStack stack;
+	public ItemStack stack = ItemStack.EMPTY;
 	public boolean selected;
 
 	public GuiSlotElement(Minecraft mc, int slot, Consumer<GuiSlotElement> callback)

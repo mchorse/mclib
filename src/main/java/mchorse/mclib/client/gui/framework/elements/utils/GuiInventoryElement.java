@@ -27,7 +27,7 @@ public class GuiInventoryElement extends GuiElement
 	protected Area inventory = new Area();
 	protected Area hotbar = new Area();
 
-	private ItemStack active;
+	private ItemStack active = ItemStack.EMPTY;
 
 	/**
 	 * Draws an ItemStack.
