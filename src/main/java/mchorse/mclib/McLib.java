@@ -53,7 +53,7 @@ public class McLib
     @SubscribeEvent
     public void onConfigRegister(RegisterConfigEvent event)
     {
-        ConfigBuilder builder = new ConfigBuilder("mclib", new File(proxy.configFolder, "mclib/config.json"));
+        ConfigBuilder builder = new ConfigBuilder("mclib", new File(event.configs, "mclib/config.json"));
 
         primaryColor = builder.category("appearance").getColor("primary_color", 0x0088ff);
         enableBorders = builder.getBoolean("enable_borders", true);

@@ -27,7 +27,7 @@ public class GuiTooltip
 
     public void draw(Tooltip tooltip, GuiContext context)
     {
-        if (this.element == null || tooltip == null)
+        if (this.element == null || tooltip == null || tooltip.label.isEmpty())
         {
             return;
         }
