@@ -2,6 +2,7 @@ package mchorse.mclib.math.functions.limit;
 
 import mchorse.mclib.math.IValue;
 import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.utils.MathUtils;
 import net.minecraft.util.math.MathHelper;
 
 public class Clamp extends Function
@@ -20,6 +21,6 @@ public class Clamp extends Function
     @Override
     public double get()
     {
-        return MathHelper.clamp(this.getArg(0), this.getArg(1), this.getArg(2));
+        return MathUtils.clamp(this.getArg(0), this.getArg(1), this.getArg(2));
     }
 }

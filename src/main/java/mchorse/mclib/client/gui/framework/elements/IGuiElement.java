@@ -1,6 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements;
 
-import mchorse.mclib.client.gui.framework.GuiTooltip;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -8,9 +8,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IGuiElement
 {
     /**
-     * Should be called by the screen when it was resized 
+     * Should be called when position has to be recalculated
      */
-    public void resize(int width, int height);
+    public void resize();
 
     /**
      * Whether this element is enabled (and can accept any input) 
@@ -25,35 +25,25 @@ public interface IGuiElement
     /**
      * Mouse was clicked
      */
-    public boolean mouseClicked(int mouseX, int mouseY, int mouseButton);
+    public boolean mouseClicked(GuiContext context);
 
     /**
      * Mouse wheel was scrolled
      */
-    public boolean mouseScrolled(int mouseX, int mouseY, int scroll);
+    public boolean mouseScrolled(GuiContext context);
 
     /**
      * Mouse was released
      */
-    public void mouseReleased(int mouseX, int mouseY, int state);
-
-    /**
-     * Does this element has any active text fields
-     */
-    public boolean hasActiveTextfields();
-
-    /**
-     * Unfocus any text fields this GUI element might have 
-     */
-    public void unfocus();
+    public void mouseReleased(GuiContext context);
 
     /**
      * Key was typed
      */
-    public void keyTyped(char typedChar, int keyCode);
+    public boolean keyTyped(GuiContext context);
 
     /**
      * Draw its components on the screen
      */
-    public void draw(GuiTooltip tooltip, int mouseX, int mouseY, float partialTicks);
+    public void draw(GuiContext context);
 }
