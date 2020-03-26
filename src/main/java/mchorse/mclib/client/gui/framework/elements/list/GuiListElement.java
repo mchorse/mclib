@@ -152,6 +152,28 @@ public abstract class GuiListElement<T> extends GuiElement
         }
     }
 
+    public void setCurrent(List<T> elements)
+    {
+        if (!this.multi && !elements.isEmpty())
+        {
+            this.setCurrent(elements.get(0));
+
+            return;
+        }
+
+        this.current.clear();
+
+        for (T element : elements)
+        {
+            int index = this.list.indexOf(element);
+
+            if (this.exists(index))
+            {
+                this.current.add(index);
+            }
+        }
+    }
+
     public void setCurrentScroll(T element)
     {
         this.setCurrent(element);
