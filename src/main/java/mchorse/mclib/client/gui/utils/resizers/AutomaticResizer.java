@@ -85,6 +85,12 @@ public abstract class AutomaticResizer extends DecoratedResizer
 	}
 
 	@Override
+	public void add(GuiElement parent, GuiElement child)
+	{
+		child.resizer(this.child(child));
+	}
+
+	@Override
 	public int getX()
 	{
 		return this.parent.area.x;

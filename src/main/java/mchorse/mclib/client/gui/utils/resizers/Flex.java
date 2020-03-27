@@ -4,12 +4,12 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.Area;
 
 /**
- * Resizer class
+ * Flex class
  * 
  * This class is used to define resizing behavior for a 
  * {@link GuiElement}. 
  */
-public class Resizer implements IResizer
+public class Flex implements IResizer
 {
     public Unit x = new Unit();
     public Unit y = new Unit();
@@ -19,12 +19,12 @@ public class Resizer implements IResizer
     public IResizer relative;
     public Area parent;
 
-    public Resizer set(float x, float y, float w, float h)
+    public Flex set(float x, float y, float w, float h)
     {
         return this.set(x, y, w, h, Measure.PIXELS);
     }
 
-    public Resizer set(float x, float y, float w, float h, Measure measure)
+    public Flex set(float x, float y, float w, float h, Measure measure)
     {
         this.x.set(x, measure);
         this.y.set(y, measure);
@@ -34,63 +34,63 @@ public class Resizer implements IResizer
         return this;
     }
 
-    public Resizer x(int value)
+    public Flex x(int value)
     {
         this.x.set(value, Measure.PIXELS, 0);
 
         return this;
     }
 
-    public Resizer x(float value, int padding)
+    public Flex x(float value, int padding)
     {
         this.x.set(value, Measure.RELATIVE, padding);
 
         return this;
     }
 
-    public Resizer y(int value)
+    public Flex y(int value)
     {
         this.y.set(value, Measure.PIXELS, 0);
 
         return this;
     }
 
-    public Resizer y(float value, int padding)
+    public Flex y(float value, int padding)
     {
         this.y.set(value, Measure.RELATIVE, padding);
 
         return this;
     }
 
-    public Resizer w(int value)
+    public Flex w(int value)
     {
         this.w.set(value, Measure.PIXELS, 0);
 
         return this;
     }
 
-    public Resizer w(float value, int padding)
+    public Flex w(float value, int padding)
     {
         this.w.set(value, Measure.RELATIVE, padding);
 
         return this;
     }
 
-    public Resizer h(int value)
+    public Flex h(int value)
     {
         this.h.set(value, Measure.PIXELS, 0);
 
         return this;
     }
 
-    public Resizer h(float value, int padding)
+    public Flex h(float value, int padding)
     {
         this.h.set(value, Measure.RELATIVE, padding);
 
         return this;
     }
 
-    public Resizer xy(int x, int y)
+    public Flex xy(int x, int y)
     {
         this.x.set(x, Measure.PIXELS);
         this.y.set(y, Measure.PIXELS);
@@ -98,7 +98,7 @@ public class Resizer implements IResizer
         return this;
     }
 
-    public Resizer xy(float x, float y)
+    public Flex xy(float x, float y)
     {
         this.x.set(x, Measure.RELATIVE);
         this.y.set(y, Measure.RELATIVE);
@@ -106,7 +106,7 @@ public class Resizer implements IResizer
         return this;
     }
 
-    public Resizer wh(int w, int h)
+    public Flex wh(int w, int h)
     {
         this.w.set(w, Measure.PIXELS);
         this.h.set(h, Measure.PIXELS);
@@ -114,7 +114,7 @@ public class Resizer implements IResizer
         return this;
     }
 
-    public Resizer wh(float w, float h)
+    public Flex wh(float w, float h)
     {
         this.w.set(w, Measure.RELATIVE);
         this.h.set(h, Measure.RELATIVE);
@@ -122,21 +122,21 @@ public class Resizer implements IResizer
         return this;
     }
 
-    public Resizer maxW(int max)
+    public Flex maxW(int max)
     {
         this.w.max = max;
 
         return this;
     }
 
-    public Resizer maxH(int max)
+    public Flex maxH(int max)
     {
         this.h.max = max;
 
         return this;
     }
 
-    public Resizer anchor(float x, float y)
+    public Flex anchor(float x, float y)
     {
         this.x.anchor = x;
         this.y.anchor = y;
@@ -144,7 +144,7 @@ public class Resizer implements IResizer
         return this;
     }
 
-    public Resizer relative(IResizer relative)
+    public Flex relative(IResizer relative)
     {
         this.relative = relative;
         this.parent = null;
@@ -152,7 +152,7 @@ public class Resizer implements IResizer
         return this;
     }
 
-    public Resizer parent(Area parent)
+    public Flex parent(Area parent)
     {
         this.parent = parent;
         this.relative = null;
@@ -186,6 +186,10 @@ public class Resizer implements IResizer
             }
         }
     }
+
+    @Override
+    public void add(GuiElement parent, GuiElement child)
+    {}
 
     public int getX()
     {

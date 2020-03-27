@@ -6,7 +6,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.KeybindManager;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.resizers.IResizer;
-import mchorse.mclib.client.gui.utils.resizers.Resizer;
+import mchorse.mclib.client.gui.utils.resizers.Flex;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -156,7 +156,14 @@ public class GuiElement extends Gui implements IGuiElement
     {
         if (element instanceof GuiElement)
         {
-            ((GuiElement) element).parent = this;
+            GuiElement child = (GuiElement) element;
+
+            child.parent = this;
+
+            if (this.resizer != null)
+            {
+                this.resizer.add(this, child);
+            }
         }
 
         this.children.add(element);
@@ -248,14 +255,14 @@ public class GuiElement extends Gui implements IGuiElement
 
     /* Resizer methods */
 
-    public Resizer flex()
+    public Flex flex()
     {
         if (this.resizer == null)
         {
-            this.resizer = new Resizer();
+            this.resizer = new Flex();
         }
 
-        return this.resizer instanceof Resizer ? (Resizer) this.resizer : null;
+        return this.resizer instanceof Flex ? (Flex) this.resizer : null;
     }
 
     public IResizer resizer()
