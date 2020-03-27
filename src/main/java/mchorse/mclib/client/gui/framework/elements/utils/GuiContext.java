@@ -36,6 +36,8 @@ public class GuiContext
 
 	/* Render states */
 	public float partialTicks;
+	public int shiftX;
+	public int shiftY;
 
 	public GuiContext(GuiBase screen)
 	{
@@ -49,6 +51,8 @@ public class GuiContext
 	{
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
+		this.shiftX = 0;
+		this.shiftY = 0;
 	}
 
 	public void setMouse(int mouseX, int mouseY, int mouseButton)

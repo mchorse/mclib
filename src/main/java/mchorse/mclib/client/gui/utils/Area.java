@@ -29,6 +29,17 @@ public class Area
      */
     public int h;
 
+    public Area()
+    {}
+
+    public Area(int x, int y, int w, int h)
+    {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+    }
+
     /**
      * Check whether given position is inside of the rect
      */

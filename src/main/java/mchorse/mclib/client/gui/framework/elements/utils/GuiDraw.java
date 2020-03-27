@@ -6,6 +6,7 @@ import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.utils.ColorUtils;
+import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -14,11 +15,15 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Stack;
+
 public class GuiDraw
 {
+	private final static Stack<Area> scissors = new Stack<Area>();
+
 	public static void scissor(int x, int y, int w, int h, GuiContext context)
 	{
-	    scissor(x, y, w, h, context.screen.width, context.screen.height);
+	    scissor(x - context.shiftX, y - context.shiftY, w, h, context.screen.width, context.screen.height);
 	}
 
 	/**
@@ -27,24 +32,49 @@ public class GuiDraw
 	public static void scissor(int x, int y, int w, int h, int sw, int sh)
 	{
 	    Minecraft mc = Minecraft.getMinecraft();
+	    Area scissor = scissors.isEmpty() ? null : scissors.peek();
 
-	    /* F*$! those ints */
-	    float rx = (float) Math.ceil((double) mc.displayWidth / (double) sw);
-	    float ry = (float) Math.ceil((double) mc.displayHeight / (double) sh);
+	    /* If it was scissored before, then clamp to the bounds of the last one */
+		if (scissor != null)
+		{
+			w += Math.max(x - scissor.x, 0);
+			h += Math.max(y - scissor.y, 0);
+			x = MathUtils.clamp(x, scissor.x, scissor.ex());
+			y = MathUtils.clamp(y, scissor.y, scissor.ey());
+			w = MathUtils.clamp(w, 0, scissor.ex() - x);
+			h = MathUtils.clamp(h, 0, scissor.ey() - y);
+		}
+
+		scissor = new Area(x, y, w, h);
 
 	    /* Clipping area around scroll area */
+		float rx = (float) Math.ceil(mc.displayWidth / (double) sw);
+		float ry = (float) Math.ceil(mc.displayHeight / (double) sh);
+
 	    int xx = (int) (x * rx);
 	    int yy = (int) (mc.displayHeight - (y + h) * ry);
 	    int ww = (int) (w * rx);
 	    int hh = (int) (h * ry);
 
-	    GL11.glScissor(xx, yy, ww, hh);
-	    GL11.glEnable(GL11.GL_SCISSOR_TEST);
+		GL11.glEnable(GL11.GL_SCISSOR_TEST);
+
+		if (ww == 0 || hh == 0)
+		{
+			GL11.glScissor(0, 0, 1, 1);
+		}
+		else
+		{
+			GL11.glScissor(xx, yy, ww, hh);
+		}
+
+		scissors.add(scissor);
 	}
 
 	public static void unscissor()
 	{
-	    GL11.glDisable(GL11.GL_SCISSOR_TEST);
+		scissors.pop();
+
+		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 	}
 
 	public static void drawHorizontalGradientRect(int left, int top, int right, int bottom, int startColor, int endColor)

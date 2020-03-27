@@ -34,10 +34,12 @@ public class GuiScrollElement extends GuiElement
         if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
         {
             context.mouseY += this.scroll.scroll;
+            context.shiftY += this.scroll.scroll;
         }
         else
         {
             context.mouseX += this.scroll.scroll;
+            context.shiftX += this.scroll.scroll;
         }
     }
 
@@ -46,10 +48,12 @@ public class GuiScrollElement extends GuiElement
         if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
         {
             context.mouseY -= this.scroll.scroll;
+            context.shiftY -= this.scroll.scroll;
         }
         else
         {
             context.mouseX -= this.scroll.scroll;
+            context.shiftX -= this.scroll.scroll;
         }
     }
 
@@ -111,8 +115,6 @@ public class GuiScrollElement extends GuiElement
     {
         this.scroll.drag(context.mouseX, context.mouseY);
 
-        this.apply(context);
-
         GuiDraw.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
         GlStateManager.pushMatrix();
 
@@ -124,6 +126,8 @@ public class GuiScrollElement extends GuiElement
         {
             GlStateManager.translate(-this.scroll.scroll, 0, 0);
         }
+
+        this.apply(context);
 
         this.preDraw(context);
         super.draw(context);

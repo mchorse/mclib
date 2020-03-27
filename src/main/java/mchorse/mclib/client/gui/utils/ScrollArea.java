@@ -48,6 +48,14 @@ public class ScrollArea extends Area
      */
     public boolean opposite;
 
+    public ScrollArea(int x, int y, int w, int h)
+    {
+        super(x, y, w, h);
+    }
+
+    public ScrollArea()
+    {}
+
     public ScrollArea(int itemSize)
     {
         this.scrollItemSize = itemSize;
