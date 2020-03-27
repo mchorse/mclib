@@ -108,7 +108,7 @@ public class GuiTextElement extends GuiElement implements GuiResponder, IFocused
             context.focus(wasFocused ? null : this);
         }
 
-        return false;
+        return this.area.isInside(context.mouseX, context.mouseY);
     }
 
     @Override
