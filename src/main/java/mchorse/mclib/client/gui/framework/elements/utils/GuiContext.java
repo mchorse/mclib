@@ -38,6 +38,7 @@ public class GuiContext
 	public float partialTicks;
 	public int shiftX;
 	public int shiftY;
+	public long tick;
 
 	public GuiContext(GuiBase screen)
 	{

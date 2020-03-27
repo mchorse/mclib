@@ -51,6 +51,12 @@ public class GuiBase extends GuiScreen
     }
 
     @Override
+    public void updateScreen()
+    {
+        this.context.tick += 1;
+    }
+
+    @Override
     public void initGui()
     {
         current = this.context;
