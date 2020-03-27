@@ -31,14 +31,13 @@ public class GuiDraw
 	 */
 	public static void scissor(int x, int y, int w, int h, int sw, int sh)
 	{
-	    Minecraft mc = Minecraft.getMinecraft();
 	    Area scissor = scissors.isEmpty() ? null : scissors.peek();
 
 	    /* If it was scissored before, then clamp to the bounds of the last one */
 		if (scissor != null)
 		{
-			w += Math.max(x - scissor.x, 0);
-			h += Math.max(y - scissor.y, 0);
+			w += Math.min(x - scissor.x, 0);
+			h += Math.min(y - scissor.y, 0);
 			x = MathUtils.clamp(x, scissor.x, scissor.ex());
 			y = MathUtils.clamp(y, scissor.y, scissor.ey());
 			w = MathUtils.clamp(w, 0, scissor.ex() - x);
@@ -46,15 +45,22 @@ public class GuiDraw
 		}
 
 		scissor = new Area(x, y, w, h);
+	    scissorArea(x, y, w, h, sw, sh);
+		scissors.add(scissor);
+	}
 
-	    /* Clipping area around scroll area */
+	private static void scissorArea(int x, int y, int w, int h, int sw, int sh)
+	{
+		/* Clipping area around scroll area */
+		Minecraft mc = Minecraft.getMinecraft();
+
 		float rx = (float) Math.ceil(mc.displayWidth / (double) sw);
 		float ry = (float) Math.ceil(mc.displayHeight / (double) sh);
 
-	    int xx = (int) (x * rx);
-	    int yy = (int) (mc.displayHeight - (y + h) * ry);
-	    int ww = (int) (w * rx);
-	    int hh = (int) (h * ry);
+		int xx = (int) (x * rx);
+		int yy = (int) (mc.displayHeight - (y + h) * ry);
+		int ww = (int) (w * rx);
+		int hh = (int) (h * ry);
 
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 
@@ -66,15 +72,27 @@ public class GuiDraw
 		{
 			GL11.glScissor(xx, yy, ww, hh);
 		}
-
-		scissors.add(scissor);
 	}
 
-	public static void unscissor()
+	public static void unscissor(GuiContext context)
+	{
+		unscissor(context.screen.width, context.screen.height);
+	}
+
+	public static void unscissor(int sw, int sh)
 	{
 		scissors.pop();
 
-		GL11.glDisable(GL11.GL_SCISSOR_TEST);
+		if (scissors.isEmpty())
+		{
+			GL11.glDisable(GL11.GL_SCISSOR_TEST);
+		}
+		else
+		{
+			Area area = scissors.peek();
+
+			scissorArea(area.x, area.y, area.w, area.h, sw, sh);
+		}
 	}
 
 	public static void drawHorizontalGradientRect(int left, int top, int right, int bottom, int startColor, int endColor)

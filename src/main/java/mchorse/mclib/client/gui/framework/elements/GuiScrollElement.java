@@ -134,7 +134,7 @@ public class GuiScrollElement extends GuiElement
         this.postDraw(context);
 
         GlStateManager.popMatrix();
-        GuiDraw.unscissor();
+        GuiDraw.unscissor(context);
 
         this.scroll.drawScrollbar();
         this.unapply(context);

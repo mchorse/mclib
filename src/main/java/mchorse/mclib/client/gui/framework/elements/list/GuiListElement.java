@@ -424,7 +424,7 @@ public abstract class GuiListElement<T> extends GuiElement
             i++;
         }
 
-        GuiDraw.unscissor();
+        GuiDraw.unscissor(context);
 
         this.scroll.drawScrollbar();
 
