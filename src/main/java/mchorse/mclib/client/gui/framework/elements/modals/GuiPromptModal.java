@@ -21,14 +21,14 @@ public class GuiPromptModal extends GuiModal
 
         this.callback = callback;
         this.text = new GuiTextElement(mc, null);
-        this.text.resizer().parent(this.area).set(10, 0, 0, 20).y(1, -55).w(1, -20);
+        this.text.flex().parent(this.area).set(10, 0, 0, 20).y(1, -55).w(1, -20);
         this.text.field.setFocused(true);
 
         this.confirm = new GuiButtonElement(mc, I18n.format("mclib.gui.ok"), (b) -> this.send());
-        this.confirm.resizer().parent(this.area).set(10, 0, 0, 20).y(1, -30).w(0.5F, -15);
+        this.confirm.flex().parent(this.area).set(10, 0, 0, 20).y(1, -30).w(0.5F, -15);
 
         this.cancel = new GuiButtonElement(mc, I18n.format("mclib.gui.cancel"), (b) -> this.removeFromParent());
-        this.cancel.resizer().parent(this.area).set(10, 0, 0, 20).x(0.5F, 5).y(1, -30).w(0.5F, -15);
+        this.cancel.flex().parent(this.area).set(10, 0, 0, 20).x(0.5F, 5).y(1, -30).w(0.5F, -15);
 
         this.add(this.text, this.confirm, this.cancel);
     }

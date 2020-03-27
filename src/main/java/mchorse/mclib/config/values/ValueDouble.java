@@ -67,8 +67,8 @@ public class ValueDouble extends Value
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
 
-		label.resizer().parent(element.area).set(0, 0, 90, 20);
-		element.resizer().set(0, 0, 180, 20);
+		label.flex().parent(element.area).set(0, 0, 90, 20);
+		element.flex().set(0, 0, 180, 20);
 		element.add(label);
 
 		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (v) ->
@@ -77,7 +77,7 @@ public class ValueDouble extends Value
 			save.accept(this);
 		});
 
-		trackpad.resizer().parent(element.area).set(90, 0, 90, 20);
+		trackpad.flex().parent(element.area).set(90, 0, 90, 20);
 		trackpad.limit((float) this.min, (float) this.max);
 		trackpad.setValue((float) this.value);
 		element.add(trackpad);

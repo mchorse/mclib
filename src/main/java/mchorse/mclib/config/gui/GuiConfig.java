@@ -41,13 +41,13 @@ public class GuiConfig extends GuiElement
 		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.get(0).value));
 		this.options = new GuiScrollElement(mc, ScrollArea.ScrollDirection.HORIZONTAL);
 
-		this.reload.resizer().parent(this.area).set(110 - 14, 12, 16, 16);
-		this.mods.resizer().parent(this.area).set(10, 35, 100, 0).h(1, -45);
-		this.options.resizer().parent(this.area).set(120, 0, 0, 0).w(1, -120).h(1, 0);
+		this.reload.flex().parent(this.area).set(110 - 14, 12, 16, 16);
+		this.mods.flex().parent(this.area).set(10, 35, 100, 0).h(1, -45);
+		this.options.flex().parent(this.area).set(120, 0, 0, 0).w(1, -120).h(1, 0);
 
 		this.column = new ColumnResizer(this.options, 5);
 		this.column.dontCollect().padding(15);
-		this.options.setResizer(this.column);
+		this.options.resizer(this.column);
 
 		for (Config config : McLib.proxy.configs.modules.values())
 		{
@@ -86,14 +86,14 @@ public class GuiConfig extends GuiElement
 			}
 
 			GuiLabel label = new GuiLabel(this.mc, this.config.getCategoryTitle(category.id)).anchor(0, 1);
-			label.resizer().set(0, 0, this.font.getStringWidth(label.label), 20);
+			label.flex().set(0, 0, this.font.getStringWidth(label.label), 20);
 
 			if (first)
 			{
-				label.anchor(0, 0).resizer().h(0, this.font.FONT_HEIGHT);
+				label.anchor(0, 0).flex().h(0, this.font.FONT_HEIGHT);
 			}
 
-			label.setResizer(this.column.child(label));
+			label.resizer(this.column.child(label));
 			this.options.add(label.tooltip(this.config.getCategoryTooltip(category.id), Direction.BOTTOM));
 
 			for (IConfigValue value : category.values.values())
@@ -106,7 +106,7 @@ public class GuiConfig extends GuiElement
 				for (GuiElement element : value.getFields(this.mc, this.config, category, this::save))
 				{
 					this.options.add(element);
-					element.setResizer(this.column.child(element));
+					element.resizer(this.column.child(element));
 				}
 			}
 

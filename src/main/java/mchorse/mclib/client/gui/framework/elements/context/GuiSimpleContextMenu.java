@@ -26,7 +26,7 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 			this.removeFromParent();
 		});
 
-		this.actions.resizer().parent(this.area).w(1, 0).h(1, 0);
+		this.actions.flex().parent(this.area).w(1, 0).h(1, 0);
 		this.add(this.actions);
 	}
 
@@ -50,7 +50,7 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 	@Override
 	public void setMouse(GuiContext context)
 	{
-		this.resizer().set(context.mouseX, context.mouseY, 100, this.actions.scroll.scrollSize);
+		this.flex().set(context.mouseX, context.mouseY, 100, this.actions.scroll.scrollSize);
 	}
 
 	public static class GuiActionListElement extends GuiListElement<Action>

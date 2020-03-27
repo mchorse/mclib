@@ -37,19 +37,19 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
 
         this.direction = direction == null ? Direction.BOTTOM : direction;
         this.view = new GuiDelegateElement<T>(mc, null);
-        this.view.resizer().parent(this.area).set(0, 0, 1, 1, Measure.RELATIVE).h(1, -20);
+        this.view.flex().parent(this.area).set(0, 0, 1, 1, Measure.RELATIVE).h(1, -20);
 
         if (this.direction == Direction.TOP)
         {
-            this.view.resizer().y(20);
+            this.view.flex().y(20);
         }
         else if (this.direction == Direction.LEFT)
         {
-            this.view.resizer().x(20).w(1, -20).h(1, 0);
+            this.view.flex().x(20).w(1, -20).h(1, 0);
         }
         else if (this.direction == Direction.RIGHT)
         {
-            this.view.resizer().w(1, -20).h(1, 0);
+            this.view.flex().w(1, -20).h(1, 0);
         }
 
         this.buttons = new GuiElements<GuiIconElement>(this);
@@ -86,18 +86,18 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
         {
             if (this.direction.isHorizontal())
             {
-                button.resizer().parent(this.area).set(2, 2, 16, 16);
+                button.flex().parent(this.area).set(2, 2, 16, 16);
 
                 if (this.direction == Direction.RIGHT)
                 {
-                    button.resizer().x(1, -18);
+                    button.flex().x(1, -18);
                 }
             }
             else
             {
                 boolean bottom = this.direction == Direction.BOTTOM;
 
-                button.resizer().parent(this.area).set(0, 0, 16, 16).x(1, -18).y(bottom ? 1 : 0, bottom ? -18 : 2);
+                button.flex().parent(this.area).set(0, 0, 16, 16).x(1, -18).y(bottom ? 1 : 0, bottom ? -18 : 2);
             }
         }
         else
@@ -107,7 +107,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
             int x = this.direction.isVertical() ? -20 : 0;
             int y = this.direction.isHorizontal() ? 20 : 0;
 
-            button.resizer().relative(last.resizer()).set(x, y, 16, 16);
+            button.flex().relative(last.flex()).set(x, y, 16, 16);
         }
     }
 

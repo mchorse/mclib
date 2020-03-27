@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
-import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.config.Config;
@@ -15,7 +14,6 @@ import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -87,8 +85,8 @@ public class ValueInt extends Value
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
 
-		label.resizer().parent(element.area).set(0, 0, 90, 20);
-		element.resizer().set(0, 0, 180, 20);
+		label.flex().parent(element.area).set(0, 0, 90, 20);
+		element.flex().set(0, 0, 180, 20);
 		element.add(label);
 
 		if (this.color)
@@ -100,7 +98,7 @@ public class ValueInt extends Value
 			});
 
 			color.picker.setColor(this.value);
-			color.resizer().parent(element.area).wh(90, 20).x(1, 0).anchor(1, 0);
+			color.flex().parent(element.area).wh(90, 20).x(1, 0).anchor(1, 0);
 
 			element.add(color);
 		}
@@ -112,7 +110,7 @@ public class ValueInt extends Value
 				save.accept(this);
 			});
 
-			trackpad.resizer().parent(element.area).set(90, 0, 90, 20);
+			trackpad.flex().parent(element.area).set(90, 0, 90, 20);
 			trackpad.limit(this.min, this.max, true);
 			trackpad.setValue(this.value);
 			element.add(trackpad);

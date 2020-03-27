@@ -248,7 +248,7 @@ public class GuiElement extends Gui implements IGuiElement
 
     /* Resizer methods */
 
-    public Resizer resizer()
+    public Resizer flex()
     {
         if (this.resizer == null)
         {
@@ -258,12 +258,12 @@ public class GuiElement extends Gui implements IGuiElement
         return this.resizer instanceof Resizer ? (Resizer) this.resizer : null;
     }
 
-    public IResizer getResizer()
+    public IResizer resizer()
     {
         return this.resizer;
     }
 
-    public GuiElement setResizer(IResizer resizer)
+    public GuiElement resizer(IResizer resizer)
     {
         this.resizer = resizer;
 

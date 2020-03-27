@@ -55,7 +55,7 @@ public class ValueBoolean extends Value
 			save.accept(this);
 		});
 
-		checkbox.resizer().set(0, 0, 180, 20);
+		checkbox.flex().set(0, 0, 180, 20);
 
 		return Arrays.asList(checkbox.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
 	}

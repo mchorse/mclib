@@ -2,7 +2,6 @@ package mchorse.mclib.client.gui.framework;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
 import mchorse.mclib.client.gui.utils.Area;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -38,7 +37,7 @@ public class GuiBase extends GuiScreen
         this.context.font = this.context.mc.fontRenderer;
 
         this.root = new GuiElement(this.context.mc);
-        this.root.markContainer().resizer().w(1, 0).h(1, 0);
+        this.root.markContainer().flex().w(1, 0).h(1, 0);
         this.root.keys().register("Keybinds list", Keyboard.KEY_F9, () ->
         {
             this.context.keybinds.toggleVisible();
@@ -46,7 +45,7 @@ public class GuiBase extends GuiScreen
             return true;
         });
 
-        this.context.keybinds.resizer().parent(this.viewport).wh(0.5F, 1F);
+        this.context.keybinds.flex().parent(this.viewport).wh(0.5F, 1F);
 
         Keyboard.enableRepeatEvents(false);
     }

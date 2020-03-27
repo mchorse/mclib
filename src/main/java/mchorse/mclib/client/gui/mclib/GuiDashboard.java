@@ -42,7 +42,7 @@ public class GuiDashboard extends GuiBase
 			}
 		};
 
-		this.panels.resizer().parent(this.viewport).w(1, 0).h(1, 0);
+		this.panels.flex().parent(this.viewport).w(1, 0).h(1, 0);
 		this.panels.registerPanel(config, I18n.format("mclib.gui.config.tooltip"), Icons.GEAR);
 		this.panels.registerPanel(new GuiTest(mc), "Test", Icons.POSE);
 		McLib.EVENT_BUS.post(new RegisterDashboardPanels(this));
@@ -70,7 +70,7 @@ public class GuiDashboard extends GuiBase
 			{
 				GuiConfirmModal modal = new GuiConfirmModal(mc, "Hello dude, I heard you like jokes?\n\nMy favorite joke is about some kind of nonesense. It's very cool, right?", (bool) -> {});
 
-				modal.resizer().parent(this.area).set(10, 30, 200, 300);
+				modal.flex().parent(this.area).set(10, 30, 200, 300);
 				modal.resize();
 
 				this.add(modal);
@@ -84,7 +84,7 @@ public class GuiDashboard extends GuiBase
 				return false;
 			}, Keyboard.KEY_LCONTROL);
 
-			button.resizer().parent(this.area).set(10, 10, 100, 20);
+			button.flex().parent(this.area).set(10, 10, 100, 20);
 			button.context(() -> new GuiSimpleContextMenu(mc)
 				.action(Icons.ADD, "Add", () -> System.out.println("Add"))
 				.action(Icons.REMOVE, "Remove", () -> System.out.println("Remove, hehe..."))
@@ -94,35 +94,35 @@ public class GuiDashboard extends GuiBase
 			GuiToggleElement toggle = new GuiToggleElement(mc, "Hello!", (b) -> {});
 
 			toggle.setEnabled(false);
-			toggle.resizer().relative(button.getResizer()).y(1, 5).w(1, 0).h(20);
+			toggle.flex().relative(button.resizer()).y(1, 5).w(1, 0).h(20);
 
 			GuiIconElement icon = new GuiIconElement(mc, Icons.POSE, (ic) -> {});
 
-			icon.resizer().relative(toggle.getResizer()).x(1, -20).y(1, 5).w(20).h(20);
+			icon.flex().relative(toggle.resizer()).x(1, -20).y(1, 5).w(20).h(20);
 			icon.setEnabled(false);
 
 			GuiTextElement input = new GuiTextElement(mc, (v) -> {});
 
-			input.resizer().relative(toggle.getResizer()).y(1, 5).w(1, -25).h(20);
+			input.flex().relative(toggle.resizer()).y(1, 5).w(1, -25).h(20);
 			input.setEnabled(false);
 			input.setText("Test!");
 
 			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (v) -> {});
 
-			trackpad.resizer().relative(input.getResizer()).y(1, 5).w(1, 25).h(20);
+			trackpad.flex().relative(input.resizer()).y(1, 5).w(1, 25).h(20);
 			trackpad.setEnabled(false);
 
 			GuiColorElement color = new GuiColorElement(mc, (v) -> {});
 
 			color.picker.editAlpha().setColor(0x880088ff);
-			color.resizer().relative(trackpad.getResizer()).y(1, 5).w(1, 0).h(20);
+			color.flex().relative(trackpad.resizer()).y(1, 5).w(1, 0).h(20);
 			color.setEnabled(true);
 
 			this.add(button, toggle, icon, input, trackpad, color);
 
 			GuiElement slots = new GuiElement(mc);
 
-			slots.resizer().parent(this.area).wh(145, 40).anchor(0.5F, 0).x(0.5F, 0);
+			slots.flex().parent(this.area).wh(145, 40).anchor(0.5F, 0).x(0.5F, 0);
 
 			GuiSlotElement slot1 = new GuiSlotElement(mc, 0, this::setSlot);
 			GuiSlotElement slot2 = new GuiSlotElement(mc, 1, this::setSlot);
@@ -130,13 +130,13 @@ public class GuiDashboard extends GuiBase
 			GuiSlotElement slot4 = new GuiSlotElement(mc, 3, this::setSlot);
 
 			slot1.setEnabled(false);
-			slot1.resizer().wh(0, 30);
-			slot2.resizer().wh(0, 30);
-			slot3.resizer().wh(0, 30);
-			slot4.resizer().wh(0, 30);
+			slot1.flex().wh(0, 30);
+			slot2.flex().wh(0, 30);
+			slot3.flex().wh(0, 30);
+			slot4.flex().wh(0, 30);
 
 			slots.add(slot1, slot2, slot3, slot4);
-			slots.setResizer(new RowResizer(slots, 5).padding(5));
+			slots.resizer(new RowResizer(slots, 5).padding(5));
 
 			this.inve = new GuiInventoryElement(mc, (item) ->
 			{
@@ -157,7 +157,7 @@ public class GuiDashboard extends GuiBase
 				return true;
 			});
 
-			this.inve.resizer().relative(slots.getResizer()).y(1, 0).x(0.5F, 0).wh(10 * 20, 5 * 20).anchor(0.5F, 0);
+			this.inve.flex().relative(slots.resizer()).y(1, 0).x(0.5F, 0).wh(10 * 20, 5 * 20).anchor(0.5F, 0);
 			this.inve.setVisible(false);
 
 			this.add(slots, this.inve);

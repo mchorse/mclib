@@ -18,7 +18,7 @@ public abstract class AutomaticResizer extends DecoratedResizer
 
 	public AutomaticResizer(GuiElement parent, int margin)
 	{
-		super(parent.resizer());
+		super(parent.flex());
 
 		this.parent = parent;
 		this.margin = margin;
@@ -53,7 +53,7 @@ public abstract class AutomaticResizer extends DecoratedResizer
 			{
 				GuiElement element = (GuiElement) child;
 
-				element.setResizer(this.child(element));
+				element.resizer(this.child(element));
 			}
 		}
 	}
@@ -62,13 +62,13 @@ public abstract class AutomaticResizer extends DecoratedResizer
 	{
 		for (GuiElement element : elements)
 		{
-			element.setResizer(this.child(element));
+			element.resizer(this.child(element));
 		}
 	}
 
 	public IResizer child(GuiElement element)
 	{
-		ChildResizer child = new ChildResizer(this, element.getResizer());
+		ChildResizer child = new ChildResizer(this, element.resizer());
 
 		if (this.collectChildren)
 		{

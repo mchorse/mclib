@@ -58,9 +58,9 @@ public class ValueString extends Value
 			save.accept(this);
 		});
 
-		element.resizer().set(0, 0, 180, 20);
-		label.resizer().parent(element.area).set(0, 0, 90, 20);
-		textbox.resizer().parent(element.area).set(90, 0, 90, 20);
+		element.flex().set(0, 0, 180, 20);
+		label.flex().parent(element.area).set(0, 0, 90, 20);
+		textbox.flex().parent(element.area).set(90, 0, 90, 20);
 		textbox.setText(this.value);
 
 		element.add(label, textbox);
