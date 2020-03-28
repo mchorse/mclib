@@ -8,10 +8,22 @@ public class ColumnResizer extends AutomaticResizer
 	private int x;
 	private int y;
 	private int w;
+	private boolean stretch;
 
 	public ColumnResizer(GuiElement element, int margin)
 	{
 		super(element, margin);
+	}
+
+	/**
+	 * Instead of moving elements onto the next column,
+	 * keep going on and stretch the elements to the full width
+	 */
+	public ColumnResizer stretch()
+	{
+		this.stretch = true;
+
+		return this;
 	}
 
 	@Override
@@ -30,7 +42,11 @@ public class ColumnResizer extends AutomaticResizer
 		int w = resizer == null ? 0 : resizer.getW();
 		int h = resizer == null ? 0 : resizer.getH();
 
-		if (this.y + h > this.parent.area.h - this.padding * 2)
+		if (this.stretch)
+		{
+			w = this.parent.area.w - this.padding * 2;
+		}
+		else if (this.y + h > this.parent.area.h - this.padding * 2)
 		{
 			this.x += this.w + this.margin * 2;
 			this.y = this.w = 0;
@@ -47,6 +63,11 @@ public class ColumnResizer extends AutomaticResizer
 
 	public int getSize()
 	{
+		if (this.stretch)
+		{
+			return this.y - this.margin;
+		}
+
 		return this.x + this.w + this.padding * 2;
 	}
 }
