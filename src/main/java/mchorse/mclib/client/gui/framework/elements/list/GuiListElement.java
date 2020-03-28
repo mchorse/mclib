@@ -312,6 +312,11 @@ public abstract class GuiListElement<T> extends GuiElement
     @Override
     public boolean mouseClicked(GuiContext context)
     {
+        if (super.mouseClicked(context))
+        {
+            return true;
+        }
+
         int mouseX = context.mouseX;
         int mouseY = context.mouseY;
 
@@ -356,7 +361,7 @@ public abstract class GuiListElement<T> extends GuiElement
     @Override
     public boolean mouseScrolled(GuiContext context)
     {
-        return this.scroll.mouseScroll(context.mouseX, context.mouseY, context.mouseWheel);
+        return super.mouseScrolled(context) || this.scroll.mouseScroll(context.mouseX, context.mouseY, context.mouseWheel);
     }
 
     @Override
@@ -381,6 +386,7 @@ public abstract class GuiListElement<T> extends GuiElement
         }
 
         this.scroll.mouseReleased(context.mouseX, context.mouseY);
+        super.mouseReleased(context);
     }
 
     @Override

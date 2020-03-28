@@ -162,6 +162,11 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     @Override
     public boolean mouseClicked(GuiContext context)
     {
+        if (super.mouseClicked(context))
+        {
+            return true;
+        }
+
         int mouseX = context.mouseX;
         int mouseY = context.mouseY;
         boolean control = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
@@ -204,7 +209,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             this.lastValue = this.value;
         }
 
-        return this.isDragging() || super.mouseClicked(context);
+        return this.isDragging();
     }
 
     /**
@@ -221,6 +226,11 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     @Override
     public boolean keyTyped(GuiContext context)
     {
+        if (super.keyTyped(context))
+        {
+            return true;
+        }
+
         if (this.isFocused() && context.keyCode == Keyboard.KEY_TAB)
         {
             context.focus(this, -1, GuiScreen.isShiftKeyDown() ? -1 : 1);
@@ -247,7 +257,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             {}
         }
 
-        return result || super.keyTyped(context);
+        return result;
     }
 
     @Override
