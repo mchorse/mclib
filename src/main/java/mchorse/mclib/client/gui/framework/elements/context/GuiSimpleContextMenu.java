@@ -6,6 +6,7 @@ import mchorse.mclib.client.gui.framework.elements.list.GuiListElement;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Icons;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 
@@ -50,7 +51,14 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 	@Override
 	public void setMouse(GuiContext context)
 	{
-		this.flex().set(context.mouseX, context.mouseY, 100, this.actions.scroll.scrollSize);
+		int w = 100;
+
+		for (Action action : this.actions.getList())
+		{
+			w = Math.max(action.getWidth(this.font), w);
+		}
+
+		this.flex().set(context.mouseX, context.mouseY, w, this.actions.scroll.scrollSize);
 	}
 
 	public static class GuiActionListElement extends GuiListElement<Action>
@@ -89,6 +97,11 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 			this.icon = icon;
 			this.label = label;
 			this.runnable = runnable;
+		}
+
+		public int getWidth(FontRenderer font)
+		{
+			return 28 + font.getStringWidth(this.label);
 		}
 	}
 }
