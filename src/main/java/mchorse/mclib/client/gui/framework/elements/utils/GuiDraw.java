@@ -119,18 +119,20 @@ public class GuiDraw
 	    GlStateManager.enableBlend();
 	    GlStateManager.disableAlpha();
 	    GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-	    GlStateManager.shadeModel(7425);
+	    GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
 	    Tessellator tessellator = Tessellator.getInstance();
-	    BufferBuilder vertexbuffer = tessellator.getBuffer();
-	    vertexbuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-	    vertexbuffer.pos(right, top, zLevel).color(r2, g2, b2, a2).endVertex();
-	    vertexbuffer.pos(left, top, zLevel).color(r1, g1, b1, a1).endVertex();
-	    vertexbuffer.pos(left, bottom, zLevel).color(r1, g1, b1, a1).endVertex();
-	    vertexbuffer.pos(right, bottom, zLevel).color(r2, g2, b2, a2).endVertex();
+	    BufferBuilder buffer = tessellator.getBuffer();
+
+	    buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+	    buffer.pos(right, top, zLevel).color(r2, g2, b2, a2).endVertex();
+	    buffer.pos(left, top, zLevel).color(r1, g1, b1, a1).endVertex();
+	    buffer.pos(left, bottom, zLevel).color(r1, g1, b1, a1).endVertex();
+	    buffer.pos(right, bottom, zLevel).color(r2, g2, b2, a2).endVertex();
+
 	    tessellator.draw();
 
-	    GlStateManager.shadeModel(7424);
+	    GlStateManager.shadeModel(GL11.GL_FLAT);
 	    GlStateManager.disableBlend();
 	    GlStateManager.enableAlpha();
 	    GlStateManager.enableTexture2D();
@@ -150,13 +152,13 @@ public class GuiDraw
 	    float th = 1F / textureH;
 
 	    Tessellator tessellator = Tessellator.getInstance();
-	    BufferBuilder vertexbuffer = tessellator.getBuffer();
+	    BufferBuilder buffer = tessellator.getBuffer();
 
-	    vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-	    vertexbuffer.pos(x, y + h, z).tex(u * tw, (v + h) * th).endVertex();
-	    vertexbuffer.pos(x + w, y + h, z).tex((u + w) * tw, (v + h) * th).endVertex();
-	    vertexbuffer.pos(x + w, y, z).tex((u + w) * tw, v * th).endVertex();
-	    vertexbuffer.pos(x, y, z).tex(u * tw, v * th).endVertex();
+	    buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+	    buffer.pos(x, y + h, z).tex(u * tw, (v + h) * th).endVertex();
+	    buffer.pos(x + w, y + h, z).tex((u + w) * tw, (v + h) * th).endVertex();
+	    buffer.pos(x + w, y, z).tex((u + w) * tw, v * th).endVertex();
+	    buffer.pos(x, y, z).tex(u * tw, v * th).endVertex();
 
 	    tessellator.draw();
 	}
@@ -228,5 +230,166 @@ public class GuiDraw
 
 			GuiDraw.drawOutlinedIcon(Icons.LOCKED, element.area.mx(), element.area.my(), 0xffffffff, 0.5F, 0.5F);
 		}
+	}
+
+	public static void drawDropShadow(int left, int top, int right, int bottom, int offset, int opaque, int shadow)
+	{
+		float a1 = (opaque >> 24 & 255) / 255.0F;
+		float r1 = (opaque >> 16 & 255) / 255.0F;
+		float g1 = (opaque >> 8 & 255) / 255.0F;
+		float b1 = (opaque & 255) / 255.0F;
+		float a2 = (shadow >> 24 & 255) / 255.0F;
+		float r2 = (shadow >> 16 & 255) / 255.0F;
+		float g2 = (shadow >> 8 & 255) / 255.0F;
+		float b2 = (shadow & 255) / 255.0F;
+
+		GlStateManager.disableTexture2D();
+		GlStateManager.enableBlend();
+		GlStateManager.disableAlpha();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+
+		/* Draw opaque part */
+		buffer.pos(right - offset, top + offset, 0).color(r1, g1, b1, a1).endVertex();
+		buffer.pos(left + offset, top + offset, 0).color(r1, g1, b1, a1).endVertex();
+		buffer.pos(left + offset, bottom - offset, 0).color(r1, g1, b1, a1).endVertex();
+		buffer.pos(right - offset, bottom - offset, 0).color(r1, g1, b1, a1).endVertex();
+
+		/* Draw top shadow */
+		buffer.pos(right, top, 0).color(r2, g2, b2, a2).endVertex();
+		buffer.pos(left, top, 0).color(r2, g2, b2, a2).endVertex();
+		buffer.pos(left + offset, top + offset, 0).color(r1, g1, b1, a1).endVertex();
+		buffer.pos(right - offset, top + offset, 0).color(r1, g1, b1, a1).endVertex();
+
+		/* Draw bottom shadow */
+		buffer.pos(right - offset, bottom - offset, 0).color(r1, g1, b1, a1).endVertex();
+		buffer.pos(left + offset, bottom - offset, 0).color(r1, g1, b1, a1).endVertex();
+		buffer.pos(left, bottom, 0).color(r2, g2, b2, a2).endVertex();
+		buffer.pos(right, bottom, 0).color(r2, g2, b2, a2).endVertex();
+
+		/* Draw left shadow */
+		buffer.pos(left + offset, top + offset, 0).color(r1, g1, b1, a1).endVertex();
+		buffer.pos(left, top, 0).color(r2, g2, b2, a2).endVertex();
+		buffer.pos(left, bottom, 0).color(r2, g2, b2, a2).endVertex();
+		buffer.pos(left + offset, bottom - offset, 0).color(r1, g1, b1, a1).endVertex();
+
+		/* Draw right shadow */
+		buffer.pos(right, top, 0).color(r2, g2, b2, a2).endVertex();
+		buffer.pos(right - offset, top + offset, 0).color(r1, g1, b1, a1).endVertex();
+		buffer.pos(right - offset, bottom - offset, 0).color(r1, g1, b1, a1).endVertex();
+		buffer.pos(right, bottom, 0).color(r2, g2, b2, a2).endVertex();
+
+		tessellator.draw();
+
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+		GlStateManager.disableBlend();
+		GlStateManager.enableAlpha();
+		GlStateManager.enableTexture2D();
+	}
+
+	public static void drawDropCircleShadow(int x, int y, int radius, int segments, int opaque, int shadow)
+	{
+		float a1 = (opaque >> 24 & 255) / 255.0F;
+		float r1 = (opaque >> 16 & 255) / 255.0F;
+		float g1 = (opaque >> 8 & 255) / 255.0F;
+		float b1 = (opaque & 255) / 255.0F;
+		float a2 = (shadow >> 24 & 255) / 255.0F;
+		float r2 = (shadow >> 16 & 255) / 255.0F;
+		float g2 = (shadow >> 8 & 255) / 255.0F;
+		float b2 = (shadow & 255) / 255.0F;
+
+		GlStateManager.disableTexture2D();
+		GlStateManager.enableBlend();
+		GlStateManager.disableAlpha();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+
+		buffer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+
+		buffer.pos(x, y, 0).color(r1, g1, b1, a1).endVertex();
+
+		for (int i = 0; i <= segments; i ++)
+		{
+			double a = i / (double) segments * Math.PI * 2 - Math.PI / 2;
+
+			buffer.pos(x - Math.cos(a) * radius, y + Math.sin(a) * radius, 0).color(r2, g2, b2, a2).endVertex();
+		}
+
+		tessellator.draw();
+
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+		GlStateManager.disableBlend();
+		GlStateManager.enableAlpha();
+		GlStateManager.enableTexture2D();
+	}
+
+	public static void drawDropCircleShadow(int x, int y, int radius, int offset, int segments, int opaque, int shadow)
+	{
+		if (offset >= radius)
+		{
+			drawDropCircleShadow(x, y, radius, segments, opaque, shadow);
+
+			return;
+		}
+
+		float a1 = (opaque >> 24 & 255) / 255.0F;
+		float r1 = (opaque >> 16 & 255) / 255.0F;
+		float g1 = (opaque >> 8 & 255) / 255.0F;
+		float b1 = (opaque & 255) / 255.0F;
+		float a2 = (shadow >> 24 & 255) / 255.0F;
+		float r2 = (shadow >> 16 & 255) / 255.0F;
+		float g2 = (shadow >> 8 & 255) / 255.0F;
+		float b2 = (shadow & 255) / 255.0F;
+
+		GlStateManager.disableTexture2D();
+		GlStateManager.enableBlend();
+		GlStateManager.disableAlpha();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+
+		/* Draw opaque base */
+		buffer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+		buffer.pos(x, y, 0).color(r1, g1, b1, a1).endVertex();
+
+		for (int i = 0; i <= segments; i ++)
+		{
+			double a = i / (double) segments * Math.PI * 2 - Math.PI / 2;
+
+			buffer.pos(x - Math.cos(a) * offset, y + Math.sin(a) * offset, 0).color(r1, g1, b1, a1).endVertex();
+		}
+
+		tessellator.draw();
+
+		/* Draw outer shadow */
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+
+		for (int i = 0; i < segments; i ++)
+		{
+			double alpha1 = i / (double) segments * Math.PI * 2 - Math.PI / 2;
+			double alpha2 = (i + 1) / (double) segments * Math.PI * 2 - Math.PI / 2;
+
+			buffer.pos(x - Math.cos(alpha2) * offset, y + Math.sin(alpha2) * offset, 0).color(r1, g1, b1, a1).endVertex();
+			buffer.pos(x - Math.cos(alpha1) * offset, y + Math.sin(alpha1) * offset, 0).color(r1, g1, b1, a1).endVertex();
+			buffer.pos(x - Math.cos(alpha1) * radius, y + Math.sin(alpha1) * radius, 0).color(r2, g2, b2, a2).endVertex();
+			buffer.pos(x - Math.cos(alpha2) * radius, y + Math.sin(alpha2) * radius, 0).color(r2, g2, b2, a2).endVertex();
+		}
+
+		tessellator.draw();
+
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+		GlStateManager.disableBlend();
+		GlStateManager.enableAlpha();
+		GlStateManager.enableTexture2D();
 	}
 }
