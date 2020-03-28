@@ -14,6 +14,7 @@ import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.utils.Direction;
+import mchorse.mclib.utils.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.resources.I18n;
@@ -29,8 +30,7 @@ public class GuiConfig extends GuiElement
 	public ColumnResizer column;
 
 	private Config config;
-	private boolean save;
-	private long saveTime;
+	private Timer timer = new Timer(500);
 
 	public GuiConfig(Minecraft mc)
 	{
@@ -116,8 +116,7 @@ public class GuiConfig extends GuiElement
 
 	public void save(IConfigValue value)
 	{
-		this.save = true;
-		this.saveTime = System.currentTimeMillis() + 500;
+		this.timer.mark();
 	}
 
 	@Override
@@ -132,9 +131,8 @@ public class GuiConfig extends GuiElement
 	@Override
 	public void draw(GuiContext context)
 	{
-		if (this.save && System.currentTimeMillis() > this.saveTime)
+		if (this.timer.checkReset())
 		{
-			this.save = false;
 			this.config.save();
 		}
 
