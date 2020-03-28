@@ -12,8 +12,8 @@ import java.util.function.Consumer;
 
 public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 {
-	public String label;
-	public boolean state;
+	private String label;
+	private boolean state;
 
 	public GuiToggleElement(Minecraft mc, String label, Consumer<GuiToggleElement> callback)
 	{
@@ -26,6 +26,25 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 
 		this.label = label;
 		this.state = state;
+	}
+
+	public GuiToggleElement label(String label)
+	{
+		this.label = label;
+
+		return this;
+	}
+
+	public GuiToggleElement toggled(boolean state)
+	{
+		this.state = state;
+
+		return this;
+	}
+
+	public boolean isToggled()
+	{
+		return this.state;
 	}
 
 	@Override

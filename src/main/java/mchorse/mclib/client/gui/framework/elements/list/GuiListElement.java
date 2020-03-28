@@ -72,19 +72,19 @@ public abstract class GuiListElement<T> extends GuiElement
 
     /* List element settings */
 
-    public GuiListElement<T> setBackground()
+    public GuiListElement<T> background()
     {
         this.background = true;
 
         return this;
     }
 
-    public GuiListElement<T> setBackground(int color)
+    public GuiListElement<T> background(int color)
     {
-        return this.setBackground(true, color);
+        return this.background(true, color);
     }
 
-    public GuiListElement<T> setBackground(boolean background, int color)
+    public GuiListElement<T> background(boolean background, int color)
     {
         this.background = background;
         this.color = color;

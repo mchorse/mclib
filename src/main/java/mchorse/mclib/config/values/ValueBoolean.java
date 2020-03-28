@@ -51,7 +51,7 @@ public class ValueBoolean extends Value
 	{
 		GuiToggleElement checkbox = new GuiToggleElement(mc, config.getValueTitle(category.id, this.id), this.value, (value) ->
 		{
-			this.setValue(value.state);
+			this.setValue(value.isToggled());
 			save.accept(this);
 		});
 
