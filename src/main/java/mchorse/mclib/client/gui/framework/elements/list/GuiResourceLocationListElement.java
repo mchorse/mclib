@@ -31,15 +31,4 @@ public class GuiResourceLocationListElement extends GuiListElement<ResourceLocat
 
         return true;
     }
-
-    @Override
-    public void drawElement(ResourceLocation element, int i, int x, int y, boolean hover, boolean seleted)
-    {
-        if (seleted)
-        {
-            Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
-        }
-
-        this.font.drawStringWithShadow(element.toString(), x + 4, y + 4, hover ? 16777120 : 0xffffff);
-    }
 }

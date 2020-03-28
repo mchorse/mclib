@@ -63,7 +63,7 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 		}
 
 		@Override
-		public void drawElement(Action element, int i, int x, int y, boolean hover, boolean selected)
+		public void drawListElement(Action element, int i, int x, int y, boolean hover, boolean selected)
 		{
 			int h = this.scroll.scrollItemSize;
 

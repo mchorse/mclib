@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
+import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.utils.files.entries.AbstractEntry;
 import mchorse.mclib.utils.files.entries.FileEntry;
 import mchorse.mclib.utils.files.entries.FolderEntry;
@@ -126,27 +127,15 @@ public class GuiFolderEntryListElement extends GuiListElement<AbstractEntry>
     }
 
     @Override
-    public void drawElement(AbstractEntry element, int i, int x, int y, boolean hover, boolean selected)
+    protected void drawElementPart(AbstractEntry element, int i, int x, int y, boolean hover, boolean selected)
     {
-        if (selected)
-        {
-            Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
-        }
-
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
         this.mc.renderEngine.bindTexture(GuiBase.ICONS);
 
         GlStateManager.color(1, 1, 1, hover ? 0.8F : 0.6F);
 
-        if (element instanceof FolderEntry)
-        {
-            Gui.drawScaledCustomSizeModalRect(x + 2, y, 112, 64, 16, 16, 16, 16, 256, 256);
-        }
-        else
-        {
-            Gui.drawScaledCustomSizeModalRect(x + 2, y, 96, 64, 16, 16, 16, 16, 256, 256);
-        }
+        (element instanceof FolderEntry ? Icons.FOLDER : Icons.SERVER).render(x + 2, y);
 
         this.font.drawStringWithShadow(element.title, x + 20, y + 4, hover ? 16777120 : 0xffffff);
     }

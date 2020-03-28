@@ -5,12 +5,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.ScrollArea;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 
 /**
@@ -419,7 +421,7 @@ public abstract class GuiListElement<T> extends GuiElement
             boolean hover = mouseX >= x && mouseY >= y && mouseX < x + this.scroll.w && mouseY < y + this.scroll.scrollItemSize;
             boolean selected = this.current.indexOf(i) != -1;
 
-            this.drawElement(element, i, x, y, hover, selected);
+            this.drawListElement(element, i, x, y, hover, selected);
 
             i++;
         }
@@ -434,12 +436,36 @@ public abstract class GuiListElement<T> extends GuiElement
 
         if (this.exists(this.dragging) && dragging)
         {
-            this.drawElement(this.list.get(this.dragging), this.dragging, context.mouseX + 6, context.mouseY - this.scroll.scrollItemSize / 2, true, true);
+            this.drawListElement(this.list.get(this.dragging), this.dragging, context.mouseX + 6, context.mouseY - this.scroll.scrollItemSize / 2, true, true);
         }
     }
 
     /**
-     * Draw individual element 
+     * Draw individual element (with selection
      */
-    public abstract void drawElement(T element, int i, int x, int y, boolean hover, boolean selected);
+    public void drawListElement(T element, int i, int x, int y, boolean hover, boolean selected)
+    {
+        if (selected)
+        {
+            Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
+        }
+
+        this.drawElementPart(element, i, x, y, hover, selected);
+    }
+
+    /**
+     * Draw only the main part (without selection or any hover elements)
+     */
+    protected void drawElementPart(T element, int i, int x, int y, boolean hover, boolean selected)
+    {
+        this.font.drawStringWithShadow(this.elementToString(element, i, x, y, hover, selected), x + 4, y + this.scroll.scrollItemSize / 2 - this.font.FONT_HEIGHT / 2, hover ? 16777120 : 0xffffff);
+    }
+
+    /**
+     * Convert element to string
+     */
+    protected String elementToString(T element, int i, int x, int y, boolean hover, boolean selected)
+    {
+        return element.toString();
+    }
 }

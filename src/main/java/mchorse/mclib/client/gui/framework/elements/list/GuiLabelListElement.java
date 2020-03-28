@@ -58,13 +58,8 @@ public class GuiLabelListElement <T> extends GuiListElement<Label<T>>
 	}
 
 	@Override
-	public void drawElement(Label<T> element, int i, int x, int y, boolean hover, boolean selected)
+	protected String elementToString(Label<T> element, int i, int x, int y, boolean hover, boolean selected)
 	{
-		if (selected)
-		{
-			Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
-		}
-
-		this.font.drawStringWithShadow(element.title, x + 4, y + 4, hover ? 16777120 : 0xffffff);
+		return element.title;
 	}
 }
