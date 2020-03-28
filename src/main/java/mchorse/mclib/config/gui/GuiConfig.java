@@ -93,7 +93,6 @@ public class GuiConfig extends GuiElement
 				label.anchor(0, 0).flex().h(0, this.font.FONT_HEIGHT);
 			}
 
-			label.resizer(this.column.child(label));
 			this.options.add(label.tooltip(this.config.getCategoryTooltip(category.id), Direction.BOTTOM));
 
 			for (IConfigValue value : category.values.values())
@@ -106,7 +105,6 @@ public class GuiConfig extends GuiElement
 				for (GuiElement element : value.getFields(this.mc, this.config, category, this::save))
 				{
 					this.options.add(element);
-					element.resizer(this.column.child(element));
 				}
 			}
 
