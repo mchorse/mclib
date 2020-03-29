@@ -335,7 +335,7 @@ public class GuiElement extends Gui implements IGuiElement
         {
             if (!context.hasContextMenu())
             {
-                GuiContextMenu menu = this.createContextMenu();
+                GuiContextMenu menu = this.createContextMenu(context);
 
                 if (menu != null)
                 {
@@ -355,7 +355,7 @@ public class GuiElement extends Gui implements IGuiElement
      * Some subclasses of GuiElement might want to override this method in order to create their
      * own context menus.
      */
-    public GuiContextMenu createContextMenu()
+    public GuiContextMenu createContextMenu(GuiContext context)
     {
         return this.contextMenu == null ? null : this.contextMenu.get();
     }

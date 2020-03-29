@@ -1,6 +1,7 @@
 package mchorse.mclib.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonWriter;
 
@@ -12,12 +13,12 @@ public class JsonUtils
 	{
 		StringWriter writer = new StringWriter();
 		JsonWriter jsonWriter = new JsonWriter(writer);
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-		gson.toJson(element, jsonWriter);
 		jsonWriter.setIndent("    ");
+		gson.toJson(element, jsonWriter);
 
 		/* Prettify arrays */
-		return writer.toString().replaceAll("\\n\\s+(?=-?\\d|\\])", " ");
+		return writer.toString();
 	}
 }

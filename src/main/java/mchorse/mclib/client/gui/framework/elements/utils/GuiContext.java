@@ -63,7 +63,7 @@ public class GuiContext
 	 */
 	public int mouseY()
 	{
-		return this.mouseX - this.shiftX;
+		return this.mouseY - this.shiftY;
 	}
 
 	public void setMouse(int mouseX, int mouseY)
@@ -193,6 +193,25 @@ public class GuiContext
 		if (this.hasContextMenu() || menu == null)
 		{
 			return;
+		}
+
+		menu.setMouse(this);
+		menu.resize();
+
+		this.contextMenu = menu;
+		this.screen.root.add(menu);
+	}
+
+	public void replaceContextMenu(GuiContextMenu menu)
+	{
+		if (menu == null)
+		{
+			return;
+		}
+
+		if (this.contextMenu != null)
+		{
+			this.contextMenu.removeFromParent();
 		}
 
 		menu.setMouse(this);

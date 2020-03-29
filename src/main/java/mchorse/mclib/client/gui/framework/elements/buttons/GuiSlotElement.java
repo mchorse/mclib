@@ -38,19 +38,17 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 	}
 
 	@Override
-	public GuiContextMenu createContextMenu()
+	public GuiContextMenu createContextMenu(GuiContext context)
 	{
 		if (this.contextMenu == null)
 		{
 			return new GuiSimpleContextMenu(this.mc)
+				/* TODO: do something about it */
 				.action(Icons.DOWNLOAD, "Drop item down", () -> {})
-				.action(Icons.CLOSE, "Clear item", () ->
-				{
-					this.stack = null;
-				});
+				.action(Icons.CLOSE, "Clear item", () -> this.stack = null);
 		}
 
-		return super.createContextMenu();
+		return super.createContextMenu(context);
 	}
 
 	@Override
