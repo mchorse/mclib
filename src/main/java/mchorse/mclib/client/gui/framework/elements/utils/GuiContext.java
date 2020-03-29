@@ -48,6 +48,24 @@ public class GuiContext
 		this.keybinds.setVisible(false);
 	}
 
+	/**
+	 * Get absolute X coordinate of the mouse without the
+	 * scrolling areas applied
+	 */
+	public int mouseX()
+	{
+		return this.mouseX - this.shiftX;
+	}
+
+	/**
+	 * Get absolute Y coordinate of the mouse without the
+	 * scrolling areas applied
+	 */
+	public int mouseY()
+	{
+		return this.mouseX - this.shiftX;
+	}
+
 	public void setMouse(int mouseX, int mouseY)
 	{
 		this.mouseX = mouseX;

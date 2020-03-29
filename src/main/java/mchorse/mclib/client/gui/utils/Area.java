@@ -10,6 +10,12 @@ import net.minecraft.client.gui.Gui;
 public class Area
 {
     /**
+     * Shared area which could be used for calculations without creating new
+     * instances
+     */
+    public static final Area SHARED = new Area();
+
+    /**
      * X position coordinate of the box
      */
     public int x;
