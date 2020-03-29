@@ -5,6 +5,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.list.GuiListElement;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.resizers.BoundsResizer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -59,6 +60,7 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 		}
 
 		this.flex().set(context.mouseX(), context.mouseY(), w, this.actions.scroll.scrollSize);
+		this.resizer(new BoundsResizer(this.resizer(), context, 5));
 	}
 
 	public static class GuiActionListElement extends GuiListElement<Action>

@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements.modals;
 
+import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import net.minecraft.client.Minecraft;
@@ -22,7 +23,7 @@ public class GuiPromptModal extends GuiModal
         this.callback = callback;
         this.text = new GuiTextElement(mc, null);
         this.text.flex().parent(this.area).set(10, 0, 0, 20).y(1, -55).w(1, -20);
-        this.text.field.setFocused(true);
+        this.text.focus(GuiBase.getCurrent());
 
         this.confirm = new GuiButtonElement(mc, I18n.format("mclib.gui.ok"), (b) -> this.send());
         this.confirm.flex().parent(this.area).set(10, 0, 0, 20).y(1, -30).w(0.5F, -15);
