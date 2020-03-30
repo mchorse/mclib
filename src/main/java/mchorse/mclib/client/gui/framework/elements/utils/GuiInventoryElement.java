@@ -112,15 +112,15 @@ public class GuiInventoryElement extends GuiElement
 			return true;
 		}
 
-		if (!this.area.isInside(context.mouseX, context.mouseY))
+		if (!this.area.isInside(context))
 		{
 			this.setVisible(false);
 
 			return false;
 		}
 
-		boolean inventory = this.inventory.isInside(context.mouseX, context.mouseY);
-		boolean hotbar = this.hotbar.isInside(context.mouseX, context.mouseY);
+		boolean inventory = this.inventory.isInside(context);
+		boolean hotbar = this.hotbar.isInside(context);
 
 		if ((inventory || hotbar) && context.mouseButton == 0)
 		{

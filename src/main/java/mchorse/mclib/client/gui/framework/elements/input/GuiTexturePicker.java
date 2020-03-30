@@ -296,7 +296,7 @@ public class GuiTexturePicker extends GuiElement
     {
         /* Necessary measure to avoid triggering buttons when you press 
          * on a text field, for example */
-        return super.mouseClicked(context) || (this.isVisible() && this.area.isInside(context.mouseX, context.mouseY));
+        return super.mouseClicked(context) || (this.isVisible() && this.area.isInside(context));
     }
 
     @Override

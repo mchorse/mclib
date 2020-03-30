@@ -1,8 +1,8 @@
 package mchorse.mclib.client.gui.utils;
 
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * Scrollable area
@@ -151,6 +151,11 @@ public class ScrollArea extends Area
 
     /* GUI code for easier manipulations */
 
+    public boolean mouseClicked(GuiContext context)
+    {
+        return this.mouseClicked(context.mouseX, context.mouseY);
+    }
+
     /**
      * This method should be invoked to register dragging 
      */
@@ -178,6 +183,11 @@ public class ScrollArea extends Area
         return isInside;
     }
 
+    public boolean mouseScroll(GuiContext context)
+    {
+        return this.mouseScroll(context.mouseX, context.mouseY, context.mouseWheel);
+    }
+
     /**
      * This method should be invoked when mouse wheel is scrolling 
      */
@@ -193,12 +203,22 @@ public class ScrollArea extends Area
         return isInside;
     }
 
+    public void mouseReleased(GuiContext context)
+    {
+        this.mouseReleased(context.mouseX, context.mouseY);
+    }
+
     /**
      * When mouse button gets released
      */
     public void mouseReleased(int x, int y)
     {
         this.dragging = false;
+    }
+
+    public void drag(GuiContext context)
+    {
+        this.drag(context.mouseX, context.mouseY);
     }
 
     /**

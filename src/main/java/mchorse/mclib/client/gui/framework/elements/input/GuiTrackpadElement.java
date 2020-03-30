@@ -167,19 +167,17 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             return true;
         }
 
-        int mouseX = context.mouseX;
-        int mouseY = context.mouseY;
         boolean control = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
 
         if (!control)
         {
-            if (this.plusOne.isInside(mouseX, mouseY))
+            if (this.plusOne.isInside(context))
             {
                 this.setValueAndNotify(this.value + this.increment);
 
                 return true;
             }
-            else if (this.minusOne.isInside(mouseX, mouseY))
+            else if (this.minusOne.isInside(context))
             {
                 this.setValueAndNotify(this.value - this.increment);
 
@@ -196,7 +194,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             context.focus(wasFocused ? null : this);
         }
 
-        if (!this.text.isFocused() && this.area.isInside(mouseX, mouseY))
+        if (!this.text.isFocused() && this.area.isInside(context))
         {
             if (control)
             {
@@ -204,8 +202,8 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             }
 
             this.dragging = true;
-            this.lastX = mouseX;
-            this.lastY = mouseY;
+            this.lastX = context.mouseX;
+            this.lastY = context.mouseY;
             this.lastValue = this.value;
         }
 
@@ -297,8 +295,8 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
         Gui.drawRect(x, y, x + w, y + h, 0xff000000);
 
-        boolean plus = !this.dragging && this.plusOne.isInside(context.mouseX, context.mouseY);
-        boolean minus = !this.dragging && this.minusOne.isInside(context.mouseX, context.mouseY);
+        boolean plus = !this.dragging && this.plusOne.isInside(context);
+        boolean minus = !this.dragging && this.minusOne.isInside(context);
 
         if (this.dragging)
         {

@@ -30,7 +30,7 @@ public abstract class GuiClickElement<T extends GuiClickElement> extends GuiElem
             return true;
         }
 
-        if (context.mouseButton == 0 && this.area.isInside(context.mouseX, context.mouseY))
+        if (context.mouseButton == 0 && this.area.isInside(context))
         {
             this.pressed = true;
             this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
@@ -60,7 +60,7 @@ public abstract class GuiClickElement<T extends GuiClickElement> extends GuiElem
     @Override
     public void draw(GuiContext context)
     {
-        this.hover = this.area.isInside(context.mouseX, context.mouseY);
+        this.hover = this.area.isInside(context);
 
         this.drawSkin(context);
         super.draw(context);

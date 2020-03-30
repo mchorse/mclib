@@ -60,7 +60,7 @@ public abstract class GuiSearchListElement<T> extends GuiElement
     @Override
     public boolean mouseClicked(GuiContext context)
     {
-        return super.mouseClicked(context) || this.isVisible() && this.area.isInside(context.mouseX, context.mouseY);
+        return super.mouseClicked(context) || this.isVisible() && this.area.isInside(context);
     }
 
     @Override

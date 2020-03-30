@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.utils;
 
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import net.minecraft.client.gui.Gui;
 
 /**
@@ -44,6 +45,11 @@ public class Area
         this.y = y;
         this.w = w;
         this.h = h;
+    }
+
+    public boolean isInside(GuiContext context)
+    {
+        return this.isInside(context);
     }
 
     /**

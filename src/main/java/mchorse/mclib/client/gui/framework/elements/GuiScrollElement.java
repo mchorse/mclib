@@ -69,12 +69,12 @@ public class GuiScrollElement extends GuiElement
     @Override
     public boolean mouseClicked(GuiContext context)
     {
-        if (!this.area.isInside(context.mouseX, context.mouseY))
+        if (!this.area.isInside(context))
         {
             return false;
         }
 
-        boolean result = this.scroll.mouseClicked(context.mouseX, context.mouseY);
+        boolean result = this.scroll.mouseClicked(context);
 
         this.apply(context);
         result = result || super.mouseClicked(context);
@@ -86,12 +86,12 @@ public class GuiScrollElement extends GuiElement
     @Override
     public boolean mouseScrolled(GuiContext context)
     {
-        if (!this.area.isInside(context.mouseX, context.mouseY))
+        if (!this.area.isInside(context))
         {
             return false;
         }
 
-        boolean result = this.scroll.mouseScroll(context.mouseX, context.mouseY, context.mouseWheel);
+        boolean result = this.scroll.mouseScroll(context);
 
         this.apply(context);
         result = result || super.mouseScrolled(context);
@@ -103,7 +103,7 @@ public class GuiScrollElement extends GuiElement
     @Override
     public void mouseReleased(GuiContext context)
     {
-        this.scroll.mouseReleased(context.mouseX, context.mouseY);
+        this.scroll.mouseReleased(context);
 
         this.apply(context);
         super.mouseReleased(context);

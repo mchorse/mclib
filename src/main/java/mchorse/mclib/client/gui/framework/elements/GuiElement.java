@@ -338,7 +338,7 @@ public class GuiElement extends Gui implements IGuiElement
             return true;
         }
 
-        if (this.area.isInside(context.mouseX, context.mouseY) && context.mouseButton == 1)
+        if (this.area.isInside(context) && context.mouseButton == 1)
         {
             if (!context.hasContextMenu())
             {
@@ -407,7 +407,7 @@ public class GuiElement extends Gui implements IGuiElement
             return true;
         }
 
-        if (this.keybinds != null && this.keybinds.check(context.keyCode, this.area.isInside(context.mouseX, context.mouseY)))
+        if (this.keybinds != null && this.keybinds.check(context.keyCode, this.area.isInside(context)))
         {
             return true;
         }
@@ -420,14 +420,14 @@ public class GuiElement extends Gui implements IGuiElement
     {
         if (this.keybinds != null && this.isEnabled())
         {
-            this.keybinds.add(context.keybinds, this.area.isInside(context.mouseX, context.mouseY));
+            this.keybinds.add(context.keybinds, this.area.isInside(context));
         }
 
-        if (this.tooltip != null && this.area.isInside(context.mouseX, context.mouseY))
+        if (this.tooltip != null && this.area.isInside(context))
         {
             context.tooltip.set(this);
         }
-        else if ((this.hideTooltip || this.container) && this.area.isInside(context.mouseX, context.mouseY))
+        else if ((this.hideTooltip || this.container) && this.area.isInside(context))
         {
             context.reset();
         }

@@ -66,7 +66,7 @@ public class GuiColorElement extends GuiElement
 			return true;
 		}
 
-		if (!this.picker.hasParent() && this.area.isInside(context.mouseX, context.mouseY))
+		if (!this.picker.hasParent() && this.area.isInside(context))
 		{
 			this.getParentContainer().add(this.picker);
 			this.picker.resize();
@@ -80,7 +80,7 @@ public class GuiColorElement extends GuiElement
 	@Override
 	public void draw(GuiContext context)
 	{
-		float factor = this.area.isInside(context.mouseX, context.mouseY) ? 0.85F : 1F;
+		float factor = this.area.isInside(context) ? 0.85F : 1F;
 		int padding = 0;
 
 		if (McLib.enableBorders.get())
@@ -95,7 +95,7 @@ public class GuiColorElement extends GuiElement
 			this.picker.drawRect(this.area.x, this.area.y, this.area.ex(), this.area.ey());
 		}
 
-		if (this.area.isInside(context.mouseX, context.mouseY))
+		if (this.area.isInside(context))
 		{
 			this.area.draw(0x22000000, padding);
 		}
@@ -215,35 +215,32 @@ public class GuiColorElement extends GuiElement
 				return true;
 			}
 
-			int x = context.mouseX;
-			int y = context.mouseY;
-
-			if (this.red.isInside(x, y))
+			if (this.red.isInside(context))
 			{
 				this.dragging = 1;
 
 				return true;
 			}
-			else if (this.green.isInside(x, y))
+			else if (this.green.isInside(context))
 			{
 				this.dragging = 2;
 
 				return true;
 			}
-			else if (this.blue.isInside(x, y))
+			else if (this.blue.isInside(context))
 			{
 				this.dragging = 3;
 
 				return true;
 			}
-			else if (this.alpha.isInside(x, y) && this.editAlpha)
+			else if (this.alpha.isInside(context) && this.editAlpha)
 			{
 				this.dragging = 4;
 
 				return true;
 			}
 
-			if (!this.area.isInside(x, y))
+			if (!this.area.isInside(context))
 			{
 				this.removeFromParent();
 

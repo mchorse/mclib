@@ -28,7 +28,7 @@ public abstract class GuiContextMenu extends GuiElement
 			return true;
 		}
 
-		if (!this.area.isInside(context.mouseX, context.mouseY))
+		if (!this.area.isInside(context))
 		{
 			this.removeFromParent();
 		}

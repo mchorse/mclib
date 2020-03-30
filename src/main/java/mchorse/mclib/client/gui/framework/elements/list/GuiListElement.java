@@ -317,17 +317,14 @@ public abstract class GuiListElement<T> extends GuiElement
             return true;
         }
 
-        int mouseX = context.mouseX;
-        int mouseY = context.mouseY;
-
-        if (this.scroll.mouseClicked(mouseX, mouseY))
+        if (this.scroll.mouseClicked(context))
         {
             return true;
         }
 
-        if (this.scroll.isInside(mouseX, mouseY))
+        if (this.scroll.isInside(context))
         {
-            int index = this.scroll.getIndex(mouseX, mouseY);
+            int index = this.scroll.getIndex(context.mouseX, context.mouseY);
 
             if (this.exists(index))
             {
@@ -361,7 +358,7 @@ public abstract class GuiListElement<T> extends GuiElement
     @Override
     public boolean mouseScrolled(GuiContext context)
     {
-        return super.mouseScrolled(context) || this.scroll.mouseScroll(context.mouseX, context.mouseY, context.mouseWheel);
+        return super.mouseScrolled(context) || this.scroll.mouseScroll(context);
     }
 
     @Override
@@ -385,7 +382,7 @@ public abstract class GuiListElement<T> extends GuiElement
             this.dragging = -1;
         }
 
-        this.scroll.mouseReleased(context.mouseX, context.mouseY);
+        this.scroll.mouseReleased(context);
         super.mouseReleased(context);
     }
 
@@ -395,7 +392,7 @@ public abstract class GuiListElement<T> extends GuiElement
         int mouseX = context.mouseX;
         int mouseY = context.mouseY;
 
-        this.scroll.drag(mouseX, mouseY);
+        this.scroll.drag(context);
 
         if (this.background)
         {

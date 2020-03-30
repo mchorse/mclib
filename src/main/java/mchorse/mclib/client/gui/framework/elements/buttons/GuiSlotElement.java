@@ -111,7 +111,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 
 			GuiInventoryElement.drawItemStack(this.stack, x, y, null);
 
-			if (this.area.isInside(context.mouseX, context.mouseY))
+			if (this.area.isInside(context))
 			{
 				context.tooltip.set(this);
 			}

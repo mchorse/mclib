@@ -28,7 +28,7 @@ public abstract class GuiModal extends GuiElement
     @Override
     public boolean mouseClicked(GuiContext context)
     {
-        return super.mouseClicked(context) || this.area.isInside(context.mouseX, context.mouseY);
+        return super.mouseClicked(context) || this.area.isInside(context);
     }
 
     @Override
