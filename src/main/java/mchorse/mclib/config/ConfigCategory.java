@@ -3,6 +3,7 @@ package mchorse.mclib.config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import mchorse.mclib.config.values.IConfigValue;
+import mchorse.mclib.config.values.Value;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,11 +12,22 @@ import java.util.TreeMap;
 public class ConfigCategory
 {
 	public final String id;
+	public Config config;
 	public final Map<String, IConfigValue> values = new LinkedHashMap<String, IConfigValue>();
 
 	public ConfigCategory(String id)
 	{
 		this.id = id;
+	}
+
+	public void register(String id, IConfigValue value)
+	{
+		if (value instanceof Value)
+		{
+			((Value) value).category = this;
+		}
+
+		this.values.put(id, value);
 	}
 
 	public boolean isVisible()

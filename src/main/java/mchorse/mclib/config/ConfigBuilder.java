@@ -30,6 +30,7 @@ public class ConfigBuilder
 
 		for (ConfigCategory category : this.categories)
 		{
+			category.config = config;
 			config.categories.put(category.id, category);
 		}
 
@@ -47,7 +48,7 @@ public class ConfigBuilder
 	{
 		ValueInt value = new ValueInt(id, defaultValue);
 
-		this.category.values.put(id, value);
+		this.category.register(id, value);
 
 		return value;
 	}
@@ -56,7 +57,7 @@ public class ConfigBuilder
 	{
 		ValueInt value = new ValueInt(id, defaultValue, min, max);
 
-		this.category.values.put(id, value);
+		this.category.register(id, value);
 
 		return value;
 	}
@@ -66,7 +67,7 @@ public class ConfigBuilder
 		ValueInt value = new ValueInt(id, defaultValue);
 
 		value.color();
-		this.category.values.put(id, value);
+		this.category.register(id, value);
 
 		return value;
 	}
@@ -75,7 +76,7 @@ public class ConfigBuilder
 	{
 		ValueFloat value = new ValueFloat(id, defaultValue);
 
-		this.category.values.put(id, value);
+		this.category.register(id, value);
 
 		return value;
 	}
@@ -84,7 +85,7 @@ public class ConfigBuilder
 	{
 		ValueFloat value = new ValueFloat(id, defaultValue, min, max);
 
-		this.category.values.put(id, value);
+		this.category.register(id, value);
 
 		return value;
 	}
@@ -93,7 +94,7 @@ public class ConfigBuilder
 	{
 		ValueDouble value = new ValueDouble(id, defaultValue);
 
-		this.category.values.put(id, value);
+		this.category.register(id, value);
 
 		return value;
 	}
@@ -102,7 +103,7 @@ public class ConfigBuilder
 	{
 		ValueDouble value = new ValueDouble(id, defaultValue, min, max);
 
-		this.category.values.put(id, value);
+		this.category.register(id, value);
 
 		return value;
 	}
@@ -111,7 +112,7 @@ public class ConfigBuilder
 	{
 		ValueBoolean value = new ValueBoolean(id, defaultValue);
 
-		this.category.values.put(id, value);
+		this.category.register(id, value);
 
 		return value;
 	}
@@ -120,7 +121,7 @@ public class ConfigBuilder
 	{
 		ValueString value = new ValueString(id, defaultValue);
 
-		this.category.values.put(id, value);
+		this.category.register(id, value);
 
 		return value;
 	}
