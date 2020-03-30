@@ -45,7 +45,10 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 			return new GuiSimpleContextMenu(this.mc)
 				/* TODO: do something about it */
 				.action(Icons.DOWNLOAD, "Drop item down", () -> {})
-				.action(Icons.CLOSE, "Clear item", () -> this.stack = null);
+				.action(Icons.CLOSE, "Clear item", () -> {
+					this.stack = ItemStack.EMPTY;
+					this.selected = false;
+				});
 		}
 
 		return super.createContextMenu(context);
