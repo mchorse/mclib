@@ -187,6 +187,13 @@ public class GuiElement extends Gui implements IGuiElement
 
     /* Setters */
 
+    public GuiElement tooltip(String label)
+    {
+        this.tooltip = new GuiTooltip.Tooltip(label, Direction.BOTTOM);
+
+        return this;
+    }
+
     public GuiElement tooltip(String label, Direction direction)
     {
         this.tooltip = new GuiTooltip.Tooltip(label, direction);
@@ -347,6 +354,23 @@ public class GuiElement extends Gui implements IGuiElement
         }
 
         return false;
+    }
+
+    public void clickItself(GuiContext context)
+    {
+        int mouseX = context.mouseX;
+        int mouseY = context.mouseY;
+        int button = context.mouseButton;
+
+        context.mouseX = this.area.x;
+        context.mouseY = this.area.y;
+        context.mouseButton = 0;
+
+        this.mouseClicked(context);
+
+        context.mouseX = mouseX;
+        context.mouseY = mouseY;
+        context.mouseButton = button;
     }
 
     /**
