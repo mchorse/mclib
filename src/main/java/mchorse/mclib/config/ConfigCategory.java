@@ -4,13 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import mchorse.mclib.config.values.IConfigValue;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ConfigCategory
 {
 	public final String id;
-	public final Map<String, IConfigValue> values = new HashMap<String, IConfigValue>();
+	public final Map<String, IConfigValue> values = new LinkedHashMap<String, IConfigValue>();
 
 	public ConfigCategory(String id)
 	{
