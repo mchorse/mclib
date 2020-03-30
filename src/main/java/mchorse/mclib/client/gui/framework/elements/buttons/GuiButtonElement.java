@@ -12,6 +12,9 @@ public class GuiButtonElement extends GuiClickElement<GuiButtonElement>
 {
 	public String label;
 
+	public boolean custom;
+	public int customColor;
+
 	public GuiButtonElement(Minecraft mc, String label, Consumer<GuiButtonElement> callback)
 	{
 		super(mc, callback);
@@ -19,10 +22,18 @@ public class GuiButtonElement extends GuiClickElement<GuiButtonElement>
 		this.label = label;
 	}
 
+	public GuiButtonElement color(int color)
+	{
+		this.custom = true;
+		this.customColor = color & 0xffffff;
+
+		return this;
+	}
+
 	@Override
 	protected void drawSkin(GuiContext context)
 	{
-		int color = 0xff000000 + McLib.primaryColor.get();
+		int color = 0xff000000 + (this.custom ? this.customColor : McLib.primaryColor.get());
 
 		if (this.hover)
 		{
