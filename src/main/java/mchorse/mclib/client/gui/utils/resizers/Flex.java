@@ -188,6 +188,10 @@ public class Flex implements IResizer
     }
 
     @Override
+    public void postApply(Area area)
+    {}
+
+    @Override
     public void add(GuiElement parent, GuiElement child)
     {}
 

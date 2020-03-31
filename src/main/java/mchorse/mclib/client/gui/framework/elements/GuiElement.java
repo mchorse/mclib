@@ -328,6 +328,11 @@ public class GuiElement extends Gui implements IGuiElement
         {
             this.children.resize();
         }
+
+        if (this.resizer != null)
+        {
+            this.resizer.postApply(this.area);
+        }
     }
 
     @Override
@@ -362,8 +367,8 @@ public class GuiElement extends Gui implements IGuiElement
         int mouseY = context.mouseY;
         int button = context.mouseButton;
 
-        context.mouseX = this.area.x;
-        context.mouseY = this.area.y;
+        context.mouseX = this.area.x + 1;
+        context.mouseY = this.area.y + 1;
         context.mouseButton = 0;
 
         this.mouseClicked(context);

@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.GlStateManager;
  */
 public class GuiScrollElement extends GuiElement
 {
-    public ScrollArea scroll = new ScrollArea(0);
+    public ScrollArea scroll;
 
     public GuiScrollElement(Minecraft mc)
     {
@@ -25,6 +25,7 @@ public class GuiScrollElement extends GuiElement
     {
         super(mc);
 
+        this.area = this.scroll = new ScrollArea(0);
         this.scroll.direction = direction;
         this.scroll.scrollSpeed = 20;
     }
@@ -62,7 +63,6 @@ public class GuiScrollElement extends GuiElement
     {
         super.resize();
 
-        this.scroll.copy(this.area);
         this.scroll.clamp();
     }
 

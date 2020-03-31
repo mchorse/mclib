@@ -49,7 +49,7 @@ public class Area
 
     public boolean isInside(GuiContext context)
     {
-        return this.isInside(context);
+        return this.isInside(context.mouseX, context.mouseY);
     }
 
     /**

@@ -7,6 +7,8 @@ public interface IResizer
 {
 	public void apply(Area area);
 
+	public void postApply(Area area);
+
 	public void add(GuiElement parent, GuiElement child);
 
 	public int getX();

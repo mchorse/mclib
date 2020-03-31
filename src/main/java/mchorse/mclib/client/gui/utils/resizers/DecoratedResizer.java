@@ -16,6 +16,10 @@ public abstract class DecoratedResizer implements IResizer
 	{}
 
 	@Override
+	public void postApply(Area area)
+	{}
+
+	@Override
 	public void add(GuiElement parent, GuiElement child)
 	{}
 }

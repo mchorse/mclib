@@ -86,6 +86,8 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     public GuiTrackpadElement values(float normal)
     {
         this.normal = normal;
+        this.weak = normal / 5F;
+        this.strong = normal * 5F;
 
         return this;
     }
@@ -207,7 +209,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             this.lastValue = this.value;
         }
 
-        return this.isDragging();
+        return this.isDragging() || this.area.isInside(context);
     }
 
     /**

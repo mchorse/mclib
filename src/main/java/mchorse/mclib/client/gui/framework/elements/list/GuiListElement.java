@@ -35,7 +35,7 @@ public abstract class GuiListElement<T> extends GuiElement
     /**
      * Scrolling area
      */
-    public ScrollArea scroll = new ScrollArea(20);
+    public ScrollArea scroll;
 
     /**
      * Callback which gets invoked when user selects an element
@@ -68,6 +68,7 @@ public abstract class GuiListElement<T> extends GuiElement
         super(mc);
 
         this.callback = callback;
+        this.area = this.scroll = new ScrollArea(20);
     }
 
     /* List element settings */
@@ -108,6 +109,11 @@ public abstract class GuiListElement<T> extends GuiElement
 
     /* Index and current value(s) methods */
 
+    public boolean isDeselected()
+    {
+        return this.current.isEmpty();
+    }
+
     public List<T> getCurrent()
     {
         this.copy.clear();
@@ -121,6 +127,16 @@ public abstract class GuiListElement<T> extends GuiElement
         }
 
         return this.copy;
+    }
+
+    public T getCurrentFirst()
+    {
+        if (!this.current.isEmpty())
+        {
+            return this.list.get(this.current.get(0));
+        }
+
+        return null;
     }
 
     public int getIndex()
@@ -305,7 +321,6 @@ public abstract class GuiListElement<T> extends GuiElement
     {
         super.resize();
 
-        this.scroll.copy(this.area);
         this.scroll.clamp();
     }
 
