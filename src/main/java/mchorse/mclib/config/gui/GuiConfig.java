@@ -9,7 +9,7 @@ import mchorse.mclib.client.gui.framework.elements.list.GuiLabelListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.ScrollArea;
-import mchorse.mclib.client.gui.utils.resizers.ColumnResizer;
+import mchorse.mclib.client.gui.utils.resizers.layout.ColumnResizer;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.values.IConfigValue;
@@ -43,11 +43,10 @@ public class GuiConfig extends GuiElement
 
 		this.reload.flex().parent(this.area).set(110 - 14, 12, 16, 16);
 		this.mods.flex().parent(this.area).set(10, 35, 100, 0).h(1, -45);
-		this.options.flex().parent(this.area).set(120, 0, 0, 0).w(1, -120).h(1, 0);
+		this.options.flex().parent(this.area).set(120, 0, 0, 0).w(1, -120).h(1F);
 
 		this.column = new ColumnResizer(this.options, 5);
-		this.column.dontCollect().padding(15);
-		this.options.resizer(this.column);
+		this.options.flex().post(this.column.scroll().padding(15));
 
 		for (Config config : McLib.proxy.configs.modules.values())
 		{
@@ -120,15 +119,6 @@ public class GuiConfig extends GuiElement
 	}
 
 	@Override
-	public void resize()
-	{
-		super.resize();
-
-		this.options.scroll.scrollSize = this.column.getSize();
-		this.options.scroll.clamp();
-	}
-
-	@Override
 	public void draw(GuiContext context)
 	{
 		if (this.timer.checkReset())
@@ -137,7 +127,7 @@ public class GuiConfig extends GuiElement
 		}
 
 		this.area.draw(0xaa000000);
-		Gui.drawRect(this.area.x, this.area.y, this.area.x + this.mods.area.w + 20, this.area.ey(), 0xdd000000);
+		this.mods.area.draw(0xdd000000, -10, -35, -10, -10);
 		this.font.drawStringWithShadow(I18n.format("mclib.gui.config.title"), this.area.x + 10, this.area.y + 20 - this.font.FONT_HEIGHT / 2, 0xffffff);
 
 		super.draw(context);

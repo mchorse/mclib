@@ -4,26 +4,22 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
+import mchorse.mclib.client.gui.framework.elements.GuiScrollElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
-import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
-import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
-import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
-import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
-import mchorse.mclib.client.gui.framework.elements.modals.GuiConfirmModal;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
-import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
+import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.Icons;
-import mchorse.mclib.client.gui.utils.resizers.RowResizer;
+import mchorse.mclib.client.gui.utils.resizers.layout.ColumnResizer;
+import mchorse.mclib.client.gui.utils.resizers.layout.GridResizer;
 import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.events.RegisterDashboardPanels;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.resources.I18n;
-import org.lwjgl.input.Keyboard;
 
 public class GuiDashboard extends GuiBase
 {
@@ -59,120 +55,79 @@ public class GuiDashboard extends GuiBase
 
 	public static class GuiTest extends GuiElement
 	{
-		private GuiSlotElement current;
-		private GuiInventoryElement inve;
+		private GuiElement frame;
+		private GuiElement top;
+		private GuiElement bottom;
 
 		public GuiTest(Minecraft mc)
 		{
 			super(mc);
 
-			GuiButtonElement button = new GuiButtonElement(mc, "Context", (b) ->
+			this.frame = new GuiElement(mc);
+			this.frame.flex().parent(this.area).w(180).h(1F);
+
+			this.bottom = new GuiElement(mc);
+			this.bottom.flex().relative(this.frame.resizer()).x(10).y(1, -10).w(1F, -20).anchor(0, 1);
+			this.bottom.flex().post(new ColumnResizer(this.bottom, 5).vertical().stretch().height(20));
+
+			GuiIconElement icon = new GuiIconElement(mc, Icons.REMOVE, null);
+			GuiButtonElement close = new GuiButtonElement(mc, "Close", null);
+			GuiButtonElement open = new GuiButtonElement(mc, "Open", null);
+
+			icon.flex().wh(20, 20);
+			close.flex().h(20);
+			open.flex().h(20);
+
+			GuiTextElement text = new GuiTextElement(mc, null);
+
+			this.bottom.add(Elements.row(mc, 5, close, open, icon), text);
+
+			this.top = new GuiScrollElement(mc);
+			this.top.flex().relative(this.frame.resizer()).xy(10, 10).w(1F, -20).hTo(this.bottom.flex(), -5);
+			this.top.flex().post(new ColumnResizer(this.top, 5).vertical().scroll().stretch().height(20));
+
+			for (int i = 0; i < 20; i ++)
 			{
-				GuiConfirmModal modal = new GuiConfirmModal(mc, "Hello dude, I heard you like jokes?\n\nMy favorite joke is about some kind of nonesense. It's very cool, right?", (bool) -> {});
-
-				modal.flex().parent(this.area).set(10, 30, 200, 300);
-				modal.resize();
-
-				this.add(modal);
-			});
-
-			button.setEnabled(false);
-			button.keys().register("To pay respect", Keyboard.KEY_F, () ->
-			{
-				System.out.println("F");
-
-				return false;
-			}, Keyboard.KEY_LCONTROL);
-
-			button.flex().parent(this.area).set(10, 10, 100, 20);
-			button.context(() -> new GuiSimpleContextMenu(mc)
-				.action(Icons.ADD, "Add", () -> System.out.println("Add"))
-				.action(Icons.REMOVE, "Remove", () -> System.out.println("Remove, hehe..."))
-				.action(Icons.NONE, "Space...", () -> System.out.println("Boo hoo"))
-				.action(Icons.LOCKED, "SECRET", () -> System.out.println("Secret!")));
-
-			GuiToggleElement toggle = new GuiToggleElement(mc, "Hello!", (b) -> {});
-
-			toggle.setEnabled(false);
-			toggle.flex().relative(button.resizer()).y(1, 5).w(1, 0).h(20);
-
-			GuiIconElement icon = new GuiIconElement(mc, Icons.POSE, (ic) -> {});
-
-			icon.flex().relative(toggle.resizer()).x(1, -20).y(1, 5).w(20).h(20);
-			icon.setEnabled(false);
-
-			GuiTextElement input = new GuiTextElement(mc, (v) -> {});
-
-			input.flex().relative(toggle.resizer()).y(1, 5).w(1, -25).h(20);
-			input.setEnabled(false);
-			input.setText("Test!");
-
-			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (v) -> {});
-
-			trackpad.flex().relative(input.resizer()).y(1, 5).w(1, 25).h(20);
-			trackpad.setEnabled(false);
-
-			GuiColorElement color = new GuiColorElement(mc, (v) -> {});
-
-			color.picker.editAlpha().setColor(0x880088ff);
-			color.flex().relative(trackpad.resizer()).y(1, 5).w(1, 0).h(20);
-			color.setEnabled(true);
-
-			this.add(button, toggle, icon, input, trackpad, color);
-
-			GuiElement slots = new GuiElement(mc);
-
-			slots.flex().parent(this.area).wh(145, 40).anchor(0.5F, 0).x(0.5F, 0);
-
-			GuiSlotElement slot1 = new GuiSlotElement(mc, 0, this::setSlot);
-			GuiSlotElement slot2 = new GuiSlotElement(mc, 1, this::setSlot);
-			GuiSlotElement slot3 = new GuiSlotElement(mc, 2, this::setSlot);
-			GuiSlotElement slot4 = new GuiSlotElement(mc, 3, this::setSlot);
-
-			slot1.setEnabled(false);
-			slot1.flex().wh(0, 30);
-			slot2.flex().wh(0, 30);
-			slot3.flex().wh(0, 30);
-			slot4.flex().wh(0, 30);
-
-			slots.add(slot1, slot2, slot3, slot4);
-			slots.resizer(new RowResizer(slots, 5).padding(5));
-
-			this.inve = new GuiInventoryElement(mc, (item) ->
-			{
-				if (this.current != null)
+				if (i % 5 == 0)
 				{
-					this.current.stack = item;
+					if (i % 10 == 0)
+					{
+						GuiElement element = new GuiElement(mc);
+
+						element.flex().post(new GridResizer(element, 5).items(4));
+
+						for (int j = 0; j < 16; j ++)
+						{
+							GuiButtonElement b = new GuiButtonElement(mc, "Grid " + j, null);
+
+							b.flex().h(20);
+							element.add(b);
+						}
+
+						this.top.add(element);
+					}
+					else
+					{
+						GuiButtonElement left = new GuiButtonElement(mc, "Left", null);
+						GuiButtonElement right = new GuiButtonElement(mc, "Right", null);
+
+						left.flex().h(20).w(40);
+						right.flex().h(20);
+
+						this.top.add(Elements.row(mc, 10, left, right));
+					}
 				}
+				else
+				{
+					GuiColorElement button = new GuiColorElement(mc, null);
+					button.picker.setColor((int) (Math.random() * 0xffffff));
 
-				this.current.selected = false;
-				this.current = null;
-				this.inve.setVisible(false);
-			});
-
-			this.inve.keys().registerInside("To clear inventory", Keyboard.KEY_0, () ->
-			{
-				System.out.println("Clear!");
-
-				return true;
-			});
-
-			this.inve.flex().relative(slots.resizer()).y(1, 0).x(0.5F, 0).wh(10 * 20, 5 * 20).anchor(0.5F, 0);
-			this.inve.setVisible(false);
-
-			this.add(slots, this.inve);
-		}
-
-		private void setSlot(GuiSlotElement element)
-		{
-			if (this.current != null)
-			{
-				this.current.selected = false;
+					this.top.add(button);
+				}
 			}
 
-			this.current = element;
-			this.current.selected = true;
-			this.inve.setVisible(true);
+			this.frame.add(this.bottom, this.top);
+			this.add(this.frame);
 		}
 
 		@Override

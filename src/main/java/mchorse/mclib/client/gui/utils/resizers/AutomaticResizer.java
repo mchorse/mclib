@@ -2,36 +2,28 @@ package mchorse.mclib.client.gui.utils.resizers;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
-import mchorse.mclib.client.gui.utils.Area;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AutomaticResizer extends DecoratedResizer
+public abstract class AutomaticResizer extends BaseResizer
 {
 	public GuiElement parent;
 	public int margin;
 	public int padding;
+	public int height;
 
 	protected List<ChildResizer> resizers = new ArrayList<ChildResizer>();
-	protected boolean collectChildren = true;
 
 	public AutomaticResizer(GuiElement parent, int margin)
 	{
-		super(parent.flex());
-
 		this.parent = parent;
 		this.margin = margin;
 
 		this.setup();
 	}
 
-	public AutomaticResizer dontCollect()
-	{
-		this.collectChildren = false;
-
-		return this;
-	}
+	/* Standard properties */
 
 	public AutomaticResizer padding(int padding)
 	{
@@ -40,10 +32,19 @@ public abstract class AutomaticResizer extends DecoratedResizer
 		return this;
 	}
 
+	public AutomaticResizer height(int height)
+	{
+		this.height = height;
+
+		return this;
+	}
+
 	public void reset()
 	{
 		this.resizers.clear();
 	}
+
+	/* Child management */
 
 	public void setup()
 	{
@@ -68,9 +69,9 @@ public abstract class AutomaticResizer extends DecoratedResizer
 
 	public IResizer child(GuiElement element)
 	{
-		ChildResizer child = new ChildResizer(this, element.resizer());
+		ChildResizer child = new ChildResizer(this, element);
 
-		if (this.collectChildren)
+		if (this.isCollecting())
 		{
 			this.resizers.add(child);
 		}
@@ -78,11 +79,12 @@ public abstract class AutomaticResizer extends DecoratedResizer
 		return child;
 	}
 
-	@Override
-	public void apply(Area area)
+	protected boolean isCollecting()
 	{
-		this.resizer.apply(area);
+		return true;
 	}
+
+	/* Miscellaneous */
 
 	@Override
 	public void add(GuiElement parent, GuiElement child)
@@ -93,24 +95,24 @@ public abstract class AutomaticResizer extends DecoratedResizer
 	@Override
 	public int getX()
 	{
-		return this.parent.area.x;
+		return 0;
 	}
 
 	@Override
 	public int getY()
 	{
-		return this.parent.area.y;
+		return 0;
 	}
 
 	@Override
 	public int getW()
 	{
-		return this.parent.area.w;
+		return 0;
 	}
 
 	@Override
 	public int getH()
 	{
-		return this.parent.area.h;
+		return 0;
 	}
 }

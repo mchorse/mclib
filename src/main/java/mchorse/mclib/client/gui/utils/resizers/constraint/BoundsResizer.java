@@ -1,8 +1,9 @@
-package mchorse.mclib.client.gui.utils.resizers;
+package mchorse.mclib.client.gui.utils.resizers.constraint;
 
-import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.resizers.DecoratedResizer;
+import mchorse.mclib.client.gui.utils.resizers.IResizer;
 import mchorse.mclib.utils.MathUtils;
 
 /**
@@ -27,8 +28,6 @@ public class BoundsResizer extends DecoratedResizer
 	@Override
 	public void apply(Area area)
 	{
-		this.resizer.apply(area);
-
 		area.x = MathUtils.clamp(area.x, this.padding, this.context.screen.width - area.w - this.padding);
 		area.y = MathUtils.clamp(area.y, this.padding, this.context.screen.height - area.h - this.padding);
 	}
@@ -36,24 +35,24 @@ public class BoundsResizer extends DecoratedResizer
 	@Override
 	public int getX()
 	{
-		return MathUtils.clamp(this.resizer.getX(), this.padding, this.context.screen.width - this.resizer.getW() - this.padding);
+		return 0;
 	}
 
 	@Override
 	public int getY()
 	{
-		return MathUtils.clamp(this.resizer.getY(), this.padding, this.context.screen.height - this.resizer.getH() - this.padding);
+		return 0;
 	}
 
 	@Override
 	public int getW()
 	{
-		return this.resizer.getW();
+		return 0;
 	}
 
 	@Override
 	public int getH()
 	{
-		return this.resizer.getH();
+		return 0;
 	}
 }

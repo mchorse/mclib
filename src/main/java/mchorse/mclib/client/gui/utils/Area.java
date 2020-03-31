@@ -2,6 +2,8 @@ package mchorse.mclib.client.gui.utils;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import net.minecraft.client.gui.Gui;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Utility class for boxes
@@ -47,6 +49,7 @@ public class Area
         this.h = h;
     }
 
+    @SideOnly(Side.CLIENT)
     public boolean isInside(GuiContext context)
     {
         return this.isInside(context.mouseX, context.mouseY);

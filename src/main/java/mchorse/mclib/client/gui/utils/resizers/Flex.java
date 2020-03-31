@@ -16,8 +16,9 @@ public class Flex implements IResizer
     public Unit w = new Unit();
     public Unit h = new Unit();
 
-    public IResizer relative;
     public Area parent;
+    public IResizer relative;
+    public IResizer post;
 
     public Flex set(float x, float y, float w, float h)
     {
@@ -34,6 +35,8 @@ public class Flex implements IResizer
         return this;
     }
 
+    /* X */
+
     public Flex x(int value)
     {
         this.x.set(value, Measure.PIXELS, 0);
@@ -41,12 +44,21 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex x(float value, int padding)
+    public Flex x(float value)
     {
-        this.x.set(value, Measure.RELATIVE, padding);
+        this.x.set(value, Measure.RELATIVE);
 
         return this;
     }
+
+    public Flex x(float value, int offset)
+    {
+        this.x.set(value, Measure.RELATIVE, offset);
+
+        return this;
+    }
+
+    /* Y */
 
     public Flex y(int value)
     {
@@ -55,12 +67,21 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex y(float value, int padding)
+    public Flex y(float value)
     {
-        this.y.set(value, Measure.RELATIVE, padding);
+        this.y.set(value, Measure.RELATIVE, 0);
 
         return this;
     }
+
+    public Flex y(float value, int offset)
+    {
+        this.y.set(value, Measure.RELATIVE, offset);
+
+        return this;
+    }
+
+    /* Width */
 
     public Flex w(int value)
     {
@@ -69,12 +90,36 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex w(float value, int padding)
+    public Flex w(float value)
     {
-        this.w.set(value, Measure.RELATIVE, padding);
+        this.w.set(value, Measure.RELATIVE, 0);
 
         return this;
     }
+
+    public Flex w(float value, int offset)
+    {
+        this.w.set(value, Measure.RELATIVE, offset);
+
+        return this;
+    }
+
+    public Flex wTo(Flex flex)
+    {
+        this.w.target = flex;
+
+        return this;
+    }
+
+    public Flex wTo(Flex flex, int offset)
+    {
+        this.w.target = flex;
+        this.w.offset = offset;
+
+        return this;
+    }
+
+    /* Height */
 
     public Flex h(int value)
     {
@@ -83,12 +128,36 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex h(float value, int padding)
+    public Flex h(float value)
     {
-        this.h.set(value, Measure.RELATIVE, padding);
+        this.h.set(value, Measure.RELATIVE, 0);
 
         return this;
     }
+
+    public Flex h(float value, int offset)
+    {
+        this.h.set(value, Measure.RELATIVE, offset);
+
+        return this;
+    }
+
+    public Flex hTo(Flex flex)
+    {
+        this.h.target = flex;
+
+        return this;
+    }
+
+    public Flex hTo(Flex flex, int offset)
+    {
+        this.h.target = flex;
+        this.h.offset = offset;
+
+        return this;
+    }
+
+    /* Other variations */
 
     public Flex xy(int x, int y)
     {
@@ -144,13 +213,43 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex relative(IResizer relative)
+    public Flex anchorX(float x)
     {
-        this.relative = relative;
-        this.parent = null;
+        this.x.anchor = x;
 
         return this;
     }
+
+    public Flex anchorY(float y)
+    {
+        this.y.anchor = y;
+
+        return this;
+    }
+
+    /* Convenience methods */
+
+    public Flex above(Flex flex, int offset)
+    {
+        return this.relative(flex).y(0, offset).anchorY(1);
+    }
+
+    public Flex under(Flex flex, int offset)
+    {
+        return this.relative(flex).y(1, offset);
+    }
+
+    public Flex left(Flex flex, int offset)
+    {
+        return this.relative(flex).x(0, offset).anchorX(1);
+    }
+
+    public Flex right(Flex flex, int offset)
+    {
+        return this.relative(flex).x(1, offset);
+    }
+
+    /* Hierarchy */
 
     public Flex parent(Area parent)
     {
@@ -160,40 +259,61 @@ public class Flex implements IResizer
         return this;
     }
 
+    public Flex relative(IResizer relative)
+    {
+        this.relative = relative;
+        this.parent = null;
+
+        return this;
+    }
+
+    public Flex post(IResizer post)
+    {
+        this.post = post;
+
+        return this;
+    }
+
+    @Override
+    public void preApply(Area area)
+    {}
+
     @Override
     public void apply(Area area)
     {
-        if (this.w.enabled) area.w = this.getW();
-        if (this.h.enabled) area.h = this.getH();
-
-        if (this.x.enabled)
+        if (this.post != null)
         {
-            area.x = this.getX();
-
-            if (this.w.enabled)
-            {
-                area.x -= area.w * this.x.anchor;
-            }
+            this.post.preApply(area);
         }
 
-        if (this.y.enabled)
-        {
-            area.y = this.getY();
+        area.w = this.getW();
+        area.h = this.getH();
+        area.x = this.getX();
+        area.y = this.getY();
 
-            if (this.h.enabled)
-            {
-                area.y -= area.h * this.y.anchor;
-            }
+        if (this.post != null)
+        {
+            this.post.apply(area);
         }
     }
 
     @Override
     public void postApply(Area area)
-    {}
+    {
+        if (this.post != null)
+        {
+            this.post.postApply(area);
+        }
+    }
 
     @Override
     public void add(GuiElement parent, GuiElement child)
-    {}
+    {
+        if (this.post != null)
+        {
+            this.post.add(parent, child);
+        }
+    }
 
     public int getX()
     {
@@ -218,7 +338,14 @@ public class Flex implements IResizer
             }
         }
 
-        return value + this.x.padding;
+        value += this.x.offset;
+
+        if (this.x.anchor != 0)
+        {
+            value -= this.x.anchor * this.getW();
+        }
+
+        return value;
     }
 
     public int getY()
@@ -244,12 +371,31 @@ public class Flex implements IResizer
             }
         }
 
-        return value + this.y.padding;
+        value += this.y.offset;
+
+        if (this.y.anchor != 0)
+        {
+            value -= this.y.anchor * this.getH();
+        }
+
+        return value;
     }
 
     public int getW()
     {
-        int value = (int) this.w.value;
+        if (this.w.target != null)
+        {
+            return this.w.target.getX() - this.getX() + this.w.offset;
+        }
+
+        int value = this.post == null ? 0 : this.post.getW();
+
+        if (value != 0)
+        {
+            return value;
+        }
+
+        value = (int) this.w.value;
 
         if (this.relative != null && this.w.unit == Measure.RELATIVE)
         {
@@ -260,7 +406,7 @@ public class Flex implements IResizer
             value = (int) (this.parent.w * this.w.value);
         }
 
-        value = value + this.w.padding;
+        value = value + this.w.offset;
 
         if (this.w.max > 0)
         {
@@ -272,7 +418,19 @@ public class Flex implements IResizer
 
     public int getH()
     {
-        int value = (int) this.h.value;
+        if (this.h.target != null)
+        {
+            return this.h.target.getY() - this.getY() + this.h.offset;
+        }
+
+        int value = this.post == null ? 0 : this.post.getH();
+
+        if (value != 0)
+        {
+            return value;
+        }
+
+        value = (int) this.h.value;
 
         if (this.relative != null && this.h.unit == Measure.RELATIVE)
         {
@@ -283,7 +441,7 @@ public class Flex implements IResizer
             value = (int) (this.parent.h * this.h.value);
         }
 
-        value = value + this.h.padding;
+        value = value + this.h.offset;
 
         if (this.h.max > 0)
         {
@@ -299,27 +457,22 @@ public class Flex implements IResizer
     public static class Unit
     {
         public float value;
-        public int padding;
+        public int offset;
         public int max;
         public float anchor;
-        public boolean enabled = true;
         public Measure unit = Measure.PIXELS;
+        public Flex target;
 
         public void set(float value, Measure unit)
         {
             this.set(value, unit, 0);
         }
 
-        public void set(float value, Measure unit, int padding)
+        public void set(float value, Measure unit, int offset)
         {
             this.value = value;
             this.unit = unit;
-            this.padding = padding;
-        }
-
-        public void disable()
-        {
-            this.enabled = false;
+            this.offset = offset;
         }
     }
 

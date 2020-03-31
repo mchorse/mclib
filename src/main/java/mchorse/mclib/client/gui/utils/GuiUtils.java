@@ -10,12 +10,15 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.net.URI;
 
 /**
  * GUI utilities
  */
+@SideOnly(Side.CLIENT)
 public class GuiUtils
 {
     public static void drawModel(ModelBase model, EntityPlayer player, int x, int y, float scale)

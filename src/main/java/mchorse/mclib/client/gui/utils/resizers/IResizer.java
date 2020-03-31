@@ -5,6 +5,8 @@ import mchorse.mclib.client.gui.utils.Area;
 
 public interface IResizer
 {
+	public void preApply(Area area);
+
 	public void apply(Area area);
 
 	public void postApply(Area area);

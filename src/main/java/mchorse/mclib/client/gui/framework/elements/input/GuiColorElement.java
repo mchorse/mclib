@@ -7,7 +7,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icons;
-import mchorse.mclib.client.gui.utils.resizers.BoundsResizer;
+import mchorse.mclib.client.gui.utils.resizers.constraint.BoundsResizer;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
@@ -45,10 +45,8 @@ public class GuiColorElement extends GuiElement
 			}
 		});
 
-		this.picker.resizer(new BoundsResizer(
-			this.picker.flex().parent(this.area).x(0.5F, 0).y(1F, 2).anchor(0.5F, 0).wh(200, 85),
-			GuiBase.getCurrent(), 2
-		));
+		this.picker.flex().parent(this.area).x(0.5F, 0).y(1F, 2).anchor(0.5F, 0).wh(200, 85);
+		this.picker.flex().post(new BoundsResizer(this.picker.flex(), GuiBase.getCurrent(), 2));
 	}
 
 	public GuiColorElement noLabel()

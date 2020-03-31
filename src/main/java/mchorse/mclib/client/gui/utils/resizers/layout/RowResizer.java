@@ -1,7 +1,10 @@
-package mchorse.mclib.client.gui.utils.resizers;
+package mchorse.mclib.client.gui.utils.resizers.layout;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.resizers.AutomaticResizer;
+import mchorse.mclib.client.gui.utils.resizers.ChildResizer;
+import mchorse.mclib.client.gui.utils.resizers.IResizer;
 
 public class RowResizer extends AutomaticResizer
 {
@@ -18,8 +21,6 @@ public class RowResizer extends AutomaticResizer
 	@Override
 	public void apply(Area area)
 	{
-		super.apply(area);
-
 		this.i = this.x = this.w = 0;
 		this.count = this.resizers.size();
 
@@ -45,7 +46,7 @@ public class RowResizer extends AutomaticResizer
 
 		/* If resizer specifies its custom width, use that one instead */
 		int cw = resizer == null ? 0 : resizer.getW();
-		int ch = resizer == null ? 0 : resizer.getH();
+		int ch = resizer == null ? this.height : resizer.getH();
 
 		cw = cw > 0 ? cw : w;
 
@@ -64,5 +65,23 @@ public class RowResizer extends AutomaticResizer
 
 		this.x += cw + this.margin;
 		this.i ++;
+	}
+
+	@Override
+	public int getH()
+	{
+		int h = 0;
+
+		for (ChildResizer child : this.resizers)
+		{
+			h = child.resizer == null ? 0 : child.resizer.getH();
+		}
+
+		if (h == 0)
+		{
+			h = this.height;
+		}
+
+		return h + this.padding * 2;
 	}
 }
