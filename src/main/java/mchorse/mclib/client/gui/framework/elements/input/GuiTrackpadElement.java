@@ -40,6 +40,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     private int lastY;
     private float lastValue;
 
+    private long time;
     private Area plusOne = new Area();
     private Area minusOne = new Area();
 
@@ -109,6 +110,11 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         return this.dragging;
     }
 
+    public boolean isDraggingTime()
+    {
+        return this.isDragging() && System.currentTimeMillis() - this.time > 150;
+    }
+
     /**
      * Set the value of the field. The input value would be rounded up to 3
      * decimal places.
@@ -169,24 +175,6 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             return true;
         }
 
-        boolean control = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
-
-        if (!control)
-        {
-            if (this.plusOne.isInside(context))
-            {
-                this.setValueAndNotify(this.value + this.increment);
-
-                return true;
-            }
-            else if (this.minusOne.isInside(context))
-            {
-                this.setValueAndNotify(this.value - this.increment);
-
-                return true;
-            }
-        }
-
         boolean wasFocused = this.text.isFocused();
 
         this.text.mouseClicked(context.mouseX, context.mouseY, context.mouseButton);
@@ -196,20 +184,23 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             context.focus(wasFocused ? null : this);
         }
 
-        if (!this.text.isFocused() && this.area.isInside(context))
+        if (this.area.isInside(context))
         {
-            if (control)
+            if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
             {
                 this.setValueAndNotify(Math.round(this.value));
+
+                return true;
             }
 
             this.dragging = true;
             this.lastX = context.mouseX;
             this.lastY = context.mouseY;
             this.lastValue = this.value;
+            this.time = System.currentTimeMillis();
         }
 
-        return this.isDragging() || this.area.isInside(context);
+        return this.area.isInside(context);
     }
 
     /**
@@ -218,6 +209,18 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     @Override
     public void mouseReleased(GuiContext context)
     {
+        if (!this.isFocused())
+        {
+            if (this.plusOne.isInside(context))
+            {
+                this.setValueAndNotify(this.value + this.increment);
+            }
+            else if (this.minusOne.isInside(context))
+            {
+                this.setValueAndNotify(this.value - this.increment);
+            }
+        }
+
         this.dragging = false;
 
         super.mouseReleased(context);
@@ -297,10 +300,11 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
         Gui.drawRect(x, y, x + w, y + h, 0xff000000);
 
-        boolean plus = !this.dragging && this.plusOne.isInside(context);
-        boolean minus = !this.dragging && this.minusOne.isInside(context);
+        boolean dragging = this.isDraggingTime();
+        boolean plus = !dragging && this.plusOne.isInside(context);
+        boolean minus = !dragging && this.minusOne.isInside(context);
 
-        if (this.dragging)
+        if (dragging)
         {
             /* Draw filling background */
             int color = McLib.primaryColor.get();
@@ -332,8 +336,13 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         this.text.height = 9;
         this.text.drawTextBox();
 
-        if (this.dragging)
+        if (dragging)
         {
+            if (this.isFocused())
+            {
+                context.unfocus();
+            }
+
             int dx = context.mouseX - this.lastX;
             int dy = context.mouseY - this.lastY;
 
