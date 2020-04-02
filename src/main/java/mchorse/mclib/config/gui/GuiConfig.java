@@ -27,7 +27,6 @@ public class GuiConfig extends GuiElement
 	public GuiIconElement reload;
 	public GuiLabelListElement<String> mods;
 	public GuiScrollElement options;
-	public ColumnResizer column;
 
 	private Config config;
 	private Timer timer = new Timer(500);
@@ -45,8 +44,7 @@ public class GuiConfig extends GuiElement
 		this.mods.flex().parent(this.area).set(10, 35, 100, 0).h(1, -45);
 		this.options.flex().parent(this.area).set(120, 0, 0, 0).w(1, -120).h(1F);
 
-		this.column = new ColumnResizer(this.options, 5);
-		this.options.flex().post(this.column.scroll().padding(15));
+		ColumnResizer.apply(this.options, 5).scroll().padding(15);
 
 		for (Config config : McLib.proxy.configs.modules.values())
 		{

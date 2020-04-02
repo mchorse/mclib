@@ -9,6 +9,7 @@ import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.Icons;
@@ -63,76 +64,57 @@ public class GuiDashboard extends GuiBase
 		{
 			super(mc);
 
-			this.frame = new GuiElement(mc);
-			this.frame.flex().parent(this.area).w(180).h(1F);
+			this.frame = new GuiScrollElement(mc);
+			this.frame.flex().parent(this.area).y(20).w(200).h(1, -20);
+			ColumnResizer.apply(this.frame, 0).vertical().stretch().scroll().padding(20);
 
-			this.bottom = new GuiElement(mc);
-			this.bottom.flex().relative(this.frame.resizer()).x(10).y(1, -10).w(1F, -20).anchor(0, 1);
-			this.bottom.flex().post(new ColumnResizer(this.bottom, 5).vertical().stretch().height(20));
-
-			GuiIconElement icon = new GuiIconElement(mc, Icons.REMOVE, null);
-			GuiButtonElement close = new GuiButtonElement(mc, "Close", null);
-			GuiButtonElement open = new GuiButtonElement(mc, "Open", null);
-
-			icon.flex().wh(20, 20);
-			close.flex().h(20);
-			open.flex().h(20);
-
-			GuiTextElement text = new GuiTextElement(mc, null);
-
-			this.bottom.add(Elements.row(mc, 5, close, open, icon), text);
-
-			this.top = new GuiScrollElement(mc);
-			this.top.flex().relative(this.frame.resizer()).xy(10, 10).w(1F, -20).hTo(this.bottom.flex(), -5);
-			this.top.flex().post(new ColumnResizer(this.top, 5).vertical().scroll().stretch().height(20));
-
-			for (int i = 0; i < 20; i ++)
+			for (int i = 0; i < 10; i ++)
 			{
-				if (i % 5 == 0)
-				{
-					if (i % 10 == 0)
-					{
-						GuiElement element = new GuiElement(mc);
+				GuiElement thing = new GuiElement(mc);
 
-						element.flex().post(new GridResizer(element, 5).items(4));
+				GuiElement fields = new GuiElement(mc);
+				ColumnResizer.apply(fields, 5).vertical().stretch().height(20).padding(5);
 
-						for (int j = 0; j < 16; j ++)
-						{
-							GuiButtonElement b = new GuiButtonElement(mc, "Grid " + j, null);
+				GuiTrackpadElement yaw = new GuiTrackpadElement(mc, null);
+				GuiTrackpadElement pitch = new GuiTrackpadElement(mc, null);
+				GuiTrackpadElement roll = new GuiTrackpadElement(mc, null);
+				GuiTrackpadElement fov = new GuiTrackpadElement(mc, null);
 
-							b.flex().h(20);
-							element.add(b);
-						}
+				yaw.flex().h(20);
+				pitch.flex().h(20);
+				roll.flex().h(20);
+				fov.flex().h(20);
 
-						this.top.add(element);
-					}
-					else
-					{
-						GuiButtonElement left = new GuiButtonElement(mc, "Left", null);
-						GuiButtonElement right = new GuiButtonElement(mc, "Right", null);
+				fields.add(Elements.row(mc, 5, yaw, pitch), Elements.row(mc, 5, roll, fov));
 
-						left.flex().h(20).w(40);
-						right.flex().h(20);
+				GuiElement header = new GuiElement(mc);
+				header.flex().h(20);
 
-						this.top.add(Elements.row(mc, 10, left, right));
-					}
-				}
-				else
-				{
-					GuiColorElement button = new GuiColorElement(mc, null);
-					button.picker.setColor((int) (Math.random() * 0xffffff));
+				GuiElement enable = new GuiIconElement(mc, Icons.NONE, null);
+				GuiElement remove = new GuiIconElement(mc, Icons.CLOSE, null);
+				GuiElement moveUp = new GuiIconElement(mc, Icons.MOVE_UP, null);
+				GuiElement moveDown = new GuiIconElement(mc, Icons.MOVE_DOWN, null);
+				GuiElement copy = new GuiIconElement(mc, Icons.COPY, null);
 
-					this.top.add(button);
-				}
+				remove.flex().parent(header.area).set(0, 2, 16, 16).x(1, -18);
+				enable.flex().relative(remove.resizer()).set(-20, 0, 16, 16);
+				moveUp.flex().relative(enable.resizer()).set(-20, 0, 16, 8);
+				moveDown.flex().relative(enable.resizer()).set(-20, 8, 16, 8);
+				copy.flex().relative(moveUp.resizer()).set(-20, 0, 16, 16);
+
+				ColumnResizer.apply(thing, 0).vertical().stretch();
+				thing.add(header, fields);
+				this.frame.add(thing);
 			}
 
-			this.frame.add(this.bottom, this.top);
 			this.add(this.frame);
 		}
 
 		@Override
 		public void draw(GuiContext context)
 		{
+			this.frame.area.draw(0x88000000);
+
 			super.draw(context);
 		}
 	}

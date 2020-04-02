@@ -32,6 +32,11 @@ public class GuiElement extends Gui implements IGuiElement
     protected IResizer resizer;
 
     /**
+     * Flex resizer of this class
+     */
+    protected Flex flex;
+
+    /**
      * Tooltip instance
      */
     public GuiTooltip.Tooltip tooltip;
@@ -264,12 +269,17 @@ public class GuiElement extends Gui implements IGuiElement
 
     public Flex flex()
     {
-        if (this.resizer == null)
+        if (this.flex == null)
         {
-            this.resizer = new Flex();
+            this.flex = new Flex();
+
+            if (this.resizer == null)
+            {
+                this.resizer = this.flex;
+            }
         }
 
-        return this.resizer instanceof Flex ? (Flex) this.resizer : null;
+        return this.flex;
     }
 
     public IResizer resizer()

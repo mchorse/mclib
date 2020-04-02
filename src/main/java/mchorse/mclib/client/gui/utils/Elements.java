@@ -18,7 +18,7 @@ public class Elements
 	{
 		GuiElement element = new GuiElement(mc);
 
-		element.flex().post(new RowResizer(element, margin).padding(padding));
+		RowResizer.apply(element, margin).padding(padding);
 		element.add(elements);
 
 		return element;

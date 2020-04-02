@@ -13,7 +13,16 @@ public class RowResizer extends AutomaticResizer
 	private int w;
 	private int count;
 
-	public RowResizer(GuiElement parent, int margin)
+	public static RowResizer apply(GuiElement element, int margin)
+	{
+		RowResizer resizer = new RowResizer(element, margin);
+
+		element.flex().post(resizer);
+
+		return resizer;
+	}
+
+	protected RowResizer(GuiElement parent, int margin)
 	{
 		super(parent, margin);
 	}

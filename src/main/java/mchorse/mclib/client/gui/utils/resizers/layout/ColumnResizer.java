@@ -29,7 +29,16 @@ public class ColumnResizer extends AutomaticResizer
 	 */
 	private boolean scroll;
 
-	public ColumnResizer(GuiElement element, int margin)
+	public static ColumnResizer apply(GuiElement element, int margin)
+	{
+		ColumnResizer resizer = new ColumnResizer(element, margin);
+
+		element.flex().post(resizer);
+
+		return resizer;
+	}
+
+	protected ColumnResizer(GuiElement element, int margin)
 	{
 		super(element, margin);
 	}

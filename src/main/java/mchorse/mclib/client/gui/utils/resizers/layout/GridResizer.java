@@ -22,7 +22,16 @@ public class GridResizer extends AutomaticResizer
 	 */
 	private boolean resizes = true;
 
-	public GridResizer(GuiElement parent, int margin)
+	public static GridResizer apply(GuiElement element, int margin)
+	{
+		GridResizer resizer = new GridResizer(element, margin);
+
+		element.flex().post(resizer);
+
+		return resizer;
+	}
+
+	protected GridResizer(GuiElement parent, int margin)
 	{
 		super(parent, margin);
 	}
