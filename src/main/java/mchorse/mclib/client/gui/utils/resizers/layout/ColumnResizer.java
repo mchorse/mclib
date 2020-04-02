@@ -73,7 +73,7 @@ public class ColumnResizer extends AutomaticResizer
 	}
 
 	@Override
-	public void apply(Area area, IResizer resizer)
+	public void apply(Area area, IResizer resizer, ChildResizer child)
 	{
 		int w = resizer == null ? 0 : resizer.getW();
 		int h = resizer == null ? this.height : resizer.getH();

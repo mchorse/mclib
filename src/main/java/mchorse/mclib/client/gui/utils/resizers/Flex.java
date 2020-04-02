@@ -315,6 +315,15 @@ public class Flex implements IResizer
         }
     }
 
+    @Override
+    public void remove(GuiElement parent, GuiElement child)
+    {
+        if (this.post != null)
+        {
+            this.post.remove(parent, child);
+        }
+    }
+
     public int getX()
     {
         int value = (int) this.x.value;

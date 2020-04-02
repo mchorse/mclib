@@ -35,7 +35,7 @@ public class RowResizer extends AutomaticResizer
 
 		for (ChildResizer resizer : this.resizers)
 		{
-			int w = Math.max(resizer.resizer.getW(), 0);
+			int w = Math.max(resizer.resizer == null ? 0 : resizer.resizer.getW(), 0);
 
 			if (w > 0)
 			{
@@ -46,7 +46,7 @@ public class RowResizer extends AutomaticResizer
 	}
 
 	@Override
-	public void apply(Area area, IResizer resizer)
+	public void apply(Area area, IResizer resizer, ChildResizer child)
 	{
 		int c = this.resizers.size();
 		int original = this.parent.area.w - this.padding * 2 - this.margin * (c - 1);

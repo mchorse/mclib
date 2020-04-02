@@ -27,11 +27,38 @@ public class ChildResizer extends DecoratedResizer
 			this.resizer.apply(area);
 		}
 
-		this.parent.apply(area, this.resizer);
+		this.parent.apply(area, this.resizer, this);
 		this.x = area.x;
 		this.y = area.y;
 		this.w = area.w;
 		this.h = area.h;
+	}
+
+	@Override
+	public void postApply(Area area)
+	{
+		if (this.resizer != null)
+		{
+			this.resizer.postApply(area);
+		}
+	}
+
+	@Override
+	public void add(GuiElement parent, GuiElement child)
+	{
+		if (this.resizer != null)
+		{
+			this.resizer.add(parent, child);
+		}
+	}
+
+	@Override
+	public void remove(GuiElement parent, GuiElement child)
+	{
+		if (this.resizer != null)
+		{
+			this.resizer.remove(parent, child);
+		}
 	}
 
 	@Override

@@ -14,7 +14,7 @@ public abstract class BaseResizer implements IResizer, IParentResizer
 	{}
 
 	@Override
-	public void apply(Area area, IResizer resizer)
+	public void apply(Area area, IResizer resizer, ChildResizer child)
 	{}
 
 	@Override
@@ -23,5 +23,9 @@ public abstract class BaseResizer implements IResizer, IParentResizer
 
 	@Override
 	public void add(GuiElement parent, GuiElement child)
+	{}
+
+	@Override
+	public void remove(GuiElement parent, GuiElement child)
 	{}
 }

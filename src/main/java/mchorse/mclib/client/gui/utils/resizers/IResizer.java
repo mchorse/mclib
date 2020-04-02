@@ -13,6 +13,8 @@ public interface IResizer
 
 	public void add(GuiElement parent, GuiElement child);
 
+	public void remove(GuiElement parent, GuiElement child);
+
 	public int getX();
 
 	public int getY();

@@ -42,6 +42,11 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement
         this.elements.clear();
     }
 
+    public void prepend(T element)
+    {
+        if (element != null) this.elements.add(0, element);
+    }
+
     public void add(T element)
     {
         if (element != null) this.elements.add(element);

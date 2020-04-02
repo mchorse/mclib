@@ -4,6 +4,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class AutomaticResizer extends BaseResizer
@@ -59,14 +60,6 @@ public abstract class AutomaticResizer extends BaseResizer
 		}
 	}
 
-	public void add(GuiElement... elements)
-	{
-		for (GuiElement element : elements)
-		{
-			element.resizer(this.child(element));
-		}
-	}
-
 	public IResizer child(GuiElement element)
 	{
 		ChildResizer child = new ChildResizer(this, element);
@@ -90,6 +83,25 @@ public abstract class AutomaticResizer extends BaseResizer
 	public void add(GuiElement parent, GuiElement child)
 	{
 		child.resizer(this.child(child));
+	}
+
+	@Override
+	public void remove(GuiElement parent, GuiElement child)
+	{
+		Iterator<ChildResizer> it = this.resizers.iterator();
+
+		while (it.hasNext())
+		{
+			ChildResizer resizer = it.next();
+
+			if (resizer.element == child)
+			{
+				it.remove();
+				resizer.element.resizer(resizer.resizer);
+
+				break;
+			}
+		}
 	}
 
 	@Override

@@ -134,6 +134,17 @@ public class GuiElement extends Gui implements IGuiElement
         this.children.clear();
     }
 
+    public void prepend(IGuiElement element)
+    {
+        if (this.children == null)
+        {
+            this.children = new GuiElements<IGuiElement>(this);
+        }
+
+        this.markChild(element);
+        this.children.prepend(element);
+    }
+
     public void add(IGuiElement element)
     {
         if (this.children == null)
@@ -141,7 +152,8 @@ public class GuiElement extends Gui implements IGuiElement
             this.children = new GuiElements<IGuiElement>(this);
         }
 
-        this.addChild(element);
+        this.markChild(element);
+        this.children.add(element);
     }
 
     public void add(IGuiElement... elements)
@@ -153,11 +165,12 @@ public class GuiElement extends Gui implements IGuiElement
 
         for (IGuiElement element : elements)
         {
-            this.addChild(element);
+            this.markChild(element);
+            this.children.add(element);
         }
     }
 
-    private void addChild(IGuiElement element)
+    private void markChild(IGuiElement element)
     {
         if (element instanceof GuiElement)
         {
@@ -170,8 +183,6 @@ public class GuiElement extends Gui implements IGuiElement
                 this.resizer.add(this, child);
             }
         }
-
-        this.children.add(element);
     }
 
     public void removeFromParent()
@@ -186,6 +197,11 @@ public class GuiElement extends Gui implements IGuiElement
     {
         if (this.children.elements.remove(element))
         {
+            if (this.resizer != null)
+            {
+                this.resizer.remove(this, element);
+            }
+
             element.parent = null;
         }
     }

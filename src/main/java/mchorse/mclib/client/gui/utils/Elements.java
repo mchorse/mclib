@@ -16,9 +16,14 @@ public class Elements
 
 	public static GuiElement row(Minecraft mc, int margin, int padding, GuiElement... elements)
 	{
+		return row(mc, margin, padding, 0, elements);
+	}
+
+	public static GuiElement row(Minecraft mc, int margin, int padding, int height, GuiElement... elements)
+	{
 		GuiElement element = new GuiElement(mc);
 
-		RowResizer.apply(element, margin).padding(padding);
+		RowResizer.apply(element, margin).padding(padding).height(height);
 		element.add(elements);
 
 		return element;

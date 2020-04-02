@@ -57,7 +57,7 @@ public class GridResizer extends AutomaticResizer
 	}
 
 	@Override
-	public void apply(Area area, IResizer resizer)
+	public void apply(Area area, IResizer resizer, ChildResizer child)
 	{
 		if (this.i != 0 && this.i % this.items == 0)
 		{
