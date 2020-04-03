@@ -4,7 +4,9 @@ import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueDouble;
 import mchorse.mclib.config.values.ValueFloat;
 import mchorse.mclib.config.values.ValueInt;
+import mchorse.mclib.config.values.ValueRL;
 import mchorse.mclib.config.values.ValueString;
+import net.minecraft.util.ResourceLocation;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -120,6 +122,15 @@ public class ConfigBuilder
 	public ValueString getString(String id, String defaultValue)
 	{
 		ValueString value = new ValueString(id, defaultValue);
+
+		this.category.register(id, value);
+
+		return value;
+	}
+
+	public ValueRL getRL(String id, ResourceLocation defaultValue)
+	{
+		ValueRL value = new ValueRL(id, defaultValue);
 
 		this.category.register(id, value);
 
