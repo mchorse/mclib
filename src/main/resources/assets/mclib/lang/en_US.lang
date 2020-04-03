@@ -21,3 +21,5 @@ mclib.config.appearance.enable_borders=Button borders
 mclib.config.comments.appearance.enable_borders=Should buttons and other elements have borders?
 mclib.config.appearance.opacity=Opacity
 mclib.config.comments.appearance.opacity=General opacity of background GUI elements
+mclib.config.appearance.enable_mouse_rendering=Mouse cursor
+mclib.config.comments.appearance.enable_mouse_rendering=Enable rendering of the mouse cursor. It's very useful for tutorials when they're recorded with Minema mod...

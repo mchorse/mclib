@@ -44,7 +44,7 @@ public class GuiConfig extends GuiElement
 		this.mods.flex().parent(this.area).set(10, 35, 100, 0).h(1, -45);
 		this.options.flex().parent(this.area).set(120, 0, 0, 0).w(1, -120).h(1F);
 
-		ColumnResizer.apply(this.options, 5).scroll().padding(15);
+		ColumnResizer.apply(this.options, 5).scroll().width(240).height(20).padding(15);
 
 		for (Config config : McLib.proxy.configs.modules.values())
 		{
@@ -83,7 +83,7 @@ public class GuiConfig extends GuiElement
 			}
 
 			GuiLabel label = new GuiLabel(this.mc, this.config.getCategoryTitle(category.id)).anchor(0, 1);
-			label.flex().set(0, 0, this.font.getStringWidth(label.label), 20);
+			label.flex().set(0, 0, this.font.getStringWidth(label.label), 40);
 
 			if (first)
 			{

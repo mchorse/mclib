@@ -14,6 +14,11 @@ public class ColumnResizer extends AutomaticResizer
 	private int w;
 
 	/**
+	 * Default width
+	 */
+	private int width;
+
+	/**
 	 * Keeps on adding elements vertically without shifting them into
 	 * the next row and resize the height of the element
 	 */
@@ -41,6 +46,13 @@ public class ColumnResizer extends AutomaticResizer
 	protected ColumnResizer(GuiElement element, int margin)
 	{
 		super(element, margin);
+	}
+
+	public ColumnResizer width(int width)
+	{
+		this.width = width;
+
+		return this;
 	}
 
 	public ColumnResizer vertical()
@@ -75,8 +87,18 @@ public class ColumnResizer extends AutomaticResizer
 	@Override
 	public void apply(Area area, IResizer resizer, ChildResizer child)
 	{
-		int w = resizer == null ? 0 : resizer.getW();
+		int w = resizer == null ? this.width : resizer.getW();
 		int h = resizer == null ? this.height : resizer.getH();
+
+		if (w == 0)
+		{
+			w = this.width;
+		}
+
+		if (h == 0)
+		{
+			h = this.height;
+		}
 
 		if (this.stretch)
 		{

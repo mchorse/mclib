@@ -16,7 +16,7 @@ public class KeyboardHandler
 	{
 		String category = "key.mclib.category";
 
-		this.dashboard = new KeyBinding("key.mclib.dashboard", Keyboard.KEY_NONE, category);
+		this.dashboard = new KeyBinding("key.mclib.dashboard", Keyboard.KEY_0, category);
 
 		ClientRegistry.registerKeyBinding(this.dashboard);
 	}

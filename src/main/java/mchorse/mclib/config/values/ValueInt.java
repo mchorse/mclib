@@ -6,6 +6,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
+import mchorse.mclib.client.gui.utils.resizers.layout.RowResizer;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.gui.GuiConfig;
@@ -86,8 +87,7 @@ public class ValueInt extends Value
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
 
-		label.flex().parent(element.area).set(0, 0, 90, 20);
-		element.flex().set(0, 0, 180, 20);
+		RowResizer.apply(element, 0).height(20);
 		element.add(label);
 
 		if (this.color)
@@ -99,7 +99,6 @@ public class ValueInt extends Value
 			});
 
 			color.picker.setColor(this.value);
-			color.flex().parent(element.area).wh(90, 20).x(1, 0).anchor(1, 0);
 
 			element.add(color);
 		}
@@ -111,7 +110,6 @@ public class ValueInt extends Value
 				save.accept(this);
 			});
 
-			trackpad.flex().parent(element.area).set(90, 0, 90, 20);
 			trackpad.limit(this.min, this.max, true);
 			trackpad.setValue(this.value);
 			element.add(trackpad);

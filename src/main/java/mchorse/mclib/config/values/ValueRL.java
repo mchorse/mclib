@@ -5,6 +5,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTexturePicker;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
+import mchorse.mclib.client.gui.utils.resizers.layout.RowResizer;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.gui.GuiConfig;
@@ -75,13 +76,11 @@ public class ValueRL extends Value
 			GuiElement parent = gui.getParentContainer();
 
 			picker.flex().parent(parent.area).wh(1F, 1F);
+			picker.resize();
 			parent.add(picker);
 		});
 
-		element.flex().set(0, 0, 180, 20);
-		label.flex().parent(element.area).set(0, 0, 90, 20);
-		pick.flex().parent(element.area).set(90, 0, 90, 20);
-
+		RowResizer.apply(element, 0).height(20);
 		element.add(label, pick);
 
 		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));

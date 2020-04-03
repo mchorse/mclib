@@ -1,6 +1,7 @@
 package mchorse.mclib;
 
 import mchorse.mclib.client.KeyboardHandler;
+import mchorse.mclib.client.MouseRenderer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -15,5 +16,6 @@ public class ClientProxy extends CommonProxy
 		super.preInit(event);
 
 		MinecraftForge.EVENT_BUS.register(new KeyboardHandler());
+		MinecraftForge.EVENT_BUS.register(new MouseRenderer());
 	}
 }

@@ -5,6 +5,7 @@ import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
+import mchorse.mclib.client.gui.utils.resizers.layout.RowResizer;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.gui.GuiConfig;
@@ -59,11 +60,8 @@ public class ValueString extends Value
 			save.accept(this);
 		});
 
-		element.flex().set(0, 0, 180, 20);
-		label.flex().parent(element.area).set(0, 0, 90, 20);
-		textbox.flex().parent(element.area).set(90, 0, 90, 20);
 		textbox.setText(this.value);
-
+		RowResizer.apply(element, 0).height(20);
 		element.add(label, textbox);
 
 		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));

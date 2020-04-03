@@ -5,6 +5,7 @@ import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
+import mchorse.mclib.client.gui.utils.resizers.layout.RowResizer;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.gui.GuiConfig;
@@ -67,21 +68,17 @@ public class ValueDouble extends Value
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
-
-		label.flex().parent(element.area).set(0, 0, 90, 20);
-		element.flex().set(0, 0, 180, 20);
-		element.add(label);
-
 		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (v) ->
 		{
 			this.set(v.doubleValue());
 			save.accept(this);
 		});
 
-		trackpad.flex().parent(element.area).set(90, 0, 90, 20);
 		trackpad.limit((float) this.min, (float) this.max);
 		trackpad.setValue((float) this.value);
-		element.add(trackpad);
+
+		RowResizer.apply(element, 0).height(20);
+		element.add(label, trackpad);
 
 		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
 	}
