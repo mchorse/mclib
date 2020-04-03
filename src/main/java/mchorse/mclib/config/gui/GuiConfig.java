@@ -54,6 +54,7 @@ public class GuiConfig extends GuiElement
 		this.mods.sort();
 		this.add(this.reload, this.mods, this.options);
 		this.selectConfig("mclib");
+		this.markContainer();
 	}
 
 	private void reload()
@@ -82,7 +83,7 @@ public class GuiConfig extends GuiElement
 				continue;
 			}
 
-			GuiLabel label = new GuiLabel(this.mc, this.config.getCategoryTitle(category.id)).anchor(0, 1);
+			GuiLabel label = new GuiLabel(this.mc, this.config.getCategoryTitle(category.id)).anchor(0, 1).background(0x88000000);
 			label.flex().set(0, 0, this.font.getStringWidth(label.label), 40);
 
 			if (first)

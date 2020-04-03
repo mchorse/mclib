@@ -12,6 +12,7 @@ public class RowResizer extends AutomaticResizer
 	private int x;
 	private int w;
 	private int count;
+	private int preferred = -1;
 
 	public static RowResizer apply(GuiElement element, int margin)
 	{
@@ -25,6 +26,13 @@ public class RowResizer extends AutomaticResizer
 	protected RowResizer(GuiElement parent, int margin)
 	{
 		super(parent, margin);
+	}
+
+	public RowResizer preferred(int index)
+	{
+		this.preferred = i;
+
+		return this;
 	}
 
 	@Override
@@ -60,7 +68,9 @@ public class RowResizer extends AutomaticResizer
 		cw = cw > 0 ? cw : w;
 
 		/* Readjust the middle element width to balance out int imprecision */
-		if (this.i == c / 2)
+		int preferred = this.preferred == -1 ? c / 2 : this.preferred;
+
+		if (this.i == preferred)
 		{
 			int diff = original - this.w - w * this.count;
 

@@ -23,3 +23,11 @@ mclib.config.appearance.opacity=Opacity
 mclib.config.comments.appearance.opacity=General opacity of background GUI elements
 mclib.config.appearance.enable_mouse_rendering=Mouse cursor
 mclib.config.comments.appearance.enable_mouse_rendering=Enable rendering of the mouse cursor. It's very useful for tutorials when they're recorded with Minema mod...
+
+mclib.config.background.title=Background
+mclib.config.background.tooltip=Background options like color and texture to be used 
+
+mclib.config.background.image=Image
+mclib.config.comments.background.image=Background image to be used in every menu
+mclib.config.background.color=Color
+mclib.config.comments.background.color=Background color to be used in every menu. If image is specified, then this will be used as tinting color for background

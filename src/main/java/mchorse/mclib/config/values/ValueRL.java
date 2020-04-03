@@ -73,14 +73,21 @@ public class ValueRL extends Value
 				});
 			}
 
-			GuiElement parent = gui.getParentContainer();
-
-			picker.flex().parent(parent.area).wh(1F, 1F);
+			picker.fill(this.value);
+			picker.flex().parent(gui.area).wh(1F, 1F);
 			picker.resize();
-			parent.add(picker);
+
+			if (picker.hasParent())
+			{
+				picker.removeFromParent();
+			}
+
+			gui.add(picker);
 		});
 
-		RowResizer.apply(element, 0).height(20);
+		pick.flex().w(90);
+
+		RowResizer.apply(element, 0).preferred(0).height(20);
 		element.add(label, pick);
 
 		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));

@@ -76,8 +76,9 @@ public class ValueDouble extends Value
 
 		trackpad.limit((float) this.min, (float) this.max);
 		trackpad.setValue((float) this.value);
+		trackpad.flex().w(90);
 
-		RowResizer.apply(element, 0).height(20);
+		RowResizer.apply(element, 0).preferred(0).height(20);
 		element.add(label, trackpad);
 
 		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));

@@ -7,6 +7,7 @@ import mchorse.mclib.config.ConfigBuilder;
 import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueFloat;
 import mchorse.mclib.config.values.ValueInt;
+import mchorse.mclib.config.values.ValueRL;
 import mchorse.mclib.config.values.ValueString;
 import mchorse.mclib.events.RegisterConfigEvent;
 import mchorse.mclib.math.IValue;
@@ -51,6 +52,9 @@ public class McLib
     public static ValueFloat opacity;
     public static ValueBoolean enableMouseRendering;
 
+    public static ValueRL backgroundImage;
+    public static ValueInt backgroundColor;
+
     @SubscribeEvent
     public void onConfigRegister(RegisterConfigEvent event)
     {
@@ -60,6 +64,9 @@ public class McLib
         enableBorders = builder.getBoolean("enable_borders", true);
         opacity = builder.getFloat("opacity", 0.54F, 0F, 1F);
         enableMouseRendering = builder.getBoolean("enable_mouse_rendering", false);
+
+        backgroundImage = builder.category("background").getRL("image",  null);
+        backgroundColor = builder.getColor("color",  0x000000);
 
         event.modules.add(builder.build());
     }

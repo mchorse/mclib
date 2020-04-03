@@ -87,7 +87,7 @@ public class ValueInt extends Value
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
 
-		RowResizer.apply(element, 0).height(20);
+		RowResizer.apply(element, 0).preferred(0).height(20);
 		element.add(label);
 
 		if (this.color)
@@ -99,6 +99,7 @@ public class ValueInt extends Value
 			});
 
 			color.picker.setColor(this.value);
+			color.flex().w(90);
 
 			element.add(color);
 		}
@@ -112,6 +113,7 @@ public class ValueInt extends Value
 
 			trackpad.limit(this.min, this.max, true);
 			trackpad.setValue(this.value);
+			trackpad.flex().w(90);
 			element.add(trackpad);
 		}
 

@@ -60,8 +60,9 @@ public class ValueString extends Value
 			save.accept(this);
 		});
 
+		textbox.flex().w(90);
 		textbox.setText(this.value);
-		RowResizer.apply(element, 0).height(20);
+		RowResizer.apply(element, 0).preferred(0).height(20);
 		element.add(label, textbox);
 
 		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));

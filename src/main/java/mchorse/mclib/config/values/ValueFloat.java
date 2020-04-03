@@ -76,8 +76,9 @@ public class ValueFloat extends Value
 
 		trackpad.limit(this.min, this.max);
 		trackpad.setValue(this.value);
+		trackpad.flex().w(90);
 
-		RowResizer.apply(element, 0).height(20);
+		RowResizer.apply(element, 0).preferred(0).height(20);
 		element.add(label, trackpad);
 
 		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));

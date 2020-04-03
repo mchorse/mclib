@@ -67,7 +67,7 @@ public class GuiTexturePicker extends GuiElement
         super(mc);
 
         this.text = new GuiTextElement(mc, 1000, (str) -> this.selectCurrent(str.isEmpty() ? null : RLUtils.create(str)));
-        this.close = new GuiButtonElement(mc, "X", (b) -> this.setVisible(false));
+        this.close = new GuiButtonElement(mc, "X", (b) -> this.removeFromParent());
         this.folder = new GuiButtonElement(mc, I18n.format("mclib.gui.open_folder"), (b) -> this.openFolder());
         this.picker = new GuiFolderEntryListElement(mc, (entry) ->
         {
@@ -204,7 +204,10 @@ public class GuiTexturePicker extends GuiElement
             /* If this code causes an exception, that means that there 
              * is some issue with the texture, so we should rather not 
              * use it */
-            this.mc.renderEngine.bindTexture(rl);
+            if (rl != null)
+            {
+                this.mc.renderEngine.bindTexture(rl);
+            }
         }
         catch (Exception e)
         {
@@ -416,10 +419,9 @@ public class GuiTexturePicker extends GuiElement
 
         if (this.multiList.isVisible())
         {
-            this.mc.renderEngine.bindTexture(GuiBase.ICONS);
-            GuiUtils.drawContinuousTexturedBox(this.area.x, this.area.y, 0, 32, 110, this.area.h, 32, 32, 0, 0);
+            drawRect(this.area.x, this.area.y, this.area.x + 110, this.area.ey(), 0xff181818);
             drawRect(this.area.x, this.area.y, this.area.x + 110, this.area.y + 30, 0x44000000);
-            drawGradientRect(this.area.x, this.area.ey() - 20, this.area.x + 110, this.area.ey(), 0x00, 0x44000000);
+            drawGradientRect(this.area.x, this.area.ey() - 20, this.area.x + 110, this.area.ey(), 0x00, 0x88000000);
         }
 
         if (this.picker.getList().isEmpty())
