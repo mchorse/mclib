@@ -102,6 +102,8 @@ public class GuiTexturePicker extends GuiElement
 
         this.add(this.picker, this.multi, this.multiList, this.text, this.close, this.folder, this.add, this.remove);
         this.callback = callback;
+
+        this.markContainer();
     }
 
     public void refresh()

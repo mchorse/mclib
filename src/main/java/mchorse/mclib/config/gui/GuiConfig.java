@@ -99,7 +99,7 @@ public class GuiConfig extends GuiElement
 					continue;
 				}
 
-				for (GuiElement element : value.getFields(this.mc, this.config, category, this::save))
+				for (GuiElement element : value.getFields(this.mc, this, this.config, category, this::save))
 				{
 					this.options.add(element);
 				}

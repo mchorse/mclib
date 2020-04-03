@@ -1,15 +1,17 @@
 package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTexturePicker;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.utils.Direction;
+import mchorse.mclib.utils.resources.RLUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -17,28 +19,34 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ValueString extends Value
+public class ValueRL extends Value
 {
-	private String value = "";
-	private String defaultValue;
+	@SideOnly(Side.CLIENT)
+	public static GuiTexturePicker picker;
 
-	public ValueString(String id, String defaultValue)
+	private ResourceLocation value;
+	private ResourceLocation defaultValue;
+
+	public ValueRL(String id, ResourceLocation defaultValue)
 	{
 		super(id);
 
 		this.defaultValue = defaultValue;
-
-		this.reset();
 	}
 
-	public String get()
+	public ResourceLocation get()
 	{
 		return this.value;
 	}
 
-	public void set(String value)
+	public void set(ResourceLocation value)
 	{
 		this.value = value;
+	}
+
+	public void set(String value)
+	{
+		this.value = RLUtils.create(value);
 	}
 
 	@Override
@@ -53,18 +61,28 @@ public class ValueString extends Value
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
-		GuiTextElement textbox = new GuiTextElement(mc, (value) ->
+		GuiButtonElement pick = new GuiButtonElement(mc, "Pick texture",  (button) ->
 		{
-			this.set(value);
-			save.accept(this);
+			if (picker == null)
+			{
+				picker = new GuiTexturePicker(mc, (rl) ->
+				{
+					this.set(rl);
+					save.accept(this);
+				});
+			}
+
+			GuiElement parent = gui.getParentContainer();
+
+			picker.flex().parent(parent.area).wh(1F, 1F);
+			parent.add(picker);
 		});
 
 		element.flex().set(0, 0, 180, 20);
 		label.flex().parent(element.area).set(0, 0, 90, 20);
-		textbox.flex().parent(element.area).set(90, 0, 90, 20);
-		textbox.setText(this.value);
+		pick.flex().parent(element.area).set(90, 0, 90, 20);
 
-		element.add(label, textbox);
+		element.add(label, pick);
 
 		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
 	}
@@ -72,12 +90,12 @@ public class ValueString extends Value
 	@Override
 	public void fromJSON(JsonElement element)
 	{
-		this.set(element.getAsString());
+		this.value = RLUtils.create(element);
 	}
 
 	@Override
 	public JsonElement toJSON()
 	{
-		return new JsonPrimitive(this.value);
+		return RLUtils.writeJson(this.value);
 	}
 }

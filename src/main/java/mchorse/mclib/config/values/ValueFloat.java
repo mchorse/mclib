@@ -7,6 +7,7 @@ import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
+import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
@@ -49,7 +50,7 @@ public class ValueFloat extends Value
 		return this.value;
 	}
 
-	public void setValue(float value)
+	public void set(float value)
 	{
 		this.value = MathUtils.clamp(value, this.min, this.max);
 	}
@@ -57,12 +58,12 @@ public class ValueFloat extends Value
 	@Override
 	public void reset()
 	{
-		this.setValue(this.defaultValue);
+		this.set(this.defaultValue);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category, Consumer<IConfigValue> save)
+	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Config config, ConfigCategory category, Consumer<IConfigValue> save)
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
@@ -73,7 +74,7 @@ public class ValueFloat extends Value
 
 		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (value) ->
 		{
-			this.setValue(value);
+			this.set(value);
 			save.accept(this);
 		});
 
@@ -88,7 +89,7 @@ public class ValueFloat extends Value
 	@Override
 	public void fromJSON(JsonElement element)
 	{
-		this.setValue(element.getAsFloat());
+		this.set(element.getAsFloat());
 	}
 
 	@Override

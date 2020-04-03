@@ -8,6 +8,7 @@ import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
+import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.MathUtils;
@@ -52,7 +53,7 @@ public class ValueInt extends Value
 		return this.value;
 	}
 
-	public void setValue(int value)
+	public void set(int value)
 	{
 		this.value = MathUtils.clamp(value, this.min, this.max);
 	}
@@ -63,7 +64,7 @@ public class ValueInt extends Value
 
 		if (v != 0)
 		{
-			this.setValue(v);
+			this.set(v);
 		}
 	}
 
@@ -75,12 +76,12 @@ public class ValueInt extends Value
 	@Override
 	public void reset()
 	{
-		this.setValue(this.defaultValue);
+		this.set(this.defaultValue);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category, Consumer<IConfigValue> save)
+	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Config config, ConfigCategory category, Consumer<IConfigValue> save)
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
@@ -93,7 +94,7 @@ public class ValueInt extends Value
 		{
 			GuiColorElement color = new GuiColorElement(mc, (value) ->
 			{
-				this.setValue(value);
+				this.set(value);
 				save.accept(this);
 			});
 
@@ -106,7 +107,7 @@ public class ValueInt extends Value
 		{
 			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (value) ->
 			{
-				this.setValue(value.intValue());
+				this.set(value.intValue());
 				save.accept(this);
 			});
 
@@ -122,7 +123,7 @@ public class ValueInt extends Value
 	@Override
 	public void fromJSON(JsonElement element)
 	{
-		this.setValue(element.getAsInt());
+		this.set(element.getAsInt());
 	}
 
 	@Override

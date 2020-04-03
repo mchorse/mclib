@@ -6,6 +6,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
+import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,7 +35,7 @@ public class ValueBoolean extends Value
 		return this.value;
 	}
 
-	public void setValue(boolean value)
+	public void set(boolean value)
 	{
 		this.value = value;
 	}
@@ -42,16 +43,16 @@ public class ValueBoolean extends Value
 	@Override
 	public void reset()
 	{
-		this.setValue(this.defaultValue);
+		this.set(this.defaultValue);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, Config config, ConfigCategory category, Consumer<IConfigValue> save)
+	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Config config, ConfigCategory category, Consumer<IConfigValue> save)
 	{
 		GuiToggleElement checkbox = new GuiToggleElement(mc, config.getValueTitle(category.id, this.id), this.value, (value) ->
 		{
-			this.setValue(value.isToggled());
+			this.set(value.isToggled());
 			save.accept(this);
 		});
 
@@ -63,7 +64,7 @@ public class ValueBoolean extends Value
 	@Override
 	public void fromJSON(JsonElement element)
 	{
-		this.setValue(element.getAsBoolean());
+		this.set(element.getAsBoolean());
 	}
 
 	@Override
