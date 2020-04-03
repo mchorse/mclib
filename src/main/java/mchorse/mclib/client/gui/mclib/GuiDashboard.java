@@ -4,6 +4,7 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
+import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Icons;
@@ -58,6 +59,17 @@ public class GuiDashboard extends GuiBase
 
 			GuiTrackpadElement element = new GuiTrackpadElement(mc, null);
 
+			element.context(() ->
+			{
+				GuiSimpleContextMenu menu = new GuiSimpleContextMenu(mc);
+
+				menu.action(Icons.ADD, "A", null);
+				menu.action(Icons.REMOVE, "B", null);
+				menu.action(Icons.FOLDER, "C", null);
+				menu.action(Icons.UPLOAD, "D", null);
+
+				return menu;
+			});
 			element.flex().parent(this.area).set(10, 10, 60, 20);
 
 			this.add(element);

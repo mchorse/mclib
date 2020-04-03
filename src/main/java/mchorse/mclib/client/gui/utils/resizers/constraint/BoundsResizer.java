@@ -1,9 +1,11 @@
 package mchorse.mclib.client.gui.utils.resizers.constraint;
 
+import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.resizers.DecoratedResizer;
 import mchorse.mclib.client.gui.utils.resizers.IResizer;
+import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.utils.MathUtils;
 
 /**
@@ -17,7 +19,16 @@ public class BoundsResizer extends DecoratedResizer
 	public GuiContext context;
 	public int padding;
 
-	public BoundsResizer(IResizer resizer, GuiContext context, int padding)
+	public static BoundsResizer apply(GuiElement element, GuiContext context, int padding)
+	{
+		BoundsResizer resizer = new BoundsResizer(element.resizer(), context, padding);
+
+		element.flex().post(resizer);
+
+		return resizer;
+	}
+
+	protected BoundsResizer(IResizer resizer, GuiContext context, int padding)
 	{
 		super(resizer);
 

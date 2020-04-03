@@ -24,7 +24,11 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 
 		this.actions = new GuiActionListElement(mc, (action) ->
 		{
-			action.get(0).runnable.run();
+			if (action.get(0).runnable != null)
+			{
+				action.get(0).runnable.run();
+			}
+
 			this.removeFromParent();
 		});
 
@@ -39,7 +43,7 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 
 	public GuiSimpleContextMenu action(Icon icon, String label, Runnable runnable)
 	{
-		if (icon == null || label == null || runnable == null)
+		if (icon == null || label == null)
 		{
 			return this;
 		}
@@ -60,7 +64,7 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 		}
 
 		this.flex().set(context.mouseX(), context.mouseY(), w, this.actions.scroll.scrollSize);
-		this.resizer(new BoundsResizer(this.resizer(), context, 5));
+		BoundsResizer.apply(this, context, 5);
 	}
 
 	public static class GuiActionListElement extends GuiListElement<Action>

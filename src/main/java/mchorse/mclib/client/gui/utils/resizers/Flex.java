@@ -119,6 +119,23 @@ public class Flex implements IResizer
         return this;
     }
 
+    public Flex wTo(Flex flex, float anchor)
+    {
+        this.w.target = flex;
+        this.w.targetAnchor = anchor;
+
+        return this;
+    }
+
+    public Flex wTo(Flex flex, float anchor, int offset)
+    {
+        this.w.target = flex;
+        this.w.targetAnchor = anchor;
+        this.w.offset = offset;
+
+        return this;
+    }
+
     /* Height */
 
     public Flex h(int value)
@@ -152,6 +169,23 @@ public class Flex implements IResizer
     public Flex hTo(Flex flex, int offset)
     {
         this.h.target = flex;
+        this.h.offset = offset;
+
+        return this;
+    }
+
+    public Flex hTo(Flex flex, float anchor)
+    {
+        this.h.target = flex;
+        this.h.targetAnchor = anchor;
+
+        return this;
+    }
+
+    public Flex hTo(Flex flex, float anchor, int offset)
+    {
+        this.h.target = flex;
+        this.h.targetAnchor = anchor;
         this.h.offset = offset;
 
         return this;
@@ -394,7 +428,9 @@ public class Flex implements IResizer
     {
         if (this.w.target != null)
         {
-            return this.w.target.getX() - this.getX() + this.w.offset;
+            int w = this.w.targetAnchor == 0 ? 0 : (int) (this.w.target.getW() * this.w.targetAnchor);
+
+            return (this.w.target.getX() + w) - this.getX() + this.w.offset;
         }
 
         int value = this.post == null ? 0 : this.post.getW();
@@ -429,7 +465,9 @@ public class Flex implements IResizer
     {
         if (this.h.target != null)
         {
-            return this.h.target.getY() - this.getY() + this.h.offset;
+            int h = this.h.targetAnchor == 0 ? 0 : (int) (this.h.target.getH() * this.h.targetAnchor);
+
+            return (this.h.target.getY() + h) - this.getY() + this.h.offset;
         }
 
         int value = this.post == null ? 0 : this.post.getH();
@@ -471,6 +509,7 @@ public class Flex implements IResizer
         public float anchor;
         public Measure unit = Measure.PIXELS;
         public Flex target;
+        public float targetAnchor;
 
         public void set(float value, Measure unit)
         {

@@ -175,29 +175,32 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             return true;
         }
 
-        boolean wasFocused = this.text.isFocused();
-
-        this.text.mouseClicked(context.mouseX, context.mouseY, context.mouseButton);
-
-        if (wasFocused != this.text.isFocused())
+        if (context.mouseButton == 0)
         {
-            context.focus(wasFocused ? null : this);
-        }
+            boolean wasFocused = this.text.isFocused();
 
-        if (this.area.isInside(context))
-        {
-            if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
+            this.text.mouseClicked(context.mouseX, context.mouseY, context.mouseButton);
+
+            if (wasFocused != this.text.isFocused())
             {
-                this.setValueAndNotify(Math.round(this.value));
-
-                return true;
+                context.focus(wasFocused ? null : this);
             }
 
-            this.dragging = true;
-            this.lastX = context.mouseX;
-            this.lastY = context.mouseY;
-            this.lastValue = this.value;
-            this.time = System.currentTimeMillis();
+            if (this.area.isInside(context))
+            {
+                if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
+                {
+                    this.setValueAndNotify(Math.round(this.value));
+
+                    return true;
+                }
+
+                this.dragging = true;
+                this.lastX = context.mouseX;
+                this.lastY = context.mouseY;
+                this.lastValue = this.value;
+                this.time = System.currentTimeMillis();
+            }
         }
 
         return this.area.isInside(context);
@@ -209,7 +212,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     @Override
     public void mouseReleased(GuiContext context)
     {
-        if (!this.isFocused())
+        if (!this.isFocused() && context.mouseButton == 0)
         {
             if (this.plusOne.isInside(context))
             {
