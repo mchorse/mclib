@@ -127,6 +127,11 @@ public class GuiElement extends Gui implements IGuiElement
         {
             if (element instanceof GuiElement)
             {
+                if (this.resizer != null)
+                {
+                    this.resizer.remove(this, (GuiElement) element);
+                }
+
                 ((GuiElement) element).parent = null;
             }
         }
