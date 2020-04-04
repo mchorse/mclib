@@ -461,7 +461,7 @@ public class GuiElement extends Gui implements IGuiElement
 
         if (this.tooltip != null && this.area.isInside(context))
         {
-            context.tooltip.set(this);
+            context.tooltip.set(context, this);
         }
         else if ((this.hideTooltip || this.container) && this.area.isInside(context))
         {

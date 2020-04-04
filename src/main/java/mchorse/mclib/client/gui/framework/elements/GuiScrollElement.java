@@ -74,10 +74,13 @@ public class GuiScrollElement extends GuiElement
             return false;
         }
 
-        boolean result = this.scroll.mouseClicked(context);
+        if (this.scroll.mouseClicked(context))
+        {
+            return true;
+        }
 
         this.apply(context);
-        result = result || super.mouseClicked(context);
+        boolean result = super.mouseClicked(context);
         this.unapply(context);
 
         return result;
@@ -91,13 +94,16 @@ public class GuiScrollElement extends GuiElement
             return false;
         }
 
-        boolean result = this.scroll.mouseScroll(context);
-
         this.apply(context);
-        result = result || super.mouseScrolled(context);
+        boolean result = super.mouseScrolled(context);
         this.unapply(context);
 
-        return result;
+        if (result)
+        {
+            return true;
+        }
+
+        return this.scroll.mouseScroll(context);
     }
 
     @Override
@@ -138,15 +144,6 @@ public class GuiScrollElement extends GuiElement
 
         this.scroll.drawScrollbar();
         this.unapply(context);
-
-        if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
-        {
-            context.tooltip.area.y -= this.scroll.scroll;
-        }
-        else
-        {
-            context.tooltip.area.x -= this.scroll.scroll;
-        }
     }
 
     protected void preDraw(GuiContext context)

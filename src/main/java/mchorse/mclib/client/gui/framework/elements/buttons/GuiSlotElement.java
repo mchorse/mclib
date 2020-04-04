@@ -113,7 +113,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 
 			if (this.area.isInside(context))
 			{
-				context.tooltip.set(this);
+				context.tooltip.set(context, this);
 			}
 
 			GlStateManager.disableDepth();

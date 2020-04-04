@@ -94,7 +94,7 @@ public class GuiContext
 
 	public void reset()
 	{
-		this.tooltip.set(null);
+		this.tooltip.set(null, null);
 	}
 
 	/* Tooltip */

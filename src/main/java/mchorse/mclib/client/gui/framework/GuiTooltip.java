@@ -15,13 +15,15 @@ public class GuiTooltip
     public GuiElement element;
     public Area area = new Area();
 
-    public void set(GuiElement element)
+    public void set(GuiContext context, GuiElement element)
     {
         this.element = element;
 
         if (element != null)
         {
             this.area.copy(element.area);
+            this.area.x += context.shiftX;
+            this.area.y += context.shiftY;
         }
     }
 

@@ -188,7 +188,7 @@ public class GuiInventoryElement extends GuiElement
 
 		if (index != -1)
 		{
-			context.tooltip.set(this);
+			context.tooltip.set(context, this);
 			this.active = inventory.get(index);
 		}
 
