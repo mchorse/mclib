@@ -37,7 +37,7 @@ public class GuiBase extends GuiScreen
         this.context.font = this.context.mc.fontRenderer;
 
         this.root = new GuiElement(this.context.mc);
-        this.root.markContainer().flex().w(1, 0).h(1, 0);
+        this.root.markContainer().flex().parent(this.viewport).wh(1F, 1F);
         this.root.keys().register("Keybinds list", Keyboard.KEY_F9, () ->
         {
             this.context.keybinds.toggleVisible();

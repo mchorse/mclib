@@ -521,6 +521,10 @@ public class Flex implements IResizer
             this.value = value;
             this.unit = unit;
             this.offset = offset;
+
+            /* Reset target */
+            this.target = null;
+            this.targetAnchor = 0;
         }
     }
 
