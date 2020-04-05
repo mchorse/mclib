@@ -64,16 +64,6 @@ public class ConfigBuilder
 		return value;
 	}
 
-	public ValueInt getColor(String id, int defaultValue)
-	{
-		ValueInt value = new ValueInt(id, defaultValue);
-
-		value.color();
-		this.category.register(id, value);
-
-		return value;
-	}
-
 	public ValueFloat getFloat(String id, float defaultValue)
 	{
 		ValueFloat value = new ValueFloat(id, defaultValue);

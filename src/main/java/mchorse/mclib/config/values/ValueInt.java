@@ -27,7 +27,7 @@ public class ValueInt extends Value
 	private int defaultValue;
 	private int min = Integer.MIN_VALUE;
 	private int max = Integer.MAX_VALUE;
-	private boolean color;
+	private Subtype subtype = Subtype.INTEGER;
 
 	public ValueInt(String id, int defaultValue)
 	{
@@ -69,9 +69,26 @@ public class ValueInt extends Value
 		}
 	}
 
-	public void color()
+	public ValueInt subtype(Subtype subtype)
 	{
-		this.color = true;
+		this.subtype = subtype;
+
+		return this;
+	}
+
+	public ValueInt color()
+	{
+		return this.subtype(Subtype.COLOR);
+	}
+
+	public ValueInt colorAlpha()
+	{
+		return this.subtype(Subtype.COLOR_ALPHA);
+	}
+
+	public ValueInt keybind()
+	{
+		return this.subtype(Subtype.KEYBIND);
 	}
 
 	@Override
@@ -90,7 +107,7 @@ public class ValueInt extends Value
 		RowResizer.apply(element, 0).preferred(0).height(20);
 		element.add(label);
 
-		if (this.color)
+		if (this.subtype == Subtype.COLOR || this.subtype == Subtype.COLOR_ALPHA)
 		{
 			GuiColorElement color = new GuiColorElement(mc, (value) ->
 			{
@@ -98,10 +115,19 @@ public class ValueInt extends Value
 				save.accept(this);
 			});
 
-			color.picker.setColor(this.value);
 			color.flex().w(90);
+			color.picker.setColor(this.value);
+
+			if (this.subtype == Subtype.COLOR_ALPHA)
+			{
+				color.picker.editAlpha();
+			}
 
 			element.add(color);
+		}
+		else if (this.subtype == Subtype.KEYBIND)
+		{
+			/* TODO: implement keybind picker */
 		}
 		else
 		{
@@ -130,5 +156,13 @@ public class ValueInt extends Value
 	public JsonElement toJSON()
 	{
 		return new JsonPrimitive(this.value);
+	}
+
+	public static enum Subtype
+	{
+		INTEGER,
+		COLOR,
+		COLOR_ALPHA,
+		KEYBIND
 	}
 }

@@ -60,13 +60,13 @@ public class McLib
     {
         ConfigBuilder builder = new ConfigBuilder("mclib", new File(event.configs, "mclib/config.json"));
 
-        primaryColor = builder.category("appearance").getColor("primary_color", 0x0088ff);
+        primaryColor = builder.category("appearance").getInt("primary_color", 0x0088ff).color();
         enableBorders = builder.getBoolean("enable_borders", true);
         opacity = builder.getFloat("opacity", 0.54F, 0F, 1F);
         enableMouseRendering = builder.getBoolean("enable_mouse_rendering", false);
 
         backgroundImage = builder.category("background").getRL("image",  null);
-        backgroundColor = builder.getColor("color",  0x000000);
+        backgroundColor = builder.getInt("color",  0x000000).color();
 
         event.modules.add(builder.build());
     }
