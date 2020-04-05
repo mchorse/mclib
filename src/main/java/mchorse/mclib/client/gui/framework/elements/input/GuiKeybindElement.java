@@ -54,13 +54,13 @@ public class GuiKeybindElement extends GuiElement
 
 		if (this.enabled)
 		{
+			this.keybind = context.keyCode;
+			this.enabled = false;
+
 			if (this.callback != null)
 			{
 				this.callback.accept(context.keyCode);
 			}
-
-			this.keybind = context.keyCode;
-			this.enabled = false;
 
 			return true;
 		}
