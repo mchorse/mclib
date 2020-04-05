@@ -40,9 +40,9 @@ public class GuiConfig extends GuiElement
 		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.get(0).value));
 		this.options = new GuiScrollElement(mc, ScrollArea.ScrollDirection.HORIZONTAL);
 
-		this.reload.flex().parent(this.area).set(110 - 14, 12, 16, 16);
-		this.mods.flex().parent(this.area).set(10, 35, 100, 0).h(1, -45);
-		this.options.flex().parent(this.area).set(120, 0, 0, 0).w(1, -120).h(1F);
+		this.reload.flex().relative(this.area).set(110 - 14, 12, 16, 16);
+		this.mods.flex().relative(this.area).set(10, 35, 100, 0).h(1, -45);
+		this.options.flex().relative(this.area).set(120, 0, 0, 0).w(1, -120).h(1F);
 
 		ColumnResizer.apply(this.options, 5).scroll().width(240).height(20).padding(15);
 

@@ -1,6 +1,8 @@
 package mchorse.mclib.client.gui.utils;
 
+import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.utils.resizers.IResizer;
 import net.minecraft.client.gui.Gui;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -10,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * Used in GUI for rendering and locating cursor inside of the box purposes.
  */
-public class Area
+public class Area implements IResizer
 {
     /**
      * Shared area which could be used for calculations without creating new
@@ -220,5 +222,53 @@ public class Area
     public void draw(int color, int lx, int ty, int rx, int by)
     {
         Gui.drawRect(this.x + lx, this.y + ty, this.ex() - rx, this.ey() - by, color);
+    }
+
+    /* IResizer implementation */
+
+    @Override
+    public void preApply(Area area)
+    {}
+
+    @Override
+    public void apply(Area area)
+    {
+        area.copy(this);
+    }
+
+    @Override
+    public void postApply(Area area)
+    {}
+
+    @Override
+    public void add(GuiElement parent, GuiElement child)
+    {}
+
+    @Override
+    public void remove(GuiElement parent, GuiElement child)
+    {}
+
+    @Override
+    public int getX()
+    {
+        return this.x;
+    }
+
+    @Override
+    public int getY()
+    {
+        return this.y;
+    }
+
+    @Override
+    public int getW()
+    {
+        return this.w;
+    }
+
+    @Override
+    public int getH()
+    {
+        return this.h;
     }
 }

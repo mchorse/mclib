@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -97,7 +98,7 @@ public class Config
 	{
 		try
 		{
-			FileUtils.writeStringToFile(this.file, this.toJSON());
+			FileUtils.writeStringToFile(this.file, this.toJSON(), Charset.defaultCharset());
 
 			return true;
 		}

@@ -98,6 +98,7 @@ public class GuiDelegateElement<T extends GuiElement> extends GuiElement
         if (this.delegate != null)
         {
             this.delegate.resizer = this.resizer;
+            this.delegate.flex = this.flex;
             this.delegate.resize();
         }
     }

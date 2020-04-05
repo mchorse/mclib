@@ -74,7 +74,7 @@ public class ValueRL extends Value
 			}
 
 			picker.fill(this.value);
-			picker.flex().parent(gui.area).wh(1F, 1F);
+			picker.flex().relative(gui.area).wh(1F, 1F);
 			picker.resize();
 
 			if (picker.hasParent())

@@ -32,7 +32,7 @@ public class GuiDashboard extends GuiBase
 			}
 		};
 
-		this.panels.flex().parent(this.viewport).w(1, 0).h(1, 0);
+		this.panels.flex().relative(this.viewport).w(1, 0).h(1, 0);
 		this.panels.registerPanel(config, I18n.format("mclib.gui.config.tooltip"), Icons.GEAR);
 		this.panels.registerPanel(new GuiTest(mc), "Test", Icons.POSE);
 		McLib.EVENT_BUS.post(new RegisterDashboardPanels(this));
@@ -70,7 +70,7 @@ public class GuiDashboard extends GuiBase
 
 				return menu;
 			});
-			element.flex().parent(this.area).set(10, 10, 60, 20);
+			element.flex().relative(this.area).set(10, 10, 60, 20);
 
 			this.add(element);
 		}

@@ -37,7 +37,7 @@ public class GuiBase extends GuiScreen
         this.context.font = this.context.mc.fontRenderer;
 
         this.root = new GuiElement(this.context.mc);
-        this.root.markContainer().flex().parent(this.viewport).wh(1F, 1F);
+        this.root.markContainer().flex().relative(this.viewport).wh(1F, 1F);
         this.root.keys().register("Keybinds list", Keyboard.KEY_F9, () ->
         {
             this.context.keybinds.toggleVisible();
@@ -45,7 +45,7 @@ public class GuiBase extends GuiScreen
             return true;
         });
 
-        this.context.keybinds.flex().parent(this.viewport).wh(0.5F, 1F);
+        this.context.keybinds.flex().relative(this.viewport).wh(0.5F, 1F);
 
         Keyboard.enableRepeatEvents(false);
     }

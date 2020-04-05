@@ -303,6 +303,14 @@ public class GuiElement extends Gui implements IGuiElement
         return this.flex;
     }
 
+    public void flex(Flex flex)
+    {
+        if (flex != null)
+        {
+            this.flex = flex;
+        }
+    }
+
     public IResizer resizer()
     {
         return this.resizer;

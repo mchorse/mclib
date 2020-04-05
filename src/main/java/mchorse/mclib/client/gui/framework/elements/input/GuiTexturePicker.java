@@ -90,15 +90,15 @@ public class GuiTexturePicker extends GuiElement
         this.add = new GuiIconElement(mc, Icons.ADD, (b) -> this.addMultiSkin());
         this.remove = new GuiIconElement(mc, Icons.REMOVE, (b) -> this.removeMultiSkin());
 
-        this.text.flex().set(115, 5, 0, 20).parent(this.area).w(1, -145);
-        this.close.flex().set(0, 5, 20, 20).parent(this.area).x(1, -25);
-        this.folder.flex().set(0, 0, 80, 20).parent(this.area).x(1, -90).y(1, - 30);
-        this.picker.flex().set(115, 30, 0, 0).parent(this.area).w(1, -120).h(1, -30);
+        this.text.flex().set(115, 5, 0, 20).relative(this.area).w(1, -145);
+        this.close.flex().set(0, 5, 20, 20).relative(this.area).x(1, -25);
+        this.folder.flex().set(0, 0, 80, 20).relative(this.area).x(1, -90).y(1, - 30);
+        this.picker.flex().set(115, 30, 0, 0).relative(this.area).w(1, -120).h(1, -30);
 
-        this.multi.flex().parent(this.area).set(5, 5, 100, 20);
-        this.add.flex().parent(this.area).set(67, 7, 16, 16);
+        this.multi.flex().relative(this.area).set(5, 5, 100, 20);
+        this.add.flex().relative(this.area).set(67, 7, 16, 16);
         this.remove.flex().relative(this.add.flex()).set(20, 0, 16, 16);
-        this.multiList.flex().set(5, 35, 100, 0).parent(this.area).h(1, -40);
+        this.multiList.flex().set(5, 35, 100, 0).relative(this.area).h(1, -40);
 
         this.add(this.picker, this.multi, this.multiList, this.text, this.close, this.folder, this.add, this.remove);
         this.callback = callback;
@@ -268,15 +268,15 @@ public class GuiTexturePicker extends GuiElement
             this.multiList.setIndex(this.multiRL.children.isEmpty() ? -1 : 0);;
             this.multiList.setList(this.multiRL.children);
 
-            this.picker.flex().set(115, 30, 0, 0).parent(this.area).w(1, -120).h(1, -30);
-            this.multi.flex().set(5, 5, 60, 20).parent(this.area);
+            this.picker.flex().set(115, 30, 0, 0).relative(this.area).w(1, -120).h(1, -30);
+            this.multi.flex().set(5, 5, 60, 20).relative(this.area);
         }
         else
         {
             this.multiRL = null;
 
-            this.picker.flex().set(5, 30, 0, 0).parent(this.area).w(1, -10).h(1, -30);
-            this.multi.flex().set(5, 5, 100, 20).parent(this.area);
+            this.picker.flex().set(5, 30, 0, 0).relative(this.area).w(1, -10).h(1, -30);
+            this.multi.flex().set(5, 5, 100, 20).relative(this.area);
 
             this.displayCurrent(skin);
         }

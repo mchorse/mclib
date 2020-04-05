@@ -23,10 +23,10 @@ public abstract class GuiSearchListElement<T> extends GuiElement
         super(mc);
 
         this.search = new GuiTextElement(mc, 100, (str) -> this.filter(str, false));
-        this.search.flex().parent(this.area).set(0, 0, 0, 20).w(1, 0);
+        this.search.flex().relative(this.area).set(0, 0, 0, 20).w(1, 0);
 
         this.list = this.createList(mc, callback);
-        this.list.flex().parent(this.area).set(0, 20, 0, 0).w(1, 0).h(1, -20);
+        this.list.flex().relative(this.area).set(0, 20, 0, 0).w(1, 0).h(1, -20);
 
         this.add(this.search, this.list);
     }

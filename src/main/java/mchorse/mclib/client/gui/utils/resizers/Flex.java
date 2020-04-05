@@ -16,9 +16,19 @@ public class Flex implements IResizer
     public Unit w = new Unit();
     public Unit h = new Unit();
 
-    public Area parent;
     public IResizer relative;
     public IResizer post;
+
+    public void link(Flex flex)
+    {
+        this.x = flex.x;
+        this.y = flex.y;
+        this.w = flex.w;
+        this.h = flex.h;
+
+        this.relative = flex.relative;
+        this.post = flex.post;
+    }
 
     public Flex set(float x, float y, float w, float h)
     {
@@ -285,18 +295,9 @@ public class Flex implements IResizer
 
     /* Hierarchy */
 
-    public Flex parent(Area parent)
-    {
-        this.parent = parent;
-        this.relative = null;
-
-        return this;
-    }
-
-    public Flex relative(IResizer relative)
+   public Flex relative(IResizer relative)
     {
         this.relative = relative;
-        this.parent = null;
 
         return this;
     }
@@ -371,15 +372,6 @@ public class Flex implements IResizer
                 value = this.relative.getX() + (int) (this.relative.getW() * this.x.value);
             }
         }
-        else if (this.parent != null)
-        {
-            value += this.parent.x;
-
-            if (this.x.unit == Measure.RELATIVE)
-            {
-                value = this.parent.x + (int) (this.parent.w * this.x.value);
-            }
-        }
 
         value += this.x.offset;
 
@@ -402,15 +394,6 @@ public class Flex implements IResizer
             if (this.y.unit == Measure.RELATIVE)
             {
                 value = this.relative.getY() + (int) (this.relative.getH() * this.y.value);
-            }
-        }
-        else if (this.parent != null)
-        {
-            value += this.parent.y;
-
-            if (this.y.unit == Measure.RELATIVE)
-            {
-                value = this.parent.y + (int) (this.parent.h * this.y.value);
             }
         }
 
@@ -446,10 +429,6 @@ public class Flex implements IResizer
         {
             value = (int) (this.relative.getW() * this.w.value);
         }
-        else if (this.parent != null && this.w.unit == Measure.RELATIVE)
-        {
-            value = (int) (this.parent.w * this.w.value);
-        }
 
         value = value + this.w.offset;
 
@@ -482,10 +461,6 @@ public class Flex implements IResizer
         if (this.relative != null && this.h.unit == Measure.RELATIVE)
         {
             value = (int) (this.relative.getH() * this.h.value);
-        }
-        else if (this.parent != null && this.h.unit == Measure.RELATIVE)
-        {
-            value = (int) (this.parent.h * this.h.value);
         }
 
         value = value + this.h.offset;
