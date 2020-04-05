@@ -52,7 +52,7 @@ public class KeybindManager
 		{
 			if (!keybind.inside || inside)
 			{
-				keybinds.keybinds.add(keybind);
+				keybinds.addKeybind(keybind);
 			}
 		}
 	}

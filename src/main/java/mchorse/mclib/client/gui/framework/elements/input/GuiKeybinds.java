@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class GuiKeybinds extends GuiScrollElement
@@ -21,6 +22,21 @@ public class GuiKeybinds extends GuiScrollElement
 
 		this.hideTooltip();
 		this.scroll.opposite = true;
+	}
+
+	public void addKeybind(Keybind keybind)
+	{
+		for (int i = 0; i < this.keybinds.size(); i ++)
+		{
+			if (this.keybinds.get(i).equals(keybind))
+			{
+				this.keybinds.set(i, keybind);
+
+				return;
+			}
+		}
+
+		this.keybinds.add(keybind);
 	}
 
 	@Override

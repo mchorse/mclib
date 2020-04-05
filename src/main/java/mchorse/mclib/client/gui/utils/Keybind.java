@@ -77,4 +77,17 @@ public class Keybind
 
 		return true;
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj instanceof Keybind)
+		{
+			Keybind keybind = (Keybind) obj;
+
+			return this.mainKey == keybind.mainKey && Arrays.equals(this.heldKeys, keybind.heldKeys) && this.inside == keybind.inside;
+		}
+
+		return super.equals(obj);
+	}
 }
