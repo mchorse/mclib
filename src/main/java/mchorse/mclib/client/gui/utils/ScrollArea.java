@@ -198,13 +198,14 @@ public class ScrollArea extends Area
     public boolean mouseScroll(int x, int y, int scroll)
     {
         boolean isInside = this.isInside(x, y);
+        int lastScroll = this.scroll;
 
         if (isInside)
         {
             this.scrollBy((int) Math.copySign(this.scrollSpeed, scroll));
         }
 
-        return isInside;
+        return isInside && lastScroll != this.scroll;
     }
 
     @SideOnly(Side.CLIENT)
