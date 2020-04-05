@@ -114,14 +114,14 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex wTo(Flex flex)
+    public Flex wTo(IResizer flex)
     {
         this.w.target = flex;
 
         return this;
     }
 
-    public Flex wTo(Flex flex, int offset)
+    public Flex wTo(IResizer flex, int offset)
     {
         this.w.target = flex;
         this.w.offset = offset;
@@ -129,7 +129,7 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex wTo(Flex flex, float anchor)
+    public Flex wTo(IResizer flex, float anchor)
     {
         this.w.target = flex;
         this.w.targetAnchor = anchor;
@@ -137,7 +137,7 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex wTo(Flex flex, float anchor, int offset)
+    public Flex wTo(IResizer flex, float anchor, int offset)
     {
         this.w.target = flex;
         this.w.targetAnchor = anchor;
@@ -169,14 +169,14 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex hTo(Flex flex)
+    public Flex hTo(IResizer flex)
     {
         this.h.target = flex;
 
         return this;
     }
 
-    public Flex hTo(Flex flex, int offset)
+    public Flex hTo(IResizer flex, int offset)
     {
         this.h.target = flex;
         this.h.offset = offset;
@@ -184,7 +184,7 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex hTo(Flex flex, float anchor)
+    public Flex hTo(IResizer flex, float anchor)
     {
         this.h.target = flex;
         this.h.targetAnchor = anchor;
@@ -192,7 +192,7 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex hTo(Flex flex, float anchor, int offset)
+    public Flex hTo(IResizer flex, float anchor, int offset)
     {
         this.h.target = flex;
         this.h.targetAnchor = anchor;
@@ -483,7 +483,7 @@ public class Flex implements IResizer
         public int max;
         public float anchor;
         public Measure unit = Measure.PIXELS;
-        public Flex target;
+        public IResizer target;
         public float targetAnchor;
 
         public void set(float value, Measure unit)
