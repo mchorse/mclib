@@ -5,6 +5,7 @@ import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
 import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
+import mchorse.mclib.client.gui.framework.elements.input.GuiKeybindElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Icons;
@@ -72,7 +73,11 @@ public class GuiDashboard extends GuiBase
 			});
 			element.flex().relative(this.area).set(10, 10, 60, 20);
 
-			this.add(element);
+			GuiKeybindElement key = new GuiKeybindElement(mc, null);
+
+			key.flex().relative(element.resizer()).y(1F, 5).w(1F).h(20);
+
+			this.add(element, key);
 		}
 
 		@Override

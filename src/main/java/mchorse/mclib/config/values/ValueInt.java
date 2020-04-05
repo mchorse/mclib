@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiKeybindElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.resizers.layout.RowResizer;
@@ -127,7 +128,15 @@ public class ValueInt extends Value
 		}
 		else if (this.subtype == Subtype.KEYBIND)
 		{
-			/* TODO: implement keybind picker */
+			GuiKeybindElement keybind = new GuiKeybindElement(mc, (value) ->
+			{
+				this.set(value.intValue());
+				save.accept(this);
+			});
+
+			keybind.setKeybind(this.value);
+			keybind.flex().w(90);
+			element.add(keybind);
 		}
 		else
 		{
