@@ -1,14 +1,14 @@
 package mchorse.mclib.client.gui.framework.elements.list;
 
+import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-
-import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
-import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 
 public abstract class GuiSearchListElement<T> extends GuiElement
 {
