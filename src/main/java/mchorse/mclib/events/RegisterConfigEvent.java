@@ -1,6 +1,7 @@
 package mchorse.mclib.events;
 
 import mchorse.mclib.config.Config;
+import mchorse.mclib.config.ConfigBuilder;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 import java.io.File;
@@ -15,5 +16,10 @@ public class RegisterConfigEvent extends Event
 	public RegisterConfigEvent(File configs)
 	{
 		this.configs = configs;
+	}
+
+	public ConfigBuilder createBuilder(String id)
+	{
+		return new ConfigBuilder(id, new File(this.configs, id + "/config.json"));
 	}
 }
