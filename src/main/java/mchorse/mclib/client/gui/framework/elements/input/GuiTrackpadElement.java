@@ -55,6 +55,20 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         this.setValue(0);
     }
 
+    public GuiTrackpadElement max(float max)
+    {
+        this.max = max;
+
+        return this;
+    }
+
+    public GuiTrackpadElement limit(float min)
+    {
+        this.min = min;
+
+        return this;
+    }
+
     public GuiTrackpadElement limit(float min, float max)
     {
         this.min = min;
