@@ -1,9 +1,9 @@
 package mchorse.mclib.client.gui.framework.elements.buttons;
 
 import mchorse.mclib.McLib;
-import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
 import mchorse.mclib.client.gui.utils.Area;
@@ -28,13 +28,28 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 
 	public int slot;
 	public ItemStack stack = ItemStack.EMPTY;
-	public boolean selected;
+	public GuiInventoryElement inventory;
 
 	public GuiSlotElement(Minecraft mc, int slot, Consumer<GuiSlotElement> callback)
 	{
 		super(mc, callback);
 
 		this.slot = slot;
+	}
+
+	public GuiSlotElement(Minecraft mc, int slot, GuiInventoryElement inventory, Consumer<GuiSlotElement> callback)
+	{
+		super(mc, callback);
+
+		this.slot = slot;
+		this.inventory = inventory;
+	}
+
+	public GuiSlotElement inventory(GuiInventoryElement inventory)
+	{
+		this.inventory = inventory;
+
+		return this;
 	}
 
 	@Override
@@ -47,7 +62,6 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 				.action(Icons.DOWNLOAD, "Drop item down", () -> {})
 				.action(Icons.CLOSE, "Clear item", () -> {
 					this.stack = ItemStack.EMPTY;
-					this.selected = false;
 				});
 		}
 
@@ -57,7 +71,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 	@Override
 	protected void drawSkin(GuiContext context)
 	{
-		int border = this.selected ? 0xff000000 + McLib.primaryColor.get() : 0xffffffff;
+		int border = this.inventory != null && this.inventory.isVisible() && this.inventory.linked == this ? 0xff000000 + McLib.primaryColor.get() : 0xffffffff;
 
 		if (McLib.enableBorders.get())
 		{

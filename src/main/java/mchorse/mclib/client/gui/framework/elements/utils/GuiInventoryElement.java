@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements.utils;
 
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
 import mchorse.mclib.client.gui.utils.Area;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -23,24 +24,30 @@ import java.util.function.Consumer;
 public class GuiInventoryElement extends GuiElement
 {
 	public Consumer<ItemStack> callback;
+	public GuiSlotElement linked;
 
 	protected Area inventory = new Area();
 	protected Area hotbar = new Area();
 
 	private ItemStack active = ItemStack.EMPTY;
 
+	public static void drawItemStack(ItemStack stack, int x, int y, String altText)
+	{
+		drawItemStack(stack, x, y, 200, altText);
+	}
+
 	/**
 	 * Draws an ItemStack.
 	 *
 	 * The z index is increased by 32 (and not decreased afterwards), and the item is then rendered at z=200.
 	 */
-	public static void drawItemStack(ItemStack stack, int x, int y, String altText)
+	public static void drawItemStack(ItemStack stack, int x, int y, int z, String altText)
 	{
 		RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0.0F, 0.0F, 32.0F);
-		itemRender.zLevel = 200.0F;
+		itemRender.zLevel = z;
 
 		FontRenderer font = null;
 		if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
@@ -89,6 +96,18 @@ public class GuiInventoryElement extends GuiElement
 		super(mc);
 
 		this.callback = callback;
+	}
+
+	public void link(GuiSlotElement slot)
+	{
+		this.linked = slot;
+		this.setVisible(true);
+	}
+
+	public void unlink()
+	{
+		this.linked = null;
+		this.setVisible(false);
 	}
 
 	@Override

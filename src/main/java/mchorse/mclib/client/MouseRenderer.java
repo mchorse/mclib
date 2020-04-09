@@ -1,12 +1,14 @@
 package mchorse.mclib.client;
 
 import mchorse.mclib.McLib;
+import mchorse.mclib.utils.MatrixUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Mouse;
 
@@ -101,5 +103,11 @@ public class MouseRenderer
         }
 
         return true;
+    }
+
+    @SubscribeEvent
+    public void onRenderLast(RenderWorldLastEvent event)
+    {
+        MatrixUtils.releaseMatrix();
     }
 }
