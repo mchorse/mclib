@@ -22,8 +22,8 @@ public class GuiTooltip
         if (element != null)
         {
             this.area.copy(element.area);
-            this.area.x += context.shiftX;
-            this.area.y += context.shiftY;
+            this.area.x -= context.shiftX;
+            this.area.y -= context.shiftY;
         }
     }
 

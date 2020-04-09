@@ -1,20 +1,11 @@
 package mchorse.mclib;
 
-import java.io.File;
-import java.util.Map;
-
 import mchorse.mclib.config.ConfigBuilder;
 import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueFloat;
 import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.config.values.ValueRL;
-import mchorse.mclib.config.values.ValueString;
 import mchorse.mclib.events.RegisterConfigEvent;
-import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.MathBuilder;
-import mchorse.mclib.math.Variable;
-import mchorse.mclib.utils.files.GlobalTree;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -23,7 +14,8 @@ import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Map;
 
 /**
  * McLib mod
