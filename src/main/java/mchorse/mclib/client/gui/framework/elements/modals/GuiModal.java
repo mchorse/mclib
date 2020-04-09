@@ -1,11 +1,14 @@
 package mchorse.mclib.client.gui.framework.elements.modals;
 
+import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiDelegateElement;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+
+import java.util.function.Supplier;
 
 /**
  * Parent class for all modals
@@ -17,18 +20,68 @@ public abstract class GuiModal extends GuiElement
     public String label;
     public int y;
 
+    public static boolean hasModal(GuiElement parent)
+    {
+        for (IGuiElement element : parent.getChildren())
+        {
+            if (element instanceof GuiModal)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean addModal(GuiElement parent, Supplier<GuiModal> supplier)
+    {
+        if (hasModal(parent) || supplier == null)
+        {
+            return false;
+        }
+
+        GuiModal modal = supplier.get();
+
+        modal.resize();
+        parent.add(modal);
+
+        return true;
+    }
+
+    public static boolean addFullModal(GuiElement parent, Supplier<GuiModal> supplier)
+    {
+        if (hasModal(parent) || supplier == null)
+        {
+            return false;
+        }
+
+        GuiModal modal = supplier.get();
+
+        modal.flex().relative(parent.area).wh(1F, 1F);
+        modal.resize();
+        parent.add(modal);
+
+        return true;
+    }
+
     public GuiModal(Minecraft mc, String label)
     {
         super(mc);
 
         this.label = label;
-        this.hideTooltip();
+        this.markContainer();
     }
 
     @Override
     public boolean mouseClicked(GuiContext context)
     {
         return super.mouseClicked(context) || this.area.isInside(context);
+    }
+
+    @Override
+    public boolean mouseScrolled(GuiContext context)
+    {
+        return super.mouseScrolled(context) || this.area.isInside(context);
     }
 
     @Override
