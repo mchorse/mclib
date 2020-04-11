@@ -14,7 +14,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Keyboard;
 
 import java.util.function.Consumer;

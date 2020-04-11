@@ -2,7 +2,6 @@ package mchorse.mclib.client.gui.utils;
 
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * Scrollable area

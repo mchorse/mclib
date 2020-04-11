@@ -127,6 +127,6 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 	{
 		super.drawTooltip(context, area);
 
-		GuiInventoryElement.drawItemTooltip(this.stack, this.mc.thePlayer, this.font, context.mouseX, context.mouseY);
+		GuiInventoryElement.drawItemTooltip(this.stack, this.mc.player, this.font, context.mouseX, context.mouseY);
 	}
 }

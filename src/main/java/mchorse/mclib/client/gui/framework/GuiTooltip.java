@@ -6,7 +6,6 @@ import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 

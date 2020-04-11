@@ -141,7 +141,7 @@ public class GuiInventoryElement extends GuiElement
 
 			if (this.callback != null)
 			{
-				this.callback.accept(Minecraft.getMinecraft().thePlayer.inventory.mainInventory[index]);
+				this.callback.accept(Minecraft.getMinecraft().player.inventory.mainInventory[index]);
 
 				return true;
 			}
@@ -178,7 +178,7 @@ public class GuiInventoryElement extends GuiElement
 		RenderHelper.enableGUIStandardItemLighting();
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 
-		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayerSP player = Minecraft.getMinecraft().player;
 		ItemStack[] inventory = player.inventory.mainInventory;
 
 		int index = this.drawGrid(context, this.inventory, inventory, -1, 9, inventory.length);
@@ -235,6 +235,6 @@ public class GuiInventoryElement extends GuiElement
 	{
 		super.drawTooltip(context, area);
 
-		GuiInventoryElement.drawItemTooltip(this.active, this.mc.thePlayer, this.font, context.mouseX, context.mouseY);
+		GuiInventoryElement.drawItemTooltip(this.active, this.mc.player, this.font, context.mouseX, context.mouseY);
 	}
 }
