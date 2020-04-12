@@ -26,7 +26,6 @@ import mchorse.mclib.math.functions.classic.Sin;
 import mchorse.mclib.math.functions.classic.Sqrt;
 import mchorse.mclib.math.functions.rounding.Trunc;
 import mchorse.mclib.utils.MathUtils;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * Math builder

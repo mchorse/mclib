@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * Model renderer GUI element
@@ -44,7 +43,7 @@ public abstract class GuiModelRenderer extends GuiElement
     {
         super(mc);
 
-        this.dummy = new DummyEntity(mc.theWorld);
+        this.dummy = new DummyEntity(mc.world);
     }
 
     public void reset()
@@ -126,7 +125,7 @@ public abstract class GuiModelRenderer extends GuiElement
      */
     protected void update()
     {
-        this.timer = this.mc.thePlayer != null ? this.mc.thePlayer.ticksExisted : this.timer + 1;
+        this.timer = this.mc.player != null ? this.mc.player.ticksExisted : this.timer + 1;
         this.dummy.ticksExisted = this.timer;
     }
 
