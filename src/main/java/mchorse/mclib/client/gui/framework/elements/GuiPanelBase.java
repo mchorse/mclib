@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDrawable;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.resizers.Flex.Measure;
@@ -53,7 +54,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
         }
 
         this.buttons = new GuiElements<GuiIconElement>(this);
-        this.add(this.buttons, this.view);
+        this.add(new GuiDrawable(this::drawOverlay), this.buttons, this.view);
     }
 
     /**
@@ -119,8 +120,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
         this.view.setDelegate(panel);
     }
 
-    @Override
-    public void draw(GuiContext context)
+    protected void drawOverlay(GuiContext context)
     {
         if (this.direction == Direction.TOP)
         {
@@ -148,8 +148,6 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
                 Gui.drawRect(area.x - 2, area.y - 2, area.ex() + 2, area.ey() + 2, 0xaa000000 + McLib.primaryColor.get());
             }
         }
-
-        super.draw(context);
     }
 
     protected void drawBackground(GuiContext context, int x, int y, int w, int h)
