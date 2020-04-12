@@ -1,11 +1,9 @@
 package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
-import mchorse.mclib.utils.MathUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.Project;
-
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.utils.DummyEntity;
+import mchorse.mclib.utils.MathUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,7 +13,13 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.Project;
+
+import javax.vecmath.Vector3f;
+import java.nio.ByteBuffer;
+import java.util.function.Consumer;
 
 /**
  * Model renderer GUI element
@@ -24,7 +28,7 @@ import net.minecraft.util.math.MathHelper;
  */
 public abstract class GuiModelRenderer extends GuiElement
 {
-    public DummyEntity dummy;
+    protected DummyEntity dummy;
     protected IBlockState block = Blocks.GRASS.getDefaultState();
 
     protected float scale;
@@ -34,26 +38,37 @@ public abstract class GuiModelRenderer extends GuiElement
     protected boolean position;
     protected float yaw;
     protected float pitch;
-    protected float x;
-    protected float y;
+    protected Vector3f pos = new Vector3f();
+    protected Vector3f temp = new Vector3f();
 
     protected float lastX;
     protected float lastY;
+
+    /* Picking */
+    protected boolean tryPicking;
+    protected Consumer<String> callback;
 
     public GuiModelRenderer(Minecraft mc)
     {
         super(mc);
 
         this.dummy = new DummyEntity(mc.world);
+        this.reset();
+    }
+
+    public GuiModelRenderer picker(Consumer<String> callback)
+    {
+        this.callback = callback;
+
+        return this;
     }
 
     public void reset()
     {
         this.yaw = 0;
         this.pitch = 0;
-        this.x = 0;
-        this.y = 0;
-        this.scale = 0;
+        this.scale = 2;
+        this.pos = new Vector3f(0, 1, 0);
     }
 
     @Override
@@ -64,13 +79,21 @@ public abstract class GuiModelRenderer extends GuiElement
             return true;
         }
 
-        this.dragging = true;
-        this.lastX = context.mouseX;
-        this.lastY = context.mouseY;
+        if (this.area.isInside(context))
+        {
+            this.dragging = true;
+            this.position = GuiScreen.isShiftKeyDown() || context.mouseButton == 2;
+            this.lastX = context.mouseX;
+            this.lastY = context.mouseY;
 
-        this.position = GuiScreen.isShiftKeyDown() || context.mouseButton == 2;
+            if (GuiScreen.isCtrlKeyDown())
+            {
+                this.tryPicking = true;
+                this.dragging = false;
+            }
+        }
 
-        return false;
+        return this.area.isInside(context);
     }
 
     @Override
@@ -81,34 +104,20 @@ public abstract class GuiModelRenderer extends GuiElement
             return true;
         }
 
-        this.scale += Math.copySign(0.25F, context.mouseWheel);
-        this.scale = MathUtils.clamp(this.scale, -1.5F, 30);
+        if (this.area.isInside(context))
+        {
+            this.scale += Math.copySign(0.25F, context.mouseWheel);
+            this.scale = MathUtils.clamp(this.scale, 0, 100);
+        }
 
-        return false;
+        return this.area.isInside(context);
     }
 
     @Override
     public void mouseReleased(GuiContext context)
     {
-        int mouseX = context.mouseX;
-        int mouseY = context.mouseY;
-
-        if (this.dragging)
-        {
-            if (this.position)
-            {
-                this.x -= (this.lastX - mouseX) / 60;
-                this.y += (this.lastY - mouseY) / 60;
-            }
-            else
-            {
-                this.yaw -= this.lastX - mouseX;
-                this.pitch += this.lastY - mouseY;
-            }
-        }
-
         this.dragging = false;
-        this.position = false;
+        this.tryPicking = false;
 
         super.mouseReleased(context);
     }
@@ -117,7 +126,11 @@ public abstract class GuiModelRenderer extends GuiElement
     public void draw(GuiContext context)
     {
         this.update();
-        this.drawModel(context.mouseX, context.mouseY, context.partialTicks);
+
+        GuiDraw.scissor(this.area.x, this.area.y, this.area.w, this.area.h, context);
+        this.drawModel(context);
+        GuiDraw.unscissor(context);
+
         super.draw(context);
     }
 
@@ -133,36 +146,10 @@ public abstract class GuiModelRenderer extends GuiElement
     /**
      * Draw currently edited model
      */
-    private void drawModel(int mouseX, int mouseY, float partialTicks)
+    private void drawModel(GuiContext context)
     {
-        /* Changing projection mode to perspective. In order for this to 
-         * work, depth buffer must also be cleared. Thanks to Gegy for 
-         * pointing this out (depth buffer)! */
-        GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT);
-        GlStateManager.matrixMode(GL11.GL_PROJECTION);
-        GlStateManager.loadIdentity();
-        Project.gluPerspective(70, (float) this.mc.displayWidth / (float) this.mc.displayHeight, 0.05F, 1000);
-        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-
-        float newYaw = this.yaw;
-        float newPitch = this.pitch;
-
-        float x = this.x;
-        float y = this.y;
-
-        if (this.dragging)
-        {
-            if (this.position)
-            {
-                x -= (this.lastX - mouseX) / 60;
-                y += (this.lastY - mouseY) / 60;
-            }
-            else
-            {
-                newYaw -= this.lastX - mouseX;
-                newPitch += this.lastY - mouseY;
-            }
-        }
+        this.setupViewport(context);
+        this.setupPosition(context);
 
         /* Enable rendering states */
         RenderHelper.enableStandardItemLighting();
@@ -175,19 +162,18 @@ public abstract class GuiModelRenderer extends GuiElement
         /* Setup transformations */
         GlStateManager.pushMatrix();
         GlStateManager.loadIdentity();
-        GlStateManager.translate(0 + x, -1 + y, -2 - this.scale);
-        GlStateManager.scale(-1, -1, 1);
-        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
-        GlStateManager.rotate(180.0F + newYaw, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(newPitch, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(this.pitch, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(this.yaw, 0.0F, 1.0F, 0.0F);
+        GlStateManager.translate(-this.temp.x, -this.temp.y, -this.temp.z);
 
         /* Drawing begins */
         this.drawGround();
-        this.drawModel(newYaw, newPitch, mouseX, mouseY, partialTicks);
+        this.drawUserModel(context);
+        this.tryPicking(context);
 
-        /* Disable rendering states */
         GlStateManager.popMatrix();
 
+        /* Disable rendering states */
         GlStateManager.enableCull();
         GlStateManager.disableDepth();
         GlStateManager.disableRescaleNormal();
@@ -199,18 +185,136 @@ public abstract class GuiModelRenderer extends GuiElement
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
         /* Return back to orthographic projection */
-        GuiScreen screen = this.mc.currentScreen;
-
+        GlStateManager.viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
         GlStateManager.matrixMode(GL11.GL_PROJECTION);
         GlStateManager.loadIdentity();
-        GlStateManager.ortho(0.0D, screen.width, screen.height, 0.0D, 1000.0D, 3000000.0D);
+        GlStateManager.ortho(0.0D, context.screen.width, context.screen.height, 0.0D, 1000.0D, 3000000.0D);
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+    }
+
+    protected void setupPosition(GuiContext context)
+    {
+        int mouseX = context.mouseX;
+        int mouseY = context.mouseY;
+
+        if (this.dragging)
+        {
+            if (this.position)
+            {
+                float x = this.pos.x;
+                float y = this.pos.y;
+                float z = this.pos.z;
+
+                double xx = -(this.lastX - mouseX) / 60F;
+                double yy = -(this.lastY - mouseY) / 60F;
+
+                if (xx != 0 || yy != 0)
+                {
+                    Vec3d vec = new Vec3d(xx, yy, 0);
+
+                    vec = vec.rotatePitch(-this.pitch / 180 * (float) Math.PI);
+                    vec = vec.rotateYaw((180 - this.yaw) / 180 * (float) Math.PI);
+
+                    x += vec.x;
+                    y += vec.y;
+                    z += vec.z;
+
+                    this.pos.set(x, y, z);
+                }
+            }
+            else
+            {
+                this.yaw += this.lastX - mouseX;
+                this.pitch += this.lastY - mouseY;
+            }
+
+            this.lastX = mouseX;
+            this.lastY = mouseY;
+        }
+
+        this.temp = new Vector3f(this.pos);
+        Vec3d vec = new Vec3d(0, 0, -this.scale);
+
+        vec = vec.rotatePitch(-this.pitch / 180 * (float) Math.PI);
+        vec = vec.rotateYaw((180 - this.yaw) / 180 * (float) Math.PI);
+
+        this.temp.x += vec.x;
+        this.temp.y += vec.y;
+        this.temp.z += vec.z;
+    }
+
+    protected void setupViewport(GuiContext context)
+    {
+        /* Changing projection mode to perspective. In order for this to
+         * work, depth buffer must also be cleared. Thanks to Gegy for
+         * pointing this out (depth buffer)! */
+        GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT);
+
+        float rx = (float) Math.ceil(mc.displayWidth / (double) context.screen.width);
+        float ry = (float) Math.ceil(mc.displayHeight / (double) context.screen.height);
+
+        int vx = (int) (this.area.x * rx);
+        int vy = (int) (this.mc.displayHeight - (this.area.y + this.area.h) * ry);
+        int vw = (int) (this.area.w * rx);
+        int vh = (int) (this.area.h * ry);
+
+        GlStateManager.viewport(vx, vy, vw, vh);
+        GlStateManager.matrixMode(GL11.GL_PROJECTION);
+        GlStateManager.loadIdentity();
+        Project.gluPerspective(70, (float) vw / (float) vh, 0.05F, 1000);
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
     }
 
     /**
      * Draw your model here 
      */
-    protected abstract void drawModel(float headYaw, float headPitch, int mouseX, int mouseY, float partial);
+    protected abstract void drawUserModel(GuiContext context);
+
+    protected void tryPicking(GuiContext context)
+    {
+        if (this.tryPicking)
+        {
+            int scale = this.mc.displayWidth / context.screen.width;
+            int x = context.mouseX * scale;
+            int y = Minecraft.getMinecraft().displayHeight - context.mouseY * scale - 1;
+
+            GL11.glClearStencil(0);
+            GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+
+            GL11.glEnable(GL11.GL_STENCIL_TEST);
+            GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+
+            this.drawForStencil(context);
+
+            ByteBuffer buffer = ByteBuffer.allocateDirect(1);
+            GL11.glReadPixels(x, y, 1, 1, GL11.GL_STENCIL_INDEX, GL11.GL_UNSIGNED_BYTE, buffer);
+
+            buffer.rewind();
+
+            if (this.callback != null)
+            {
+                int value = buffer.get();
+
+                if (value > 0)
+                {
+                    this.callback.accept(this.getStencilValue(value));
+                }
+            }
+
+            this.tryPicking = false;
+        }
+    }
+
+    /**
+     * Here you should draw your own things into stencil
+     */
+    protected void drawForStencil(GuiContext context)
+    {}
+
+    protected String getStencilValue(int value)
+    {
+        return null;
+    }
 
     /**
      * Render block of grass under the model (which signify where 

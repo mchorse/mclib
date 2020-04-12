@@ -3,10 +3,8 @@ package mchorse.mclib.client.gui.mclib;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.GuiModelRenderer;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
-import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
-import mchorse.mclib.client.gui.framework.elements.input.GuiKeybindElement;
-import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.config.gui.GuiConfig;
@@ -14,7 +12,11 @@ import mchorse.mclib.events.RegisterDashboardPanels;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiDashboard extends GuiBase
 {
@@ -50,39 +52,65 @@ public class GuiDashboard extends GuiBase
 
 	public static class GuiTest extends GuiElement
 	{
-		private GuiElement frame;
-		private GuiElement top;
-		private GuiElement bottom;
-
 		public GuiTest(Minecraft mc)
 		{
 			super(mc);
 
-			GuiTrackpadElement element = new GuiTrackpadElement(mc, null);
-
-			element.context(() ->
+			GuiModelRenderer renderer = new GuiModelRenderer(mc)
 			{
-				GuiSimpleContextMenu menu = new GuiSimpleContextMenu(mc);
+				@Override
+				protected void drawUserModel(GuiContext context)
+				{
+					EntityPlayer ent = this.mc.player;
+					boolean render = ent.getAlwaysRenderNameTag();
 
-				menu.action(Icons.ADD, "A", null);
-				menu.action(Icons.REMOVE, "B", null);
-				menu.action(Icons.FOLDER, "C", null);
-				menu.action(Icons.UPLOAD, "D", null);
+					RenderHelper.enableStandardItemLighting();
 
-				return menu;
-			});
-			element.flex().relative(this.area).set(10, 10, 60, 20);
+					GlStateManager.enableRescaleNormal();
+					GlStateManager.color(1.0F, 1.0F, 1.0F, 1F);
 
-			GuiKeybindElement key = new GuiKeybindElement(mc, null);
+					float f = ent.renderYawOffset;
+					float f1 = ent.rotationYaw;
+					float f2 = ent.rotationPitch;
+					float f3 = ent.prevRotationYawHead;
+					float f4 = ent.rotationYawHead;
 
-			key.flex().relative(element.resizer()).y(1F, 5).w(1F).h(20);
+					ent.renderYawOffset = 0;
+					ent.rotationYaw = 0;
+					ent.rotationPitch = 0;
+					ent.rotationYawHead = ent.rotationYaw;
+					ent.prevRotationYawHead = ent.rotationYaw;
+					ent.setAlwaysRenderNameTag(false);
 
-			this.add(element, key);
+					GlStateManager.translate(0.0F, 0.0F, 0.0F);
+
+					RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
+					rendermanager.setPlayerViewY(180.0F);
+					rendermanager.setRenderShadow(false);
+					rendermanager.renderEntity(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
+					rendermanager.setRenderShadow(true);
+
+					ent.renderYawOffset = f;
+					ent.rotationYaw = f1;
+					ent.rotationPitch = f2;
+					ent.prevRotationYawHead = f3;
+					ent.rotationYawHead = f4;
+
+					ent.setAlwaysRenderNameTag(render);
+
+					RenderHelper.disableStandardItemLighting();
+				}
+			};
+
+			renderer.flex().relative(this.area).wh(0.5F, 0.5F);
+			this.add(renderer);
 		}
 
 		@Override
 		public void draw(GuiContext context)
 		{
+			this.area.draw(0x88000000);
+
 			super.draw(context);
 		}
 	}
