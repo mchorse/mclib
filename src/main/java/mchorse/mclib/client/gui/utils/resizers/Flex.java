@@ -19,6 +19,18 @@ public class Flex implements IResizer
     public IResizer relative;
     public IResizer post;
 
+    public Flex reset()
+    {
+        this.x = new Unit();
+        this.y = new Unit();
+        this.w = new Unit();
+        this.h = new Unit();
+
+        this.relative = this.post = null;
+
+        return this;
+    }
+
     public void link(Flex flex)
     {
         this.x = flex.x;
