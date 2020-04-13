@@ -169,7 +169,6 @@ public abstract class GuiModelRenderer extends GuiElement
         /* Drawing begins */
         this.drawGround();
         this.drawUserModel(context);
-        this.tryPicking(context);
 
         GlStateManager.popMatrix();
 
@@ -270,13 +269,19 @@ public abstract class GuiModelRenderer extends GuiElement
      */
     protected abstract void drawUserModel(GuiContext context);
 
+    /**
+     * IMPORTANT: this method should be called manually by the subclass right
+     * after rendering the model
+     */
     protected void tryPicking(GuiContext context)
     {
         if (this.tryPicking)
         {
-            int scale = this.mc.displayWidth / context.screen.width;
-            int x = context.mouseX * scale;
-            int y = Minecraft.getMinecraft().displayHeight - context.mouseY * scale - 1;
+            float rx = (float) Math.ceil(mc.displayWidth / (double) context.screen.width);
+            float ry = (float) Math.ceil(mc.displayHeight / (double) context.screen.height);
+
+            int x = (int) (context.mouseX * rx);
+            int y = (int) (this.mc.displayHeight - (context.mouseY) * ry);
 
             GL11.glClearStencil(0);
             GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);

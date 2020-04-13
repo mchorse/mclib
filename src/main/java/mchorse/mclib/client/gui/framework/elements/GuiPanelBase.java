@@ -1,11 +1,13 @@
 package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.McLib;
+import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDrawable;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icon;
+import mchorse.mclib.client.gui.utils.Keybind;
 import mchorse.mclib.client.gui.utils.resizers.Flex.Measure;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
@@ -75,6 +77,16 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
         this.buttons.add(button);
 
         return button;
+    }
+
+    public Keybind registerKeybind(GuiIconElement element, String label, int key)
+    {
+        return element.keys().register(label, key, () ->
+        {
+            element.clickItself(GuiBase.getCurrent());
+
+            return true;
+        });
     }
 
     /**
