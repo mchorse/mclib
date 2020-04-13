@@ -226,7 +226,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     @Override
     public void mouseReleased(GuiContext context)
     {
-        if (!this.dragging && !this.isFocused() && context.mouseButton == 0)
+        if (this.dragging && !this.isFocused() && context.mouseButton == 0)
         {
             if (this.plusOne.isInside(context))
             {
