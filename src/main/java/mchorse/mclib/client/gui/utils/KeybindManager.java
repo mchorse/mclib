@@ -13,32 +13,18 @@ public class KeybindManager
 {
 	public List<Keybind> keybinds = new ArrayList<Keybind>();
 
-	public KeybindManager register(String label, int key, Supplier<Boolean> callback)
+	public Keybind register(String label, int key, Supplier<Boolean> callback)
 	{
-		this.keybinds.add(new Keybind(label, key, callback));
+		Keybind keybind = new Keybind(label, key, callback);
 
-		return this;
+		this.keybinds.add(keybind);
+
+		return keybind;
 	}
 
-	public KeybindManager registerInside(String label, int key, Supplier<Boolean> callback)
+	public Keybind registerInside(String label, int key, Supplier<Boolean> callback)
 	{
-		this.keybinds.add(new Keybind(label, key, callback).inside());
-
-		return this;
-	}
-
-	public KeybindManager register(String label, int key, Supplier<Boolean> callback, int... keys)
-	{
-		this.keybinds.add(new Keybind(label, key, callback).held(keys));
-
-		return this;
-	}
-
-	public KeybindManager registerInside(String label, int key, Supplier<Boolean> callback, int... keys)
-	{
-		this.keybinds.add(new Keybind(label, key, callback).inside().held(keys));
-
-		return this;
+		return this.register(label, key, callback).inside();
 	}
 
 	public void add(GuiKeybinds keybinds, boolean inside)
@@ -50,7 +36,7 @@ public class KeybindManager
 
 		for (Keybind keybind : this.keybinds)
 		{
-			if (!keybind.inside || inside)
+			if (keybind.active && (!keybind.inside || inside))
 			{
 				keybinds.addKeybind(keybind);
 			}
@@ -61,7 +47,7 @@ public class KeybindManager
 	{
 		for (Keybind keybind : this.keybinds)
 		{
-			if (keybind.check(keyCode, inside))
+			if (keybind.active && keybind.check(keyCode, inside))
 			{
 				return keybind.callback != null && keybind.callback.get();
 			}

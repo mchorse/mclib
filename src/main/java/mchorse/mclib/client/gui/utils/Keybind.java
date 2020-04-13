@@ -15,6 +15,7 @@ public class Keybind
 	public int[] heldKeys;
 	public Supplier<Boolean> callback;
 	public boolean inside;
+	public boolean active = true;
 
 	public Keybind(String label, int mainKey, Supplier<Boolean> callback)
 	{
