@@ -224,8 +224,8 @@ public abstract class GuiModelRenderer extends GuiElement
             }
             else
             {
-                this.yaw += this.lastX - mouseX;
-                this.pitch += this.lastY - mouseY;
+                this.yaw -= this.lastX - mouseX;
+                this.pitch -= this.lastY - mouseY;
             }
 
             this.lastX = mouseX;
