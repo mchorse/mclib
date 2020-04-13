@@ -37,6 +37,11 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 		this.slot = slot;
 	}
 
+	public GuiSlotElement(Minecraft mc, int slot, GuiInventoryElement inventory)
+	{
+		this(mc, slot, inventory, inventory::link);
+	}
+
 	public GuiSlotElement(Minecraft mc, int slot, GuiInventoryElement inventory, Consumer<GuiSlotElement> callback)
 	{
 		super(mc, callback);
