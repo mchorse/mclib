@@ -9,6 +9,22 @@ public class Color
 	public float b;
 	public float a = 1;
 
+	public Color()
+	{}
+
+	public Color(float r, float g, float b)
+	{
+		this.r = r;
+		this.g = g;
+		this.b = b;
+	}
+
+	public Color(float r, float g, float b, float a)
+	{
+		this(r, g, b);
+		this.a = a;
+	}
+
 	public Color set(float r, float g, float b, float a)
 	{
 		this.r = r;
