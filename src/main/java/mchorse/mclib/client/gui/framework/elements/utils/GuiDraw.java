@@ -178,6 +178,16 @@ public class GuiDraw
 		return 1;
 	}
 
+	public static void drawOutlineCenter(int x, int y, int offset, int color)
+	{
+		drawOutlineCenter(x, y, offset, color, 1);
+	}
+
+	public static void drawOutlineCenter(int x, int y, int offset, int color, int border)
+	{
+		drawOutline(x - offset, y - offset, x + offset, y + offset, color, border);
+	}
+
 	public static void drawOutline(int left, int top, int right, int bottom, int color)
 	{
 		drawOutline(left, top, right, bottom, color, 1);
