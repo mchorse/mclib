@@ -2,7 +2,6 @@ package mchorse.mclib.client.gui.framework.elements.list;
 
 import mchorse.mclib.utils.Interpolation;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 
 import java.util.Collections;
 import java.util.Comparator;

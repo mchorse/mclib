@@ -203,6 +203,7 @@ public class Interpolations
      */
     public static float envelope(float x, float lowIn, float lowOut, float highIn, float highOut)
     {
+        if (x < lowIn || x > highOut) return 0;
         if (x < lowOut) return (x - lowIn) / (lowOut - lowIn);
         if (x > highIn) return 1 - (x - highIn) / (highOut - highIn);
 
