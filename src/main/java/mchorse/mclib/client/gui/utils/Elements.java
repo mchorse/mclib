@@ -23,7 +23,7 @@ public class Elements
 	{
 		GuiElement element = new GuiElement(mc);
 
-		RowResizer.apply(element, margin).padding(padding).height(height);
+		element.flex().row(margin).padding(padding).height(height);
 		element.add(elements);
 
 		return element;

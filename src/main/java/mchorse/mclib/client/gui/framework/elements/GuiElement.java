@@ -312,7 +312,7 @@ public class GuiElement extends Gui implements IGuiElement
     {
         if (this.flex == null)
         {
-            this.flex = new Flex();
+            this.flex = new Flex(this);
 
             if (this.resizer == null)
             {

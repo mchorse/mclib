@@ -62,7 +62,7 @@ public class ValueString extends Value
 
 		textbox.flex().w(90);
 		textbox.setText(this.value);
-		RowResizer.apply(element, 0).preferred(0).height(20);
+		element.flex().row(0).preferred(0).height(20);
 		element.add(label, textbox);
 
 		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));

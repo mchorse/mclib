@@ -43,8 +43,7 @@ public class GuiConfig extends GuiElement
 		this.reload.flex().relative(this.area).set(110 - 14, 12, 16, 16);
 		this.mods.flex().relative(this.area).set(10, 35, 100, 0).h(1, -45);
 		this.options.flex().relative(this.area).set(120, 0, 0, 0).w(1, -120).h(1F);
-
-		ColumnResizer.apply(this.options, 5).scroll().width(240).height(20).padding(15);
+		this.options.flex().column(5).scroll().width(240).height(20).padding(15);
 
 		for (Config config : McLib.proxy.configs.modules.values())
 		{

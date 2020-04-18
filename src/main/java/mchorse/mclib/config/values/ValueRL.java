@@ -87,7 +87,7 @@ public class ValueRL extends Value
 
 		pick.flex().w(90);
 
-		RowResizer.apply(element, 0).preferred(0).height(20);
+		element.flex().row(0).preferred(0).height(20);
 		element.add(label, pick);
 
 		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));

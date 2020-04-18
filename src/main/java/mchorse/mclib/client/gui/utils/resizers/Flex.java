@@ -1,7 +1,12 @@
 package mchorse.mclib.client.gui.utils.resizers;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.resizers.constraint.BoundsResizer;
+import mchorse.mclib.client.gui.utils.resizers.layout.ColumnResizer;
+import mchorse.mclib.client.gui.utils.resizers.layout.GridResizer;
+import mchorse.mclib.client.gui.utils.resizers.layout.RowResizer;
 
 /**
  * Flex class
@@ -18,6 +23,13 @@ public class Flex implements IResizer
 
     public IResizer relative;
     public IResizer post;
+
+    public final GuiElement parent;
+
+    public Flex(GuiElement parent)
+    {
+        this.parent = parent;
+    }
 
     public Flex reset()
     {
@@ -305,6 +317,28 @@ public class Flex implements IResizer
         return this.relative(flex).x(1, offset);
     }
 
+    /* Post resizers convenience methods */
+
+    public RowResizer row(int margin)
+    {
+        return RowResizer.apply(this.parent, margin);
+    }
+
+    public ColumnResizer column(int margin)
+    {
+        return ColumnResizer.apply(this.parent, margin);
+    }
+
+    public GridResizer grid(int margin)
+    {
+        return GridResizer.apply(this.parent, margin);
+    }
+
+    public BoundsResizer bounds(GuiContext context, int margin)
+    {
+        return BoundsResizer.apply(this.parent, context, margin);
+    }
+
     /* Hierarchy */
 
    public Flex relative(IResizer relative)
@@ -320,6 +354,8 @@ public class Flex implements IResizer
 
         return this;
     }
+
+    /* IResizer implementation */
 
     @Override
     public void preApply(Area area)

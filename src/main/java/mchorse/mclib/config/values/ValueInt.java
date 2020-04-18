@@ -105,7 +105,7 @@ public class ValueInt extends Value
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
 
-		RowResizer.apply(element, 0).preferred(0).height(20);
+		element.flex().row(0).preferred(0).height(20);
 		element.add(label);
 
 		if (this.subtype == Subtype.COLOR || this.subtype == Subtype.COLOR_ALPHA)

@@ -46,7 +46,7 @@ public class GuiColorElement extends GuiElement
 		});
 
 		this.picker.flex().relative(this.area).x(0.5F, 0).y(1F, 2).anchor(0.5F, 0).wh(200, 85);
-		BoundsResizer.apply(this.picker, GuiBase.getCurrent(), 2);
+		this.picker.flex().bounds(GuiBase.getCurrent(), 2);
 	}
 
 	public GuiColorElement noLabel()
