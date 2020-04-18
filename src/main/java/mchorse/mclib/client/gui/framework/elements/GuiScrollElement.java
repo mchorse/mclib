@@ -71,6 +71,11 @@ public class GuiScrollElement extends GuiElement
     {
         if (!this.area.isInside(context))
         {
+            if (context.isFocused() && this.isDescendant((GuiElement) context.activeElement))
+            {
+                context.unfocus();
+            }
+
             return false;
         }
 
@@ -91,6 +96,11 @@ public class GuiScrollElement extends GuiElement
     {
         if (!this.area.isInside(context))
         {
+            if (context.isFocused() && this.isDescendant((GuiElement) context.activeElement))
+            {
+                context.unfocus();
+            }
+
             return false;
         }
 

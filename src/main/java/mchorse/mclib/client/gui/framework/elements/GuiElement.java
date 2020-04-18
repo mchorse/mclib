@@ -106,6 +106,26 @@ public class GuiElement extends Gui implements IGuiElement
         return this.parent != null;
     }
 
+    public boolean isDescendant(GuiElement element)
+    {
+        if (this == element)
+        {
+            return false;
+        }
+
+        while (element != null)
+        {
+            if (element.parent == this)
+            {
+                return true;
+            }
+
+            element = element.parent;
+        }
+
+        return false;
+    }
+
     public List<IGuiElement> getChildren()
     {
         if (this.children == null)
