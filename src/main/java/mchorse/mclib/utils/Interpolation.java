@@ -1,5 +1,9 @@
 package mchorse.mclib.utils;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 public enum Interpolation
 {
     LINEAR("linear")
@@ -113,4 +117,10 @@ public enum Interpolation
     }
 
     public abstract float interpolate(float a, float b, float x);
+
+    @SideOnly(Side.CLIENT)
+    public String getName()
+    {
+        return I18n.format("mclib.interpolations." + this.key);
+    }
 }

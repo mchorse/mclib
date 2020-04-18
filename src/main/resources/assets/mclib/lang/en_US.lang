@@ -31,3 +31,15 @@ mclib.config.background.image=Image
 mclib.config.comments.background.image=Background image to be used in every menu
 mclib.config.background.color=Color
 mclib.config.comments.background.color=Background color to be used in every menu. If image is specified, then this will be used as tinting color for background
+
+# Interpolations
+mclib.interpolations.linear=Linear
+mclib.interpolations.quad_in=Quadratic In
+mclib.interpolations.quad_out=Quadratic Out
+mclib.interpolations.quad_inout=Quadratic In/out
+mclib.interpolations.cubic_in=Cubic In
+mclib.interpolations.cubic_out=Cubic Out
+mclib.interpolations.cubic_inout=Cubic In/out
+mclib.interpolations.exp_in=Exponential In
+mclib.interpolations.exp_out=Exponential Out
+mclib.interpolations.exp_inout=Exponential In/out
