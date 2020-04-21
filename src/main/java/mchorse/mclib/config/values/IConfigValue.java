@@ -21,7 +21,7 @@ public interface IConfigValue
 	public boolean isVisible();
 
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Config config, ConfigCategory category, Consumer<IConfigValue> save);
+	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Consumer<IConfigValue> save);
 
 	public void fromJSON(JsonElement element);
 

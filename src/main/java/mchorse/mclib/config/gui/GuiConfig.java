@@ -82,7 +82,7 @@ public class GuiConfig extends GuiElement
 				continue;
 			}
 
-			GuiLabel label = new GuiLabel(this.mc, this.config.getCategoryTitle(category.id)).anchor(0, 1).background(0x88000000);
+			GuiLabel label = new GuiLabel(this.mc, category.getTitle()).anchor(0, 1).background(0x88000000);
 			label.flex().set(0, 0, this.font.getStringWidth(label.label), 40);
 
 			if (first)
@@ -90,7 +90,7 @@ public class GuiConfig extends GuiElement
 				label.anchor(0, 0).flex().h(0, this.font.FONT_HEIGHT);
 			}
 
-			this.options.add(label.tooltip(this.config.getCategoryTooltip(category.id), Direction.BOTTOM));
+			this.options.add(label.tooltip(category.getTooltip(), Direction.BOTTOM));
 
 			for (IConfigValue value : category.values.values())
 			{
@@ -99,7 +99,7 @@ public class GuiConfig extends GuiElement
 					continue;
 				}
 
-				for (GuiElement element : value.getFields(this.mc, this, this.config, category, this::save))
+				for (GuiElement element : value.getFields(this.mc, this, this::save))
 				{
 					this.options.add(element);
 				}

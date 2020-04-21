@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.config.values.Value;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,6 +20,18 @@ public class ConfigCategory
 	public ConfigCategory(String id)
 	{
 		this.id = id;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getTitle()
+	{
+		return this.config.getCategoryTitle(this.id);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getTooltip()
+	{
+		return this.config.getCategoryTooltip(this.id);
 	}
 
 	public void register(String id, IConfigValue value)

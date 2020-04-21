@@ -1,6 +1,8 @@
 package mchorse.mclib.config.values;
 
 import mchorse.mclib.config.ConfigCategory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class Value implements IConfigValue
 {
@@ -11,6 +13,18 @@ public abstract class Value implements IConfigValue
 	public Value(String id)
 	{
 		this.id = id;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getTitle()
+	{
+		return this.category.config.getValueTitle(this.category.id, this.id);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getTooltip()
+	{
+		return this.category.config.getValueTooltip(this.category.id, this.id);
 	}
 
 	public void invisible()

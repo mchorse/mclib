@@ -50,10 +50,10 @@ public class ValueString extends Value
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Config config, ConfigCategory category, Consumer<IConfigValue> save)
+	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Consumer<IConfigValue> save)
 	{
 		GuiElement element = new GuiElement(mc);
-		GuiLabel label = new GuiLabel(mc, config.getValueTitle(category.id, this.id)).anchor(0, 0.5F);
+		GuiLabel label = new GuiLabel(mc, this.getTitle()).anchor(0, 0.5F);
 		GuiTextElement textbox = new GuiTextElement(mc, (value) ->
 		{
 			this.set(value);
@@ -65,7 +65,7 @@ public class ValueString extends Value
 		element.flex().row(0).preferred(0).height(20);
 		element.add(label, textbox);
 
-		return Arrays.asList(element.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
+		return Arrays.asList(element.tooltip(this.getTooltip()));
 	}
 
 	@Override

@@ -48,15 +48,15 @@ public class ValueBoolean extends Value
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Config config, ConfigCategory category, Consumer<IConfigValue> save)
+	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Consumer<IConfigValue> save)
 	{
-		GuiToggleElement checkbox = new GuiToggleElement(mc, config.getValueTitle(category.id, this.id), this.value, (value) ->
+		GuiToggleElement checkbox = new GuiToggleElement(mc, this.getTitle(), this.value, (value) ->
 		{
 			this.set(value.isToggled());
 			save.accept(this);
 		});
 
-		return Arrays.asList(checkbox.tooltip(config.getValueTooltip(category.id, this.id), Direction.BOTTOM));
+		return Arrays.asList(checkbox.tooltip(this.getTooltip()));
 	}
 
 	@Override
