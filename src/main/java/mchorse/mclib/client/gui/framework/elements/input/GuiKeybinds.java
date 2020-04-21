@@ -9,12 +9,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class GuiKeybinds extends GuiScrollElement
 {
-	public List<Keybind> keybinds = new ArrayList<Keybind>();
+	public Map<String, KeybindCategory> keybinds = new HashMap<String, KeybindCategory>();
 
 	public GuiKeybinds(Minecraft mc)
 	{
@@ -26,17 +28,15 @@ public class GuiKeybinds extends GuiScrollElement
 
 	public void addKeybind(Keybind keybind)
 	{
-		for (int i = 0; i < this.keybinds.size(); i ++)
-		{
-			if (this.keybinds.get(i).equals(keybind))
-			{
-				this.keybinds.set(i, keybind);
+		KeybindCategory category = this.keybinds.get(keybind.category);
 
-				return;
-			}
+		if (category == null)
+		{
+			category = new KeybindCategory(keybind.category);
+			this.keybinds.put(keybind.category, category);
 		}
 
-		this.keybinds.add(keybind);
+		category.add(keybind);
 	}
 
 	@Override
@@ -55,22 +55,71 @@ public class GuiKeybinds extends GuiScrollElement
 		super.preDraw(context);
 
 		int x = this.area.x + 10;
-		int y = this.area.y + 20;
+		int y = this.area.y + 10;
 		int i = 0;
 
-		for (Keybind keybind : this.keybinds)
-		{
-			String combo = keybind.getKeyCombo();
-			int w = this.font.getStringWidth(combo);
+		KeybindCategory general = this.keybinds.get("");
 
-			Gui.drawRect(x - 2, y + i - 2, x + w + 2, y + i + this.font.FONT_HEIGHT + 2, 0xff000000 + McLib.primaryColor.get());
-			this.font.drawString(combo, x, y + i, 0xffffff);
-			this.font.drawStringWithShadow(keybind.label, x + w + 6, y + i, 0xffffff);
-			i += 17;
+		i = general.draw(context, x, y, i) + 10;
+
+		for (KeybindCategory category : this.keybinds.values())
+		{
+			if (category != general)
+			{
+				i = category.draw(context, x, y, i) + 10;
+			}
 		}
 
 		this.keybinds.clear();
-		this.scroll.scrollSize = 40 + i - 17;
+		this.scroll.scrollSize = i + 3;
 		this.scroll.clamp();
+	}
+
+	public static class KeybindCategory
+	{
+		public String title;
+		public List<Keybind> keybinds = new ArrayList<Keybind>();
+		public boolean shouldClean;
+
+		public KeybindCategory(String title)
+		{
+			this.title = title;
+		}
+
+		public void add(Keybind keybind)
+		{
+			if (this.shouldClean)
+			{
+				this.keybinds.clear();
+				this.shouldClean = false;
+			}
+
+			this.keybinds.add(keybind);
+		}
+
+		public int draw(GuiContext context, int x, int y, int i)
+		{
+			int color = 0xff000000 + McLib.primaryColor.get();
+
+			if (!this.title.isEmpty())
+			{
+				Gui.drawRect(x - 10, y + i - 2, x + context.font.getStringWidth(this.title) + 2, y + i + context.font.FONT_HEIGHT + 2, color);
+				context.font.drawStringWithShadow(this.title, x, y + i, 0xffffff);
+				i += 14;
+			}
+
+			for (Keybind keybind : this.keybinds)
+			{
+				String combo = keybind.getKeyCombo();
+				int w = context.font.getStringWidth(combo);
+
+				Gui.drawRect(x - 2, y + i - 2, x + w + 2, y + i + context.font.FONT_HEIGHT + 2, color);
+				context.font.drawString(combo, x, y + i, 0xffffff);
+				context.font.drawStringWithShadow(keybind.label, x + w + 5, y + i, 0xffffff);
+				i += 14;
+			}
+
+			return i;
+		}
 	}
 }

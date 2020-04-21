@@ -3,24 +3,18 @@ package mchorse.mclib.client.gui.mclib;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.GuiModelRenderer;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
-import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.Icons;
-import mchorse.mclib.client.gui.utils.resizers.layout.RowResizer;
 import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.events.RegisterDashboardPanels;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
+import org.lwjgl.input.Keyboard;
 
 public class GuiDashboard extends GuiBase
 {
@@ -76,6 +70,16 @@ public class GuiDashboard extends GuiBase
 			}
 
 			this.add(this.element);
+
+			for (int i = 0; i < 5; i ++)
+			{
+				String category = i == 0 ? "" : "Category " + i;
+
+				for (int j = 0; j < 5; j ++)
+				{
+					this.keys().register("Test", Keyboard.KEY_Q + i + j * (i + 1), () -> {}).category(category);
+				}
+			}
 		}
 
 		@Override

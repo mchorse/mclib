@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 public class Keybind
 {
 	public String label;
+	public String category = "";
 	public int mainKey;
 	public int[] heldKeys;
 	public Runnable callback;
@@ -49,6 +50,13 @@ public class Keybind
 	public Keybind active(boolean active)
 	{
 		this.active = active;
+
+		return this;
+	}
+
+	public Keybind category(String category)
+	{
+		this.category = category;
 
 		return this;
 	}
