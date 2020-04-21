@@ -3,7 +3,6 @@ package mchorse.mclib.client.gui.utils;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Arrays;
-import java.util.function.Supplier;
 
 /**
  * Keybind class
@@ -13,11 +12,11 @@ public class Keybind
 	public String label;
 	public int mainKey;
 	public int[] heldKeys;
-	public Supplier<Boolean> callback;
+	public Runnable callback;
 	public boolean inside;
 	public boolean active = true;
 
-	public Keybind(String label, int mainKey, Supplier<Boolean> callback)
+	public Keybind(String label, int mainKey, Runnable callback)
 	{
 		this.label = label;
 		this.mainKey = mainKey;

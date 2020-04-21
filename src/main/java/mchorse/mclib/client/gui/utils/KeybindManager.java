@@ -4,7 +4,6 @@ import mchorse.mclib.client.gui.framework.elements.input.GuiKeybinds;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * Keybind manager
@@ -13,7 +12,7 @@ public class KeybindManager
 {
 	public List<Keybind> keybinds = new ArrayList<Keybind>();
 
-	public Keybind register(String label, int key, Supplier<Boolean> callback)
+	public Keybind register(String label, int key, Runnable callback)
 	{
 		Keybind keybind = new Keybind(label, key, callback);
 
@@ -22,7 +21,7 @@ public class KeybindManager
 		return keybind;
 	}
 
-	public Keybind registerInside(String label, int key, Supplier<Boolean> callback)
+	public Keybind registerInside(String label, int key, Runnable callback)
 	{
 		return this.register(label, key, callback).inside();
 	}
@@ -47,9 +46,11 @@ public class KeybindManager
 	{
 		for (Keybind keybind : this.keybinds)
 		{
-			if (keybind.active && keybind.check(keyCode, inside))
+			if (keybind.active && keybind.check(keyCode, inside) && keybind.callback != null)
 			{
-				return keybind.callback != null && keybind.callback.get();
+				keybind.callback.run();
+
+				return true;
 			}
 		}
 
