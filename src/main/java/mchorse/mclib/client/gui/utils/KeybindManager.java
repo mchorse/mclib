@@ -35,7 +35,7 @@ public class KeybindManager
 
 		for (Keybind keybind : this.keybinds)
 		{
-			if (keybind.active && (!keybind.inside || inside))
+			if (keybind.isActive() && (!keybind.inside || inside))
 			{
 				keybinds.addKeybind(keybind);
 			}
@@ -46,7 +46,7 @@ public class KeybindManager
 	{
 		for (Keybind keybind : this.keybinds)
 		{
-			if (keybind.active && keybind.check(keyCode, inside) && keybind.callback != null)
+			if (keybind.isActive() && keybind.check(keyCode, inside) && keybind.callback != null)
 			{
 				keybind.callback.run();
 
