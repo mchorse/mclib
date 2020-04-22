@@ -13,7 +13,7 @@ public class GuiMessageModal extends GuiModal
         super(mc, label);
 
         this.button = new GuiButtonElement(mc, I18n.format("mclib.gui.ok"), (b) -> this.removeFromParent());
-        this.button.flex().relative(this.area).set(10, 0, 0, 20).y(1, -30).w(1, -20);
+        this.button.flex().relative(this).set(10, 0, 0, 20).y(1, -30).w(1, -20);
 
         this.add(this.button);
     }

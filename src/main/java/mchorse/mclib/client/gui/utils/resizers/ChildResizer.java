@@ -14,7 +14,7 @@ public class ChildResizer extends DecoratedResizer
 
 	public ChildResizer(IParentResizer parent, GuiElement element)
 	{
-		super(element.resizer());
+		super(element.flex());
 		this.parent = parent;
 		this.element = element;
 	}

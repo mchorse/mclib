@@ -32,7 +32,7 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 			this.removeFromParent();
 		});
 
-		this.actions.flex().relative(this.area).w(1, 0).h(1, 0);
+		this.actions.flex().relative(this).w(1, 0).h(1, 0);
 		this.add(this.actions);
 	}
 

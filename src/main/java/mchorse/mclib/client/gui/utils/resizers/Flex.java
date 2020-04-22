@@ -341,6 +341,13 @@ public class Flex implements IResizer
 
     /* Hierarchy */
 
+    public Flex relative(GuiElement element)
+    {
+        this.relative = element.area;
+
+        return this;
+    }
+
    public Flex relative(IResizer relative)
     {
         this.relative = relative;

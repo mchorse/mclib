@@ -40,7 +40,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
 
         this.direction = direction == null ? Direction.BOTTOM : direction;
         this.view = new GuiDelegateElement<T>(mc, null);
-        this.view.flex().relative(this.area).w(1F).h(1F, -20);
+        this.view.flex().relative(this).w(1F).h(1F, -20);
 
         if (this.direction == Direction.TOP)
         {
@@ -94,7 +94,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
         {
             if (this.direction.isHorizontal())
             {
-                button.flex().relative(this.area).set(2, 2, 16, 16);
+                button.flex().relative(this).set(2, 2, 16, 16);
 
                 if (this.direction == Direction.RIGHT)
                 {
@@ -105,7 +105,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
             {
                 boolean bottom = this.direction == Direction.BOTTOM;
 
-                button.flex().relative(this.area).set(0, 0, 16, 16).x(1, -18).y(bottom ? 1 : 0, bottom ? -18 : 2);
+                button.flex().relative(this).set(0, 0, 16, 16).x(1, -18).y(bottom ? 1 : 0, bottom ? -18 : 2);
             }
         }
         else
@@ -115,7 +115,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
             int x = this.direction.isVertical() ? -20 : 0;
             int y = this.direction.isHorizontal() ? 20 : 0;
 
-            button.flex().relative(last.flex()).set(x, y, 16, 16);
+            button.flex().relative(last).set(x, y, 16, 16);
         }
     }
 

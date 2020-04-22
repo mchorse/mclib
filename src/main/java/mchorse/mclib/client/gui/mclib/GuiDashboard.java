@@ -57,7 +57,7 @@ public class GuiDashboard extends GuiBase
 			super(mc);
 
 			this.element = new GuiElement(mc);
-			this.element.flex().relative(this.area).xy(0.5F, 0.5F).anchor(0.5F, 0)
+			this.element.flex().relative(this).xy(0.5F, 0.5F).anchor(0.5F, 0)
 				.row(5).width(20).resize().padding(5);
 
 			for (int i = 0, c = (int) (Math.random() * 5) + 5; i < c; i ++)

@@ -67,7 +67,7 @@ public class GuiColorElement extends GuiElement
 			}
 		});
 
-		this.picker.flex().relative(this.area).x(0.5F, 0).y(1F, 2).anchor(0.5F, 0).wh(200, 85);
+		this.picker.flex().relative(this).x(0.5F, 0).y(1F, 2).anchor(0.5F, 0).wh(200, 85);
 		this.picker.flex().bounds(GuiBase.getCurrent(), 2);
 	}
 
@@ -163,7 +163,7 @@ public class GuiColorElement extends GuiElement
 				this.callback();
 			});
 
-			this.input.flex().relative(this.area).set(5, 5, 0, 20).w(1, -35);
+			this.input.flex().relative(this).set(5, 5, 0, 20).w(1, -35);
 
 			this.hideTooltip().add(this.input);
 		}

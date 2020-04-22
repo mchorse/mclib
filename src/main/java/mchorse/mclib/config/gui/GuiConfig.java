@@ -39,9 +39,9 @@ public class GuiConfig extends GuiElement
 		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.get(0).value));
 		this.options = new GuiScrollElement(mc, ScrollArea.ScrollDirection.HORIZONTAL);
 
-		this.reload.flex().relative(this.area).set(110 - 14, 12, 16, 16);
-		this.mods.flex().relative(this.area).set(10, 35, 100, 0).h(1, -45);
-		this.options.flex().relative(this.area).set(120, 0, 0, 0).w(1, -120).h(1F);
+		this.reload.flex().relative(this).set(110 - 14, 12, 16, 16);
+		this.mods.flex().relative(this).set(10, 35, 100, 0).h(1, -45);
+		this.options.flex().relative(this).set(120, 0, 0, 0).w(1, -120).h(1F);
 		this.options.flex().column(5).scroll().width(240).height(20).padding(15);
 
 		for (Config config : McLib.proxy.configs.modules.values())

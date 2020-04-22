@@ -73,7 +73,7 @@ public class ValueRL extends Value
 
 			picker.callback = this::set;
 			picker.fill(this.value);
-			picker.flex().relative(gui.area).wh(1F, 1F);
+			picker.flex().relative(gui).wh(1F, 1F);
 			picker.resize();
 
 			if (picker.hasParent())

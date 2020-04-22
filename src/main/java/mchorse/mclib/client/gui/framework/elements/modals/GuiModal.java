@@ -57,7 +57,7 @@ public abstract class GuiModal extends GuiElement
 
         GuiModal modal = supplier.get();
 
-        modal.flex().relative(parent.area).wh(1F, 1F);
+        modal.flex().relative(parent).wh(1F, 1F);
         modal.resize();
         parent.add(modal);
 
