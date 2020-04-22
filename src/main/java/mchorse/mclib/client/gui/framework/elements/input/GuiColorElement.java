@@ -86,10 +86,17 @@ public class GuiColorElement extends GuiElement
 			return true;
 		}
 
-		if (!this.picker.hasParent() && this.area.isInside(context))
+		if (this.area.isInside(context))
 		{
-			this.getParentContainer().add(this.picker);
-			this.picker.resize();
+			if (!this.picker.hasParent())
+			{
+				this.getParentContainer().add(this.picker);
+				this.picker.resize();
+			}
+			else
+			{
+				this.picker.removeFromParent();
+			}
 
 			return true;
 		}

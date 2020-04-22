@@ -95,11 +95,21 @@ public class GuiDelegateElement<T extends GuiElement> extends GuiElement
     @Override
     public void resize()
     {
+        if (this.resizer != null)
+        {
+            this.resizer.apply(this.area);
+        }
+
         if (this.delegate != null)
         {
             this.delegate.resizer = this.resizer;
             this.delegate.flex().link(this.flex());
             this.delegate.resize();
+        }
+
+        if (this.resizer != null)
+        {
+            this.resizer.postApply(this.area);
         }
     }
 
