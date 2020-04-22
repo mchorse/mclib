@@ -107,7 +107,7 @@ public class ColumnResizer extends AutomaticResizer
 
 		if (!this.vertical && this.y + h > this.parent.area.h - this.padding * 2)
 		{
-			this.x += this.w + this.margin * 2;
+			this.x += this.w + this.padding;
 			this.y = this.w = 0;
 		}
 
