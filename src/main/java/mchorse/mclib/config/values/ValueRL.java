@@ -12,6 +12,7 @@ import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.resources.RLUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,11 +44,12 @@ public class ValueRL extends Value
 	public void set(ResourceLocation value)
 	{
 		this.value = value;
+		this.saveLater();
 	}
 
 	public void set(String value)
 	{
-		this.value = RLUtils.create(value);
+		this.set(RLUtils.create(value));
 	}
 
 	@Override
@@ -58,22 +60,19 @@ public class ValueRL extends Value
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Consumer<IConfigValue> save)
+	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, this.getTitle()).anchor(0, 0.5F);
 		/* TODO: extract string */
-		GuiButtonElement pick = new GuiButtonElement(mc, "Pick texture",  (button) ->
+		GuiButtonElement pick = new GuiButtonElement(mc, I18n.format("mclib.gui.pick_texture"),  (button) ->
 		{
 			if (picker == null)
 			{
-				picker = new GuiTexturePicker(mc, (rl) ->
-				{
-					this.set(rl);
-					save.accept(this);
-				});
+				picker = new GuiTexturePicker(mc, null);
 			}
 
+			picker.callback = this::set;
 			picker.fill(this.value);
 			picker.flex().relative(gui.area).wh(1F, 1F);
 			picker.resize();

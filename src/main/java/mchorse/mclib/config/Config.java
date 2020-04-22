@@ -84,6 +84,14 @@ public class Config
 	}
 
 	/**
+	 * Save later in a separate thread
+	 */
+	public void saveLater()
+	{
+		ConfigThread.add(this);
+	}
+
+	/**
 	 * Save config to default location
 	 */
 	public void save()

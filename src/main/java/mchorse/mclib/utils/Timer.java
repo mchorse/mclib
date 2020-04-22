@@ -36,6 +36,8 @@ public class Timer
 
 	public boolean check()
 	{
-		return this.enabled && System.currentTimeMillis() >= this.time;
+		long time = System.currentTimeMillis();
+
+		return this.enabled && time >= this.time;
 	}
 }

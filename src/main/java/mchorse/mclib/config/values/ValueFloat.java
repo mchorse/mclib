@@ -23,14 +23,16 @@ public class ValueFloat extends Value
 {
 	private float value;
 	private float defaultValue;
-	private float min = Float.NEGATIVE_INFINITY;
-	private float max = Float.POSITIVE_INFINITY;
+	public final float min;
+	public final float max;
 
 	public ValueFloat(String id, float defaultValue)
 	{
 		super(id);
 
 		this.defaultValue = defaultValue;
+		this.min = Float.NEGATIVE_INFINITY;
+		this.max = Float.POSITIVE_INFINITY;
 
 		this.reset();
 	}
@@ -54,6 +56,7 @@ public class ValueFloat extends Value
 	public void set(float value)
 	{
 		this.value = MathUtils.clamp(value, this.min, this.max);
+		this.saveLater();
 	}
 
 	@Override
@@ -64,22 +67,16 @@ public class ValueFloat extends Value
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Consumer<IConfigValue> save)
+	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, this.getTitle()).anchor(0, 0.5F);
-		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (value) ->
-		{
-			this.set(value);
-			save.accept(this);
-		});
+		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this);
 
-		trackpad.limit(this.min, this.max);
-		trackpad.setValue(this.value);
 		trackpad.flex().w(90);
 
 		element.flex().row(0).preferred(0).height(20);
-		element.add(label, trackpad);
+		element.add(label, trackpad.removeTooltip());
 
 		return Arrays.asList(element.tooltip(this.getTooltip()));
 	}

@@ -8,6 +8,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.resizers.constraint.BoundsResizer;
+import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
@@ -32,6 +33,18 @@ public class GuiColorElement extends GuiElement
 {
 	public GuiColorPickerElement picker;
 	public boolean label = true;
+
+	public GuiColorElement(Minecraft mc, ValueInt value)
+	{
+		this(mc, value::set);
+		this.tooltip(value.getTooltip());
+		this.picker.setColor(value.get());
+
+		if (value.getSubtype() == ValueInt.Subtype.COLOR_ALPHA)
+		{
+			this.picker.editAlpha();
+		}
+	}
 
 	public GuiColorElement(Minecraft mc, Consumer<Integer> callback)
 	{

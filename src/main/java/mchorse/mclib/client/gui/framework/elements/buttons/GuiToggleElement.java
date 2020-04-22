@@ -4,6 +4,7 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -14,6 +15,12 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 {
 	private String label;
 	private boolean state;
+
+	public GuiToggleElement(Minecraft mc, ValueBoolean value)
+	{
+		this(mc, value.getTitle(), value.get(), (toggle) -> value.set(toggle.isToggled()));
+		this.tooltip(value.getTooltip());
+	}
 
 	public GuiToggleElement(Minecraft mc, String label, Consumer<GuiToggleElement> callback)
 	{

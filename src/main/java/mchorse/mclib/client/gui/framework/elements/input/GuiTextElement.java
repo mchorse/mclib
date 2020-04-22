@@ -7,6 +7,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.config.values.ValueString;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
 import net.minecraft.client.gui.GuiScreen;
@@ -22,6 +23,13 @@ public class GuiTextElement extends GuiElement implements GuiResponder, IFocused
 {
     public GuiTextField field;
     public Consumer<String> callback;
+
+    public GuiTextElement(Minecraft mc, ValueString value)
+    {
+        this(mc, value::set);
+        this.setText(value.get());
+        this.tooltip(value.getTooltip());
+    }
 
     public GuiTextElement(Minecraft mc, int maxLength, Consumer<String> callback)
     {

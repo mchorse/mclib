@@ -233,6 +233,13 @@ public class GuiElement extends Gui implements IGuiElement
 
     /* Setters */
 
+    public GuiElement removeTooltip()
+    {
+        this.tooltip = null;
+
+        return this;
+    }
+
     public GuiElement tooltip(String label)
     {
         this.tooltip = new GuiTooltip.Tooltip(label, Direction.BOTTOM);

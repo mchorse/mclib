@@ -26,8 +26,8 @@ public class ValueInt extends Value
 {
 	private int value;
 	private int defaultValue;
-	private int min = Integer.MIN_VALUE;
-	private int max = Integer.MAX_VALUE;
+	public final int min;
+	public final int max;
 	private Subtype subtype = Subtype.INTEGER;
 
 	public ValueInt(String id, int defaultValue)
@@ -35,6 +35,8 @@ public class ValueInt extends Value
 		super(id);
 
 		this.defaultValue = defaultValue;
+		this.min = Integer.MIN_VALUE;
+		this.max = Integer.MAX_VALUE;
 
 		this.reset();
 	}
@@ -58,16 +60,17 @@ public class ValueInt extends Value
 	public void set(int value)
 	{
 		this.value = MathUtils.clamp(value, this.min, this.max);
+		this.saveLater();
 	}
 
 	public void setColorValue(String value)
 	{
-		int v = ColorUtils.parseColor(value);
+		this.set(ColorUtils.parseColor(value));
+	}
 
-		if (v != 0)
-		{
-			this.set(v);
-		}
+	public Subtype getSubtype()
+	{
+		return this.subtype;
 	}
 
 	public ValueInt subtype(Subtype subtype)
@@ -100,7 +103,7 @@ public class ValueInt extends Value
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Consumer<IConfigValue> save)
+	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, this.getTitle()).anchor(0, 0.5F);
@@ -110,46 +113,24 @@ public class ValueInt extends Value
 
 		if (this.subtype == Subtype.COLOR || this.subtype == Subtype.COLOR_ALPHA)
 		{
-			GuiColorElement color = new GuiColorElement(mc, (value) ->
-			{
-				this.set(value);
-				save.accept(this);
-			});
+			GuiColorElement color = new GuiColorElement(mc, this);
 
 			color.flex().w(90);
-			color.picker.setColor(this.value);
-
-			if (this.subtype == Subtype.COLOR_ALPHA)
-			{
-				color.picker.editAlpha();
-			}
-
-			element.add(color);
+			element.add(color.removeTooltip());
 		}
 		else if (this.subtype == Subtype.KEYBIND)
 		{
-			GuiKeybindElement keybind = new GuiKeybindElement(mc, (value) ->
-			{
-				this.set(value.intValue());
-				save.accept(this);
-			});
+			GuiKeybindElement keybind = new GuiKeybindElement(mc, this);
 
-			keybind.setKeybind(this.value);
 			keybind.flex().w(90);
-			element.add(keybind);
+			element.add(keybind.removeTooltip());
 		}
 		else
 		{
-			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (value) ->
-			{
-				this.set(value.intValue());
-				save.accept(this);
-			});
+			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this);
 
-			trackpad.limit(this.min, this.max, true);
-			trackpad.setValue(this.value);
 			trackpad.flex().w(90);
-			element.add(trackpad);
+			element.add(trackpad.removeTooltip());
 		}
 
 		return Arrays.asList(element.tooltip(this.getTooltip()));

@@ -15,16 +15,10 @@ public abstract class Value implements IConfigValue
 		this.id = id;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public String getTitle()
+	@Override
+	public String getId()
 	{
-		return this.category.config.getValueTitle(this.category.id, this.id);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public String getTooltip()
-	{
-		return this.category.config.getValueTooltip(this.category.id, this.id);
+		return this.id;
 	}
 
 	public void invisible()
@@ -38,9 +32,23 @@ public abstract class Value implements IConfigValue
 		return this.visible;
 	}
 
-	@Override
-	public String getId()
+	public void saveLater()
 	{
-		return this.id;
+		if (this.category != null && this.category.config != null)
+		{
+			this.category.config.saveLater();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getTitle()
+	{
+		return this.category.config.getValueTitle(this.category.id, this.id);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getTooltip()
+	{
+		return this.category.config.getValueTooltip(this.category.id, this.id);
 	}
 }

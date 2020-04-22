@@ -29,7 +29,6 @@ public class GuiConfig extends GuiElement
 	public GuiScrollElement options;
 
 	private Config config;
-	private Timer timer = new Timer(500);
 
 	public GuiConfig(Minecraft mc)
 	{
@@ -99,7 +98,7 @@ public class GuiConfig extends GuiElement
 					continue;
 				}
 
-				for (GuiElement element : value.getFields(this.mc, this, this::save))
+				for (GuiElement element : value.getFields(this.mc, this))
 				{
 					this.options.add(element);
 				}
@@ -111,19 +110,9 @@ public class GuiConfig extends GuiElement
 		this.resize();
 	}
 
-	public void save(IConfigValue value)
-	{
-		this.timer.mark();
-	}
-
 	@Override
 	public void draw(GuiContext context)
 	{
-		if (this.timer.checkReset())
-		{
-			this.config.save();
-		}
-
 		this.area.draw(0xaa000000);
 		this.mods.area.draw(0xdd000000, -10, -35, -10, -10);
 		this.font.drawStringWithShadow(I18n.format("mclib.gui.config.title"), this.area.x + 10, this.area.y + 20 - this.font.FONT_HEIGHT / 2, 0xffffff);

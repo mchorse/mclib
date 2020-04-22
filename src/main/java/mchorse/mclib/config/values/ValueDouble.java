@@ -23,14 +23,16 @@ public class ValueDouble extends Value
 {
 	private double value;
 	private double defaultValue;
-	private double min = Double.NEGATIVE_INFINITY;
-	private double max = Double.POSITIVE_INFINITY;
+	public final double min;
+	public final double max;
 
 	public ValueDouble(String id, double defaultValue)
 	{
 		super(id);
 
 		this.defaultValue = defaultValue;
+		this.min = Double.NEGATIVE_INFINITY;
+		this.max = Double.POSITIVE_INFINITY;
 
 		this.reset();
 	}
@@ -54,6 +56,7 @@ public class ValueDouble extends Value
 	public void set(double value)
 	{
 		this.value = MathUtils.clamp(value, this.min, this.max);
+		this.saveLater();
 	}
 
 	@Override
@@ -64,22 +67,16 @@ public class ValueDouble extends Value
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui, Consumer<IConfigValue> save)
+	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, this.getTitle()).anchor(0, 0.5F);
-		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, (v) ->
-		{
-			this.set(v.doubleValue());
-			save.accept(this);
-		});
+		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this);
 
-		trackpad.limit((float) this.min, (float) this.max);
-		trackpad.setValue((float) this.value);
 		trackpad.flex().w(90);
 
 		element.flex().row(0).preferred(0).height(20);
-		element.add(label, trackpad);
+		element.add(label, trackpad.removeTooltip());
 
 		return Arrays.asList(element.tooltip(this.getTooltip()));
 	}

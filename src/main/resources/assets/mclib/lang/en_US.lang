@@ -4,6 +4,7 @@ mclib.gui.cancel=Cancel
 mclib.gui.multi_skin=Multi-skin
 mclib.gui.no_data=No data available...
 mclib.gui.open_folder=Open folder
+mclib.gui.pick_texture=Pick texture
 
 mclib.gui.config.title=Configuration
 mclib.gui.config.tooltip=Mods configuration

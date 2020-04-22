@@ -4,6 +4,7 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.config.values.ValueInt;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import org.lwjgl.input.Keyboard;
@@ -15,6 +16,13 @@ public class GuiKeybindElement extends GuiElement
 	public int keybind;
 	public boolean enabled;
 	public Consumer<Integer> callback;
+
+	public GuiKeybindElement(Minecraft mc, ValueInt value)
+	{
+		this(mc, value::set);
+		this.setKeybind(value.get());
+		this.tooltip(value.getTooltip());
+	}
 
 	public GuiKeybindElement(Minecraft mc, Consumer<Integer> callback)
 	{

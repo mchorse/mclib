@@ -9,7 +9,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class ConfigCategory
 {
