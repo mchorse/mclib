@@ -64,7 +64,6 @@ public class ValueRL extends Value
 	{
 		GuiElement element = new GuiElement(mc);
 		GuiLabel label = new GuiLabel(mc, this.getTitle()).anchor(0, 0.5F);
-		/* TODO: extract string */
 		GuiButtonElement pick = new GuiButtonElement(mc, I18n.format("mclib.gui.pick_texture"),  (button) ->
 		{
 			if (picker == null)

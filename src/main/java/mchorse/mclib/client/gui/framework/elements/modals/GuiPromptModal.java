@@ -21,7 +21,7 @@ public class GuiPromptModal extends GuiModal
         super(mc, label);
 
         this.callback = callback;
-        this.text = new GuiTextElement(mc, null);
+        this.text = new GuiTextElement(mc, (Consumer<String>) null);
         this.text.flex().relative(this.area).set(10, 0, 0, 20).y(1, -55).w(1, -20);
         this.text.focus(GuiBase.getCurrent());
 
