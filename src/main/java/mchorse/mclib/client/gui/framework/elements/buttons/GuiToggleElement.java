@@ -18,7 +18,16 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 
 	public GuiToggleElement(Minecraft mc, ValueBoolean value)
 	{
-		this(mc, value.getTitle(), value.get(), (toggle) -> value.set(toggle.isToggled()));
+		this(mc, value, null);
+	}
+
+	public GuiToggleElement(Minecraft mc, ValueBoolean value, Consumer<GuiToggleElement> callback)
+	{
+		this(mc, value.getTitle(), value.get(), callback == null ? (toggle) -> value.set(toggle.isToggled()) : (toggle) ->
+		{
+			value.set(toggle.isToggled());
+			callback.accept(toggle);
+		});
 		this.tooltip(value.getTooltip());
 	}
 

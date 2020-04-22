@@ -49,7 +49,16 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
     public GuiTrackpadElement(Minecraft mc, ValueInt value)
     {
-        this(mc, (v) -> value.set(v.intValue()));
+        this(mc, value, null);
+    }
+
+    public GuiTrackpadElement(Minecraft mc, ValueInt value, Consumer<Float> callback)
+    {
+        this(mc, callback == null ? (v) -> value.set(v.intValue()) : (v) ->
+        {
+            value.set(v.intValue());
+            callback.accept(v);
+        });
         this.limit(value.min, value.max, true);
         this.setValue(value.get());
         this.tooltip(value.getTooltip());
@@ -57,7 +66,16 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
     public GuiTrackpadElement(Minecraft mc, ValueFloat value)
     {
-        this(mc, value::set);
+        this(mc, value, null);
+    }
+
+    public GuiTrackpadElement(Minecraft mc, ValueFloat value, Consumer<Float> callback)
+    {
+        this(mc, callback == null ? value::set : (v) ->
+        {
+            value.set(v);
+            callback.accept(v);
+        });
         this.limit(value.min, value.max);
         this.setValue(value.get());
         this.tooltip(value.getTooltip());
@@ -65,7 +83,16 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
     public GuiTrackpadElement(Minecraft mc, ValueDouble value)
     {
-        this(mc, (v) -> value.set(v.doubleValue()));
+        this(mc, value, null);
+    }
+
+    public GuiTrackpadElement(Minecraft mc, ValueDouble value, Consumer<Float> callback)
+    {
+        this(mc, callback == null ? (v) -> value.set(v.doubleValue()) : (v) ->
+        {
+            value.set(v.doubleValue());
+            callback.accept(v);
+        });
         this.limit((float) value.min, (float) value.max);
         this.setValue((float) value.get());
         this.tooltip(value.getTooltip());

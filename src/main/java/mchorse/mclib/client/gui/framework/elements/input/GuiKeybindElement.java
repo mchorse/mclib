@@ -19,7 +19,16 @@ public class GuiKeybindElement extends GuiElement
 
 	public GuiKeybindElement(Minecraft mc, ValueInt value)
 	{
-		this(mc, value::set);
+		this(mc, value, null);
+	}
+
+	public GuiKeybindElement(Minecraft mc, ValueInt value, Consumer<Integer> callback)
+	{
+		this(mc, callback == null ? value::set : (integer) ->
+		{
+			value.set(integer);
+			callback.accept(integer);
+		});
 		this.setKeybind(value.get());
 		this.tooltip(value.getTooltip());
 	}

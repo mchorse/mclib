@@ -26,7 +26,16 @@ public class GuiTextElement extends GuiElement implements GuiResponder, IFocused
 
     public GuiTextElement(Minecraft mc, ValueString value)
     {
-        this(mc, value::set);
+        this(mc, value, null);
+    }
+
+    public GuiTextElement(Minecraft mc, ValueString value, Consumer<String> callback)
+    {
+        this(mc, callback == null ? value::set : (string) ->
+        {
+            value.set(string);
+            callback.accept(string);
+        });
         this.setText(value.get());
         this.tooltip(value.getTooltip());
     }

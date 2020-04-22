@@ -36,7 +36,16 @@ public class GuiColorElement extends GuiElement
 
 	public GuiColorElement(Minecraft mc, ValueInt value)
 	{
-		this(mc, value::set);
+		this(mc, value, null);
+	}
+
+	public GuiColorElement(Minecraft mc, ValueInt value, Consumer<Integer> callback)
+	{
+		this(mc, callback == null ? value::set : (integer) ->
+		{
+			value.set(integer);
+			callback.accept(integer);
+		});
 		this.tooltip(value.getTooltip());
 		this.picker.setColor(value.get());
 
