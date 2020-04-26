@@ -379,6 +379,31 @@ public class GuiElement extends Gui implements IGuiElement
         this.visible = !this.visible;
     }
 
+    /**
+     * Whether element can be seen on the screen
+     */
+    public boolean canBeSeen()
+    {
+        if (!this.hasParent() || !this.isVisible())
+        {
+            return false;
+        }
+
+        GuiElement element = this.getParent();
+
+        while (element != null)
+        {
+            if (!element.isVisible())
+            {
+                return false;
+            }
+
+            element = element.getParent();
+        }
+
+        return true;
+    }
+
     /* Overriding those methods so it would be much easier to 
      * override only needed methods in subclasses */
 
