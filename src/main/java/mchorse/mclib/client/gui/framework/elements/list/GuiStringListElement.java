@@ -26,7 +26,7 @@ public class GuiStringListElement extends GuiListElement<String>
     }
 
     @Override
-    protected String elementToString(String element, int i, int x, int y, boolean hover, boolean selected)
+    protected String elementToString(String element)
     {
         return element;
     }

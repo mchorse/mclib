@@ -37,7 +37,7 @@ public class GuiInterpolationList extends GuiListElement<Interpolation>
     }
 
     @Override
-    protected String elementToString(Interpolation element, int i, int x, int y, boolean hover, boolean selected)
+    protected String elementToString(Interpolation element)
     {
         return element.getName();
     }

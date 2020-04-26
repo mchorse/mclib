@@ -58,7 +58,7 @@ public class GuiLabelListElement <T> extends GuiListElement<Label<T>>
 	}
 
 	@Override
-	protected String elementToString(Label<T> element, int i, int x, int y, boolean hover, boolean selected)
+	protected String elementToString(Label<T> element)
 	{
 		return element.title;
 	}

@@ -12,11 +12,9 @@ import java.util.function.Consumer;
 
 public abstract class GuiSearchListElement<T> extends GuiElement
 {
-    public List<T> elements = new ArrayList<T>();
     public GuiTextElement search;
     public GuiListElement<T> list;
     public String label;
-    public boolean background;
 
     public GuiSearchListElement(Minecraft mc, Consumer<List<T>> callback)
     {
@@ -35,42 +33,17 @@ public abstract class GuiSearchListElement<T> extends GuiElement
 
     public void filter(String str, boolean fill)
     {
-        if (fill) this.search.setText(str);
-
-        this.list.clear();
-
-        if (str == null || str.isEmpty())
+        if (fill)
         {
-            this.list.add(this.elements);
-        }
-        else
-        {
-            for (T element : this.elements)
-            {
-                if (element.toString().toLowerCase().startsWith(str.toLowerCase()))
-                {
-                    this.list.add(element);
-                }
-            }
+            this.search.setText(str);
         }
 
-        this.list.sort();
-    }
-
-    @Override
-    public boolean mouseClicked(GuiContext context)
-    {
-        return super.mouseClicked(context) || this.isVisible() && this.area.isInside(context);
+        this.list.filter(str);
     }
 
     @Override
     public void draw(GuiContext context)
     {
-        if (this.background)
-        {
-            Gui.drawRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 0x88000000);
-        }
-
         super.draw(context);
 
         if (!this.search.field.isFocused() && this.search.field.getText().isEmpty())

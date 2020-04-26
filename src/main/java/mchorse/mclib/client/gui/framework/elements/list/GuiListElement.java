@@ -60,6 +60,9 @@ public abstract class GuiListElement<T> extends GuiElement
     public boolean background = false;
     public int color = 0x88000000;
 
+    private String filter = "";
+    private List<Pair<T>> filtered = new ArrayList<Pair<T>>();
+
     private int dragging = -1;
     private long dragTime;
 
@@ -105,6 +108,41 @@ public abstract class GuiListElement<T> extends GuiElement
         this.sorting = true;
 
         return this;
+    }
+
+    /* Filtering elements */
+
+    public void filter(String filter)
+    {
+        filter = filter.toLowerCase();
+
+        if (this.filter.equals(filter))
+        {
+            return;
+        }
+
+        this.filter = filter;
+        this.filtered.clear();
+
+        if (filter.isEmpty())
+        {
+            return;
+        }
+
+        for (int i = 0; i < this.list.size(); i ++)
+        {
+            T element = this.list.get(i);
+
+            if (this.elementToString(element).toLowerCase().contains(filter))
+            {
+                this.filtered.add(new Pair<T>(element, i));
+            }
+        }
+    }
+
+    public boolean isFiltering()
+    {
+        return !this.filter.isEmpty();
     }
 
     /* Index and current value(s) methods */
@@ -247,11 +285,11 @@ public abstract class GuiListElement<T> extends GuiElement
 
     public void replace(T element)
     {
-        int size = this.list.size();
+        int index = this.current.size() == 1 ? this.current.get(0) : -1;
 
-        if (this.current.size() == 1 && this.exists(this.current.get(0)))
+        if (this.exists(index))
         {
-            this.list.set(this.current.get(0), element);
+            this.list.set(index, element);
         }
     }
 
@@ -269,6 +307,7 @@ public abstract class GuiListElement<T> extends GuiElement
     public void remove(T element)
     {
         this.list.remove(element);
+        this.update();
     }
 
     /**
@@ -283,14 +322,12 @@ public abstract class GuiListElement<T> extends GuiElement
         {
             this.current.clear();
 
-            for (T string : current)
+            for (T element : current)
             {
-                this.current.add(this.list.indexOf(string));
+                this.current.add(this.list.indexOf(element));
             }
         }
     }
-
-    /* Miscellaneous methods */
 
     /**
      * Sort elements
@@ -300,6 +337,8 @@ public abstract class GuiListElement<T> extends GuiElement
         return false;
     }
 
+    /* Miscellaneous methods */
+
     public void update()
     {
         this.scroll.setSize(this.list.size());
@@ -308,7 +347,12 @@ public abstract class GuiListElement<T> extends GuiElement
 
     public boolean exists(int index)
     {
-        return index >= 0 && index < this.list.size();
+        return this.exists(this.list, index);
+    }
+
+    public boolean exists(List list, int index)
+    {
+        return index >= 0 && index < list.size();
     }
 
     public boolean isDragging()
@@ -340,6 +384,12 @@ public abstract class GuiListElement<T> extends GuiElement
         if (this.scroll.isInside(context))
         {
             int index = this.scroll.getIndex(context.mouseX, context.mouseY);
+            boolean filtering = this.isFiltering();
+
+            if (filtering)
+            {
+                index = this.exists(this.filtered, index) ? this.filtered.get(index).index : -1;
+            }
 
             if (this.exists(index))
             {
@@ -352,7 +402,7 @@ public abstract class GuiListElement<T> extends GuiElement
                     this.setIndex(index);
                 }
 
-                if (this.sorting && this.current.size() == 1)
+                if (!filtering && this.sorting && this.current.size() == 1)
                 {
                     this.dragging = index;
                     this.dragTime = System.currentTimeMillis();
@@ -379,7 +429,7 @@ public abstract class GuiListElement<T> extends GuiElement
     @Override
     public void mouseReleased(GuiContext context)
     {
-        if (this.sorting)
+        if (this.sorting && !this.isFiltering())
         {
             if (this.isDragging())
             {
@@ -404,9 +454,6 @@ public abstract class GuiListElement<T> extends GuiElement
     @Override
     public void draw(GuiContext context)
     {
-        int mouseX = context.mouseX;
-        int mouseY = context.mouseY;
-
         this.scroll.drag(context);
 
         if (this.background)
@@ -414,36 +461,10 @@ public abstract class GuiListElement<T> extends GuiElement
             this.area.draw(this.color);
         }
 
-        int i = 0;
-        int h = this.scroll.scrollItemSize;
         boolean dragging = isDragging();
 
         GuiDraw.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
-
-        for (T element : this.list)
-        {
-            int x = this.scroll.x;
-            int y = this.scroll.y + i * h - this.scroll.scroll;
-
-            if (y + h < this.scroll.y || (this.dragging == i && dragging))
-            {
-                i++;
-                continue;
-            }
-
-            if (y >= this.scroll.ey())
-            {
-                break;
-            }
-
-            boolean hover = mouseX >= x && mouseY >= y && mouseX < x + this.scroll.w && mouseY < y + this.scroll.scrollItemSize;
-            boolean selected = this.current.indexOf(i) != -1;
-
-            this.drawListElement(element, i, x, y, hover, selected);
-
-            i++;
-        }
-
+        this.drawList(context);
         GuiDraw.unscissor(context);
 
         this.scroll.drawScrollbar();
@@ -455,6 +476,71 @@ public abstract class GuiListElement<T> extends GuiElement
         if (this.exists(this.dragging) && dragging)
         {
             this.drawListElement(this.list.get(this.dragging), this.dragging, context.mouseX + 6, context.mouseY - this.scroll.scrollItemSize / 2, true, true);
+        }
+    }
+
+    public void drawList(GuiContext context)
+    {
+        int mouseX = context.mouseX;
+        int mouseY = context.mouseY;
+
+        int i = 0;
+        int h = this.scroll.scrollItemSize;
+
+        if (this.isFiltering())
+        {
+            for (Pair<T> element : this.filtered)
+            {
+                int x = this.scroll.x;
+                int y = this.scroll.y + i * h - this.scroll.scroll;
+                int index = element.index;
+
+                if (y + h < this.scroll.y)
+                {
+                    i++;
+                    continue;
+                }
+
+                if (y >= this.scroll.ey())
+                {
+                    break;
+                }
+
+                boolean hover = mouseX >= x && mouseY >= y && mouseX < x + this.scroll.w && mouseY < y + this.scroll.scrollItemSize;
+                boolean selected = this.current.indexOf(index) != -1;
+
+                this.drawListElement(element.value, index, x, y, hover, selected);
+
+                i++;
+            }
+        }
+        else
+        {
+            boolean dragging = isDragging();
+
+            for (T element : this.list)
+            {
+                int x = this.scroll.x;
+                int y = this.scroll.y + i * h - this.scroll.scroll;
+
+                if (y + h < this.scroll.y || (this.dragging == i && dragging))
+                {
+                    i++;
+                    continue;
+                }
+
+                if (y >= this.scroll.ey())
+                {
+                    break;
+                }
+
+                boolean hover = mouseX >= x && mouseY >= y && mouseX < x + this.scroll.w && mouseY < y + this.scroll.scrollItemSize;
+                boolean selected = this.current.indexOf(i) != -1;
+
+                this.drawListElement(element, i, x, y, hover, selected);
+
+                i++;
+            }
         }
     }
 
@@ -476,14 +562,26 @@ public abstract class GuiListElement<T> extends GuiElement
      */
     protected void drawElementPart(T element, int i, int x, int y, boolean hover, boolean selected)
     {
-        this.font.drawStringWithShadow(this.elementToString(element, i, x, y, hover, selected), x + 4, y + this.scroll.scrollItemSize / 2 - this.font.FONT_HEIGHT / 2, hover ? 16777120 : 0xffffff);
+        this.font.drawStringWithShadow(this.elementToString(element), x + 4, y + this.scroll.scrollItemSize / 2 - this.font.FONT_HEIGHT / 2, hover ? 16777120 : 0xffffff);
     }
 
     /**
      * Convert element to string
      */
-    protected String elementToString(T element, int i, int x, int y, boolean hover, boolean selected)
+    protected String elementToString(T element)
     {
         return element.toString();
+    }
+
+    public static class Pair<T>
+    {
+        public T value;
+        public int index;
+
+        public Pair(T value, int index)
+        {
+            this.value = value;
+            this.index = index;
+        }
     }
 }

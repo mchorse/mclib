@@ -6,6 +6,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiPanelBase;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
+import mchorse.mclib.client.gui.framework.elements.list.GuiStringSearchListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.config.gui.GuiConfig;
@@ -55,28 +56,30 @@ public class GuiDashboard extends GuiBase
 		{
 			super(mc);
 
-			this.element = new GuiElement(mc);
-			this.element.flex().relative(this).xy(0.5F, 0.5F).anchor(0.5F, 0).w(200)
-				.row(5).preferred(-2).width(20).reverse().resize().padding(5).height(20);
+			GuiStringSearchListElement list = new GuiStringSearchListElement(mc, (l) -> {});
 
-			for (int i = 0, c = (int) (Math.random() * 5) + 5; i < c; i ++)
-			{
-				this.element.add(new GuiIconElement(mc, i == 0 ? Icons.POSE : Icons.GEAR, null));
-			}
+			list.flex().relative(this).set(10, 10, 100, 200);
 
-			this.add(this.element);
+			list.list.add("Banana");
+			list.list.add("Cool");
+			list.list.add("Red");
+			list.list.add("Slow");
+			list.list.add("test");
+			list.list.add("Clap");
+			list.list.add("Hoot");
+			list.list.add("Doot");
+			list.list.add("Tweet");
+			list.list.add("Crap");
+			list.list.sort();
+			list.list.multi();
+
+			this.add(list);
 		}
 
 		@Override
 		public void draw(GuiContext context)
 		{
 			this.area.draw(0x88000000);
-			this.element.area.draw(0x88000000);
-
-			for (IGuiElement element : this.element.getChildren())
-			{
-				((GuiElement) element).area.draw(0x88000000);
-			}
 
 			super.draw(context);
 		}
