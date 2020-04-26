@@ -47,12 +47,13 @@ public class GuiColorElement extends GuiElement
 			callback.accept(integer);
 		});
 		this.tooltip(value.getTooltip());
-		this.picker.setColor(value.get());
 
 		if (value.getSubtype() == ValueInt.Subtype.COLOR_ALPHA)
 		{
 			this.picker.editAlpha();
 		}
+
+		this.picker.setColor(value.get());
 	}
 
 	public GuiColorElement(Minecraft mc, Consumer<Integer> callback)
