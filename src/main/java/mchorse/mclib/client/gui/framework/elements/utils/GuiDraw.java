@@ -8,6 +8,7 @@ import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,6 +16,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
 import java.util.Stack;
 
 public class GuiDraw
@@ -401,5 +403,20 @@ public class GuiDraw
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlpha();
 		GlStateManager.enableTexture2D();
+	}
+
+	public static void drawMultiText(FontRenderer font, String text, int x, int y, int color, int width, int lineHeight, float ax, float ay)
+	{
+		List<String> list = font.listFormattedStringToWidth(text, width);
+		int h = (lineHeight * (list.size() - 1)) + font.FONT_HEIGHT;
+
+		y -= h * ay;
+
+		for (String string : list)
+		{
+			font.drawStringWithShadow(string, x + (width - font.getStringWidth(string)) * ax, y, color);
+
+			y += lineHeight;
+		}
 	}
 }

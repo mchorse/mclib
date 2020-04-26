@@ -75,7 +75,7 @@ public abstract class GuiSearchListElement<T> extends GuiElement
 
         if (!this.search.field.isFocused() && this.search.field.getText().isEmpty())
         {
-            this.font.drawStringWithShadow(this.label, this.search.area.x + 4, this.search.area.y + 6, 0x888888);
+            this.font.drawStringWithShadow(this.label, this.search.area.x + 5, this.search.area.y + 6, 0x888888);
         }
     }
 }

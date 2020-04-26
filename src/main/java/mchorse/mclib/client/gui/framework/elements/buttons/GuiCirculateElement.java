@@ -62,5 +62,6 @@ public class GuiCirculateElement extends GuiButtonElement
 	protected void click()
 	{
 		this.toggle();
+		super.click();
 	}
 }
