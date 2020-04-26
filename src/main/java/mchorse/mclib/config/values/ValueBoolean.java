@@ -4,17 +4,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
-import mchorse.mclib.config.Config;
-import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.gui.GuiConfig;
-import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ValueBoolean extends Value
 {

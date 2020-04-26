@@ -67,8 +67,7 @@ public class GuiColorElement extends GuiElement
 			}
 		});
 
-		this.picker.flex().relative(this).x(0.5F, 0).y(1F, 2).anchor(0.5F, 0).wh(200, 85);
-		this.picker.flex().bounds(GuiBase.getCurrent(), 2);
+		this.picker.flex().anchor(0.5F, 0).wh(200, 85).bounds(GuiBase.getCurrent(), 2);
 	}
 
 	public GuiColorElement noLabel()
@@ -91,6 +90,7 @@ public class GuiColorElement extends GuiElement
 			if (!this.picker.hasParent())
 			{
 				this.getParentContainer().add(this.picker);
+				this.picker.flex().xy(context.globalX(this.area.mx()), context.globalY(this.area.ey()) + 2);
 				this.picker.resize();
 			}
 			else

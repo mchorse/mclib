@@ -7,6 +7,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiScrollElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiLabelListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
+import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.ScrollArea;
 import mchorse.mclib.client.gui.utils.resizers.layout.ColumnResizer;
@@ -81,8 +82,9 @@ public class GuiConfig extends GuiElement
 				continue;
 			}
 
-			GuiLabel label = new GuiLabel(this.mc, category.getTitle()).anchor(0, 1).background(0x88000000);
-			label.flex().set(0, 0, this.font.getStringWidth(label.label), 40);
+			GuiLabel label = Elements.label(category.getTitle(), 40).anchor(0, 1).background(0x88000000);
+
+			label.flex().w(this.font.getStringWidth(label.label));
 
 			if (first)
 			{

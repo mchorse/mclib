@@ -317,25 +317,46 @@ public class Flex implements IResizer
         return this.relative(flex).x(1, offset);
     }
 
-    /* Post resizers convenience methods */
+    /* Post resizers convenience methods
+     * TODO: remove child resizers when switching to another post method */
 
     public RowResizer row(int margin)
     {
+        if (this.post instanceof RowResizer)
+        {
+            return (RowResizer) this.post;
+        }
+
         return RowResizer.apply(this.parent, margin);
     }
 
     public ColumnResizer column(int margin)
     {
+        if (this.post instanceof ColumnResizer)
+        {
+            return (ColumnResizer) this.post;
+        }
+
         return ColumnResizer.apply(this.parent, margin);
     }
 
     public GridResizer grid(int margin)
     {
+        if (this.post instanceof GridResizer)
+        {
+            return (GridResizer) this.post;
+        }
+
         return GridResizer.apply(this.parent, margin);
     }
 
     public BoundsResizer bounds(GuiContext context, int margin)
     {
+        if (this.post instanceof BoundsResizer)
+        {
+            return (BoundsResizer) this.post;
+        }
+
         return BoundsResizer.apply(this.parent, context, margin);
     }
 

@@ -5,11 +5,8 @@ import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
-import mchorse.mclib.client.gui.utils.resizers.layout.RowResizer;
-import mchorse.mclib.config.Config;
-import mchorse.mclib.config.ConfigCategory;
+import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.config.gui.GuiConfig;
-import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
@@ -17,7 +14,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ValueDouble extends Value
 {
@@ -70,7 +66,7 @@ public class ValueDouble extends Value
 	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
 	{
 		GuiElement element = new GuiElement(mc);
-		GuiLabel label = new GuiLabel(mc, this.getTitle()).anchor(0, 0.5F);
+		GuiLabel label = Elements.label(this.getTitle()).anchor(0, 0.5F);
 		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this);
 
 		trackpad.flex().w(90);

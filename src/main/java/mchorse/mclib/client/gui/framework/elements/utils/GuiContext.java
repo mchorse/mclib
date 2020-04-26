@@ -54,7 +54,7 @@ public class GuiContext
 	 */
 	public int mouseX()
 	{
-		return this.mouseX - this.shiftX;
+		return this.globalX(this.mouseX);
 	}
 
 	/**
@@ -63,7 +63,23 @@ public class GuiContext
 	 */
 	public int mouseY()
 	{
-		return this.mouseY - this.shiftY;
+		return this.globalY(this.mouseY);
+	}
+
+	/**
+	 * Get absolute global X
+	 */
+	public int globalX(int x)
+	{
+		return x - this.shiftX;
+	}
+
+	/**
+	 * Get absolute global Y
+	 */
+	public int globalY(int y)
+	{
+		return y - this.shiftY;
 	}
 
 	public void setMouse(int mouseX, int mouseY)

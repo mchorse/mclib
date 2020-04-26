@@ -12,24 +12,6 @@ public class GuiLabel extends GuiElement
 	public float anchorY;
 	public int background;
 
-	public static GuiLabel create(String label, int height)
-	{
-		GuiLabel element = new GuiLabel(Minecraft.getMinecraft(), label);
-
-		element.flex().h(height);
-
-		return element;
-	}
-
-	public static GuiLabel create(String label, int height, int color)
-	{
-		GuiLabel element = new GuiLabel(Minecraft.getMinecraft(), label, color);
-
-		element.flex().h(height);
-
-		return element;
-	}
-
 	public GuiLabel(Minecraft mc, String label)
 	{
 		this(mc, label, 0xffffff);
