@@ -29,6 +29,11 @@ public class RowResizer extends AutomaticResizer
 	 */
 	private boolean resize;
 
+	/**
+	 * Whether the elements would be placed from right to left
+	 */
+	private boolean reverse;
+
 	public static RowResizer apply(GuiElement element, int margin)
 	{
 		RowResizer resizer = new RowResizer(element, margin);
@@ -64,6 +69,13 @@ public class RowResizer extends AutomaticResizer
 		return this;
 	}
 
+	public RowResizer reverse()
+	{
+		this.reverse = true;
+
+		return this;
+	}
+
 	@Override
 	public void apply(Area area)
 	{
@@ -90,6 +102,12 @@ public class RowResizer extends AutomaticResizer
 		int w = this.count > 0 ? (original - this.w) / this.count : 0;
 		int x = this.parent.area.x + this.padding + this.x;
 
+		/* If it's reverse, start adding from the right side */
+		if (this.reverse)
+		{
+			x = this.parent.area.ex() - this.padding - this.x;
+		}
+
 		/* If resizer specifies its custom width, use that one instead */
 		int cw = resizer == null ? 0 : resizer.getW();
 		int ch = resizer == null ? this.height : resizer.getH();
@@ -112,6 +130,12 @@ public class RowResizer extends AutomaticResizer
 			{
 				cw += diff;
 			}
+		}
+
+		/* Subtract the width from the X position */
+		if (this.reverse)
+		{
+			x -= cw;
 		}
 
 		area.set(x, this.parent.area.y + this.padding, cw, ch > 0 ? ch : this.parent.area.h - this.padding * 2);

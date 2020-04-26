@@ -14,7 +14,6 @@ import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.resources.I18n;
-import org.lwjgl.input.Keyboard;
 
 public class GuiDashboard extends GuiBase
 {
@@ -57,29 +56,15 @@ public class GuiDashboard extends GuiBase
 			super(mc);
 
 			this.element = new GuiElement(mc);
-			this.element.flex().relative(this).xy(0.5F, 0.5F).anchor(0.5F, 0)
-				.row(5).width(20).resize().padding(5);
+			this.element.flex().relative(this).xy(0.5F, 0.5F).anchor(0.5F, 0).w(200)
+				.row(5).preferred(-2).width(20).reverse().resize().padding(5).height(20);
 
 			for (int i = 0, c = (int) (Math.random() * 5) + 5; i < c; i ++)
 			{
-				GuiIconElement element = new GuiIconElement(mc, Icons.GEAR, null);
-
-				element.flex().wh(0, 20);
-
-				this.element.add(element);
+				this.element.add(new GuiIconElement(mc, i == 0 ? Icons.POSE : Icons.GEAR, null));
 			}
 
 			this.add(this.element);
-
-			for (int i = 0; i < 5; i ++)
-			{
-				String category = i == 0 ? "" : "Category " + i;
-
-				for (int j = 0; j < 5; j ++)
-				{
-					this.keys().register("Test", Keyboard.KEY_Q + i + j * (i + 1), () -> {}).category(category);
-				}
-			}
 		}
 
 		@Override
