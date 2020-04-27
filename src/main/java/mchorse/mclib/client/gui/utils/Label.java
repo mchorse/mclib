@@ -1,13 +1,15 @@
 package mchorse.mclib.client.gui.utils;
 
+import mchorse.mclib.client.gui.utils.keys.IKey;
+
 import java.util.Objects;
 
 public class Label<T>
 {
-	public String title;
+	public IKey title;
 	public T value;
 
-	public Label(String title, T value)
+	public Label(IKey title, T value)
 	{
 		this.title = title;
 		this.value = value;

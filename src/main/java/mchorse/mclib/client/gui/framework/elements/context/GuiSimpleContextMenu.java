@@ -5,6 +5,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.list.GuiListElement;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.client.gui.utils.resizers.constraint.BoundsResizer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -36,12 +37,12 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 		this.add(this.actions);
 	}
 
-	public GuiSimpleContextMenu action(String label, Runnable runnable)
+	public GuiSimpleContextMenu action(IKey label, Runnable runnable)
 	{
 		return this.action(Icons.NONE, label, runnable);
 	}
 
-	public GuiSimpleContextMenu action(Icon icon, String label, Runnable runnable)
+	public GuiSimpleContextMenu action(Icon icon, IKey label, Runnable runnable)
 	{
 		if (icon == null || label == null)
 		{
@@ -87,17 +88,17 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 
 			GlStateManager.color(1, 1, 1, 1);
 			element.icon.render(x + 2, y + h / 2, 0, 0.5F);
-			this.font.drawString(element.label, x + 22, y + (h - this.font.FONT_HEIGHT) / 2 + 1, 0xffffff);
+			this.font.drawString(element.label.get(), x + 22, y + (h - this.font.FONT_HEIGHT) / 2 + 1, 0xffffff);
 		}
 	}
 
 	public static class Action
 	{
 		public Icon icon;
-		public String label;
+		public IKey label;
 		public Runnable runnable;
 
-		public Action(Icon icon, String label, Runnable runnable)
+		public Action(Icon icon, IKey label, Runnable runnable)
 		{
 			this.icon = icon;
 			this.label = label;
@@ -106,7 +107,7 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 
 		public int getWidth(FontRenderer font)
 		{
-			return 28 + font.getStringWidth(this.label);
+			return 28 + font.getStringWidth(this.label.get());
 		}
 	}
 }

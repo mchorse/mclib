@@ -9,6 +9,7 @@ import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiStringSearchListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.events.RegisterDashboardPanels;
 import mchorse.mclib.utils.Direction;
@@ -34,8 +35,8 @@ public class GuiDashboard extends GuiBase
 		};
 
 		this.panels.flex().relative(this.viewport).w(1, 0).h(1, 0);
-		this.panels.registerPanel(config, I18n.format("mclib.gui.config.tooltip"), Icons.GEAR);
-		this.panels.registerPanel(new GuiTest(mc), "Test", Icons.POSE);
+		this.panels.registerPanel(config, IKey.lang("mclib.gui.config.tooltip"), Icons.GEAR);
+		this.panels.registerPanel(new GuiTest(mc), IKey.str("Test"), Icons.POSE);
 		McLib.EVENT_BUS.post(new RegisterDashboardPanels(this));
 		this.panels.setPanel(config);
 

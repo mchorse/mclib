@@ -10,6 +10,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.ScrollArea;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.client.gui.utils.resizers.layout.ColumnResizer;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
@@ -30,13 +31,14 @@ public class GuiConfig extends GuiElement
 	public GuiScrollElement options;
 
 	private Config config;
+	private IKey title = IKey.lang("mclib.gui.config.title");
 
 	public GuiConfig(Minecraft mc)
 	{
 		super(mc);
 
 		this.reload = new GuiIconElement(mc, Icons.REFRESH, (button) -> this.reload());
-		this.reload.tooltip(I18n.format("mclib.gui.config.reload_tooltip"), Direction.BOTTOM);
+		this.reload.tooltip(IKey.lang("mclib.gui.config.reload_tooltip"), Direction.BOTTOM);
 		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.get(0).value));
 		this.options = new GuiScrollElement(mc, ScrollArea.ScrollDirection.HORIZONTAL);
 
@@ -47,7 +49,7 @@ public class GuiConfig extends GuiElement
 
 		for (Config config : McLib.proxy.configs.modules.values())
 		{
-			this.mods.add(config.getTitle(), config.id);
+			this.mods.add(IKey.lang(config.getTitleKey()), config.id);
 		}
 
 		this.mods.sort();
@@ -82,16 +84,16 @@ public class GuiConfig extends GuiElement
 				continue;
 			}
 
-			GuiLabel label = Elements.label(category.getTitle(), 40).anchor(0, 1).background(0x88000000);
+			GuiLabel label = Elements.label(IKey.lang(category.getTitleKey()), 40).anchor(0, 1).background(0x88000000);
 
-			label.flex().w(this.font.getStringWidth(label.label));
+			label.flex().w(this.font.getStringWidth(label.label.get()));
 
 			if (first)
 			{
 				label.anchor(0, 0).flex().h(0, this.font.FONT_HEIGHT);
 			}
 
-			this.options.add(label.tooltip(category.getTooltip(), Direction.BOTTOM));
+			this.options.add(label.tooltip(IKey.lang(category.getTooltipKey()), Direction.BOTTOM));
 
 			for (IConfigValue value : category.values.values())
 			{
@@ -117,7 +119,7 @@ public class GuiConfig extends GuiElement
 	{
 		this.area.draw(0xaa000000);
 		this.mods.area.draw(0xdd000000, -10, -35, -10, -10);
-		this.font.drawStringWithShadow(I18n.format("mclib.gui.config.title"), this.area.x + 10, this.area.y + 20 - this.font.FONT_HEIGHT / 2, 0xffffff);
+		this.font.drawStringWithShadow(this.title.get(), this.area.x + 10, this.area.y + 20 - this.font.FONT_HEIGHT / 2, 0xffffff);
 
 		super.draw(context);
 	}

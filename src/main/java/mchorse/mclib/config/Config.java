@@ -41,31 +41,61 @@ public class Config
 	@SideOnly(Side.CLIENT)
 	public String getTitle()
 	{
-		return I18n.format(this.id + ".config.title");
+		return I18n.format(this.getTitleKey());
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getTitleKey()
+	{
+		return this.id + ".config.title";
 	}
 
 	@SideOnly(Side.CLIENT)
 	public String getCategoryTitle(String category)
 	{
-		return I18n.format(this.id + ".config." + category + ".title");
+		return I18n.format(this.getCategoryTitleKey(category));
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getCategoryTitleKey(String category)
+	{
+		return this.id + ".config." + category + ".title";
 	}
 
 	@SideOnly(Side.CLIENT)
 	public String getCategoryTooltip(String category)
 	{
-		return I18n.format(this.id + ".config." + category + ".tooltip");
+		return I18n.format(this.getCategoryTooltipKey(category));
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getCategoryTooltipKey(String category)
+	{
+		return this.id + ".config." + category + ".tooltip";
 	}
 
 	@SideOnly(Side.CLIENT)
 	public String getValueTitle(String category, String value)
 	{
-		return I18n.format(this.id + ".config." + category + "." + value);
+		return I18n.format(this.getValueTitleKey(category, value));
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getValueTitleKey(String category, String value)
+	{
+		return this.id + ".config." + category + "." + value;
 	}
 
 	@SideOnly(Side.CLIENT)
 	public String getValueTooltip(String category, String value)
 	{
-		return I18n.format(this.id + ".config.comments." + category + "." + value);
+		return I18n.format(this.getValueTooltipKey(category, value));
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getValueTooltipKey(String category, String value)
+	{
+		return this.id + ".config.comments." + category + "." + value;
 	}
 
 	/**

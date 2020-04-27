@@ -47,8 +47,20 @@ public abstract class Value implements IConfigValue
 	}
 
 	@SideOnly(Side.CLIENT)
+	public String getTitleKey()
+	{
+		return this.category.config.getValueTitleKey(this.category.id, this.id);
+	}
+
+	@SideOnly(Side.CLIENT)
 	public String getTooltip()
 	{
 		return this.category.config.getValueTooltip(this.category.id, this.id);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getTooltipKey()
+	{
+		return this.category.config.getValueTooltipKey(this.category.id, this.id);
 	}
 }

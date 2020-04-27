@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.modals;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 
@@ -16,7 +17,7 @@ public class GuiPromptModal extends GuiModal
     public GuiButtonElement confirm;
     public GuiButtonElement cancel;
 
-    public GuiPromptModal(Minecraft mc, String label, Consumer<String> callback)
+    public GuiPromptModal(Minecraft mc, IKey label, Consumer<String> callback)
     {
         super(mc, label);
 
@@ -25,10 +26,10 @@ public class GuiPromptModal extends GuiModal
         this.text.flex().relative(this).set(10, 0, 0, 20).y(1, -55).w(1, -20);
         this.text.focus(GuiBase.getCurrent());
 
-        this.confirm = new GuiButtonElement(mc, I18n.format("mclib.gui.ok"), (b) -> this.send());
+        this.confirm = new GuiButtonElement(mc, IKey.lang("mclib.gui.ok"), (b) -> this.send());
         this.confirm.flex().relative(this).set(10, 0, 0, 20).y(1, -30).w(0.5F, -15);
 
-        this.cancel = new GuiButtonElement(mc, I18n.format("mclib.gui.cancel"), (b) -> this.removeFromParent());
+        this.cancel = new GuiButtonElement(mc, IKey.lang("mclib.gui.cancel"), (b) -> this.removeFromParent());
         this.cancel.flex().relative(this).set(10, 0, 0, 20).x(0.5F, 5).y(1, -30).w(0.5F, -15);
 
         this.add(this.text, this.confirm, this.cancel);

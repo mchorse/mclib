@@ -4,6 +4,7 @@ import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiDelegateElement;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -17,7 +18,7 @@ import java.util.function.Supplier;
  */
 public abstract class GuiModal extends GuiElement
 {
-    public String label;
+    public IKey label;
     public int y;
 
     public static boolean hasModal(GuiElement parent)
@@ -64,7 +65,7 @@ public abstract class GuiModal extends GuiElement
         return true;
     }
 
-    public GuiModal(Minecraft mc, String label)
+    public GuiModal(Minecraft mc, IKey label)
     {
         super(mc);
 
@@ -93,7 +94,7 @@ public abstract class GuiModal extends GuiElement
         this.y = 0;
         int y = this.area.y + 10;
 
-        for (String line : this.font.listFormattedStringToWidth(this.label, this.area.w - 20))
+        for (String line : this.font.listFormattedStringToWidth(this.label.get(), this.area.w - 20))
         {
             this.font.drawStringWithShadow(line, this.area.x + 10, y + this.y, 0xffffff);
             this.y += 11;

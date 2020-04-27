@@ -5,6 +5,7 @@ import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.KeybindManager;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.client.gui.utils.resizers.IResizer;
 import mchorse.mclib.client.gui.utils.resizers.Flex;
 import mchorse.mclib.utils.Direction;
@@ -240,21 +241,21 @@ public class GuiElement extends Gui implements IGuiElement
         return this;
     }
 
-    public GuiElement tooltip(String label)
+    public GuiElement tooltip(IKey label)
     {
         this.tooltip = new GuiTooltip.Tooltip(label, Direction.BOTTOM);
 
         return this;
     }
 
-    public GuiElement tooltip(String label, Direction direction)
+    public GuiElement tooltip(IKey label, Direction direction)
     {
         this.tooltip = new GuiTooltip.Tooltip(label, direction);
 
         return this;
     }
 
-    public GuiElement tooltip(String label, int width, Direction direction)
+    public GuiElement tooltip(IKey label, int width, Direction direction)
     {
         this.tooltip = new GuiTooltip.Tooltip(label, width, direction);
 

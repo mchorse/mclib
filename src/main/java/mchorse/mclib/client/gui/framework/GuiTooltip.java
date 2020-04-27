@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.gui.Gui;
@@ -29,12 +30,14 @@ public class GuiTooltip
 
     public void draw(Tooltip tooltip, GuiContext context)
     {
-        if (this.element == null || tooltip == null || tooltip.label.isEmpty())
+        String label = tooltip.label.get();
+
+        if (this.element == null || tooltip == null || label.isEmpty())
         {
             return;
         }
 
-        List<String> strings = context.font.listFormattedStringToWidth(tooltip.label, tooltip.width);
+        List<String> strings = context.font.listFormattedStringToWidth(label, tooltip.width);
 
         if (strings.isEmpty())
         {
@@ -84,17 +87,17 @@ public class GuiTooltip
 
     public static class Tooltip
     {
-        public String label;
+        public IKey label;
         public int width = 200;
         public Direction direction;
 
-        public Tooltip(String label, Direction direction)
+        public Tooltip(IKey label, Direction direction)
         {
             this.label = label;
             this.direction = direction;
         }
 
-        public Tooltip(String label, int width, Direction direction)
+        public Tooltip(IKey label, int width, Direction direction)
         {
             this(label, direction);
             this.width = width;

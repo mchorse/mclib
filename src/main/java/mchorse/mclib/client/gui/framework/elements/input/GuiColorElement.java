@@ -7,7 +7,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icons;
-import mchorse.mclib.client.gui.utils.resizers.constraint.BoundsResizer;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
@@ -46,7 +46,7 @@ public class GuiColorElement extends GuiElement
 			value.set(integer);
 			callback.accept(integer);
 		});
-		this.tooltip(value.getTooltip());
+		this.tooltip(IKey.lang(value.getTooltipKey()));
 
 		if (value.getSubtype() == ValueInt.Subtype.COLOR_ALPHA)
 		{

@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements.buttons;
 
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -8,15 +9,15 @@ import java.util.function.Consumer;
 
 public class GuiCirculateElement extends GuiButtonElement
 {
-	protected List<String> labels = new ArrayList<String>();
+	protected List<IKey> labels = new ArrayList<IKey>();
 	protected int value = 0;
 
 	public GuiCirculateElement(Minecraft mc, Consumer<GuiButtonElement> callback)
 	{
-		super(mc, "", callback);
+		super(mc, IKey.EMPTY, callback);
 	}
 
-	public void addLabel(String label)
+	public void addLabel(IKey label)
 	{
 		if (this.labels.isEmpty())
 		{
@@ -33,7 +34,7 @@ public class GuiCirculateElement extends GuiButtonElement
 
 	public String getLabel()
 	{
-		return this.labels.get(this.value);
+		return this.labels.get(this.value).get();
 	}
 
 	public void setValue(int value)

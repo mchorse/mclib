@@ -1,18 +1,18 @@
 package mchorse.mclib.client.gui.framework.elements.input;
 
-import java.util.function.Consumer;
-
-import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
-import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueString;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Keyboard;
+
+import java.util.function.Consumer;
 
 /**
  * GUI text element
@@ -37,7 +37,7 @@ public class GuiTextElement extends GuiElement implements GuiResponder, IFocused
             callback.accept(string);
         });
         this.setText(value.get());
-        this.tooltip(value.getTooltip());
+        this.tooltip(IKey.lang(value.getTooltipKey()));
     }
 
     public GuiTextElement(Minecraft mc, int maxLength, Consumer<String> callback)

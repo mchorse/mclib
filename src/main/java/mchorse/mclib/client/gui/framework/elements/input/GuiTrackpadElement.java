@@ -7,6 +7,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueDouble;
 import mchorse.mclib.config.values.ValueFloat;
 import mchorse.mclib.config.values.ValueInt;
@@ -61,7 +62,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         });
         this.limit(value.min, value.max, true);
         this.setValue(value.get());
-        this.tooltip(value.getTooltip());
+        this.tooltip(IKey.lang(value.getTooltipKey()));
     }
 
     public GuiTrackpadElement(Minecraft mc, ValueFloat value)
@@ -78,7 +79,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         });
         this.limit(value.min, value.max);
         this.setValue(value.get());
-        this.tooltip(value.getTooltip());
+        this.tooltip(IKey.lang(value.getTooltipKey()));
     }
 
     public GuiTrackpadElement(Minecraft mc, ValueDouble value)
@@ -95,7 +96,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         });
         this.limit((float) value.min, (float) value.max);
         this.setValue((float) value.get());
-        this.tooltip(value.getTooltip());
+        this.tooltip(IKey.lang(value.getTooltipKey()));
     }
 
     public GuiTrackpadElement(Minecraft mc, Consumer<Float> callback)

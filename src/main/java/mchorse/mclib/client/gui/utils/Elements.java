@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.utils;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.client.gui.utils.resizers.layout.RowResizer;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,17 +31,17 @@ public class Elements
 		return element;
 	}
 
-	public static GuiLabel label(String label)
+	public static GuiLabel label(IKey label)
 	{
 		return label(label, Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT);
 	}
 
-	public static GuiLabel label(String label, int height)
+	public static GuiLabel label(IKey label, int height)
 	{
 		return label(label, height, 0xffffff);
 	}
 
-	public static GuiLabel label(String label, int height, int color)
+	public static GuiLabel label(IKey label, int height, int color)
 	{
 		GuiLabel element = new GuiLabel(Minecraft.getMinecraft(), label, color);
 

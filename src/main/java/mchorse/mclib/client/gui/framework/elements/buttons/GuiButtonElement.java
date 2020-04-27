@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.buttons;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 
@@ -10,12 +11,12 @@ import java.util.function.Consumer;
 
 public class GuiButtonElement extends GuiClickElement<GuiButtonElement>
 {
-	public String label;
+	public IKey label;
 
 	public boolean custom;
 	public int customColor;
 
-	public GuiButtonElement(Minecraft mc, String label, Consumer<GuiButtonElement> callback)
+	public GuiButtonElement(Minecraft mc, IKey label, Consumer<GuiButtonElement> callback)
 	{
 		super(mc, callback);
 
@@ -42,10 +43,11 @@ public class GuiButtonElement extends GuiClickElement<GuiButtonElement>
 
 		GuiDraw.drawBorder(this.area, color);
 
-		int x = this.area.mx(this.font.getStringWidth(this.label));
+		String label = this.label.get();
+		int x = this.area.mx(this.font.getStringWidth(label));
 		int y = this.area.my(this.font.FONT_HEIGHT - 1);
 
-		this.font.drawStringWithShadow(this.label, x, y, this.hover ? 16777120 : 0xffffff);
+		this.font.drawStringWithShadow(label, x, y, this.hover ? 16777120 : 0xffffff);
 
 		GuiDraw.drawLockedArea(this);
 	}

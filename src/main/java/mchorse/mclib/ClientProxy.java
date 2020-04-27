@@ -2,7 +2,9 @@ package mchorse.mclib;
 
 import mchorse.mclib.client.KeyboardHandler;
 import mchorse.mclib.client.MouseRenderer;
+import mchorse.mclib.client.gui.utils.keys.LangKey;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -33,5 +35,7 @@ public class ClientProxy extends CommonProxy
 		{
 			mc.getFramebuffer().enableStencil();
 		}
+
+		((IReloadableResourceManager) mc.getResourceManager()).registerReloadListener((manager) -> LangKey.lastTime = System.currentTimeMillis());
 	}
 }

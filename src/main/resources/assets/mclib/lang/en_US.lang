@@ -9,6 +9,7 @@ mclib.gui.pick_texture=Pick texture
 mclib.gui.config.title=Configuration
 mclib.gui.config.tooltip=Mods configuration
 mclib.gui.config.reload_tooltip=Reload configuration from file...
+mclib.gui.keys.list=Keybinds list
 
 # Config
 mclib.config.title=McLib

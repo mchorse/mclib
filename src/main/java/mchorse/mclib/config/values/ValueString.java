@@ -6,6 +6,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,7 +51,7 @@ public class ValueString extends Value
 	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
 	{
 		GuiElement element = new GuiElement(mc);
-		GuiLabel label = Elements.label(this.getTitle()).anchor(0, 0.5F);
+		GuiLabel label = Elements.label(IKey.lang(this.getTitleKey())).anchor(0, 0.5F);
 		GuiTextElement textbox = new GuiTextElement(mc, this);
 
 		textbox.flex().w(90);
@@ -58,7 +59,7 @@ public class ValueString extends Value
 		element.flex().row(0).preferred(0).height(20);
 		element.add(label, textbox.removeTooltip());
 
-		return Arrays.asList(element.tooltip(this.getTooltip()));
+		return Arrays.asList(element.tooltip(IKey.lang(this.getTooltipKey())));
 	}
 
 	@Override

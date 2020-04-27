@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.list;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
@@ -14,7 +15,7 @@ public abstract class GuiSearchListElement<T> extends GuiElement
 {
     public GuiTextElement search;
     public GuiListElement<T> list;
-    public String label;
+    public IKey label = IKey.EMPTY;
 
     public GuiSearchListElement(Minecraft mc, Consumer<List<T>> callback)
     {
@@ -27,6 +28,13 @@ public abstract class GuiSearchListElement<T> extends GuiElement
         this.list.flex().relative(this).set(0, 20, 0, 0).w(1, 0).h(1, -20);
 
         this.add(this.search, this.list);
+    }
+
+    public GuiSearchListElement<T> label(IKey label)
+    {
+        this.label = label;
+
+        return this;
     }
 
     protected abstract GuiListElement<T> createList(Minecraft mc, Consumer<List<T>> callback);
@@ -48,7 +56,7 @@ public abstract class GuiSearchListElement<T> extends GuiElement
 
         if (!this.search.field.isFocused() && this.search.field.getText().isEmpty())
         {
-            this.font.drawStringWithShadow(this.label, this.search.area.x + 5, this.search.area.y + 6, 0x888888);
+            this.font.drawStringWithShadow(this.label.get(), this.search.area.x + 5, this.search.area.y + 6, 0x888888);
         }
     }
 }

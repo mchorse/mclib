@@ -8,6 +8,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiDrawable;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Keybind;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.client.gui.utils.resizers.Flex.Measure;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
@@ -62,11 +63,11 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
     /**
      * Register a panel with given texture and tooltip 
      */
-    public GuiIconElement registerPanel(T panel, String tooltip, Icon icon)
+    public GuiIconElement registerPanel(T panel, IKey tooltip, Icon icon)
     {
         GuiIconElement button = new GuiIconElement(this.mc, icon, (b) -> this.setPanel(panel));
 
-        if (tooltip != null && !tooltip.isEmpty())
+        if (tooltip != null && !tooltip.get().isEmpty())
         {
             button.tooltip(tooltip, this.direction.opposite());
         }
@@ -79,7 +80,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
         return button;
     }
 
-    public Keybind registerKeybind(GuiIconElement element, String label, int key)
+    public Keybind registerKeybind(GuiIconElement element, IKey label, int key)
     {
         return element.keys().register(label, key, () -> element.clickItself(GuiBase.getCurrent()));
     }

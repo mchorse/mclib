@@ -8,6 +8,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -64,8 +65,8 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 		{
 			return new GuiSimpleContextMenu(this.mc)
 				/* TODO: do something about it */
-				.action(Icons.DOWNLOAD, "Drop item down", () -> {})
-				.action(Icons.CLOSE, "Clear item", () -> {
+				.action(Icons.DOWNLOAD, IKey.str("Drop item down"), () -> {})
+				.action(Icons.CLOSE, IKey.str("Clear item"), () -> {
 					this.stack = ItemStack.EMPTY;
 				});
 		}

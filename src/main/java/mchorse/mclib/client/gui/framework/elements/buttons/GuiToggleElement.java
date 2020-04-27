@@ -4,6 +4,7 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
@@ -13,7 +14,7 @@ import java.util.function.Consumer;
 
 public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 {
-	private String label;
+	private IKey label;
 	private boolean state;
 
 	public GuiToggleElement(Minecraft mc, ValueBoolean value)
@@ -23,20 +24,20 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 
 	public GuiToggleElement(Minecraft mc, ValueBoolean value, Consumer<GuiToggleElement> callback)
 	{
-		this(mc, value.getTitle(), value.get(), callback == null ? (toggle) -> value.set(toggle.isToggled()) : (toggle) ->
+		this(mc, IKey.lang(value.getTitleKey()), value.get(), callback == null ? (toggle) -> value.set(toggle.isToggled()) : (toggle) ->
 		{
 			value.set(toggle.isToggled());
 			callback.accept(toggle);
 		});
-		this.tooltip(value.getTooltip());
+		this.tooltip(IKey.lang(value.getTooltip()));
 	}
 
-	public GuiToggleElement(Minecraft mc, String label, Consumer<GuiToggleElement> callback)
+	public GuiToggleElement(Minecraft mc, IKey label, Consumer<GuiToggleElement> callback)
 	{
 		this(mc, label, false, callback);
 	}
 
-	public GuiToggleElement(Minecraft mc, String label, boolean state, Consumer<GuiToggleElement> callback)
+	public GuiToggleElement(Minecraft mc, IKey label, boolean state, Consumer<GuiToggleElement> callback)
 	{
 		super(mc, callback);
 
@@ -44,7 +45,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 		this.state = state;
 	}
 
-	public GuiToggleElement label(String label)
+	public GuiToggleElement label(IKey label)
 	{
 		this.label = label;
 
@@ -74,7 +75,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 	@Override
 	protected void drawSkin(GuiContext context)
 	{
-		this.font.drawStringWithShadow(this.label, this.area.x, this.area.my(this.font.FONT_HEIGHT - 1), 0xffffff);
+		this.font.drawStringWithShadow(this.label.get(), this.area.x, this.area.my(this.font.FONT_HEIGHT - 1), 0xffffff);
 
 		/* Draw toggle switch */
 		int w = 16;

@@ -4,6 +4,7 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueInt;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -30,7 +31,7 @@ public class GuiKeybindElement extends GuiElement
 			callback.accept(integer);
 		});
 		this.setKeybind(value.get());
-		this.tooltip(value.getTooltip());
+		this.tooltip(IKey.lang(value.getTooltipKey()));
 	}
 
 	public GuiKeybindElement(Minecraft mc, Consumer<Integer> callback)

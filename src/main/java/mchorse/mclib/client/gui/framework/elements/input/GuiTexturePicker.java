@@ -9,6 +9,9 @@ import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiFolderEntryListElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiResourceLocationListElement;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.client.gui.utils.keys.LangKey;
+import mchorse.mclib.client.gui.utils.keys.StringKey;
 import mchorse.mclib.utils.files.FileTree;
 import mchorse.mclib.utils.files.GlobalTree;
 import mchorse.mclib.utils.files.entries.AbstractEntry;
@@ -67,8 +70,8 @@ public class GuiTexturePicker extends GuiElement
         super(mc);
 
         this.text = new GuiTextElement(mc, 1000, (str) -> this.selectCurrent(str.isEmpty() ? null : RLUtils.create(str)));
-        this.close = new GuiButtonElement(mc, "X", (b) -> this.removeFromParent());
-        this.folder = new GuiButtonElement(mc, I18n.format("mclib.gui.open_folder"), (b) -> this.openFolder());
+        this.close = new GuiButtonElement(mc, IKey.str("X"), (b) -> this.removeFromParent());
+        this.folder = new GuiButtonElement(mc, IKey.lang("mclib.gui.open_folder"), (b) -> this.openFolder());
         this.picker = new GuiFolderEntryListElement(mc, (entry) ->
         {
             ResourceLocation rl = entry.resource;
@@ -85,7 +88,7 @@ public class GuiTexturePicker extends GuiElement
             }
         };
 
-        this.multi = new GuiButtonElement(mc, I18n.format("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
+        this.multi = new GuiButtonElement(mc, IKey.lang("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
         this.multiList = new GuiResourceLocationListElement(mc, (list) -> this.displayCurrent(list.get(0)));
         this.add = new GuiIconElement(mc, Icons.ADD, (b) -> this.addMultiSkin());
         this.remove = new GuiIconElement(mc, Icons.REMOVE, (b) -> this.removeMultiSkin());

@@ -28,9 +28,21 @@ public class ConfigCategory
 	}
 
 	@SideOnly(Side.CLIENT)
+	public String getTitleKey()
+	{
+		return this.config.getCategoryTitleKey(this.id);
+	}
+
+	@SideOnly(Side.CLIENT)
 	public String getTooltip()
 	{
 		return this.config.getCategoryTooltip(this.id);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public String getTooltipKey()
+	{
+		return this.config.getCategoryTooltipKey(this.id);
 	}
 
 	public void register(String id, IConfigValue value)

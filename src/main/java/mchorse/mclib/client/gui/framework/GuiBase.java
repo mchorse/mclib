@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,7 +39,7 @@ public class GuiBase extends GuiScreen
 
         this.root = new GuiElement(this.context.mc);
         this.root.markContainer().flex().relative(this.viewport).wh(1F, 1F);
-        this.root.keys().register("Keybinds list", Keyboard.KEY_F9, () -> this.context.keybinds.toggleVisible());
+        this.root.keys().register(IKey.lang("mclib.gui.keys.list"), Keyboard.KEY_F9, () -> this.context.keybinds.toggleVisible());
 
         this.context.keybinds.flex().relative(this.viewport).wh(0.5F, 1F);
 

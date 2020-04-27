@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.utils;
 
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Arrays;
@@ -10,8 +11,8 @@ import java.util.function.Supplier;
  */
 public class Keybind
 {
-	public String label;
-	public String category = "";
+	public IKey label;
+	public IKey category = IKey.EMPTY;
 	public int mainKey;
 	public int[] heldKeys;
 	public Runnable callback;
@@ -19,7 +20,7 @@ public class Keybind
 	public boolean active = true;
 	public Supplier<Boolean> activeSupplier;
 
-	public Keybind(String label, int mainKey, Runnable callback)
+	public Keybind(IKey label, int mainKey, Runnable callback)
 	{
 		this.label = label;
 		this.mainKey = mainKey;
@@ -54,7 +55,7 @@ public class Keybind
 		return this;
 	}
 
-	public Keybind category(String category)
+	public Keybind category(IKey category)
 	{
 		this.category = category;
 

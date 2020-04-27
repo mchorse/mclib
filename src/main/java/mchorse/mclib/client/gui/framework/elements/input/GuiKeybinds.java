@@ -5,6 +5,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiScrollElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Keybind;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
@@ -28,12 +29,12 @@ public class GuiKeybinds extends GuiScrollElement
 
 	public void addKeybind(Keybind keybind)
 	{
-		KeybindCategory category = this.keybinds.get(keybind.category);
+		KeybindCategory category = this.keybinds.get(keybind.category.get());
 
 		if (category == null)
 		{
 			category = new KeybindCategory(keybind.category);
-			this.keybinds.put(keybind.category, category);
+			this.keybinds.put(keybind.category.get(), category);
 		}
 
 		category.add(keybind);
@@ -77,11 +78,11 @@ public class GuiKeybinds extends GuiScrollElement
 
 	public static class KeybindCategory
 	{
-		public String title;
+		public IKey title;
 		public List<Keybind> keybinds = new ArrayList<Keybind>();
 		public boolean shouldClean;
 
-		public KeybindCategory(String title)
+		public KeybindCategory(IKey title)
 		{
 			this.title = title;
 		}
@@ -101,10 +102,12 @@ public class GuiKeybinds extends GuiScrollElement
 		{
 			int color = 0xff000000 + McLib.primaryColor.get();
 
-			if (!this.title.isEmpty())
+			String title = this.title.get();
+
+			if (!title.isEmpty())
 			{
-				Gui.drawRect(x - 10, y + i - 2, x + context.font.getStringWidth(this.title) + 2, y + i + context.font.FONT_HEIGHT + 2, color);
-				context.font.drawStringWithShadow(this.title, x, y + i, 0xffffff);
+				Gui.drawRect(x - 10, y + i - 2, x + context.font.getStringWidth(title) + 2, y + i + context.font.FONT_HEIGHT + 2, color);
+				context.font.drawStringWithShadow(title, x, y + i, 0xffffff);
 				i += 14;
 			}
 
@@ -115,7 +118,7 @@ public class GuiKeybinds extends GuiScrollElement
 
 				Gui.drawRect(x - 2, y + i - 2, x + w + 2, y + i + context.font.FONT_HEIGHT + 2, color);
 				context.font.drawString(combo, x, y + i, 0xffffff);
-				context.font.drawStringWithShadow(keybind.label, x + w + 5, y + i, 0xffffff);
+				context.font.drawStringWithShadow(keybind.label.get(), x + w + 5, y + i, 0xffffff);
 				i += 14;
 			}
 

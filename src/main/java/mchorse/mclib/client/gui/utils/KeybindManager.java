@@ -1,6 +1,7 @@
 package mchorse.mclib.client.gui.utils;
 
 import mchorse.mclib.client.gui.framework.elements.input.GuiKeybinds;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public class KeybindManager
 {
 	public List<Keybind> keybinds = new ArrayList<Keybind>();
 
-	public Keybind register(String label, int key, Runnable callback)
+	public Keybind register(IKey label, int key, Runnable callback)
 	{
 		Keybind keybind = new Keybind(label, key, callback);
 
@@ -21,7 +22,7 @@ public class KeybindManager
 		return keybind;
 	}
 
-	public Keybind registerInside(String label, int key, Runnable callback)
+	public Keybind registerInside(IKey label, int key, Runnable callback)
 	{
 		return this.register(label, key, callback).inside();
 	}

@@ -1,23 +1,24 @@
 package mchorse.mclib.client.gui.framework.elements.utils;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
 public class GuiLabel extends GuiElement
 {
-	public String label;
+	public IKey label;
 	public int color;
 	public float anchorX;
 	public float anchorY;
 	public int background;
 
-	public GuiLabel(Minecraft mc, String label)
+	public GuiLabel(Minecraft mc, IKey label)
 	{
 		this(mc, label, 0xffffff);
 	}
 
-	public GuiLabel(Minecraft mc, String label, int color)
+	public GuiLabel(Minecraft mc, IKey label, int color)
 	{
 		super(mc);
 
@@ -55,15 +56,16 @@ public class GuiLabel extends GuiElement
 	{
 		int a = this.background >> 24 & 0xff;
 
-		int x = this.area.x(this.anchorX, this.font.getStringWidth(this.label));
+		String label = this.label.get();
+		int x = this.area.x(this.anchorX, this.font.getStringWidth(label));
 		int y = this.area.y(this.anchorY, this.font.FONT_HEIGHT);
 
 		if (a != 0)
 		{
-			Gui.drawRect(x - 3, y - 3, x + this.font.getStringWidth(this.label) + 3, y + this.font.FONT_HEIGHT + 3, this.background);
+			Gui.drawRect(x - 3, y - 3, x + this.font.getStringWidth(label) + 3, y + this.font.FONT_HEIGHT + 3, this.background);
 		}
 
-		this.font.drawStringWithShadow(this.label, x, y, this.color);
+		this.font.drawStringWithShadow(label, x, y, this.color);
 
 		super.draw(context);
 	}
