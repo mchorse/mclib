@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 
 public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 {
-	private IKey label;
+	public IKey label;
 	private boolean state;
 
 	public GuiToggleElement(Minecraft mc, ValueBoolean value)

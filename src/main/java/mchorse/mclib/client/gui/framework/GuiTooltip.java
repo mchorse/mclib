@@ -30,9 +30,14 @@ public class GuiTooltip
 
     public void draw(Tooltip tooltip, GuiContext context)
     {
+        if (this.element == null || tooltip == null)
+        {
+            return;
+        }
+
         String label = tooltip.label.get();
 
-        if (this.element == null || tooltip == null || label.isEmpty())
+        if (label.isEmpty())
         {
             return;
         }
