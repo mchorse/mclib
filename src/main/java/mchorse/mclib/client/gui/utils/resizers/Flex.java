@@ -193,32 +193,24 @@ public class Flex implements IResizer
         return this;
     }
 
-    public Flex hTo(IResizer flex)
+    public Flex hTo(IResizer target)
     {
-        this.h.target = flex;
-
-        return this;
+        return this.hTo(target, 0);
     }
 
-    public Flex hTo(IResizer flex, int offset)
+    public Flex hTo(IResizer target, int offset)
     {
-        this.h.target = flex;
-        this.h.offset = offset;
-
-        return this;
+        return this.hTo(target, 0F, offset);
     }
 
-    public Flex hTo(IResizer flex, float anchor)
+    public Flex hTo(IResizer target, float anchor)
     {
-        this.h.target = flex;
-        this.h.targetAnchor = anchor;
-
-        return this;
+        return this.hTo(target, anchor, 0);
     }
 
-    public Flex hTo(IResizer flex, float anchor, int offset)
+    public Flex hTo(IResizer target, float anchor, int offset)
     {
-        this.h.target = flex;
+        this.h.target = target;
         this.h.targetAnchor = anchor;
         this.h.offset = offset;
 
