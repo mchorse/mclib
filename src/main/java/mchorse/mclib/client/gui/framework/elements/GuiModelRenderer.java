@@ -63,6 +63,22 @@ public abstract class GuiModelRenderer extends GuiElement
         return this;
     }
 
+    public void setRotation(float yaw, float pitch)
+    {
+        this.yaw = yaw;
+        this.pitch = pitch;
+    }
+
+    public void setPosition(float x, float y, float z)
+    {
+        this.pos.set(x, y, z);
+    }
+
+    public void setScale(float scale)
+    {
+        this.scale = scale;
+    }
+
     public void reset()
     {
         this.yaw = 0;

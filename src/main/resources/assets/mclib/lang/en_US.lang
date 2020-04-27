@@ -1,4 +1,8 @@
 #PARSE_ESCAPES
+
+key.mclib.category=McLib
+key.mclib.dashboard=Dashboard
+
 mclib.gui.ok=Ok
 mclib.gui.cancel=Cancel
 mclib.gui.multi_skin=Multi-skin
