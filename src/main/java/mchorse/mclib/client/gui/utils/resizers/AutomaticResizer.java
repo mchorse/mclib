@@ -82,12 +82,22 @@ public abstract class AutomaticResizer extends BaseResizer
 	@Override
 	public void add(GuiElement parent, GuiElement child)
 	{
+		if (child.ignored)
+		{
+			return;
+		}
+
 		child.resizer(this.child(child));
 	}
 
 	@Override
 	public void remove(GuiElement parent, GuiElement child)
 	{
+		if (child.ignored)
+		{
+			return;
+		}
+
 		Iterator<ChildResizer> it = this.resizers.iterator();
 
 		while (it.hasNext())

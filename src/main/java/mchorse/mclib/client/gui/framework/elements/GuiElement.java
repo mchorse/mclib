@@ -58,6 +58,11 @@ public class GuiElement extends Gui implements IGuiElement
     public boolean hideTooltip;
 
     /**
+     * Whether this element should be ignored by post resizers
+     */
+    public boolean ignored;
+
+    /**
      * Whether this element is a container
      */
     protected boolean container;
@@ -286,6 +291,13 @@ public class GuiElement extends Gui implements IGuiElement
     public GuiElement markContainer()
     {
         this.container = true;
+
+        return this;
+    }
+
+    public GuiElement markIgnored()
+    {
+        this.ignored = true;
 
         return this;
     }
