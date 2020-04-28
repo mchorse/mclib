@@ -2,6 +2,7 @@ package mchorse.mclib;
 
 import mchorse.mclib.client.KeyboardHandler;
 import mchorse.mclib.client.MouseRenderer;
+import mchorse.mclib.client.gui.mclib.GuiDashboard;
 import mchorse.mclib.client.gui.utils.keys.LangKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
@@ -14,6 +15,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy
 {
+	public static GuiDashboard dashboard;
+
+	public static GuiDashboard getDashboard()
+	{
+		if (dashboard == null)
+		{
+			dashboard = new GuiDashboard(Minecraft.getMinecraft());
+		}
+
+		return dashboard;
+	}
+
 	@Override
 	public void preInit(FMLPreInitializationEvent event)
 	{

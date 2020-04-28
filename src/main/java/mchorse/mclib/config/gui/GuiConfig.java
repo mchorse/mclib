@@ -1,30 +1,28 @@
 package mchorse.mclib.config.gui;
 
 import mchorse.mclib.McLib;
-import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiScrollElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiLabelListElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
+import mchorse.mclib.client.gui.mclib.GuiDashboard;
+import mchorse.mclib.client.gui.mclib.GuiDashboardPanel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.ScrollArea;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.client.gui.utils.resizers.layout.ColumnResizer;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.utils.Direction;
-import mchorse.mclib.utils.Timer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiConfig extends GuiElement
+public class GuiConfig extends GuiDashboardPanel
 {
 	public GuiIconElement reload;
 	public GuiLabelListElement<String> mods;
@@ -33,9 +31,9 @@ public class GuiConfig extends GuiElement
 	private Config config;
 	private IKey title = IKey.lang("mclib.gui.config.title");
 
-	public GuiConfig(Minecraft mc)
+	public GuiConfig(Minecraft mc, GuiDashboard dashboard)
 	{
-		super(mc);
+		super(mc, dashboard);
 
 		this.reload = new GuiIconElement(mc, Icons.REFRESH, (button) -> this.reload());
 		this.reload.tooltip(IKey.lang("mclib.gui.config.reload_tooltip"), Direction.BOTTOM);

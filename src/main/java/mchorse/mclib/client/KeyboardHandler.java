@@ -1,8 +1,13 @@
 package mchorse.mclib.client;
 
+import mchorse.mclib.ClientProxy;
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.mclib.GuiDashboard;
+import mchorse.mclib.events.RemoveDashboardPanels;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -14,9 +19,7 @@ public class KeyboardHandler
 
 	public KeyboardHandler()
 	{
-		String category = "key.mclib.category";
-
-		this.dashboard = new KeyBinding("key.mclib.dashboard", Keyboard.KEY_0, category);
+		this.dashboard = new KeyBinding("key.mclib.dashboard", Keyboard.KEY_0, "key.mclib.category");
 
 		ClientRegistry.registerKeyBinding(this.dashboard);
 	}
@@ -26,9 +29,17 @@ public class KeyboardHandler
 	{
 		if (this.dashboard.isPressed())
 		{
-			Minecraft mc = Minecraft.getMinecraft();
+			Minecraft.getMinecraft().displayGuiScreen(ClientProxy.getDashboard());
+		}
+	}
 
-			mc.displayGuiScreen(new GuiDashboard(mc));
+	@SubscribeEvent
+	public void onGuiOpen(GuiOpenEvent event)
+	{
+		if (event.getGui() instanceof GuiMainMenu)
+		{
+			ClientProxy.dashboard = null;
+			McLib.EVENT_BUS.post(new RemoveDashboardPanels());
 		}
 	}
 }
