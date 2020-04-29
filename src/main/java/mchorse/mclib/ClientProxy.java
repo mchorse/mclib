@@ -15,18 +15,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy
 {
-	public static GuiDashboard dashboard;
-
-	public static GuiDashboard getDashboard()
-	{
-		if (dashboard == null)
-		{
-			dashboard = new GuiDashboard(Minecraft.getMinecraft());
-		}
-
-		return dashboard;
-	}
-
 	@Override
 	public void preInit(FMLPreInitializationEvent event)
 	{

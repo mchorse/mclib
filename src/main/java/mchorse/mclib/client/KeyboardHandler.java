@@ -1,6 +1,5 @@
 package mchorse.mclib.client;
 
-import mchorse.mclib.ClientProxy;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.mclib.GuiDashboard;
 import mchorse.mclib.events.RemoveDashboardPanels;
@@ -29,7 +28,7 @@ public class KeyboardHandler
 	{
 		if (this.dashboard.isPressed())
 		{
-			Minecraft.getMinecraft().displayGuiScreen(ClientProxy.getDashboard());
+			Minecraft.getMinecraft().displayGuiScreen(GuiDashboard.get());
 		}
 	}
 
@@ -38,7 +37,7 @@ public class KeyboardHandler
 	{
 		if (event.getGui() instanceof GuiMainMenu)
 		{
-			ClientProxy.dashboard = null;
+			GuiDashboard.dashboard = null;
 			McLib.EVENT_BUS.post(new RemoveDashboardPanels());
 		}
 	}

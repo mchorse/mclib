@@ -10,10 +10,22 @@ import net.minecraft.client.Minecraft;
 
 public class GuiDashboard extends GuiBase
 {
+	public static GuiDashboard dashboard;
+
 	public GuiDashboardPanels panels;
 	public GuiConfig config;
 
 	private boolean wasClosed = true;
+
+	public static GuiDashboard get()
+	{
+		if (dashboard == null)
+		{
+			dashboard = new GuiDashboard(Minecraft.getMinecraft());
+		}
+
+		return dashboard;
+	}
 
 	public GuiDashboard(Minecraft mc)
 	{
