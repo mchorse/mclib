@@ -115,7 +115,6 @@ public class GuiConfig extends GuiDashboardPanel
 	@Override
 	public void draw(GuiContext context)
 	{
-		this.area.draw(0xaa000000);
 		this.mods.area.draw(0xdd000000, -10, -35, -10, -10);
 		this.font.drawStringWithShadow(this.title.get(), this.area.x + 10, this.area.y + 20 - this.font.FONT_HEIGHT / 2, 0xffffff);
 

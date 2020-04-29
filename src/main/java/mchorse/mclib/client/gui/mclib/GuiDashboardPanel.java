@@ -14,6 +14,11 @@ public class GuiDashboardPanel extends GuiElement
 		this.dashboard = dashboard;
 	}
 
+	public boolean needsBackground()
+	{
+		return true;
+	}
+
 	public void appear()
 	{}
 

@@ -66,4 +66,20 @@ public class GuiDashboard extends GuiBase
 
 		super.setWorldAndResolution(mc, width, height);
 	}
+
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
+	{
+		if (this.panels.view.delegate != null && this.panels.view.delegate.needsBackground())
+		{
+			this.drawDefaultBackground();
+		}
+		else
+		{
+			this.drawGradientRect(0, 0, this.width, this.height / 8, 0x44000000, 0x00000000);
+			this.drawGradientRect(0, this.height - this.height / 8, this.width, this.height, 0x00000000, 0x44000000);
+		}
+
+		super.drawScreen(mouseX, mouseY, partialTicks);
+	}
 }
