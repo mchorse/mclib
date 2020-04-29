@@ -53,7 +53,7 @@ public class McLib
         ConfigBuilder builder = event.createBuilder(MOD_ID);
 
         primaryColor = builder.category("appearance").getInt("primary_color", 0x0088ff).color();
-        enableBorders = builder.getBoolean("enable_borders", true);
+        enableBorders = builder.getBoolean("enable_borders", false);
         opacity = builder.getFloat("opacity", 0.54F, 0F, 1F);
         enableMouseRendering = builder.getBoolean("enable_mouse_rendering", false);
 

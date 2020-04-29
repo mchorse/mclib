@@ -1,5 +1,6 @@
 package mchorse.mclib.config;
 
+import mchorse.mclib.config.values.Value;
 import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueDouble;
 import mchorse.mclib.config.values.ValueFloat;
@@ -46,11 +47,18 @@ public class ConfigBuilder
 		return this;
 	}
 
+	public ConfigBuilder register(Value value)
+	{
+		this.category.register(value.getId(), value);
+
+		return this;
+	}
+
 	public ValueInt getInt(String id, int defaultValue)
 	{
 		ValueInt value = new ValueInt(id, defaultValue);
 
-		this.category.register(id, value);
+		this.register(value);
 
 		return value;
 	}
@@ -59,7 +67,7 @@ public class ConfigBuilder
 	{
 		ValueInt value = new ValueInt(id, defaultValue, min, max);
 
-		this.category.register(id, value);
+		this.register(value);
 
 		return value;
 	}
@@ -68,7 +76,7 @@ public class ConfigBuilder
 	{
 		ValueFloat value = new ValueFloat(id, defaultValue);
 
-		this.category.register(id, value);
+		this.register(value);
 
 		return value;
 	}
@@ -77,7 +85,7 @@ public class ConfigBuilder
 	{
 		ValueFloat value = new ValueFloat(id, defaultValue, min, max);
 
-		this.category.register(id, value);
+		this.register(value);
 
 		return value;
 	}
@@ -86,7 +94,7 @@ public class ConfigBuilder
 	{
 		ValueDouble value = new ValueDouble(id, defaultValue);
 
-		this.category.register(id, value);
+		this.register(value);
 
 		return value;
 	}
@@ -95,7 +103,7 @@ public class ConfigBuilder
 	{
 		ValueDouble value = new ValueDouble(id, defaultValue, min, max);
 
-		this.category.register(id, value);
+		this.register(value);
 
 		return value;
 	}
@@ -104,7 +112,7 @@ public class ConfigBuilder
 	{
 		ValueBoolean value = new ValueBoolean(id, defaultValue);
 
-		this.category.register(id, value);
+		this.register(value);
 
 		return value;
 	}
@@ -113,7 +121,7 @@ public class ConfigBuilder
 	{
 		ValueString value = new ValueString(id, defaultValue);
 
-		this.category.register(id, value);
+		this.register(value);
 
 		return value;
 	}
@@ -122,7 +130,7 @@ public class ConfigBuilder
 	{
 		ValueRL value = new ValueRL(id, defaultValue);
 
-		this.category.register(id, value);
+		this.register(value);
 
 		return value;
 	}

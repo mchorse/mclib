@@ -5,6 +5,7 @@ import mchorse.mclib.client.gui.mclib.GuiDashboard;
 import mchorse.mclib.events.RemoveDashboardPanels;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -28,7 +29,14 @@ public class KeyboardHandler
 	{
 		if (this.dashboard.isPressed())
 		{
-			Minecraft.getMinecraft().displayGuiScreen(GuiDashboard.get());
+			GuiDashboard dashboard = GuiDashboard.get();
+
+			Minecraft.getMinecraft().displayGuiScreen(dashboard);
+
+			if (GuiScreen.isCtrlKeyDown())
+			{
+				dashboard.panels.setPanel(dashboard.config);
+			}
 		}
 	}
 
