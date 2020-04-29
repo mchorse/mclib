@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.utils.DummyEntity;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.block.state.IBlockState;
@@ -47,6 +48,8 @@ public abstract class GuiModelRenderer extends GuiElement
     /* Picking */
     protected boolean tryPicking;
     protected Consumer<String> callback;
+
+    private long tick;
 
     public GuiModelRenderer(Minecraft mc)
     {
@@ -141,13 +144,31 @@ public abstract class GuiModelRenderer extends GuiElement
     @Override
     public void draw(GuiContext context)
     {
-        this.update();
+        this.updateLogic(context);
 
         GuiDraw.scissor(this.area.x, this.area.y, this.area.w, this.area.h, context);
         this.drawModel(context);
         GuiDraw.unscissor(context);
 
         super.draw(context);
+    }
+
+    private void updateLogic(GuiContext context)
+    {
+        long i = context.tick - this.tick;
+
+        if (i > 10)
+        {
+            i = 10;
+        }
+
+        while (i > 0)
+        {
+            this.update();
+            i --;
+        }
+
+        this.tick = context.tick;
     }
 
     /**
