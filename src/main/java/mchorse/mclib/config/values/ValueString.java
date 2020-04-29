@@ -51,7 +51,7 @@ public class ValueString extends Value
 	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
 	{
 		GuiElement element = new GuiElement(mc);
-		GuiLabel label = Elements.label(IKey.lang(this.getTitleKey())).anchor(0, 0.5F);
+		GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
 		GuiTextElement textbox = new GuiTextElement(mc, this);
 
 		textbox.flex().w(90);

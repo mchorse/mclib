@@ -103,7 +103,7 @@ public class ValueInt extends Value
 	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
 	{
 		GuiElement element = new GuiElement(mc);
-		GuiLabel label = Elements.label(IKey.lang(this.getTitleKey())).anchor(0, 0.5F);
+		GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
 
 		element.flex().row(0).preferred(0).height(20);
 		element.add(label);

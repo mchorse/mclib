@@ -61,7 +61,7 @@ public class ValueRL extends Value
 	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
 	{
 		GuiElement element = new GuiElement(mc);
-		GuiLabel label = Elements.label(IKey.lang(this.getTitleKey())).anchor(0, 0.5F);
+		GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
 		GuiButtonElement pick = new GuiButtonElement(mc, IKey.lang("mclib.gui.pick_texture"),  (button) ->
 		{
 			if (picker == null)
