@@ -61,18 +61,11 @@ public class GuiLabel extends GuiElement
 	@Override
 	public void draw(GuiContext context)
 	{
-		int a = this.background >> 24 & 0xff;
-
 		String label = this.label.get();
 		int x = this.area.x(this.anchorX, this.font.getStringWidth(label));
 		int y = this.area.y(this.anchorY, this.font.FONT_HEIGHT);
 
-		if (a != 0)
-		{
-			Gui.drawRect(x - 3, y - 3, x + this.font.getStringWidth(label) + 3, y + this.font.FONT_HEIGHT + 3, this.background);
-		}
-
-		this.font.drawStringWithShadow(label, x, y, this.color);
+		GuiDraw.drawTextBackground(this.font, label, x, y, this.color, this.background);
 
 		super.draw(context);
 	}

@@ -2,7 +2,6 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
-import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.utils.DummyEntity;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.block.state.IBlockState;
@@ -13,6 +12,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
@@ -29,7 +29,7 @@ import java.util.function.Consumer;
  */
 public abstract class GuiModelRenderer extends GuiElement
 {
-    protected DummyEntity dummy;
+    protected EntityLivingBase entity;
     protected IBlockState block = Blocks.GRASS.getDefaultState();
 
     protected float scale;
@@ -55,7 +55,7 @@ public abstract class GuiModelRenderer extends GuiElement
     {
         super(mc);
 
-        this.dummy = new DummyEntity(mc.world);
+        this.entity = new DummyEntity(mc.world);
         this.reset();
     }
 
@@ -80,6 +80,11 @@ public abstract class GuiModelRenderer extends GuiElement
     public void setScale(float scale)
     {
         this.scale = scale;
+    }
+
+    public EntityLivingBase getEntity()
+    {
+        return this.entity;
     }
 
     public void reset()
@@ -177,7 +182,7 @@ public abstract class GuiModelRenderer extends GuiElement
     protected void update()
     {
         this.timer = this.mc.player != null ? this.mc.player.ticksExisted : this.timer + 1;
-        this.dummy.ticksExisted = this.timer;
+        this.entity.ticksExisted = this.timer;
     }
 
     /**

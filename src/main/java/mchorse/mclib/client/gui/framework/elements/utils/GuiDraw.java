@@ -419,4 +419,16 @@ public class GuiDraw
 			y += lineHeight;
 		}
 	}
+
+	public static void drawTextBackground(FontRenderer font, String text, int x, int y, int color, int background)
+	{
+		int a = background >> 24 & 0xff;
+
+		if (a != 0)
+		{
+			Gui.drawRect(x - 3, y - 3, x + font.getStringWidth(text) + 3, y + font.FONT_HEIGHT + 3, background);
+		}
+
+		font.drawStringWithShadow(text, x, y, color);
+	}
 }

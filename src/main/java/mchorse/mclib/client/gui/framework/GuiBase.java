@@ -63,8 +63,12 @@ public class GuiBase extends GuiScreen
         }
 
         this.viewport.set(0, 0, this.width, this.height);
+        this.viewportSet();
         this.root.resize();
     }
+
+    protected void viewportSet()
+    {}
 
     @Override
     public void handleMouseInput() throws IOException
