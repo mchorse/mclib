@@ -41,7 +41,6 @@ public class McLib
     /* Configuration */
     public static ValueInt primaryColor;
     public static ValueBoolean enableBorders;
-    public static ValueFloat opacity;
     public static ValueBoolean enableMouseRendering;
 
     public static ValueRL backgroundImage;
@@ -54,11 +53,10 @@ public class McLib
 
         primaryColor = builder.category("appearance").getInt("primary_color", 0x0088ff).color();
         enableBorders = builder.getBoolean("enable_borders", false);
-        opacity = builder.getFloat("opacity", 0.54F, 0F, 1F);
         enableMouseRendering = builder.getBoolean("enable_mouse_rendering", false);
 
         backgroundImage = builder.category("background").getRL("image",  null);
-        backgroundColor = builder.getInt("color",  0x000000).color();
+        backgroundColor = builder.getInt("color",  0x88000000).colorAlpha();
 
         event.modules.add(builder.build());
     }

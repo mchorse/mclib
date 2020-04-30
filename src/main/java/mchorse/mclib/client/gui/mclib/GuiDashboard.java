@@ -2,11 +2,16 @@ package mchorse.mclib.client.gui.mclib;
 
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.events.RegisterDashboardPanels;
+import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiDashboard extends GuiBase
 {
@@ -72,7 +77,20 @@ public class GuiDashboard extends GuiBase
 	{
 		if (this.panels.view.delegate != null && this.panels.view.delegate.needsBackground())
 		{
-			this.drawDefaultBackground();
+			ResourceLocation background = McLib.backgroundImage.get();
+			int color = McLib.backgroundColor.get();
+
+			if (background == null)
+			{
+				Gui.drawRect(0, 0, this.width, this.height, color);
+			}
+			else
+			{
+				this.mc.renderEngine.bindTexture(background);
+				ColorUtils.bindColor(color);
+				GlStateManager.enableAlpha();
+				GuiDraw.drawBillboard(0, 0, 0, 0, this.width, this.height, this.width, this.height);
+			}
 		}
 		else
 		{
