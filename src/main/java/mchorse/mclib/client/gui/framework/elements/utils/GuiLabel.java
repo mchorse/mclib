@@ -26,6 +26,13 @@ public class GuiLabel extends GuiElement
 		this.color = color;
 	}
 
+	public GuiLabel color(int color)
+	{
+		this.color = color;
+
+		return this;
+	}
+
 	public GuiLabel background(int color)
 	{
 		this.background = color;

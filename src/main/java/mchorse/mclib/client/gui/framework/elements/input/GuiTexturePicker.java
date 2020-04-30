@@ -8,10 +8,12 @@ import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiFolderEntryListElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiResourceLocationListElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.client.gui.utils.keys.LangKey;
 import mchorse.mclib.client.gui.utils.keys.StringKey;
+import mchorse.mclib.utils.Timer;
 import mchorse.mclib.utils.files.FileTree;
 import mchorse.mclib.utils.files.GlobalTree;
 import mchorse.mclib.utils.files.entries.AbstractEntry;
@@ -61,8 +63,8 @@ public class GuiTexturePicker extends GuiElement
     public ResourceLocation current;
     public FileTree tree = GlobalTree.TREE;
 
-    private long lastChecked;
-    private long lastTyped;
+    private Timer lastTyped = new Timer(1000);
+    private Timer lastChecked = new Timer(1000);
     private String typed = "";
 
     public GuiTexturePicker(Minecraft mc, Consumer<ResourceLocation> callback)
@@ -371,15 +373,13 @@ public class GuiTexturePicker extends GuiElement
             return false;
         }
 
-        long diff = System.currentTimeMillis() - this.lastTyped;
-
-        if (diff > 1000)
+        if (this.lastTyped.checkReset())
         {
             this.typed = "";
         }
 
         this.typed += Character.toString(typedChar);
-        this.lastTyped = System.currentTimeMillis();
+        this.lastTyped.mark();
 
         for (AbstractEntry entry : this.picker.getList())
         {
@@ -398,12 +398,8 @@ public class GuiTexturePicker extends GuiElement
     public void draw(GuiContext context)
     {
         /* Refresh the list */
-        long time = System.currentTimeMillis();
-
-        if (this.lastChecked + 1000 < time)
+        if (this.lastChecked.checkRepeat())
         {
-            this.lastChecked = time;
-
             FolderEntry folder = this.picker.parent;
 
             if (folder != null && folder.isTop())
@@ -434,7 +430,7 @@ public class GuiTexturePicker extends GuiElement
 
         super.draw(context);
 
-        if (System.currentTimeMillis() - this.lastTyped < 1000)
+        if (!this.lastTyped.check())
         {
             int w = this.font.getStringWidth(this.typed);
             int x = this.text.area.x;
@@ -478,17 +474,10 @@ public class GuiTexturePicker extends GuiElement
 
             this.mc.renderEngine.bindTexture(Icons.ICONS);
             GuiUtils.drawContinuousTexturedBox(x, y, 0, 240, fw, fh, 16, 16, 0, 0);
-            this.mc.renderEngine.bindTexture(loc);
 
             GlStateManager.enableAlpha();
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder vertexbuffer = tessellator.getBuffer();
-            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-            vertexbuffer.pos(x, y + fh, 0.0D).tex(0, 1).endVertex();
-            vertexbuffer.pos(x + fw, y + fh, 0.0D).tex(1, 1).endVertex();
-            vertexbuffer.pos(x + fw, y, 0.0D).tex(1, 0).endVertex();
-            vertexbuffer.pos(x, y, 0.0D).tex(0, 0).endVertex();
-            tessellator.draw();
+            this.mc.renderEngine.bindTexture(loc);
+            GuiDraw.drawBillboard(x, y, 0, 0, fw, fh, fw, fh);
         }
     }
 }

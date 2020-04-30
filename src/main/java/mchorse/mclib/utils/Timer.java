@@ -40,4 +40,14 @@ public class Timer
 
 		return this.enabled && time >= this.time;
 	}
+
+	public boolean checkRepeat()
+	{
+		if (!this.enabled)
+		{
+			this.mark();
+		}
+
+		return this.checkReset();
+	}
 }
