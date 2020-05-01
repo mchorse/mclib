@@ -67,6 +67,7 @@ public class GuiDashboard extends GuiBase
 		{
 			this.wasClosed = false;
 			this.panels.open();
+			this.panels.setPanel(this.panels.view.delegate);
 		}
 
 		super.setWorldAndResolution(mc, width, height);

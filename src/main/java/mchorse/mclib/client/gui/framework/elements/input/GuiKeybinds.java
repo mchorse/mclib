@@ -11,7 +11,6 @@ import net.minecraft.client.gui.Gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -107,7 +106,7 @@ public class GuiKeybinds extends GuiScrollElement
 			if (!title.isEmpty())
 			{
 				Gui.drawRect(x - 10, y + i - 2, x + context.font.getStringWidth(title) + 2, y + i + context.font.FONT_HEIGHT + 2, color);
-				context.font.drawStringWithShadow(title, x, y + i, 0xffffff);
+				context.font.drawString(title, x, y + i, 0xffffff);
 				i += 14;
 			}
 

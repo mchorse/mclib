@@ -405,7 +405,17 @@ public class GuiDraw
 		GlStateManager.enableTexture2D();
 	}
 
-	public static void drawMultiText(FontRenderer font, String text, int x, int y, int color, int width, int lineHeight, float ax, float ay)
+	public static int drawMultiText(FontRenderer font, String text, int x, int y, int color, int width)
+	{
+		return drawMultiText(font, text, x, y, color, width, 12);
+	}
+
+	public static int drawMultiText(FontRenderer font, String text, int x, int y, int color, int width, int lineHeight)
+	{
+		return drawMultiText(font, text, x, y, color, width, lineHeight, 0F, 0F);
+	}
+
+	public static int drawMultiText(FontRenderer font, String text, int x, int y, int color, int width, int lineHeight, float ax, float ay)
 	{
 		List<String> list = font.listFormattedStringToWidth(text, width);
 		int h = (lineHeight * (list.size() - 1)) + font.FONT_HEIGHT;
@@ -418,15 +428,22 @@ public class GuiDraw
 
 			y += lineHeight;
 		}
+
+		return h;
 	}
 
 	public static void drawTextBackground(FontRenderer font, String text, int x, int y, int color, int background)
+	{
+		drawTextBackground(font, text, x, y, color, background, 3);
+	}
+
+	public static void drawTextBackground(FontRenderer font, String text, int x, int y, int color, int background, int offset)
 	{
 		int a = background >> 24 & 0xff;
 
 		if (a != 0)
 		{
-			Gui.drawRect(x - 3, y - 3, x + font.getStringWidth(text) + 3, y + font.FONT_HEIGHT + 3, background);
+			Gui.drawRect(x - offset, y - offset, x + font.getStringWidth(text) + offset, y + font.FONT_HEIGHT + offset, background);
 		}
 
 		font.drawStringWithShadow(text, x, y, color);

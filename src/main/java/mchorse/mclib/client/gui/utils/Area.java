@@ -192,9 +192,23 @@ public class Area implements IResizer
         return this.y + this.h;
     }
 
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof Area)
+        {
+            Area area = (Area) obj;
+
+            return this.x == area.x && this.y == area.y && this.w == area.w && this.h == area.h;
+        }
+
+        return super.equals(obj);
+    }
+
     /**
      * Draw a rect within the bound of this rect
      */
+    @SideOnly(Side.CLIENT)
     public void draw(int color)
     {
         this.draw(color, 0, 0, 0, 0);
@@ -203,6 +217,7 @@ public class Area implements IResizer
     /**
      * Draw a rect within the bound of this rect
      */
+    @SideOnly(Side.CLIENT)
     public void draw(int color, int offset)
     {
         this.draw(color, offset, offset, offset, offset);
@@ -211,6 +226,7 @@ public class Area implements IResizer
     /**
      * Draw a rect within the bound of this rect
      */
+    @SideOnly(Side.CLIENT)
     public void draw(int color, int horizontal, int vertical)
     {
         this.draw(color, horizontal, vertical, horizontal, vertical);
@@ -219,6 +235,7 @@ public class Area implements IResizer
     /**
      * Draw a rect within the bound of this rect
      */
+    @SideOnly(Side.CLIENT)
     public void draw(int color, int lx, int ty, int rx, int by)
     {
         Gui.drawRect(this.x + lx, this.y + ty, this.ex() - rx, this.ey() - by, color);
@@ -241,10 +258,12 @@ public class Area implements IResizer
     {}
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void add(GuiElement parent, GuiElement child)
     {}
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void remove(GuiElement parent, GuiElement child)
     {}
 
