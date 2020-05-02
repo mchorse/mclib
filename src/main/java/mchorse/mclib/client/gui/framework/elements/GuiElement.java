@@ -142,29 +142,6 @@ public class GuiElement extends Gui implements IGuiElement
         return this.children.elements;
     }
 
-    public void clear()
-    {
-        if (this.children == null)
-        {
-            return;
-        }
-
-        for (IGuiElement element : this.children.elements)
-        {
-            if (element instanceof GuiElement)
-            {
-                if (this.resizer != null)
-                {
-                    this.resizer.remove(this, (GuiElement) element);
-                }
-
-                ((GuiElement) element).parent = null;
-            }
-        }
-
-        this.children.clear();
-    }
-
     public void prepend(IGuiElement element)
     {
         if (this.children == null)
@@ -214,6 +191,29 @@ public class GuiElement extends Gui implements IGuiElement
                 this.resizer.add(this, child);
             }
         }
+    }
+
+    public void removeAll()
+    {
+        if (this.children == null)
+        {
+            return;
+        }
+
+        for (IGuiElement element : this.children.elements)
+        {
+            if (element instanceof GuiElement)
+            {
+                if (this.resizer != null)
+                {
+                    this.resizer.remove(this, (GuiElement) element);
+                }
+
+                ((GuiElement) element).parent = null;
+            }
+        }
+
+        this.children.clear();
     }
 
     public void removeFromParent()

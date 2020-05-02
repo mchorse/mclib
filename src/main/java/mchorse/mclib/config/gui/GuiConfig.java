@@ -71,7 +71,7 @@ public class GuiConfig extends GuiDashboardPanel
 
 	public void refresh()
 	{
-		this.options.clear();
+		this.options.removeAll();
 
 		boolean first = true;
 

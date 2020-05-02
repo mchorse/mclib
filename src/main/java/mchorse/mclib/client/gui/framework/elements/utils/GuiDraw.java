@@ -464,7 +464,7 @@ public class GuiDraw
 			Minecraft.getMinecraft().renderEngine.bindTexture(background);
 			ColorUtils.bindColor(color);
 			GlStateManager.enableAlpha();
-			GuiDraw.drawBillboard(x, y, x, y, width, height, width, height);
+			GuiDraw.drawBillboard(x, y, 0, 0, width, height, width, height);
 		}
 	}
 }

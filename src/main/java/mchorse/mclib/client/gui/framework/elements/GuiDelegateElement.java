@@ -53,7 +53,7 @@ public class GuiDelegateElement<T extends GuiElement> extends GuiElement
     }
 
     @Override
-    public void clear()
+    public void removeAll()
     {
         this.unsupported();
     }
