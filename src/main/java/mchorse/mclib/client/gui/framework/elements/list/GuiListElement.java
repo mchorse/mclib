@@ -264,7 +264,7 @@ public abstract class GuiListElement<T> extends GuiElement
 
     /* Content management */
 
-    public void removeAll()
+    public void clear()
     {
         this.current.clear();
         this.list.clear();
