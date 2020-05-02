@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -447,5 +448,23 @@ public class GuiDraw
 		}
 
 		font.drawStringWithShadow(text, x, y, color);
+	}
+
+	public static void drawCustomBackground(int x, int y, int width, int height)
+	{
+		ResourceLocation background = McLib.backgroundImage.get();
+		int color = McLib.backgroundColor.get();
+
+		if (background == null)
+		{
+			Gui.drawRect(x, y, x + width, y + height, color);
+		}
+		else
+		{
+			Minecraft.getMinecraft().renderEngine.bindTexture(background);
+			ColorUtils.bindColor(color);
+			GlStateManager.enableAlpha();
+			GuiDraw.drawBillboard(x, y, x, y, width, height, width, height);
+		}
 	}
 }

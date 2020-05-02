@@ -56,7 +56,7 @@ public class McLib
         enableMouseRendering = builder.getBoolean("enable_mouse_rendering", false);
 
         backgroundImage = builder.category("background").getRL("image",  null);
-        backgroundColor = builder.getInt("color",  0x88000000).colorAlpha();
+        backgroundColor = builder.getInt("color",  0xcc000000).colorAlpha();
 
         event.modules.add(builder.build());
     }

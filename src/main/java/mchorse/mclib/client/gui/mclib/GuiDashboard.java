@@ -78,20 +78,7 @@ public class GuiDashboard extends GuiBase
 	{
 		if (this.panels.view.delegate != null && this.panels.view.delegate.needsBackground())
 		{
-			ResourceLocation background = McLib.backgroundImage.get();
-			int color = McLib.backgroundColor.get();
-
-			if (background == null)
-			{
-				Gui.drawRect(0, 0, this.width, this.height, color);
-			}
-			else
-			{
-				this.mc.renderEngine.bindTexture(background);
-				ColorUtils.bindColor(color);
-				GlStateManager.enableAlpha();
-				GuiDraw.drawBillboard(0, 0, 0, 0, this.width, this.height, this.width, this.height);
-			}
+			GuiDraw.drawCustomBackground(0, 0, this.width, this.height);
 		}
 		else
 		{
