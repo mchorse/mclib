@@ -129,6 +129,8 @@ public class GuiScrollElement extends GuiElement
     @Override
     public void draw(GuiContext context)
     {
+        GuiElement lastTooltip = context.tooltip.element;
+
         this.scroll.drag(context.mouseX, context.mouseY);
 
         GuiDraw.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
@@ -154,6 +156,12 @@ public class GuiScrollElement extends GuiElement
 
         this.scroll.drawScrollbar();
         this.unapply(context);
+
+        /* Clear tooltip in case if it was set outside of scroll area within the scroll */
+        if (!this.area.isInside(context) && context.tooltip.element != lastTooltip)
+        {
+            context.tooltip.set(context, null);
+        }
     }
 
     protected void preDraw(GuiContext context)

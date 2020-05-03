@@ -57,7 +57,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
         }
 
         this.buttons = new GuiElements<GuiIconElement>(this);
-        this.add(new GuiDrawable(this::drawOverlay), this.buttons, this.view);
+        this.add(new GuiDrawable(this::drawOverlay), this.view, this.buttons);
     }
 
     /**
