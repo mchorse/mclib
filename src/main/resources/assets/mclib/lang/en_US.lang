@@ -15,6 +15,13 @@ mclib.gui.config.tooltip=Mods configuration
 mclib.gui.config.reload_tooltip=Reload configuration from file...
 mclib.gui.keys.list=Keybinds list
 
+mclib.gui.transforms.x=X
+mclib.gui.transforms.y=Y
+mclib.gui.transforms.z=Z
+mclib.gui.transforms.translate=Translate
+mclib.gui.transforms.scale=Scale
+mclib.gui.transforms.rotate=Rotate
+
 # Config
 mclib.config.title=McLib
 
