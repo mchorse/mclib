@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 public class Draw
 {
-	public static void drawAxis(float length)
+	public static void axis(float length)
 	{
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -33,10 +33,10 @@ public class Draw
 		tessellator.draw();
 		GL11.glLineWidth(1);
 
-		drawPoint(0, 0, 0);
+		point(0, 0, 0);
 	}
 
-	public static void drawPoint(double x, double y, double z)
+	public static void point(double x, double y, double z)
 	{
 		GL11.glPointSize(12);
 		GL11.glBegin(GL11.GL_POINTS);
@@ -52,17 +52,17 @@ public class Draw
 		GL11.glPointSize(1);
 	}
 
-	public static void drawCube(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float red, float green, float blue, float alpha)
+	public static void cube(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float red, float green, float blue, float alpha)
 	{
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-		drawCube(buffer, minX, minY, minZ, maxX, maxY, maxZ, red, green, blue, alpha);
+		cube(buffer, minX, minY, minZ, maxX, maxY, maxZ, red, green, blue, alpha);
 		tessellator.draw();
 	}
 
-	public static void drawCube(BufferBuilder buffer, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float red, float green, float blue, float alpha)
+	public static void cube(BufferBuilder buffer, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float red, float green, float blue, float alpha)
 	{
 		/* Top */
 		buffer.pos(minX, maxY, minZ).color(red, green, blue, alpha).endVertex();
