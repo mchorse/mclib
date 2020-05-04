@@ -171,6 +171,18 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         return this;
     }
 
+    /* Values presets */
+
+    public GuiTrackpadElement degrees()
+    {
+        return this.increment(15F).values(1F, 0.1F, 5F);
+    }
+
+    public GuiTrackpadElement block()
+    {
+        return this.increment(1 / 16F).values(1 / 32F, 1 / 128F, 1 / 2F);
+    }
+
     /**
      * Whether this trackpad is dragging
      */
