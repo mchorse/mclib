@@ -225,6 +225,21 @@ public abstract class GuiListElement<T> extends GuiElement
         }
     }
 
+    public void setCurrentDirect(T element)
+    {
+        this.current.clear();
+
+        for (int i = 0; i < this.list.size(); i ++)
+        {
+            if (this.list.get(i) == element)
+            {
+                this.current.add(i);
+
+                return;
+            }
+        }
+    }
+
     public void setCurrent(List<T> elements)
     {
         if (!this.multi && !elements.isEmpty())
