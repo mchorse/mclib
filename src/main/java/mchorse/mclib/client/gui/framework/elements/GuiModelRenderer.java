@@ -29,6 +29,8 @@ import java.util.function.Consumer;
  */
 public abstract class GuiModelRenderer extends GuiElement
 {
+    private static boolean rendering;
+
     protected EntityLivingBase entity;
     protected IBlockState block = Blocks.GRASS.getDefaultState();
 
@@ -50,6 +52,11 @@ public abstract class GuiModelRenderer extends GuiElement
     protected Consumer<String> callback;
 
     private long tick;
+
+    public static boolean isRendering()
+    {
+        return rendering;
+    }
 
     public GuiModelRenderer(Minecraft mc)
     {
@@ -151,9 +158,13 @@ public abstract class GuiModelRenderer extends GuiElement
     {
         this.updateLogic(context);
 
+        rendering = true;
+
         GuiDraw.scissor(this.area.x, this.area.y, this.area.w, this.area.h, context);
         this.drawModel(context);
         GuiDraw.unscissor(context);
+
+        rendering = false;
 
         super.draw(context);
     }
