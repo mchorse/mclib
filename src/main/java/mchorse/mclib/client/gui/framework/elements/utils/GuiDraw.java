@@ -455,6 +455,10 @@ public class GuiDraw
 		ResourceLocation background = McLib.backgroundImage.get();
 		int color = McLib.backgroundColor.get();
 
+		GlStateManager.enableAlpha();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
 		if (background == null)
 		{
 			Gui.drawRect(x, y, x + width, y + height, color);
