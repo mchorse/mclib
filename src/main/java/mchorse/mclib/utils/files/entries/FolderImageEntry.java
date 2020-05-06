@@ -33,7 +33,9 @@ public class FolderImageEntry extends FolderEntry
                 /* Only textures files should be shown */
                 if (lowercase.endsWith(".png") || lowercase.endsWith(".jpg") || lowercase.endsWith(".jpeg") || lowercase.endsWith(".gif"))
                 {
-                    entry = new FileEntry(name, file, RLUtils.create(prefix + "/" + name));
+                    String path = prefix + (prefix.contains(":") ? "/" : ":") + name;
+
+                    entry = new FileEntry(name, file, RLUtils.create(path));
                 }
             }
 
