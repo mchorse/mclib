@@ -328,39 +328,43 @@ public abstract class GuiModelRenderer extends GuiElement
      */
     protected void tryPicking(GuiContext context)
     {
-        if (this.tryPicking)
+        if (!this.tryPicking)
         {
-            float rx = (float) Math.ceil(mc.displayWidth / (double) context.screen.width);
-            float ry = (float) Math.ceil(mc.displayHeight / (double) context.screen.height);
-
-            int x = (int) (context.mouseX * rx);
-            int y = (int) (this.mc.displayHeight - (context.mouseY) * ry);
-
-            GL11.glClearStencil(0);
-            GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-
-            GL11.glEnable(GL11.GL_STENCIL_TEST);
-            GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
-
-            this.drawForStencil(context);
-
-            ByteBuffer buffer = ByteBuffer.allocateDirect(1);
-            GL11.glReadPixels(x, y, 1, 1, GL11.GL_STENCIL_INDEX, GL11.GL_UNSIGNED_BYTE, buffer);
-
-            buffer.rewind();
-
-            if (this.callback != null)
-            {
-                int value = buffer.get();
-
-                if (value > 0)
-                {
-                    this.callback.accept(this.getStencilValue(value));
-                }
-            }
-
-            this.tryPicking = false;
+            return;
         }
+
+        float rx = (float) Math.ceil(mc.displayWidth / (double) context.screen.width);
+        float ry = (float) Math.ceil(mc.displayHeight / (double) context.screen.height);
+
+        int x = (int) (context.mouseX * rx);
+        int y = (int) (this.mc.displayHeight - (context.mouseY) * ry);
+
+        GL11.glClearStencil(0);
+        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+
+        GL11.glEnable(GL11.GL_STENCIL_TEST);
+        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+
+        GL11.glColorMask(false, false, false, false);
+        this.drawForStencil(context);
+        GL11.glColorMask(true, true, true, true);
+
+        ByteBuffer buffer = ByteBuffer.allocateDirect(1);
+        GL11.glReadPixels(x, y, 1, 1, GL11.GL_STENCIL_INDEX, GL11.GL_UNSIGNED_BYTE, buffer);
+
+        buffer.rewind();
+
+        if (this.callback != null)
+        {
+            int value = buffer.get();
+
+            if (value > 0)
+            {
+                this.callback.accept(this.getStencilValue(value));
+            }
+        }
+
+        this.tryPicking = false;
     }
 
     /**
