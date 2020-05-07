@@ -126,6 +126,8 @@ public abstract class GuiListElement<T> extends GuiElement
 
         if (filter.isEmpty())
         {
+            this.update();
+
             return;
         }
 
@@ -138,6 +140,8 @@ public abstract class GuiListElement<T> extends GuiElement
                 this.filtered.add(new Pair<T>(element, i));
             }
         }
+
+        this.update();
     }
 
     public boolean isFiltering()
@@ -358,7 +362,7 @@ public abstract class GuiListElement<T> extends GuiElement
 
     public void update()
     {
-        this.scroll.setSize(this.list.size());
+        this.scroll.setSize(this.isFiltering() ? this.filtered.size() : this.list.size());
         this.scroll.clamp();
     }
 
