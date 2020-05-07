@@ -67,6 +67,11 @@ public abstract class GuiModelRenderer extends GuiElement
         super(mc);
 
         this.entity = new DummyEntity(mc.world);
+        this.entity.rotationYaw = this.entity.prevRotationYaw = 0.0F;
+        this.entity.rotationPitch = this.entity.prevRotationPitch = 0.0F;
+        this.entity.rotationYawHead = this.entity.prevRotationYawHead = 0.0F;
+        this.entity.renderYawOffset = this.entity.prevRenderYawOffset = 0.0F;
+        this.entity.onGround = true;
         this.reset();
     }
 
