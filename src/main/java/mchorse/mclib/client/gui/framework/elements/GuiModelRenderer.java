@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements;
 
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.utils.DummyEntity;
@@ -8,10 +9,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
@@ -384,16 +388,64 @@ public abstract class GuiModelRenderer extends GuiElement
      */
     protected void drawGround()
     {
-        BlockRendererDispatcher renderer = this.mc.getBlockRendererDispatcher();
+        if (McLib.enableGridRendering.get())
+        {
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder buffer = tessellator.getBuffer();
 
-        this.mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            GL11.glLineWidth(3);
+            GlStateManager.disableTexture2D();
+            GlStateManager.enableAlpha();
+            GlStateManager.enableBlend();
+            GlStateManager.disableLighting();
+            buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(0, -0.5F, 0);
-        GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.translate(-0.5F, -0.5F, 0.5F);
-        renderer.renderBlockBrightness(this.block, 1.0F);
-        GlStateManager.translate(0.0F, 0.0F, 1.0F);
-        GlStateManager.popMatrix();
+            for (int x = 0; x <= 10; x ++)
+            {
+                if (x == 0)
+                {
+                    buffer.pos(x - 5, 0, -5).color(0F, 0F, 1F, 0.75F).endVertex();
+                    buffer.pos(x - 5, 0, 5).color(0F, 0F, 1F, 0.75F).endVertex();
+                }
+                else
+                {
+                    buffer.pos(x - 5, 0, -5).color(0.25F, 0.25F, 0.25F, 0.75F).endVertex();
+                    buffer.pos(x - 5, 0, 5).color(0.25F, 0.25F, 0.25F, 0.75F).endVertex();
+                }
+            }
+
+            for (int x = 0; x <= 10; x ++)
+            {
+                if (x == 10)
+                {
+                    buffer.pos(-5, 0, x - 5).color(1F, 0F, 0F, 0.75F).endVertex();
+                    buffer.pos(5, 0, x - 5).color(1F, 0F, 0F, 0.75F).endVertex();
+                }
+                else
+                {
+                    buffer.pos(-5, 0, x - 5).color(0.25F, 0.25F, 0.25F, 0.75F).endVertex();
+                    buffer.pos(5, 0, x - 5).color(0.25F, 0.25F, 0.25F, 0.75F).endVertex();
+                }
+            }
+
+            tessellator.draw();
+
+            GlStateManager.enableLighting();
+            GlStateManager.enableTexture2D();
+        }
+        else
+        {
+            BlockRendererDispatcher renderer = this.mc.getBlockRendererDispatcher();
+
+            this.mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0, -0.5F, 0);
+            GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.translate(-0.5F, -0.5F, 0.5F);
+            renderer.renderBlockBrightness(this.block, 1.0F);
+            GlStateManager.translate(0.0F, 0.0F, 1.0F);
+            GlStateManager.popMatrix();
+        }
     }
 }
