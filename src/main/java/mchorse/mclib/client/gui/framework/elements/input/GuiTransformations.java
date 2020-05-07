@@ -68,7 +68,7 @@ public class GuiTransformations extends GuiElement
             }
         });
 
-        this.one.flex().relative(this.sx).x(1F).y(-13).wh(20, 11).anchorX(1F);
+        this.one.flex().relative(this.sx).x(1F).y(-13).wh(11, 11).anchorX(1F);
 
         GuiElement first = new GuiElement(mc);
         GuiElement second = new GuiElement(mc);
