@@ -467,6 +467,11 @@ public class GuiElement extends Gui implements IGuiElement
 
     public void clickItself(GuiContext context)
     {
+        if (!this.isEnabled())
+        {
+            return;
+        }
+
         int mouseX = context.mouseX;
         int mouseY = context.mouseY;
         int button = context.mouseButton;
