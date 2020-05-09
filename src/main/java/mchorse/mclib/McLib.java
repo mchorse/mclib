@@ -57,7 +57,7 @@ public class McLib
         enableBorders = builder.getBoolean("enable_borders", false);
         enableMouseRendering = builder.getBoolean("enable_mouse_rendering", false);
         enableCheckboxRendering = builder.getBoolean("enable_checkbox_rendering", false);
-        enableGridRendering = builder.getBoolean("enable_grid_rendering", false);
+        enableGridRendering = builder.getBoolean("enable_grid_rendering", true);
 
         backgroundImage = builder.category("background").getRL("image",  null);
         backgroundColor = builder.getInt("color",  0xcc000000).colorAlpha();
