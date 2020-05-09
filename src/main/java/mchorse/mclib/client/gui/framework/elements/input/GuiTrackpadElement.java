@@ -318,11 +318,20 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             return true;
         }
 
-        if (this.isFocused() && context.keyCode == Keyboard.KEY_TAB)
+        if (this.isFocused())
         {
-            context.focus(this, -1, GuiScreen.isShiftKeyDown() ? -1 : 1);
+            if (context.keyCode == Keyboard.KEY_TAB)
+            {
+                context.focus(this, -1, GuiScreen.isShiftKeyDown() ? -1 : 1);
 
-            return true;
+                return true;
+            }
+            else if (context.keyCode == Keyboard.KEY_ESCAPE)
+            {
+                context.unfocus();
+
+                return true;
+            }
         }
 
         String old = this.text.getText();
