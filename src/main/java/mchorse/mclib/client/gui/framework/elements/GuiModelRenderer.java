@@ -38,15 +38,15 @@ public abstract class GuiModelRenderer extends GuiElement
     protected EntityLivingBase entity;
     protected IBlockState block = Blocks.GRASS.getDefaultState();
 
-    protected float scale;
     protected int timer;
-
     protected boolean dragging;
     protected boolean position;
-    protected float yaw;
-    protected float pitch;
-    protected Vector3f pos = new Vector3f();
     protected Vector3f temp = new Vector3f();
+
+    public float scale;
+    public float yaw;
+    public float pitch;
+    public Vector3f pos = new Vector3f();
 
     protected float lastX;
     protected float lastY;
