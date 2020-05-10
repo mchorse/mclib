@@ -521,7 +521,7 @@ public class GuiElement extends Gui implements IGuiElement
             return true;
         }
 
-        if (this.keybinds != null && this.keybinds.check(context.keyCode, this.area.isInside(context)))
+        if (this.keybinds != null && !context.isFocused() && this.keybinds.check(context.keyCode, this.area.isInside(context)))
         {
             return true;
         }
