@@ -61,7 +61,7 @@ public class GuiDashboardPanels extends GuiPanelBase<GuiDashboardPanel>
 		{
 			element.keys()
 				.register(IKey.comp(IKey.lang("mclib.gui.dashboard.open_panel"), tooltip), key, () -> element.clickItself(GuiBase.getCurrent()))
-				.held(Keyboard.KEY_LCONTROL, Keyboard.KEY_LMENU)
+				.held(Keyboard.KEY_LMENU)
 				.category(IKey.lang("mclib.gui.dashboard.category"));
 		}
 
