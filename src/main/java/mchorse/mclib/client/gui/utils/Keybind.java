@@ -79,6 +79,8 @@ public class Keybind
 
 	public boolean check(int keyCode, boolean inside)
 	{
+		System.out.println(keyCode + " " + this.mainKey);
+
 		if (keyCode != this.mainKey)
 		{
 			return false;

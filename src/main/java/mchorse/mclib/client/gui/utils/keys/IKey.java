@@ -14,6 +14,11 @@ public interface IKey
 		return new StringKey(key);
 	}
 
+	public static IKey comp(IKey... keys)
+	{
+		return new CompoundKey(keys);
+	}
+
 	public String get();
 
 	public void set(String string);
