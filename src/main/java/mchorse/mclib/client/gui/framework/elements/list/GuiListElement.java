@@ -394,6 +394,11 @@ public abstract class GuiListElement<T> extends GuiElement
         return this.exists(this.dragging) && System.currentTimeMillis() - this.dragTime > 100;
     }
 
+    public int getDraggingIndex()
+    {
+        return this.dragging;
+    }
+
     @Override
     public void resize()
     {
