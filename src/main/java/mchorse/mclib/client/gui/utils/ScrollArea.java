@@ -128,9 +128,13 @@ public class ScrollArea extends Area
         int axis = this.direction.getScroll(this, x, y);
         int index = axis / this.scrollItemSize;
 
-        if (axis < 0 || axis > this.scrollSize)
+        if (axis < 0)
         {
             return -1;
+        }
+        else if (axis > this.scrollSize)
+        {
+            return -2;
         }
 
         return index > this.scrollSize / this.scrollItemSize ? -1 : index;

@@ -11,6 +11,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.ScrollArea;
+import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
@@ -108,6 +109,18 @@ public abstract class GuiListElement<T> extends GuiElement
         this.sorting = true;
 
         return this;
+    }
+
+    public GuiListElement<T> horizontal()
+    {
+        this.scroll.direction = ScrollArea.ScrollDirection.HORIZONTAL;
+
+        return this;
+    }
+
+    public boolean isHorizontal()
+    {
+        return this.scroll.direction == ScrollArea.ScrollDirection.HORIZONTAL;
     }
 
     /* Filtering elements */
@@ -456,6 +469,11 @@ public abstract class GuiListElement<T> extends GuiElement
             {
                 int index = this.scroll.getIndex(context.mouseX, context.mouseY);
 
+                if (index == -2)
+                {
+                    index = this.getList().size() - 1;
+                }
+
                 if (index != this.dragging && this.exists(index))
                 {
                     T value = this.list.remove(this.dragging);
@@ -482,8 +500,6 @@ public abstract class GuiListElement<T> extends GuiElement
             this.area.draw(this.color);
         }
 
-        boolean dragging = isDragging();
-
         GuiDraw.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
         this.drawList(context);
         GuiDraw.unscissor(context);
@@ -494,7 +510,7 @@ public abstract class GuiListElement<T> extends GuiElement
 
         super.draw(context);
 
-        if (this.exists(this.dragging) && dragging)
+        if (this.exists(this.dragging) && this.isDragging())
         {
             this.drawListElement(this.list.get(this.dragging), this.dragging, context.mouseX + 6, context.mouseY - this.scroll.scrollItemSize / 2, true, true);
         }
@@ -502,67 +518,76 @@ public abstract class GuiListElement<T> extends GuiElement
 
     public void drawList(GuiContext context)
     {
-        int mouseX = context.mouseX;
-        int mouseY = context.mouseY;
-
         int i = 0;
-        int h = this.scroll.scrollItemSize;
 
         if (this.isFiltering())
         {
             for (Pair<T> element : this.filtered)
             {
-                int x = this.scroll.x;
-                int y = this.scroll.y + i * h - this.scroll.scroll;
-                int index = element.index;
+                i = this.drawElement(context, element.value, i, element.index);
 
-                if (y + h < this.scroll.y)
-                {
-                    i++;
-                    continue;
-                }
-
-                if (y >= this.scroll.ey())
+                if (i == -1)
                 {
                     break;
                 }
-
-                boolean hover = mouseX >= x && mouseY >= y && mouseX < x + this.scroll.w && mouseY < y + this.scroll.scrollItemSize;
-                boolean selected = this.current.indexOf(index) != -1;
-
-                this.drawListElement(element.value, index, x, y, hover, selected);
-
-                i++;
             }
         }
         else
         {
-            boolean dragging = isDragging();
-
             for (T element : this.list)
             {
-                int x = this.scroll.x;
-                int y = this.scroll.y + i * h - this.scroll.scroll;
+                i = this.drawElement(context, element, i, i);
 
-                if (y + h < this.scroll.y || (this.dragging == i && dragging))
-                {
-                    i++;
-                    continue;
-                }
-
-                if (y >= this.scroll.ey())
+                if (i == -1)
                 {
                     break;
                 }
-
-                boolean hover = mouseX >= x && mouseY >= y && mouseX < x + this.scroll.w && mouseY < y + this.scroll.scrollItemSize;
-                boolean selected = this.current.indexOf(i) != -1;
-
-                this.drawListElement(element, i, x, y, hover, selected);
-
-                i++;
             }
         }
+    }
+
+    public int drawElement(GuiContext context, T element, int i, int index)
+    {
+        int mouseX = context.mouseX;
+        int mouseY = context.mouseY;
+        int s = this.scroll.scrollItemSize;
+
+        int xSide = this.isHorizontal() ? this.scroll.scrollItemSize : this.scroll.w;
+        int ySide = this.isHorizontal() ? this.scroll.h : this.scroll.scrollItemSize;
+
+        int x = this.scroll.x;
+        int y = this.scroll.y + i * s - this.scroll.scroll;
+
+        int axis = y;
+        int low = this.scroll.y;
+        int high = this.scroll.ey();
+
+        if (this.isHorizontal())
+        {
+            x = this.scroll.x + i * s - this.scroll.scroll;
+            y = this.scroll.y;
+
+            axis = x;
+            low = this.scroll.x;
+            high = this.scroll.ex();
+        }
+
+        if (axis + s < low || (!this.isFiltering() && this.isDragging() && this.dragging == i))
+        {
+            return i + 1;
+        }
+
+        if (axis >= high)
+        {
+            return -1;
+        }
+
+        boolean hover = mouseX >= x && mouseY >= y && mouseX < x + xSide && mouseY < y + ySide;
+        boolean selected = this.current.indexOf(index) != -1;
+
+        this.drawListElement(element, index, x, y, hover, selected);
+
+        return i + 1;
     }
 
     /**
@@ -572,7 +597,14 @@ public abstract class GuiListElement<T> extends GuiElement
     {
         if (selected)
         {
-            Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
+            if (this.isHorizontal())
+            {
+                Gui.drawRect(x, y, x + this.scroll.scrollItemSize, y + this.scroll.h, 0x88000000 + McLib.primaryColor.get());
+            }
+            else
+            {
+                Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
+            }
         }
 
         this.drawElementPart(element, i, x, y, hover, selected);
