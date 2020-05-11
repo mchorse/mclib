@@ -61,7 +61,6 @@ public class GuiDashboardPanels extends GuiPanelBase<GuiDashboardPanel>
 		{
 			element.keys()
 				.register(IKey.comp(IKey.lang("mclib.gui.dashboard.open_panel"), tooltip), key, () -> element.clickItself(GuiBase.getCurrent()))
-				.held(Keyboard.KEY_LMENU)
 				.category(IKey.lang("mclib.gui.dashboard.category"));
 		}
 
@@ -74,16 +73,16 @@ public class GuiDashboardPanels extends GuiPanelBase<GuiDashboardPanel>
 
 		switch (size)
 		{
-			case 1: return Keyboard.KEY_0;
-			case 2: return Keyboard.KEY_1;
-			case 3: return Keyboard.KEY_2;
-			case 4: return Keyboard.KEY_3;
-			case 5: return Keyboard.KEY_4;
-			case 6: return Keyboard.KEY_5;
-			case 7: return Keyboard.KEY_6;
-			case 8: return Keyboard.KEY_7;
-			case 9: return Keyboard.KEY_8;
-			case 10: return Keyboard.KEY_9;
+			case 1: return Keyboard.KEY_NUMPAD0;
+			case 2: return Keyboard.KEY_NUMPAD1;
+			case 3: return Keyboard.KEY_NUMPAD2;
+			case 4: return Keyboard.KEY_NUMPAD3;
+			case 5: return Keyboard.KEY_NUMPAD4;
+			case 6: return Keyboard.KEY_NUMPAD5;
+			case 7: return Keyboard.KEY_NUMPAD6;
+			case 8: return Keyboard.KEY_NUMPAD7;
+			case 9: return Keyboard.KEY_NUMPAD8;
+			case 10: return Keyboard.KEY_NUMPAD9;
 		}
 
 		return -1;
