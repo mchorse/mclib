@@ -119,7 +119,7 @@ public abstract class GuiModelRenderer extends GuiElement
             return true;
         }
 
-        if (this.area.isInside(context))
+        if (this.area.isInside(context) && (context.mouseButton == 0 || context.mouseButton == 2))
         {
             this.dragging = true;
             this.position = GuiScreen.isShiftKeyDown() || context.mouseButton == 2;
