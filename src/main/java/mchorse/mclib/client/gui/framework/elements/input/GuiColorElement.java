@@ -67,8 +67,9 @@ public class GuiColorElement extends GuiElement
 				callback.accept(color);
 			}
 		});
-
 		this.picker.flex().anchor(0.5F, 0).wh(200, 85).bounds(GuiBase.getCurrent(), 2);
+
+		this.flex().h(20);
 	}
 
 	public GuiColorElement noLabel()

@@ -44,6 +44,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 
 		this.label = label;
 		this.state = state;
+		this.flex().h(14);
 	}
 
 	public GuiToggleElement label(IKey label)

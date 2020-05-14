@@ -96,6 +96,7 @@ public class GuiInventoryElement extends GuiElement
 		super(mc);
 
 		this.callback = callback;
+		this.flex().h(10 * 20, 5 * 20);
 	}
 
 	public void link(GuiSlotElement slot)

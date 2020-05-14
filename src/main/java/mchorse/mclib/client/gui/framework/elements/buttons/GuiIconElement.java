@@ -21,6 +21,7 @@ public class GuiIconElement extends GuiClickElement<GuiIconElement>
 
 		this.icon = icon;
 		this.iconHover = icon;
+		this.flex().wh(20, 20);
 	}
 
 	public GuiIconElement both(Icon icon)

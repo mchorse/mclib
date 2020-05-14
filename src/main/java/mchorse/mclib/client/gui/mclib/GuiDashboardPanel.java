@@ -12,6 +12,7 @@ public class GuiDashboardPanel extends GuiElement
 		super(mc);
 
 		this.dashboard = dashboard;
+		this.markContainer();
 	}
 
 	public boolean needsBackground()

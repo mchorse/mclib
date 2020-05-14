@@ -53,6 +53,8 @@ public class GuiTextElement extends GuiElement implements GuiResponder, IFocused
         this.field = new GuiTextField(0, this.font, 0, 0, 0, 0);
         this.field.setGuiResponder(this);
         this.callback = callback;
+
+        this.flex().h(20);
     }
 
     public void setText(String text)

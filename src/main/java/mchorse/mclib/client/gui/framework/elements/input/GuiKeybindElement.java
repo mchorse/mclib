@@ -39,6 +39,7 @@ public class GuiKeybindElement extends GuiElement
 		super(mc);
 
 		this.callback = callback;
+		this.flex().h(20);
 	}
 
 	public void setKeybind(int keybind)

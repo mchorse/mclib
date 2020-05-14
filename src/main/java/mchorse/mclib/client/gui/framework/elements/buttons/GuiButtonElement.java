@@ -21,6 +21,7 @@ public class GuiButtonElement extends GuiClickElement<GuiButtonElement>
 		super(mc, callback);
 
 		this.label = label;
+		this.flex().h(20);
 	}
 
 	public GuiButtonElement color(int color)

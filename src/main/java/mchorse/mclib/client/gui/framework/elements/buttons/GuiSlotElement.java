@@ -49,6 +49,8 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 
 		this.slot = slot;
 		this.inventory = inventory;
+
+		this.flex().wh(24, 24);
 	}
 
 	public GuiSlotElement inventory(GuiInventoryElement inventory)

@@ -108,6 +108,8 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         this.text = new GuiTextField(0, font, 0, 0, 0, 0);
         this.text.setEnableBackgroundDrawing(false);
         this.setValue(0);
+
+        this.flex().h(20);
     }
 
     public GuiTrackpadElement max(float max)
