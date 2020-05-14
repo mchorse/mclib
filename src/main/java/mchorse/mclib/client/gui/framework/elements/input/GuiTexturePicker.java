@@ -108,6 +108,7 @@ public class GuiTexturePicker extends GuiElement
         this.add(this.picker, this.multi, this.multiList, this.text, this.close, this.folder, this.add, this.remove);
         this.callback = callback;
 
+        this.fill(null);
         this.markContainer();
     }
 
@@ -430,7 +431,7 @@ public class GuiTexturePicker extends GuiElement
 
         super.draw(context);
 
-        if (!this.lastTyped.check())
+        if (!this.lastTyped.check() && this.lastTyped.enabled)
         {
             int w = this.font.getStringWidth(this.typed);
             int x = this.text.area.x;

@@ -47,7 +47,11 @@ public class ValueBoolean extends Value
 	@SideOnly(Side.CLIENT)
 	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
 	{
-		return Arrays.asList(new GuiToggleElement(mc, this));
+		GuiToggleElement toggle = new GuiToggleElement(mc, this);
+
+		toggle.flex().reset();
+
+		return Arrays.asList(toggle);
 	}
 
 	@Override
