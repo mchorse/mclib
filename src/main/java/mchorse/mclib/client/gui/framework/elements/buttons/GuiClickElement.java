@@ -30,11 +30,11 @@ public abstract class GuiClickElement<T extends GuiClickElement> extends GuiElem
             return true;
         }
 
-        if (context.mouseButton == 0 && this.area.isInside(context))
+        if (this.isAllowed(context.mouseButton) && this.area.isInside(context))
         {
             this.pressed = true;
             this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-            this.click();
+            this.click(context.mouseButton);
 
             return true;
         }
@@ -42,7 +42,12 @@ public abstract class GuiClickElement<T extends GuiClickElement> extends GuiElem
         return false;
     }
 
-    protected void click()
+    protected boolean isAllowed(int mouseButton)
+    {
+        return mouseButton == 0;
+    }
+
+    protected void click(int mouseButton)
     {
         if (this.callback != null)
         {

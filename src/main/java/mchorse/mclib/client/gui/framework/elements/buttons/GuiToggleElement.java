@@ -67,11 +67,11 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 	}
 
 	@Override
-	protected void click()
+	protected void click(int mouseWheel)
 	{
 		this.state = !this.state;
 
-		super.click();
+		super.click(mouseWheel);
 	}
 
 	@Override

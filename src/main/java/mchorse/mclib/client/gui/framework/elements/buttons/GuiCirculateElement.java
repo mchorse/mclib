@@ -54,15 +54,17 @@ public class GuiCirculateElement extends GuiButtonElement
 		this.label = this.labels.get(this.value);
 	}
 
-	public void toggle()
+	@Override
+	protected boolean isAllowed(int mouseButton)
 	{
-		this.setValue(this.value + 1);
+		return mouseButton == 0 || mouseButton == 1;
 	}
 
 	@Override
-	protected void click()
+	protected void click(int mouseButton)
 	{
-		this.toggle();
-		super.click();
+		this.setValue(this.value + (mouseButton == 0 ? 1 : -1));
+
+		super.click(mouseButton);
 	}
 }
