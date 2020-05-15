@@ -82,7 +82,7 @@ public class GuiInventoryElement extends GuiElement
 			{
 				list.set(i, TextFormatting.GRAY + list.get(i));
 			}
-		}
+		}   
 
 		GuiScreen screen = Minecraft.getMinecraft().currentScreen;
 
@@ -96,7 +96,7 @@ public class GuiInventoryElement extends GuiElement
 		super(mc);
 
 		this.callback = callback;
-		this.flex().h(10 * 20, 5 * 20);
+		this.flex().wh(10 * 20, 5 * 20);
 	}
 
 	public void link(GuiSlotElement slot)
