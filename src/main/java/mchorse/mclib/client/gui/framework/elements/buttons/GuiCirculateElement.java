@@ -17,6 +17,11 @@ public class GuiCirculateElement extends GuiButtonElement
 		super(mc, IKey.EMPTY, callback);
 	}
 
+	public List<IKey> getLabels()
+	{
+		return this.labels;
+	}
+
 	public void addLabel(IKey label)
 	{
 		if (this.labels.isEmpty())

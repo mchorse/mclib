@@ -20,6 +20,11 @@ public class Constant implements IValue
         return this.value;
     }
 
+    public void set(double value)
+    {
+        this.value = value;
+    }
+
     @Override
     public String toString()
     {
