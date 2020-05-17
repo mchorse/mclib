@@ -80,7 +80,12 @@ public class Color
 
 	public int getRGBAColor()
 	{
-		return ColorUtils.rgbaToInt(this.r, this.g, this.b, this.a);
+		float r = MathUtils.clamp(this.r, 0, 1);
+		float g = MathUtils.clamp(this.g, 0, 1);
+		float b = MathUtils.clamp(this.b, 0, 1);
+		float a = MathUtils.clamp(this.a, 0, 1);
+
+		return ((int) (a * 255) << 24) | ((int) (r * 255) << 16) | ((int) (g * 255) << 8) | (int) (b * 255);
 	}
 
 	public int getRGBColor()

@@ -393,7 +393,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         int h = this.area.h;
         int padding = McLib.enableBorders.get() ? 1 : 0;
 
-        Gui.drawRect(x, y, x + w, y + h, 0xff000000);
+        GuiDraw.drawBorder(this.area, ColorUtils.multiplyColor(0xff000000 + McLib.primaryColor.get(), 0.5F));
 
         boolean dragging = this.isDraggingTime();
         boolean plus = !dragging && this.plusOne.isInside(context);
