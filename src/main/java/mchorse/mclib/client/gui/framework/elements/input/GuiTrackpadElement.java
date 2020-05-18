@@ -278,6 +278,11 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
                     return true;
                 }
 
+                if (!this.text.isFocused() && !(this.plusOne.isInside(context) || this.minusOne.isInside(context)))
+                {
+                    context.focus(this);
+                }
+
                 this.dragging = true;
                 this.lastX = context.mouseX;
                 this.lastY = context.mouseY;
@@ -295,7 +300,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     @Override
     public void mouseReleased(GuiContext context)
     {
-        if (this.dragging && !this.isDraggingTime() && !this.isFocused() && context.mouseButton == 0)
+        if (this.dragging && !this.isDraggingTime() && context.mouseButton == 0)
         {
             if (this.plusOne.isInside(context))
             {
@@ -393,7 +398,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         int h = this.area.h;
         int padding = McLib.enableBorders.get() ? 1 : 0;
 
-        GuiDraw.drawBorder(this.area, ColorUtils.multiplyColor(0xff000000 + McLib.primaryColor.get(), 0.5F));
+        this.area.draw(0xff000000);
 
         boolean dragging = this.isDraggingTime();
         boolean plus = !dragging && this.plusOne.isInside(context);
