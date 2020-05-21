@@ -152,13 +152,17 @@ public class GuiContext
 		this.focus(null);
 	}
 
+	public boolean focus(GuiElement parent, int index, int factor)
+	{
+		return this.focus(parent, index, factor, false);
+	}
+
 	/**
 	 * Focus next focusable GUI element
 	 */
-	public void focus(GuiElement parent, int index, int factor)
+	public boolean focus(GuiElement parent, int index, int factor, boolean stop)
 	{
 		List<IGuiElement> children = parent.getChildren();
-		boolean stop = factor == 0;
 
 		factor = factor >= 0 ? 1 : -1;
 		index += factor;
@@ -167,24 +171,39 @@ public class GuiContext
 		{
 			IGuiElement child = children.get(index);
 
-			if (child instanceof IFocusedGuiElement && child.isEnabled())
+			if (!child.isEnabled())
+			{
+				continue;
+			}
+
+			if (child instanceof IFocusedGuiElement)
 			{
 				this.focus((IFocusedGuiElement) child);
 
-				return;
+				return true;
 			}
 			else if (child instanceof GuiElement)
 			{
-				this.focus((GuiElement) child, -1, 0);
+				int start = factor > 0 ? -1 : ((GuiElement) child).getChildren().size();
+
+				if (this.focus((GuiElement) child, start, factor, true))
+				{
+					return true;
+				}
 			}
 		}
 
 		GuiElement grandparent = parent.getParent();
 
-		if (grandparent != null && !stop)
+		if (grandparent != null && !stop && grandparent.canBeSeen())
 		{
-			this.focus(grandparent, grandparent.getChildren().indexOf(parent), factor);
+			if (this.focus(grandparent, grandparent.getChildren().indexOf(parent), factor))
+			{
+				return true;
+			}
 		}
+
+		return false;
 	}
 
 	/* Context menu */
