@@ -31,13 +31,6 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 	public ItemStack stack = ItemStack.EMPTY;
 	public GuiInventoryElement inventory;
 
-	public GuiSlotElement(Minecraft mc, int slot, Consumer<GuiSlotElement> callback)
-	{
-		super(mc, callback);
-
-		this.slot = slot;
-	}
-
 	public GuiSlotElement(Minecraft mc, int slot, GuiInventoryElement inventory)
 	{
 		this(mc, slot, inventory, inventory::link);
@@ -45,11 +38,16 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 
 	public GuiSlotElement(Minecraft mc, int slot, GuiInventoryElement inventory, Consumer<GuiSlotElement> callback)
 	{
+		this(mc, slot, callback);
+
+		this.inventory = inventory;
+	}
+
+	public GuiSlotElement(Minecraft mc, int slot, Consumer<GuiSlotElement> callback)
+	{
 		super(mc, callback);
 
 		this.slot = slot;
-		this.inventory = inventory;
-
 		this.flex().wh(24, 24);
 	}
 
