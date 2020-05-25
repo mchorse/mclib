@@ -111,6 +111,11 @@ public class GuiContext
 	public void reset()
 	{
 		this.tooltip.set(null, null);
+
+		if (this.activeElement instanceof GuiElement && !((GuiElement) this.activeElement).canBeSeen())
+		{
+			this.unfocus();
+		}
 	}
 
 	/* Tooltip */
