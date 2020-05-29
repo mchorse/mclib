@@ -20,10 +20,14 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.function.Consumer;
 
 public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 {
+    public static final DecimalFormat FORMAT;
+
     public Consumer<Double> callback;
     public GuiTextField text;
 
@@ -47,6 +51,12 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     private long time;
     private Area plusOne = new Area();
     private Area minusOne = new Area();
+
+    static
+    {
+        FORMAT = new DecimalFormat("#.###");
+        FORMAT.setRoundingMode(RoundingMode.CEILING);
+    }
 
     public GuiTrackpadElement(Minecraft mc, ValueInt value)
     {
@@ -213,7 +223,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         }
 
         this.value = value;
-        this.text.setText(this.integer ? String.valueOf((int) value) : String.valueOf(value));
+        this.text.setText(this.integer ? String.valueOf((int) value) : FORMAT.format(value));
         this.text.setCursorPositionZero();
     }
 
