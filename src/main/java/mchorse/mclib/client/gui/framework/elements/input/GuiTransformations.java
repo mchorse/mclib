@@ -86,34 +86,34 @@ public class GuiTransformations extends GuiElement
         this.add(first, second, third, this.one);
     }
 
-    public void fillT(float x, float y, float z)
+    public void fillT(double x, double y, double z)
     {
         this.tx.setValue(x);
         this.ty.setValue(y);
         this.tz.setValue(z);
     }
 
-    public void fillS(float x, float y, float z)
+    public void fillS(double x, double y, double z)
     {
         this.sx.setValue(x);
         this.sy.setValue(y);
         this.sz.setValue(z);
     }
 
-    public void fillR(float x, float y, float z)
+    public void fillR(double x, double y, double z)
     {
         this.rx.setValue(x);
         this.ry.setValue(y);
         this.rz.setValue(z);
     }
 
-    public void setT(float x, float y, float z)
+    public void setT(double x, double y, double z)
     {}
 
-    public void setS(float x, float y, float z)
+    public void setS(double x, double y, double z)
     {}
 
-    public void setR(float x, float y, float z)
+    public void setR(double x, double y, double z)
     {}
 
     @Override

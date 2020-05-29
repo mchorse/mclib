@@ -24,25 +24,25 @@ import java.util.function.Consumer;
 
 public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 {
-    public Consumer<Float> callback;
+    public Consumer<Double> callback;
     public GuiTextField text;
 
-    public float value;
+    public double value;
 
     /* Trackpad options */
-    public float strong = 1F;
-    public float normal = 0.25F;
-    public float weak = 0.05F;
-    public float increment = 1;
-    public float min = Float.NEGATIVE_INFINITY;
-    public float max = Float.POSITIVE_INFINITY;
+    public double strong = 1F;
+    public double normal = 0.25F;
+    public double weak = 0.05F;
+    public double increment = 1;
+    public double min = Float.NEGATIVE_INFINITY;
+    public double max = Float.POSITIVE_INFINITY;
     public boolean integer;
 
     /* Value dragging fields */
     private boolean dragging;
     private int lastX;
     private int lastY;
-    private float lastValue;
+    private double lastValue;
 
     private long time;
     private Area plusOne = new Area();
@@ -53,7 +53,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         this(mc, value, null);
     }
 
-    public GuiTrackpadElement(Minecraft mc, ValueInt value, Consumer<Float> callback)
+    public GuiTrackpadElement(Minecraft mc, ValueInt value, Consumer<Double> callback)
     {
         this(mc, callback == null ? (v) -> value.set(v.intValue()) : (v) ->
         {
@@ -70,11 +70,11 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         this(mc, value, null);
     }
 
-    public GuiTrackpadElement(Minecraft mc, ValueFloat value, Consumer<Float> callback)
+    public GuiTrackpadElement(Minecraft mc, ValueFloat value, Consumer<Double> callback)
     {
-        this(mc, callback == null ? value::set : (v) ->
+        this(mc, callback == null ? (v) -> value.set(v.floatValue()) : (v) ->
         {
-            value.set(v);
+            value.set(v.floatValue());
             callback.accept(v);
         });
         this.limit(value.min, value.max);
@@ -87,11 +87,11 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         this(mc, value, null);
     }
 
-    public GuiTrackpadElement(Minecraft mc, ValueDouble value, Consumer<Float> callback)
+    public GuiTrackpadElement(Minecraft mc, ValueDouble value, Consumer<Double> callback)
     {
-        this(mc, callback == null ? (v) -> value.set(v.doubleValue()) : (v) ->
+        this(mc, callback == null ? value::set : (v) ->
         {
-            value.set(v.doubleValue());
+            value.set(v);
             callback.accept(v);
         });
         this.limit((float) value.min, (float) value.max);
@@ -99,7 +99,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         this.tooltip(IKey.lang(value.getTooltipKey()));
     }
 
-    public GuiTrackpadElement(Minecraft mc, Consumer<Float> callback)
+    public GuiTrackpadElement(Minecraft mc, Consumer<Double> callback)
     {
         super(mc);
 
@@ -112,21 +112,21 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         this.flex().h(20);
     }
 
-    public GuiTrackpadElement max(float max)
+    public GuiTrackpadElement max(double max)
     {
         this.max = max;
 
         return this;
     }
 
-    public GuiTrackpadElement limit(float min)
+    public GuiTrackpadElement limit(double min)
     {
         this.min = min;
 
         return this;
     }
 
-    public GuiTrackpadElement limit(float min, float max)
+    public GuiTrackpadElement limit(double min, double max)
     {
         this.min = min;
         this.max = max;
@@ -134,7 +134,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         return this;
     }
 
-    public GuiTrackpadElement limit(float min, float max, boolean integer)
+    public GuiTrackpadElement limit(double min, double max, boolean integer)
     {
         this.integer = integer;
 
@@ -148,14 +148,14 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         return this;
     }
 
-    public GuiTrackpadElement increment(float increment)
+    public GuiTrackpadElement increment(double increment)
     {
         this.increment = increment;
 
         return this;
     }
 
-    public GuiTrackpadElement values(float normal)
+    public GuiTrackpadElement values(double normal)
     {
         this.normal = normal;
         this.weak = normal / 5F;
@@ -164,7 +164,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         return this;
     }
 
-    public GuiTrackpadElement values(float normal, float weak, float strong)
+    public GuiTrackpadElement values(double normal, double weak, double strong)
     {
         this.normal = normal;
         this.weak = weak;
@@ -202,7 +202,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
      * Set the value of the field. The input value would be rounded up to 3
      * decimal places.
      */
-    public void setValue(float value)
+    public void setValue(double value)
     {
         value = Math.round(value * 1000F) / 1000F;
         value = MathUtils.clamp(value, this.min, this.max);
@@ -221,7 +221,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
      * Set value of this field and also notify the trackpad listener so it
      * could detect the value change.
      */
-    public void setValueAndNotify(float value)
+    public void setValueAndNotify(double value)
     {
         this.setValue(value);
 
@@ -448,7 +448,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
             if (dx != 0 || dy != 0)
             {
-                float value = this.normal;
+                double value = this.normal;
 
                 if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
                 {
@@ -459,8 +459,8 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
                     value = this.weak;
                 }
 
-                float diff = ((int) Math.sqrt(dx * dx + dy * dy) - 3) * value;
-                float newValue = this.lastValue + (dx < 0 ? -diff : diff);
+                double diff = ((int) Math.sqrt(dx * dx + dy * dy) - 3) * value;
+                double newValue = this.lastValue + (dx < 0 ? -diff : diff);
 
                 newValue = diff < 0 ? this.lastValue : Math.round(newValue * 1000F) / 1000F;
 
