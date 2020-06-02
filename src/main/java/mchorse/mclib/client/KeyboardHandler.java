@@ -1,6 +1,7 @@
 package mchorse.mclib.client;
 
 import mchorse.mclib.McLib;
+import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.mclib.GuiDashboard;
 import mchorse.mclib.events.RemoveDashboardPanels;
 import net.minecraft.client.Minecraft;
@@ -16,6 +17,8 @@ import org.lwjgl.input.Keyboard;
 public class KeyboardHandler
 {
 	public KeyBinding dashboard;
+
+	private int lastGuiScale = -1;
 
 	public KeyboardHandler()
 	{
@@ -43,10 +46,33 @@ public class KeyboardHandler
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event)
 	{
-		if (event.getGui() instanceof GuiMainMenu)
+		if (event.getGui() instanceof GuiBase)
 		{
-			GuiDashboard.dashboard = null;
-			McLib.EVENT_BUS.post(new RemoveDashboardPanels());
+			if (this.lastGuiScale == -1)
+			{
+				this.lastGuiScale = Minecraft.getMinecraft().gameSettings.guiScale;
+
+				int scale = McLib.userIntefaceScale.get();
+
+				if (scale > 0)
+				{
+					Minecraft.getMinecraft().gameSettings.guiScale = scale;
+				}
+			}
+		}
+		else
+		{
+			if (this.lastGuiScale != -1)
+			{
+				Minecraft.getMinecraft().gameSettings.guiScale = this.lastGuiScale;
+				this.lastGuiScale = -1;
+			}
+
+			if (event.getGui() instanceof GuiMainMenu)
+			{
+				GuiDashboard.dashboard = null;
+				McLib.EVENT_BUS.post(new RemoveDashboardPanels());
+			}
 		}
 	}
 }

@@ -42,6 +42,8 @@ mclib.config.appearance.enable_checkbox_rendering=Check boxes
 mclib.config.comments.appearance.enable_checkbox_rendering=Enable check box rendering instead of toggle element (matter of the taste)
 mclib.config.appearance.enable_grid_rendering=Model grid
 mclib.config.comments.appearance.enable_grid_rendering=Enable grid rendering instead of the ground grass block
+mclib.config.appearance.user_interface_scale=GUI scale
+mclib.config.comments.appearance.user_interface_scale=GUI scale for McHorse's mods instead of Video Settings' GUI scale. If set to 0, it will use Minecraft's GUI scale setting
 
 mclib.config.background.title=Background
 mclib.config.background.tooltip=Background options like color and texture to be used

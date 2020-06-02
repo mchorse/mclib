@@ -44,6 +44,7 @@ public class McLib
     public static ValueBoolean enableMouseRendering;
     public static ValueBoolean enableCheckboxRendering;
     public static ValueBoolean enableGridRendering;
+    public static ValueInt userIntefaceScale;
 
     public static ValueRL backgroundImage;
     public static ValueInt backgroundColor;
@@ -58,6 +59,7 @@ public class McLib
         enableMouseRendering = builder.getBoolean("enable_mouse_rendering", false);
         enableCheckboxRendering = builder.getBoolean("enable_checkbox_rendering", false);
         enableGridRendering = builder.getBoolean("enable_grid_rendering", true);
+        userIntefaceScale = builder.getInt("user_interface_scale", 2, 0, 4);
 
         backgroundImage = builder.category("background").getRL("image",  null);
         backgroundColor = builder.getInt("color",  0xcc000000).colorAlpha();
