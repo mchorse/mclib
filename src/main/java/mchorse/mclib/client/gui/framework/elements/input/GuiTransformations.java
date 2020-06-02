@@ -58,8 +58,7 @@ public class GuiTransformations extends GuiElement
         {
             boolean one = b.isToggled();
 
-            this.sy.setVisible(!one);
-            this.sz.setVisible(!one);
+            this.updateScaleFields();
 
             if (!one)
             {
@@ -86,6 +85,18 @@ public class GuiTransformations extends GuiElement
         this.add(first, second, third, this.one);
     }
 
+    public void resetScale()
+    {
+        this.one.toggled(false);
+        this.updateScaleFields();
+    }
+
+    public void updateScaleFields()
+    {
+        this.sy.setVisible(!this.one.isToggled());
+        this.sz.setVisible(!this.one.isToggled());
+    }
+
     public void fillT(double x, double y, double z)
     {
         this.tx.setValue(x);
@@ -95,6 +106,8 @@ public class GuiTransformations extends GuiElement
 
     public void fillS(double x, double y, double z)
     {
+        this.resetScale();
+
         this.sx.setValue(x);
         this.sy.setValue(y);
         this.sz.setValue(z);
