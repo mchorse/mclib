@@ -46,7 +46,7 @@ public class MatrixUtils
 	 */
 	public static void loadModelView(Matrix4f matrix4f)
 	{
-		matrixToFloat(matrix4f);
+		matrixToFloat(floats, matrix4f);
 
 		buffer.clear();
 		buffer.put(floats);
@@ -57,7 +57,7 @@ public class MatrixUtils
 	/**
 	 * Private method to fill the float array with values from the matrix
 	 */
-	private static void matrixToFloat(Matrix4f matrix4f)
+	public static void matrixToFloat(float[] floats, Matrix4f matrix4f)
 	{
 		floats[0] = matrix4f.m00;
 		floats[1] = matrix4f.m01;
