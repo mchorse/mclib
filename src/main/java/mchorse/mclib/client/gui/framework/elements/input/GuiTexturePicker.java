@@ -346,6 +346,12 @@ public class GuiTexturePicker extends GuiElement
         {
             return this.moveCurrent(1, GuiScreen.isShiftKeyDown());
         }
+        else if (keyCode == Keyboard.KEY_ESCAPE)
+        {
+            this.removeFromParent();
+            
+            return true;
+        }
 
         return this.pickByTyping(context.typedChar);
     }
