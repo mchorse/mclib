@@ -349,7 +349,7 @@ public class GuiTexturePicker extends GuiElement
         else if (keyCode == Keyboard.KEY_ESCAPE)
         {
             this.removeFromParent();
-            
+
             return true;
         }
 

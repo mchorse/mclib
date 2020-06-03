@@ -109,7 +109,7 @@ public class GuiDashboard extends GuiBase
 			GuiToggleElement toggleElement = new GuiToggleElement(mc, IKey.str("Test"), null);
 
 			toggleElement.setEnabled(false);
-			toggleElement.flex().relative(this.area).xy(10, 10).wh(100, 20);
+			toggleElement.flex().relative(this.area).xy(10, 10).w(100);
 			modelRenderer.flex().relative(this.area).wh(1F, 1F);
 			this.add(modelRenderer, toggleElement);
 		}
