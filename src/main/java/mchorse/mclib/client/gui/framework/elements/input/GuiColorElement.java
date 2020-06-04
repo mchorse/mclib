@@ -109,7 +109,6 @@ public class GuiColorElement extends GuiElement
 	@Override
 	public void draw(GuiContext context)
 	{
-		float factor = this.area.isInside(context) ? 0.85F : 1F;
 		int padding = 0;
 
 		if (McLib.enableBorders.get())
@@ -133,7 +132,7 @@ public class GuiColorElement extends GuiElement
 		{
 			String label = this.picker.color.stringify(this.picker.editAlpha);
 
-			this.font.drawStringWithShadow(label, this.area.mx(this.font.getStringWidth(label)), this.area.my(this.font.FONT_HEIGHT - 1), 0xffffff);
+			GuiDraw.drawTextBackground(this.font, label, this.area.mx(this.font.getStringWidth(label)), this.area.my(this.font.FONT_HEIGHT - 1), 0xffffff, 0x55000000, 1);
 		}
 
 		GuiDraw.drawLockedArea(this);
@@ -185,9 +184,14 @@ public class GuiColorElement extends GuiElement
 			return this;
 		}
 
-		public void updateColor()
+		public void updateField()
 		{
 			this.input.setText(this.color.stringify(this.editAlpha));
+		}
+
+		public void updateColor()
+		{
+			this.updateField();
 			this.callback();
 		}
 
@@ -199,10 +203,16 @@ public class GuiColorElement extends GuiElement
 			}
 		}
 
+		public void setColor(float r, float g, float b, float a)
+		{
+			this.color.set(r, g, b, a);
+			this.updateField();
+		}
+
 		public void setColor(int color)
 		{
 			this.setValue(color);
-			this.input.setText(this.color.stringify(this.editAlpha));
+			this.updateField();
 		}
 
 		public void setValue(int color)
@@ -306,6 +316,12 @@ public class GuiColorElement extends GuiElement
 
 			GuiDraw.drawOutline(this.area.ex() - 25, this.area.y + 5, this.area.ex() - 5, this.area.y + 25, 0x44000000);
 
+			if (this.editAlpha)
+			{
+				this.mc.renderEngine.bindTexture(Icons.ICONS);
+				GuiUtils.drawContinuousTexturedBox(this.alpha.x, this.red.y, 0, 240, this.alpha.w, this.alpha.ey() - this.red.y, 16, 16, 0, 0);
+			}
+
 			Color color = new Color();
 
 			/* Draw red slider */
@@ -340,8 +356,6 @@ public class GuiColorElement extends GuiElement
 				color.copy(this.color).a = 1;
 				right = color.getRGBAColor();
 
-				this.mc.renderEngine.bindTexture(Icons.ICONS);
-				GuiUtils.drawContinuousTexturedBox(this.alpha.x, this.alpha.y, 0, 240, this.alpha.w, this.alpha.h, 16, 16, 0, 0);
 				GuiDraw.drawHorizontalGradientRect(this.alpha.x, this.alpha.y, this.alpha.ex(), this.alpha.ey(), left, right);
 			}
 
