@@ -481,7 +481,7 @@ public class Flex implements IResizer
         {
             int w = this.w.targetAnchor == 0 ? 0 : (int) (this.w.target.getW() * this.w.targetAnchor);
 
-            return (this.w.target.getX() + w) - this.getX() + this.w.offset;
+            return this.w.normalize((this.w.target.getX() + w) - this.getX() + this.w.offset);
         }
 
         int value = this.post == null ? 0 : this.post.getW();
@@ -514,7 +514,7 @@ public class Flex implements IResizer
         {
             int h = this.h.targetAnchor == 0 ? 0 : (int) (this.h.target.getH() * this.h.targetAnchor);
 
-            return (this.h.target.getY() + h) - this.getY() + this.h.offset;
+            return this.h.normalize((this.h.target.getY() + h) - this.getY() + this.h.offset);
         }
 
         int value = this.post == null ? 0 : this.post.getH();
@@ -568,6 +568,11 @@ public class Flex implements IResizer
             /* Reset target */
             this.target = null;
             this.targetAnchor = 0;
+        }
+
+        public int normalize(int value)
+        {
+            return this.max > 0 ? Math.min(value, this.max) : value;
         }
     }
 
