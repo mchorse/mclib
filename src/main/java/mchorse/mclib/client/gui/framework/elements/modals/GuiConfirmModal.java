@@ -50,7 +50,7 @@ public class GuiConfirmModal extends GuiModal
 
         if (context.keyCode == Keyboard.KEY_RETURN || context.keyCode == Keyboard.KEY_ESCAPE)
         {
-            this.close(context.keyCode == Keyboard.KEY_RETURN);
+            (context.keyCode == Keyboard.KEY_RETURN ? this.confirm : this.cancel).clickItself(context);
 
             return true;
         }

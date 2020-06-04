@@ -69,13 +69,13 @@ public class GuiPromptModal extends GuiModal
 
         if (context.keyCode == Keyboard.KEY_RETURN)
         {
-            this.send();
+            this.confirm.clickItself(context);
 
             return true;
         }
         else if (context.keyCode == Keyboard.KEY_ESCAPE)
         {
-            this.removeFromParent();
+            this.cancel.clickItself(context);
 
             return true;
         }

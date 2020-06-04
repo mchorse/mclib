@@ -29,9 +29,9 @@ public class GuiMessageModal extends GuiModal
             return true;
         }
 
-        if (context.keyCode == Keyboard.KEY_RETURN)
+        if (context.keyCode == Keyboard.KEY_RETURN || context.keyCode == Keyboard.KEY_ESCAPE)
         {
-            this.removeFromParent();
+            this.button.clickItself(context);
 
             return true;
         }
