@@ -9,4 +9,8 @@ public interface IFocusedGuiElement
 	public void focus(GuiContext context);
 
 	public void unfocus(GuiContext context);
+
+	public void selectAll(GuiContext context);
+
+	public void unselect(GuiContext context);
 }

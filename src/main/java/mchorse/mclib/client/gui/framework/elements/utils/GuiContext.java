@@ -134,6 +134,11 @@ public class GuiContext
 
 	public void focus(IFocusedGuiElement element)
 	{
+		this.focus(element, false);
+	}
+
+	public void focus(IFocusedGuiElement element, boolean select)
+	{
 		if (this.activeElement == element)
 		{
 			return;
@@ -142,6 +147,11 @@ public class GuiContext
 		if (this.activeElement != null)
 		{
 			this.activeElement.unfocus(this);
+
+			if (select)
+			{
+				this.activeElement.unselect(this);
+			}
 		}
 
 		this.activeElement = element;
@@ -149,6 +159,11 @@ public class GuiContext
 		if (this.activeElement != null)
 		{
 			this.activeElement.focus(this);
+
+			if (select)
+			{
+				this.activeElement.selectAll(this);
+			}
 		}
 	}
 
@@ -183,7 +198,7 @@ public class GuiContext
 
 			if (child instanceof IFocusedGuiElement)
 			{
-				this.focus((IFocusedGuiElement) child);
+				this.focus((IFocusedGuiElement) child, true);
 
 				return true;
 			}

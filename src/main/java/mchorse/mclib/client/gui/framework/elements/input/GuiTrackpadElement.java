@@ -1,8 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements.input;
 
 import mchorse.mclib.McLib;
-import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
@@ -16,7 +14,6 @@ import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 
@@ -24,12 +21,11 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.function.Consumer;
 
-public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
+public class GuiTrackpadElement extends GuiBaseTextElement
 {
     public static final DecimalFormat FORMAT;
 
     public Consumer<Double> callback;
-    public GuiTextField text;
 
     public double value;
 
@@ -115,8 +111,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
         this.callback = callback;
 
-        this.text = new GuiTextField(0, font, 0, 0, 0, 0);
-        this.text.setEnableBackgroundDrawing(false);
+        this.field.setEnableBackgroundDrawing(false);
         this.setValue(0);
 
         this.flex().h(20);
@@ -223,8 +218,8 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         }
 
         this.value = value;
-        this.text.setText(this.integer ? String.valueOf((int) value) : FORMAT.format(value));
-        this.text.setCursorPositionZero();
+        this.field.setText(this.integer ? String.valueOf((int) value) : FORMAT.format(value));
+        this.field.setCursorPositionZero();
     }
 
     /**
@@ -249,7 +244,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
     {
         super.resize();
 
-        this.text.setCursorPositionZero();
+        this.field.setCursorPositionZero();
         this.plusOne.copy(this.area);
         this.minusOne.copy(this.area);
         this.plusOne.w = this.minusOne.w = 20;
@@ -270,11 +265,11 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
 
         if (context.mouseButton == 0)
         {
-            boolean wasFocused = this.text.isFocused();
+            boolean wasFocused = this.field.isFocused();
 
-            this.text.mouseClicked(context.mouseX, context.mouseY, context.mouseButton);
+            this.field.mouseClicked(context.mouseX, context.mouseY, context.mouseButton);
 
-            if (wasFocused != this.text.isFocused())
+            if (wasFocused != this.field.isFocused())
             {
                 context.focus(wasFocused ? null : this);
             }
@@ -288,7 +283,7 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
                     return true;
                 }
 
-                if (!this.text.isFocused() && !(this.plusOne.isInside(context) || this.minusOne.isInside(context)))
+                if (!this.field.isFocused() && !(this.plusOne.isInside(context) || this.minusOne.isInside(context)))
                 {
                     context.focus(this);
                 }
@@ -351,11 +346,11 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
             }
         }
 
-        String old = this.text.getText();
-        boolean result = this.text.textboxKeyTyped(context.typedChar, context.keyCode);
-        String text = this.text.getText();
+        String old = this.field.getText();
+        boolean result = this.field.textboxKeyTyped(context.typedChar, context.keyCode);
+        String text = this.field.getText();
 
-        if (this.text.isFocused() && !text.equals(old))
+        if (this.field.isFocused() && !text.equals(old))
         {
             try
             {
@@ -371,26 +366,6 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         }
 
         return result;
-    }
-
-    @Override
-    public boolean isFocused()
-    {
-        return this.text.isFocused();
-    }
-
-    @Override
-    public void focus(GuiContext context)
-    {
-        this.text.setFocused(true);
-        Keyboard.enableRepeatEvents(true);
-    }
-
-    @Override
-    public void unfocus(GuiContext context)
-    {
-        this.text.setFocused(false);
-        Keyboard.enableRepeatEvents(false);
     }
 
     /**
@@ -438,13 +413,13 @@ public class GuiTrackpadElement extends GuiElement implements IFocusedGuiElement
         Icons.MOVE_RIGHT.render(x + w - 13, y + (h - 16) / 2);
         GlStateManager.disableBlend();
 
-        int width = MathUtils.clamp(this.font.getStringWidth(this.text.getText()), 0, w - 16);
+        int width = MathUtils.clamp(this.font.getStringWidth(this.field.getText()), 0, w - 16);
 
-        this.text.x = this.area.mx(width);
-        this.text.y = this.area.my() - 4;
-        this.text.width = width + 6;
-        this.text.height = 9;
-        this.text.drawTextBox();
+        this.field.x = this.area.mx(width);
+        this.field.y = this.area.my() - 4;
+        this.field.width = width + 6;
+        this.field.height = 9;
+        this.field.drawTextBox();
 
         if (dragging)
         {

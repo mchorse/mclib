@@ -1,7 +1,5 @@
 package mchorse.mclib.client.gui.framework.elements.input;
 
-import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.keys.IKey;
@@ -19,9 +17,8 @@ import java.util.function.Consumer;
  * 
  * This element is a wrapper for the text field class
  */
-public class GuiTextElement extends GuiElement implements GuiResponder, IFocusedGuiElement
+public class GuiTextElement extends GuiBaseTextElement implements GuiResponder
 {
-    public GuiTextField field;
     public Consumer<String> callback;
 
     public GuiTextElement(Minecraft mc, ValueString value)
@@ -50,7 +47,6 @@ public class GuiTextElement extends GuiElement implements GuiResponder, IFocused
     {
         super(mc);
 
-        this.field = new GuiTextField(0, this.font, 0, 0, 0, 0);
         this.field.setGuiResponder(this);
         this.callback = callback;
 
@@ -86,20 +82,6 @@ public class GuiTextElement extends GuiElement implements GuiResponder, IFocused
     }
 
     @Override
-    public void setEnabled(boolean enabled)
-    {
-        super.setEnabled(enabled);
-        this.field.setEnabled(enabled);
-    }
-
-    @Override
-    public void setVisible(boolean visible)
-    {
-        super.setVisible(visible);
-        this.field.setVisible(visible);
-    }
-
-    @Override
     public void resize()
     {
         super.resize();
@@ -128,26 +110,6 @@ public class GuiTextElement extends GuiElement implements GuiResponder, IFocused
         }
 
         return this.area.isInside(context);
-    }
-
-    @Override
-    public boolean isFocused()
-    {
-        return this.field.isFocused();
-    }
-
-    @Override
-    public void focus(GuiContext context)
-    {
-        this.field.setFocused(true);
-        Keyboard.enableRepeatEvents(true);
-    }
-
-    @Override
-    public void unfocus(GuiContext context)
-    {
-        this.field.setFocused(false);
-        Keyboard.enableRepeatEvents(false);
     }
 
     @Override
