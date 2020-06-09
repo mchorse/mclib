@@ -411,7 +411,14 @@ public class GuiElement extends Gui implements IGuiElement
                 return false;
             }
 
-            element = element.getParent();
+            GuiElement parent = element.getParent();
+
+            if (parent instanceof GuiDelegateElement && ((GuiDelegateElement) parent).delegate != element)
+            {
+                return false;
+            }
+
+            element = parent;
         }
 
         return true;
