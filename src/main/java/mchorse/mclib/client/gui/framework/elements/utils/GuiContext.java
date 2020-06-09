@@ -214,12 +214,25 @@ public class GuiContext
 		}
 
 		GuiElement grandparent = parent.getParent();
+		boolean isRoot = grandparent == this.screen.root;
 
-		if (grandparent != null && !stop && grandparent.canBeSeen())
+		if (grandparent != null && !stop && (isRoot || grandparent.canBeSeen()))
 		{
-			if (this.focus(grandparent, grandparent.getChildren().indexOf(parent), factor))
+			/* Forgive me for this heresy, but I have no idea what other name I could give
+			 * to this variable */
+			List<IGuiElement> childs = grandparent.getChildren();
+
+			if (this.focus(grandparent, childs.indexOf(parent), factor))
 			{
 				return true;
+			}
+
+			if (isRoot)
+			{
+				if (this.focus(grandparent, factor > 0 ? -1 : childs.size() - 1, factor))
+				{
+					return true;
+				}
 			}
 		}
 
