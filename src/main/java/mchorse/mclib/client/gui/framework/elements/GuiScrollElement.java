@@ -152,9 +152,9 @@ public class GuiScrollElement extends GuiElement
         this.postDraw(context);
 
         GlStateManager.popMatrix();
-        GuiDraw.unscissor(context);
 
         this.scroll.drawScrollbar();
+        GuiDraw.unscissor(context);
         this.unapply(context);
 
         /* Clear tooltip in case if it was set outside of scroll area within the scroll */

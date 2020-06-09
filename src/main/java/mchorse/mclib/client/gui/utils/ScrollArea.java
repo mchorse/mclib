@@ -1,6 +1,9 @@
 package mchorse.mclib.client.gui.utils;
 
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.gui.Gui;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,6 +53,11 @@ public class ScrollArea extends Area
      */
     public boolean opposite;
 
+    /**
+     * Width of scroll bar
+     */
+    public int scrollbarWidth = -1;
+
     public ScrollArea(int x, int y, int w, int h)
     {
         super(x, y, w, h);
@@ -61,6 +69,11 @@ public class ScrollArea extends Area
     public ScrollArea(int itemSize)
     {
         this.scrollItemSize = itemSize;
+    }
+
+    public int getScrollbarWidth()
+    {
+        return this.scrollbarWidth <= 0 ? McLib.scrollbarWidth.get() : this.scrollbarWidth;
     }
 
     public void setSize(int items)
@@ -172,13 +185,15 @@ public class ScrollArea extends Area
 
         if (isInside)
         {
+            int scrollbar = this.getScrollbarWidth();
+
             if (this.opposite)
             {
-                isInside = this.direction == ScrollDirection.VERTICAL ? x <= this.x + 4 : y <= this.y + 4;
+                isInside = this.direction == ScrollDirection.VERTICAL ? x <= this.x + scrollbar : y <= this.y + scrollbar;
             }
             else
             {
-                isInside = this.direction == ScrollDirection.VERTICAL ? x >= this.ex() - 4 : y >= this.ey() - 4;
+                isInside = this.direction == ScrollDirection.VERTICAL ? x >= this.ex() - scrollbar : y >= this.ey() - scrollbar;
             }
         }
 
@@ -242,7 +257,7 @@ public class ScrollArea extends Area
         {
             float progress = this.direction.getProgress(this, x, y);
 
-            this.scrollTo((int) (progress * (this.scrollSize - this.direction.getSide(this) + 4)));
+            this.scrollTo((int) (progress * (this.scrollSize - this.direction.getSide(this) + this.getScrollbarWidth())));
         }
     }
 
@@ -259,22 +274,36 @@ public class ScrollArea extends Area
             return;
         }
 
+        int scrollbar = this.getScrollbarWidth();
         int h = this.getScrollBar(side / 2);
-        int x = this.opposite ? this.x : this.ex() - 4;
+        int x = this.opposite ? this.x : this.ex() - scrollbar;
         /* Sometimes I don't understand how I come up with such clever
          * formulas, but it's all ratios, y'all */
         int y = this.y + (int) ((this.scroll / (float) (this.scrollSize - this.h)) * (this.h - h));
+        int rx = x + scrollbar;
+        int ry = y + h;
 
         if (this.direction == ScrollDirection.HORIZONTAL)
         {
-            y = this.opposite ? this.y : this.ey() - 4;
+            y = this.opposite ? this.y : this.ey() - scrollbar;
             x = this.x + (int) ((this.scroll / (float) (this.scrollSize - this.w)) * (this.w - h));
+            rx = x + h;
+            ry = y + scrollbar;
+        }
 
-            Gui.drawRect(x, y, x + h, y + 4, -6250336);
+        if (McLib.scrollbarFlat.get())
+        {
+            Gui.drawRect(x, y, rx, ry, -6250336);
         }
         else
         {
-            Gui.drawRect(x, y, x + 4, y + h, -6250336);
+            int color = McLib.scrollbarShadow.get();
+
+            GuiDraw.drawDropShadow(x, y, rx, ry, 5, color, ColorUtils.setAlpha(color, 0F));
+
+            Gui.drawRect(x, y, rx, ry, 0xffeeeeee);
+            Gui.drawRect(x + 1, y + 1, rx, ry, 0xff666666);
+            Gui.drawRect(x + 1, y + 1, rx - 1, ry - 1, 0xffaaaaaa);
         }
     }
 

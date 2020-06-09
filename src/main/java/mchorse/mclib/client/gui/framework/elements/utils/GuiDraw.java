@@ -247,6 +247,11 @@ public class GuiDraw
 
 	public static void drawDropShadow(int left, int top, int right, int bottom, int offset, int opaque, int shadow)
 	{
+		left -= offset;
+		top -= offset;
+		right += offset;
+		bottom += offset;
+
 		float a1 = (opaque >> 24 & 255) / 255.0F;
 		float r1 = (opaque >> 16 & 255) / 255.0F;
 		float g1 = (opaque >> 8 & 255) / 255.0F;

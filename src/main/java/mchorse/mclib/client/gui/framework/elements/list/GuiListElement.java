@@ -507,9 +507,8 @@ public abstract class GuiListElement<T> extends GuiElement
 
         GuiDraw.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
         this.drawList(context);
-        GuiDraw.unscissor(context);
-
         this.scroll.drawScrollbar();
+        GuiDraw.unscissor(context);
 
         GuiDraw.drawLockedArea(this);
 

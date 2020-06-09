@@ -49,6 +49,10 @@ public class McLib
     public static ValueRL backgroundImage;
     public static ValueInt backgroundColor;
 
+    public static ValueBoolean scrollbarFlat;
+    public static ValueInt scrollbarShadow;
+    public static ValueInt scrollbarWidth;
+
     @SubscribeEvent
     public void onConfigRegister(RegisterConfigEvent event)
     {
@@ -63,6 +67,10 @@ public class McLib
 
         backgroundImage = builder.category("background").getRL("image",  null);
         backgroundColor = builder.getInt("color",  0xcc000000).colorAlpha();
+
+        scrollbarFlat = builder.category("scrollbars").getBoolean("flat", false);
+        scrollbarShadow = builder.getInt("shadow", 0x88000000).colorAlpha();
+        scrollbarWidth = builder.getInt("width", 4, 2, 10);
 
         event.modules.add(builder.build());
     }

@@ -16,6 +16,14 @@ public class ColorUtils
 		return COLOR.getRGBAColor();
 	}
 
+	public static int setAlpha(int color, float alpha)
+	{
+		COLOR.set(color, true);
+		COLOR.a = alpha;
+
+		return COLOR.getRGBAColor();
+	}
+
 	public static void bindColor(int color)
 	{
 		COLOR.set(color, true);
