@@ -1,9 +1,16 @@
 package mchorse.mclib.utils;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.handler.codec.EncoderException;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTSizeTracker;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
 
 import javax.vecmath.Vector3f;
+import java.io.IOException;
 
 /**
  * NBT utils 
@@ -49,5 +56,29 @@ public class NBTUtils
         list.appendTag(new NBTTagFloat(vector.z));
 
         return list;
+    }
+
+    public static NBTTagCompound readInfiniteTag(ByteBuf buf)
+    {
+        int i = buf.readerIndex();
+        byte b0 = buf.readByte();
+
+        if (b0 == 0)
+        {
+            return null;
+        }
+        else
+        {
+            buf.readerIndex(i);
+
+            try
+            {
+                return CompressedStreamTools.read(new ByteBufInputStream(buf), NBTSizeTracker.INFINITE);
+            }
+            catch (IOException ioexception)
+            {
+                throw new EncoderException(ioexception);
+            }
+        }
     }
 }
