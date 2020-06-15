@@ -6,6 +6,7 @@ import mchorse.mclib.config.values.ValueFloat;
 import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.config.values.ValueRL;
 import mchorse.mclib.events.RegisterConfigEvent;
+import mchorse.mclib.utils.PayloadASM;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -53,6 +54,8 @@ public class McLib
     public static ValueInt scrollbarShadow;
     public static ValueInt scrollbarWidth;
 
+    public static ValueInt maxPacketSize;
+
     @SubscribeEvent
     public void onConfigRegister(RegisterConfigEvent event)
     {
@@ -71,6 +74,8 @@ public class McLib
         scrollbarFlat = builder.category("scrollbars").getBoolean("flat", false);
         scrollbarShadow = builder.getInt("shadow", 0x88000000).colorAlpha();
         scrollbarWidth = builder.getInt("width", 4, 2, 10);
+
+        maxPacketSize = builder.category("vanilla").getInt("max_packet_size", PayloadASM.MIN_SIZE, PayloadASM.MIN_SIZE, Integer.MAX_VALUE);
 
         event.modules.add(builder.build());
     }

@@ -62,7 +62,13 @@ mclib.config.comments.scrollbars.flat=Return the looks of flat colored scrollbar
 mclib.config.scrollbars.shadow=Shadow color
 mclib.config.comments.scrollbars.shadow=Allows you to set shadow color of scrollbars
 mclib.config.scrollbars.width=Thickness
-mclib.config.comments.scrollbars.width=Allows you to setup the thickness (width of scrollbars
+mclib.config.comments.scrollbars.width=Allows you to setup the thickness (width of scrollbars)
+
+mclib.config.vanilla.title=Vanilla tweaks
+mclib.config.vanilla.tooltip=Options regarding to tweaks done to Minecraft's code
+
+mclib.config.vanilla.max_packet_size=Max. packet size
+mclib.config.comments.vanilla.max_packet_size=Allows you to configure the maximum size (in bytes) of a modded packet. Warning: don't change this value for public servers, as it will allow to DDoS server much easier. This option is designed for singleplayer!
 
 # Interpolations
 mclib.interpolations.linear=Linear
