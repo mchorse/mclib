@@ -4,6 +4,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.config.GuiUtils;
 
 public class Icon
 {
@@ -57,5 +58,11 @@ public class Icon
 		GuiDraw.drawBillboard(x, y, this.x, this.y, this.w, this.h, this.textureW, this.textureH);
 		GlStateManager.disableBlend();
 		GlStateManager.disableAlpha();
+	}
+
+	public void renderArea(int x, int y, int w, int h)
+	{
+		Minecraft.getMinecraft().renderEngine.bindTexture(this.location);
+		GuiUtils.drawContinuousTexturedBox(x, y, this.x, this.y, w, h, this.w, this.h, 0, 0);
 	}
 }

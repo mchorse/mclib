@@ -479,8 +479,7 @@ public class GuiTexturePicker extends GuiElement
             x -= fw + 10;
             y -= fh + 40;
 
-            this.mc.renderEngine.bindTexture(Icons.ICONS);
-            GuiUtils.drawContinuousTexturedBox(x, y, 0, 240, fw, fh, 16, 16, 0, 0);
+            Icons.CHECKBOARD.renderArea(x, y, fw, fh);
 
             GlStateManager.enableAlpha();
             this.mc.renderEngine.bindTexture(loc);
