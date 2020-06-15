@@ -151,19 +151,23 @@ public class GuiDraw
 	 */
 	public static void drawBillboard(int x, int y, int u, int v, int w, int h, int textureW, int textureH, float z)
 	{
-	    float tw = 1F / textureW;
-	    float th = 1F / textureH;
-
 	    Tessellator tessellator = Tessellator.getInstance();
 	    BufferBuilder buffer = tessellator.getBuffer();
 
 	    buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-	    buffer.pos(x, y + h, z).tex(u * tw, (v + h) * th).endVertex();
-	    buffer.pos(x + w, y + h, z).tex((u + w) * tw, (v + h) * th).endVertex();
-	    buffer.pos(x + w, y, z).tex((u + w) * tw, v * th).endVertex();
-	    buffer.pos(x, y, z).tex(u * tw, v * th).endVertex();
-
+	    drawBillboard(buffer, x, y, u, v, w, h, textureW, textureH, z);
 	    tessellator.draw();
+	}
+
+	public static void drawBillboard(BufferBuilder buffer, int x, int y, int u, int v, int w, int h, int textureW, int textureH, float z)
+	{
+		float tw = 1F / textureW;
+		float th = 1F / textureH;
+
+		buffer.pos(x, y + h, z).tex(u * tw, (v + h) * th).endVertex();
+		buffer.pos(x + w, y + h, z).tex((u + w) * tw, (v + h) * th).endVertex();
+		buffer.pos(x + w, y, z).tex((u + w) * tw, v * th).endVertex();
+		buffer.pos(x, y, z).tex(u * tw, v * th).endVertex();
 	}
 
 	public static int drawBorder(Area area, int color)
@@ -475,5 +479,32 @@ public class GuiDraw
 			GlStateManager.enableAlpha();
 			GuiDraw.drawBillboard(x, y, 0, 0, width, height, width, height);
 		}
+	}
+
+	public static void drawRepeatBillboard(int x, int y, int w, int h, int u, int v, int tileW, int tileH, int tw, int th)
+	{
+		int countX = ((w - 1) / tileW) + 1;
+		int countY = ((h - 1) / tileH) + 1;
+		int fillerX = w - (countX - 1) * tileW;
+		int fillerY = h - (countY - 1) * tileH;
+
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+		for (int i = 0, c = countX * countY; i < c; i ++)
+		{
+			int ix = i % countX;
+			int iy = i / countX;
+			int xx = x + ix * tileW;
+			int yy = y + iy * tileH;
+			int xw = ix == countX - 1 ? fillerX : tileW;
+			int yh = iy == countY - 1 ? fillerY : tileH;
+
+			drawBillboard(buffer, xx, yy, u, v, xw, yh, tw, th, 0);
+		}
+
+		tessellator.draw();
 	}
 }

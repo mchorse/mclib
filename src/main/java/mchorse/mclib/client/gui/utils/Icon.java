@@ -62,7 +62,11 @@ public class Icon
 
 	public void renderArea(int x, int y, int w, int h)
 	{
+		GlStateManager.enableAlpha();
+		GlStateManager.enableBlend();
 		Minecraft.getMinecraft().renderEngine.bindTexture(this.location);
-		GuiUtils.drawContinuousTexturedBox(x, y, this.x, this.y, w, h, this.w, this.h, 0, 0);
+		GuiDraw.drawRepeatBillboard(x, y, w, h, this.x, this.y, this.w, this.h, this.textureW, this.textureH);
+		GlStateManager.disableBlend();
+		GlStateManager.disableAlpha();
 	}
 }

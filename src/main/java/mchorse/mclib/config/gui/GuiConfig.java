@@ -16,6 +16,7 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.values.IConfigValue;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
