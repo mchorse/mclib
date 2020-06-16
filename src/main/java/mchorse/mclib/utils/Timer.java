@@ -27,13 +27,18 @@ public class Timer
 		this.time = System.currentTimeMillis() + duration;
 	}
 
+	public void reset()
+	{
+		this.enabled = false;
+	}
+
 	public boolean checkReset()
 	{
 		boolean enabled = this.check();
 
 		if (enabled)
 		{
-			this.enabled = false;
+			this.reset();
 		}
 
 		return enabled;

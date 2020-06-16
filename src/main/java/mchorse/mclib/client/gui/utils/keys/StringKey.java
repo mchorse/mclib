@@ -20,4 +20,10 @@ public class StringKey implements IKey
 	{
 		this.string = string;
 	}
+
+	@Override
+	public String toString()
+	{
+		return this.string;
+	}
 }

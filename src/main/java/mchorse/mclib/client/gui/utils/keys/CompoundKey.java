@@ -48,4 +48,10 @@ public class CompoundKey implements IKey
 		this.keys = keys;
 		this.construct();
 	}
+
+	@Override
+	public String toString()
+	{
+		return this.get();
+	}
 }

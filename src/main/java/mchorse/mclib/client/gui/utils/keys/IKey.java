@@ -9,6 +9,11 @@ public interface IKey
 		return new LangKey(key);
 	}
 
+	public static IKey format(String key, Object... args)
+	{
+		return new LangKey(key).args(args);
+	}
+
 	public static IKey str(String key)
 	{
 		return new StringKey(key);

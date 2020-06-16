@@ -9,10 +9,25 @@ public class LangKey implements IKey
 	public String key;
 	public String string;
 	public long time = -1;
+	public Object[] args = new Object[0];
 
 	public LangKey(String key)
 	{
 		this.key = key;
+	}
+
+	public LangKey args(Object... args)
+	{
+		this.args = args;
+
+		return this;
+	}
+
+	public String update()
+	{
+		this.time = -1;
+
+		return this.get();
 	}
 
 	@Override
@@ -21,7 +36,7 @@ public class LangKey implements IKey
 		if (lastTime > time)
 		{
 			this.time = lastTime;
-			this.string = I18n.format(this.key);
+			this.string = I18n.format(this.key, this.args);
 		}
 
 		return this.string;
@@ -32,5 +47,11 @@ public class LangKey implements IKey
 	{
 		this.key = string;
 		this.string = I18n.format(this.key);
+	}
+
+	@Override
+	public String toString()
+	{
+		return this.get();
 	}
 }
