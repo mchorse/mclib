@@ -12,7 +12,8 @@ import java.util.function.Consumer;
 public class GuiIconElement extends GuiClickElement<GuiIconElement>
 {
 	public Icon icon;
-	public Icon iconHover;
+	public int iconColor = 0xffffffff;
+	public Icon hoverIcon;
 	public int hoverColor = 0xffaaaaaa;
 
 	public GuiIconElement(Minecraft mc, Icon icon, Consumer<GuiIconElement> callback)
@@ -20,13 +21,13 @@ public class GuiIconElement extends GuiClickElement<GuiIconElement>
 		super(mc, callback);
 
 		this.icon = icon;
-		this.iconHover = icon;
+		this.hoverIcon = icon;
 		this.flex().wh(20, 20);
 	}
 
 	public GuiIconElement both(Icon icon)
 	{
-		this.icon = this.iconHover = icon;
+		this.icon = this.hoverIcon = icon;
 
 		return this;
 	}
@@ -40,7 +41,14 @@ public class GuiIconElement extends GuiClickElement<GuiIconElement>
 
 	public GuiIconElement hovered(Icon icon)
 	{
-		this.iconHover = icon;
+		this.hoverIcon = icon;
+
+		return this;
+	}
+
+	public GuiIconElement iconColor(int color)
+	{
+		this.iconColor = color;
 
 		return this;
 	}
@@ -55,8 +63,8 @@ public class GuiIconElement extends GuiClickElement<GuiIconElement>
 	@Override
 	protected void drawSkin(GuiContext context)
 	{
-		Icon icon = this.hover ? this.iconHover : this.icon;
-		int color = this.hover ? this.hoverColor : 0xffffffff;
+		Icon icon = this.hover ? this.hoverIcon : this.icon;
+		int color = this.hover ? this.hoverColor : this.iconColor;
 
 		if (this.isEnabled())
 		{

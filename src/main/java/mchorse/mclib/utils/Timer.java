@@ -11,6 +11,11 @@ public class Timer
 		this.duration = duration;
 	}
 
+	public long getRemaining()
+	{
+		return this.time - System.currentTimeMillis();
+	}
+
 	public void mark()
 	{
 		this.mark(this.duration);
