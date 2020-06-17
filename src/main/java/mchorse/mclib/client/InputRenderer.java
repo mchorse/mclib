@@ -31,7 +31,7 @@ import java.util.List;
  * This class is responsible for rendering a mouse pointer on the screen 
  */
 @SideOnly(Side.CLIENT)
-public class RenderingHandler
+public class InputRenderer
 {
     public static final ResourceLocation MOUSE_POINTER = new ResourceLocation("mclib", "textures/gui/mouse.png");
     public static boolean disabledForFrame = false;
