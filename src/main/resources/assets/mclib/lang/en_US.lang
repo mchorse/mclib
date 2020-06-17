@@ -51,10 +51,10 @@ mclib.config.tutorials.enable_mouse_rendering=Mouse cursor
 mclib.config.comments.tutorials.enable_mouse_rendering=Enable rendering of the mouse cursor. It's very useful for tutorials when they're recorded with Minema mod and no cursor showing
 mclib.config.tutorials.enable_keystrokes_rendering=Keystrokes
 mclib.config.comments.tutorials.enable_keystrokes_rendering=Enable rendering of the keystrokes. It's very useful for tutorials when to show which keys are being pressed
-mclib.config.tutorials.keystroke_offset=Keystroke offset
+mclib.config.tutorials.keystroke_offset=Keystrokes offset
 mclib.config.comments.tutorials.keystroke_offset=Allows to configure how many pixels away from the corner the keystroke line would be drawn
-mclib.config.tutorials.keystroke_mode=Keystroke mode
-mclib.config.comments.tutorials.keystroke_mode=Allows to change the corner of the keystroke line 
+mclib.config.tutorials.keystroke_position=Keystrokes position
+mclib.config.comments.tutorials.keystroke_position=Allows to change the corner of the keystroke line 
 
 mclib.config.background.title=Background
 mclib.config.background.tooltip=Background options like color and texture to be used
@@ -93,8 +93,8 @@ mclib.interpolations.exp_out=Exponential Out
 mclib.interpolations.exp_inout=Exponential In/out
 
 # Keystroke modes
-mclib.keystrokes.auto=Auto
-mclib.keystrokes.bottom_left=Bottom left
-mclib.keystrokes.bottom_right=Bottom right
-mclib.keystrokes.top_right=Top right
-mclib.keystrokes.top_left=Top left
+mclib.keystrokes_position.auto=Auto
+mclib.keystrokes_position.bottom_left=Bottom left
+mclib.keystrokes_position.bottom_right=Bottom right
+mclib.keystrokes_position.top_right=Top right
+mclib.keystrokes_position.top_left=Top left

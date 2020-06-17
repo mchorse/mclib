@@ -75,12 +75,12 @@ public class McLib
         enableMouseRendering = builder.category("tutorials").getBoolean("enable_mouse_rendering", false);
         enableKeystrokeRendering = builder.getBoolean("enable_keystrokes_rendering", false);
         keystrokeOffset = builder.getInt("keystroke_offset", 10, 0, 20);
-        keystrokeMode = builder.getInt("keystroke_mode", 1).modes(
-            IKey.lang("mclib.keystrokes.auto"),
-            IKey.lang("mclib.keystrokes.bottom_left"),
-            IKey.lang("mclib.keystrokes.bottom_right"),
-            IKey.lang("mclib.keystrokes.top_right"),
-            IKey.lang("mclib.keystrokes.top_left")
+        keystrokeMode = builder.getInt("keystroke_position", 1).modes(
+            IKey.lang("mclib.keystrokes_position.auto"),
+            IKey.lang("mclib.keystrokes_position.bottom_left"),
+            IKey.lang("mclib.keystrokes_position.bottom_right"),
+            IKey.lang("mclib.keystrokes_position.top_right"),
+            IKey.lang("mclib.keystrokes_position.top_left")
         );
 
         backgroundImage = builder.category("background").getRL("image",  null);
