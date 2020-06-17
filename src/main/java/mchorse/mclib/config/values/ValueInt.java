@@ -3,6 +3,7 @@ package mchorse.mclib.config.values;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiCirculateElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiKeybindElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
@@ -26,6 +27,7 @@ public class ValueInt extends Value
 	public final int min;
 	public final int max;
 	private Subtype subtype = Subtype.INTEGER;
+	private IKey[] labels;
 
 	public ValueInt(String id, int defaultValue)
 	{
@@ -92,6 +94,13 @@ public class ValueInt extends Value
 		return this.subtype(Subtype.KEYBIND);
 	}
 
+	public ValueInt modes(IKey... labels)
+	{
+		this.labels = labels;
+
+		return this.subtype(Subtype.MODES);
+	}
+
 	@Override
 	public void reset()
 	{
@@ -122,6 +131,20 @@ public class ValueInt extends Value
 			keybind.flex().w(90);
 			element.add(keybind.removeTooltip());
 		}
+		else if (this.subtype == Subtype.MODES)
+		{
+			GuiCirculateElement button = new GuiCirculateElement(mc, null);
+
+			for (IKey key : this.labels)
+			{
+				button.addLabel(key);
+			}
+
+			button.callback = (b) -> this.set(button.getValue());
+			button.setValue(this.get());
+			button.flex().w(90);
+			element.add(button);
+		}
 		else
 		{
 			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this);
@@ -150,6 +173,7 @@ public class ValueInt extends Value
 		INTEGER,
 		COLOR,
 		COLOR_ALPHA,
-		KEYBIND
+		KEYBIND,
+		MODES
 	}
 }

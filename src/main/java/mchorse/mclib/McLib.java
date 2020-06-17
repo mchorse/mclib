@@ -1,5 +1,6 @@
 package mchorse.mclib;
 
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.ConfigBuilder;
 import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueFloat;
@@ -48,6 +49,8 @@ public class McLib
 
     public static ValueBoolean enableMouseRendering;
     public static ValueBoolean enableKeystrokeRendering;
+    public static ValueInt keystrokeOffset;
+    public static ValueInt keystrokeMode;
 
     public static ValueRL backgroundImage;
     public static ValueInt backgroundColor;
@@ -71,6 +74,14 @@ public class McLib
 
         enableMouseRendering = builder.category("tutorials").getBoolean("enable_mouse_rendering", false);
         enableKeystrokeRendering = builder.getBoolean("enable_keystrokes_rendering", false);
+        keystrokeOffset = builder.getInt("keystroke_offset", 10, 0, 20);
+        keystrokeMode = builder.getInt("keystroke_mode", 1).modes(
+            IKey.lang("mclib.keystrokes.auto"),
+            IKey.lang("mclib.keystrokes.bottom_left"),
+            IKey.lang("mclib.keystrokes.bottom_right"),
+            IKey.lang("mclib.keystrokes.top_right"),
+            IKey.lang("mclib.keystrokes.top_left")
+        );
 
         backgroundImage = builder.category("background").getRL("image",  null);
         backgroundColor = builder.getInt("color",  0xcc000000).colorAlpha();

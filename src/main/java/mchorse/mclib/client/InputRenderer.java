@@ -133,6 +133,7 @@ public class InputRenderer
     {
         float lqx = Math.round(mouseX / (float) screen.width);
         float lqy = Math.round(mouseY / (float) screen.height);
+        int mode = McLib.keystrokeMode.get();
 
         if (lqx == this.currentQX && lqy == this.currentQY)
         {
@@ -140,12 +141,34 @@ public class InputRenderer
             this.currentQY = this.lastQY;
         }
 
+        if (mode == 1)
+        {
+            this.currentQX = 0;
+            this.currentQY = 1;
+        }
+        else if (mode == 2)
+        {
+            this.currentQX = 1;
+            this.currentQY = 1;
+        }
+        else if (mode == 3)
+        {
+            this.currentQX = 1;
+            this.currentQY = 0;
+        }
+        else if (mode == 4)
+        {
+            this.currentQX = 0;
+            this.currentQY = 0;
+        }
+
         float qx = this.currentQX;
         float qy = this.currentQY;
 
         int fy = qy > 0.5F ? 1 : -1;
-        int mx = 10 + (int) (qx * (screen.width - 30));
-        int my = 10 + (int) (qy * (screen.height - 40));
+        int offset = McLib.keystrokeOffset.get();
+        int mx = offset + (int) (qx * (screen.width - offset * 2));
+        int my = offset + (int) (qy * (screen.height - 20 - offset * 2));
 
         FontRenderer font = Minecraft.getMinecraft().fontRenderer;
         Iterator<PressedKey> it = this.pressedKeys.iterator();
@@ -160,7 +183,7 @@ public class InputRenderer
             }
             else
             {
-                int x = mx + (qx < 0.5F ? key.x : -(key.x + key.width));
+                int x = mx + (qx < 0.5F ? key.x : -(key.x + key.width + 10));
                 int y = my + (int) (Interpolation.EXP_INOUT.interpolate(0, 1, key.getFactor()) * 50 * fy) + (key.i % 2 == 0 ? -1 : 0);
 
                 GuiDraw.drawDropShadow(x, y, x + 10 + key.width, y + 20, 4, 0x44000000, 0);
@@ -197,10 +220,11 @@ public class InputRenderer
                 last = pressed;
             }
 
+            int offset = McLib.keystrokeOffset.get();
             int x = last == null ? 0 : last.x + last.width + 5;
             PressedKey newKey = new PressedKey(key, x);
 
-            if (newKey.x + newKey.width + 10 > event.getGui().width - 20)
+            if (newKey.x + newKey.width + offset > event.getGui().width - offset * 2)
             {
                 newKey.x = 0;
             }
