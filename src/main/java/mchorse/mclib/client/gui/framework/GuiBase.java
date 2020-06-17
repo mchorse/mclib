@@ -37,7 +37,7 @@ public class GuiBase extends GuiScreen
         this.context.mc = Minecraft.getMinecraft();
         this.context.font = this.context.mc.fontRenderer;
 
-        this.root = new GuiElement(this.context.mc);
+        this.root = new GuiRootElement(this.context.mc);
         this.root.markContainer().flex().relative(this.viewport).wh(1F, 1F);
         this.root.keys().register(IKey.lang("mclib.gui.keys.list"), Keyboard.KEY_F9, () -> this.context.keybinds.toggleVisible());
 
@@ -171,6 +171,14 @@ public class GuiBase extends GuiScreen
             this.context.reset();
             this.root.draw(this.context);
             this.context.drawTooltip();
+        }
+    }
+
+    public static class GuiRootElement extends GuiElement
+    {
+        public GuiRootElement(Minecraft mc)
+        {
+            super(mc);
         }
     }
 }

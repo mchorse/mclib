@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GLSync;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -172,6 +173,9 @@ public class InputRenderer
 
         FontRenderer font = Minecraft.getMinecraft().fontRenderer;
         Iterator<PressedKey> it = this.pressedKeys.iterator();
+
+        GlStateManager.disableLighting();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
         while (it.hasNext())
         {

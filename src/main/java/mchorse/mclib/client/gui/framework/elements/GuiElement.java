@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements;
 
+import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
@@ -402,6 +403,7 @@ public class GuiElement extends Gui implements IGuiElement
             return false;
         }
 
+        GuiElement last = this;
         GuiElement element = this.getParent();
 
         while (element != null)
@@ -418,10 +420,11 @@ public class GuiElement extends Gui implements IGuiElement
                 return false;
             }
 
+            last = element;
             element = parent;
         }
 
-        return true;
+        return last instanceof GuiBase.GuiRootElement;
     }
 
     /* Overriding those methods so it would be much easier to 
