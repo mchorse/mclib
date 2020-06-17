@@ -42,10 +42,12 @@ public class McLib
     /* Configuration */
     public static ValueInt primaryColor;
     public static ValueBoolean enableBorders;
-    public static ValueBoolean enableMouseRendering;
     public static ValueBoolean enableCheckboxRendering;
     public static ValueBoolean enableGridRendering;
     public static ValueInt userIntefaceScale;
+
+    public static ValueBoolean enableMouseRendering;
+    public static ValueBoolean enableKeystrokeRendering;
 
     public static ValueRL backgroundImage;
     public static ValueInt backgroundColor;
@@ -63,10 +65,12 @@ public class McLib
 
         primaryColor = builder.category("appearance").getInt("primary_color", 0x0088ff).color();
         enableBorders = builder.getBoolean("enable_borders", false);
-        enableMouseRendering = builder.getBoolean("enable_mouse_rendering", false);
         enableCheckboxRendering = builder.getBoolean("enable_checkbox_rendering", false);
         enableGridRendering = builder.getBoolean("enable_grid_rendering", true);
         userIntefaceScale = builder.getInt("user_interface_scale", 2, 0, 4);
+
+        enableMouseRendering = builder.category("tutorials").getBoolean("enable_mouse_rendering", false);
+        enableKeystrokeRendering = builder.getBoolean("enable_keystrokes_rendering", false);
 
         backgroundImage = builder.category("background").getRL("image",  null);
         backgroundColor = builder.getInt("color",  0xcc000000).colorAlpha();

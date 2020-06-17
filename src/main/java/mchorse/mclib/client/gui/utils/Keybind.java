@@ -1,6 +1,7 @@
 package mchorse.mclib.client.gui.utils;
 
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.utils.Keys;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Arrays;
@@ -64,13 +65,13 @@ public class Keybind
 
 	public String getKeyCombo()
 	{
-		String label = Keyboard.getKeyName(this.mainKey);
+		String label = Keys.getKeyName(this.mainKey);
 
 		if (this.heldKeys != null)
 		{
 			for (int held : this.heldKeys)
 			{
-				label = Keyboard.getKeyName(held) + " + " + label;
+				label = Keys.getKeyName(held) + " + " + label;
 			}
 		}
 

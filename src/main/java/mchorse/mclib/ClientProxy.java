@@ -1,8 +1,7 @@
 package mchorse.mclib;
 
 import mchorse.mclib.client.KeyboardHandler;
-import mchorse.mclib.client.MouseRenderer;
-import mchorse.mclib.client.gui.mclib.GuiDashboard;
+import mchorse.mclib.client.RenderingHandler;
 import mchorse.mclib.client.gui.utils.keys.LangKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
@@ -21,7 +20,7 @@ public class ClientProxy extends CommonProxy
 		super.preInit(event);
 
 		MinecraftForge.EVENT_BUS.register(new KeyboardHandler());
-		MinecraftForge.EVENT_BUS.register(new MouseRenderer());
+		MinecraftForge.EVENT_BUS.register(new RenderingHandler());
 	}
 
 	@Override
