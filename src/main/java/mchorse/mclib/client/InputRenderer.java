@@ -203,7 +203,9 @@ public class InputRenderer
     @SubscribeEvent
     public void onKeyPressedInGUI(GuiScreenEvent.KeyboardInputEvent.Post event)
     {
-        if (Keyboard.getEventKeyState() && GuiBase.getCurrent().activeElement == null)
+        boolean inputFocused = GuiBase.getCurrent() == null || GuiBase.getCurrent().activeElement == null;
+
+        if (Keyboard.getEventKeyState() && inputFocused)
         {
             int key = Keyboard.getEventKey() == 0 ? Keyboard.getEventCharacter() + 256 : Keyboard.getEventKey();
 

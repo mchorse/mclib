@@ -71,6 +71,12 @@ public class GuiBase extends GuiScreen
     {}
 
     @Override
+    public void onGuiClosed()
+    {
+        current = null;
+    }
+
+    @Override
     public void handleMouseInput() throws IOException
     {
         int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
