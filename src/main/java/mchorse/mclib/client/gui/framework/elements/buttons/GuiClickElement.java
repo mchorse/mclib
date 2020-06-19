@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements.buttons;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.utils.GuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
@@ -33,7 +34,7 @@ public abstract class GuiClickElement<T extends GuiClickElement> extends GuiElem
         if (this.isAllowed(context.mouseButton) && this.area.isInside(context))
         {
             this.pressed = true;
-            this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            GuiUtils.playClick();
             this.click(context.mouseButton);
 
             return true;

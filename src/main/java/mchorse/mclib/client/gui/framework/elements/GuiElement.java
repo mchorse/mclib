@@ -477,6 +477,11 @@ public class GuiElement extends Gui implements IGuiElement
 
     public void clickItself(GuiContext context)
     {
+        this.clickItself(context, 0);
+    }
+
+    public void clickItself(GuiContext context, int mouseButton)
+    {
         if (!this.isEnabled())
         {
             return;
@@ -488,7 +493,7 @@ public class GuiElement extends Gui implements IGuiElement
 
         context.mouseX = this.area.x + 1;
         context.mouseY = this.area.y + 1;
-        context.mouseButton = 0;
+        context.mouseButton = mouseButton;
 
         this.mouseClicked(context);
 
