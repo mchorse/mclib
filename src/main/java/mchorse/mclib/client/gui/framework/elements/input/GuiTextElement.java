@@ -10,7 +10,6 @@ import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
