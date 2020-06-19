@@ -37,6 +37,13 @@ public class GuiPromptModal extends GuiModal
         this.add(this.text, this.confirm, this.cancel);
     }
 
+    public GuiPromptModal filename()
+    {
+        this.text.filename();
+
+        return this;
+    }
+
     public GuiPromptModal setValue(String value)
     {
         this.text.setText(value);
