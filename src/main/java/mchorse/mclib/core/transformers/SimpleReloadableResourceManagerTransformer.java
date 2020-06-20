@@ -1,7 +1,8 @@
 package mchorse.mclib.core.transformers;
 
+import mchorse.mclib.utils.coremod.ClassMethodTransformer;
+import mchorse.mclib.utils.coremod.CoreClassTransformer;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
@@ -11,26 +12,16 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-import mchorse.mclib.utils.coremod.ClassTransformer;
-import mchorse.mclib.utils.coremod.CoreClassTransformer;
-
-public class SimpleReloadableResourceManagerTransformer extends ClassTransformer
+public class SimpleReloadableResourceManagerTransformer extends ClassMethodTransformer
 {
-    @Override
-    public void process(String name, ClassNode node)
+    public SimpleReloadableResourceManagerTransformer()
     {
-        for (MethodNode method : node.methods)
-        {
-            String methodName = this.checkName(method, "a", "(Lnf;)Lceo;", "getResource", "(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource;");
-
-            if (methodName != null)
-            {
-                this.processGetResource(method);
-            }
-        }
+        this.setMcp("getResource", "(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource;");
+        this.setNotch("a", "(Lnf;)Lceo;");
     }
 
-    private void processGetResource(MethodNode method)
+    @Override
+    public void processMethod(String name, MethodNode method)
     {
         LabelNode label = this.getFirstLabel(method);
 

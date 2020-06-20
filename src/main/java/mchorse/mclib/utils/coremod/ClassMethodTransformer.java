@@ -12,6 +12,22 @@ public abstract class ClassMethodTransformer extends ClassTransformer
     public String notch = "";
     public String notchSign = "";
 
+    public ClassMethodTransformer setMcp(String name, String signature)
+    {
+        this.mcp = name;
+        this.mcpSign = signature;
+
+        return this;
+    }
+
+    public ClassMethodTransformer setNotch(String name, String signature)
+    {
+        this.notch = name;
+        this.notchSign = signature;
+
+        return this;
+    }
+
     @Override
     public void process(String name, ClassNode node)
     {
