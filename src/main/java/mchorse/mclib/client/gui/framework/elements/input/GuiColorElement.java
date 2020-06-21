@@ -33,6 +33,7 @@ public class GuiColorElement extends GuiElement
 {
 	public GuiColorPickerElement picker;
 	public boolean label = true;
+	public boolean onTop;
 
 	public GuiColorElement(Minecraft mc, ValueInt value)
 	{
@@ -72,6 +73,14 @@ public class GuiColorElement extends GuiElement
 		this.flex().h(20);
 	}
 
+	public GuiColorElement onTop()
+	{
+		this.picker.flex().anchorY(1F);
+		this.onTop = true;
+
+		return this;
+	}
+
 	public GuiColorElement noLabel()
 	{
 		this.label = false;
@@ -91,8 +100,11 @@ public class GuiColorElement extends GuiElement
 		{
 			if (!this.picker.hasParent())
 			{
+				int x = context.globalX(this.area.mx());
+				int y = context.globalY(this.onTop ? this.area.y - 2 : this.area.ey() + 2);
+
 				this.getParentContainer().add(this.picker);
-				this.picker.flex().xy(context.globalX(this.area.mx()), context.globalY(this.area.ey()) + 2);
+				this.picker.flex().xy(x, y);
 				this.picker.resize();
 			}
 			else
