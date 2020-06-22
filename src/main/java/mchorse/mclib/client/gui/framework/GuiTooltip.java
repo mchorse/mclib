@@ -49,26 +49,11 @@ public class GuiTooltip
             return;
         }
 
+        Direction dir = tooltip.direction;
         int w = strings.size() == 1 ? context.font.getStringWidth(strings.get(0)) : tooltip.width;
         int h = (context.font.FONT_HEIGHT + 3) * strings.size() - 3;
-
-        int x = this.area.ex() + 6;
-        int y = this.area.my() - h / 2;
-
-        if (tooltip.direction == Direction.TOP)
-        {
-            x = this.area.mx() - w / 2;
-            y = this.area.y - h - 6;
-        }
-        else if (tooltip.direction == Direction.LEFT)
-        {
-            x = this.area.x - w - 6;
-        }
-        else if (tooltip.direction == Direction.BOTTOM)
-        {
-            x = this.area.mx() - w / 2;
-            y = this.area.ey() + 6;
-        }
+        int x = this.area.x(dir.anchorX) - (int) (w * (1 - dir.anchorX)) + 6 * dir.factorX;
+        int y = this.area.y(dir.anchorY) - (int) (h * (1 - dir.anchorY)) + 6 * dir.factorY;
 
         x = MathUtils.clamp(x, 3, context.screen.width - w - 3);
         y = MathUtils.clamp(y, 3, context.screen.height - h - 3);

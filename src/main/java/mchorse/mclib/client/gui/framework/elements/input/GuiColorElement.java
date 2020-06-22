@@ -11,6 +11,7 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
+import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -33,7 +34,7 @@ public class GuiColorElement extends GuiElement
 {
 	public GuiColorPickerElement picker;
 	public boolean label = true;
-	public boolean onTop;
+	public Direction direction;
 
 	public GuiColorElement(Minecraft mc, ValueInt value)
 	{
@@ -68,17 +69,22 @@ public class GuiColorElement extends GuiElement
 				callback.accept(color);
 			}
 		});
-		this.picker.flex().anchor(0.5F, 0).wh(200, 85).bounds(GuiBase.getCurrent(), 2);
+		this.picker.flex().wh(200, 85).bounds(GuiBase.getCurrent(), 2);
 
-		this.flex().h(20);
+		this.setDirection(Direction.BOTTOM).flex().h(20);
+	}
+
+	public GuiColorElement setDirection(Direction direction)
+	{
+		this.direction = direction;
+		this.picker.flex().anchor(1 - direction.anchorX, 1 - direction.anchorY);
+
+		return this;
 	}
 
 	public GuiColorElement onTop()
 	{
-		this.picker.flex().anchorY(1F);
-		this.onTop = true;
-
-		return this;
+		return this.setDirection(Direction.TOP);
 	}
 
 	public GuiColorElement noLabel()
@@ -100,8 +106,8 @@ public class GuiColorElement extends GuiElement
 		{
 			if (!this.picker.hasParent())
 			{
-				int x = context.globalX(this.area.mx());
-				int y = context.globalY(this.onTop ? this.area.y - 2 : this.area.ey() + 2);
+				int x = context.globalX(this.area.x(this.direction.anchorX) + 2 * this.direction.factorX);
+				int y = context.globalY(this.area.y(this.direction.anchorY) + 2 * this.direction.factorY);
 
 				this.getParentContainer().add(this.picker);
 				this.picker.flex().xy(x, y);
