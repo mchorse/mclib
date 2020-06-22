@@ -71,10 +71,10 @@ public class GuiColorElement extends GuiElement
 		});
 		this.picker.flex().wh(200, 85).bounds(GuiBase.getCurrent(), 2);
 
-		this.setDirection(Direction.BOTTOM).flex().h(20);
+		this.direction(Direction.BOTTOM).flex().h(20);
 	}
 
-	public GuiColorElement setDirection(Direction direction)
+	public GuiColorElement direction(Direction direction)
 	{
 		this.direction = direction;
 		this.picker.flex().anchor(1 - direction.anchorX, 1 - direction.anchorY);
@@ -84,7 +84,7 @@ public class GuiColorElement extends GuiElement
 
 	public GuiColorElement onTop()
 	{
-		return this.setDirection(Direction.TOP);
+		return this.direction(Direction.TOP);
 	}
 
 	public GuiColorElement noLabel()
