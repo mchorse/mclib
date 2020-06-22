@@ -393,12 +393,10 @@ public class GuiTexturePicker extends GuiElement
             if (entry.title.startsWith(this.typed))
             {
                 this.picker.setCurrentScroll(entry);
-
-                return true;
             }
         }
 
-        return false;
+        return true;
     }
 
     @Override
