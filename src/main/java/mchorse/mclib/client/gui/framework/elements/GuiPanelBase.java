@@ -82,7 +82,7 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
 
     public Keybind registerKeybind(GuiIconElement element, IKey label, int key)
     {
-        return element.keys().register(label, key, () -> element.clickItself(GuiBase.getCurrent()));
+        return this.keys().register(label, key, () -> element.clickItself(GuiBase.getCurrent()));
     }
 
     /**
