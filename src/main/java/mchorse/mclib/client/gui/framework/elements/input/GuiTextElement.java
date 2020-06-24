@@ -59,7 +59,12 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder
 
     public GuiTextElement filename()
     {
-        this.field.setValidator(FILENAME_PREDICATE);
+        return this.validator(FILENAME_PREDICATE);
+    }
+
+    public GuiTextElement validator(Predicate<String> validator)
+    {
+        this.field.setValidator(validator);
 
         return this;
     }
