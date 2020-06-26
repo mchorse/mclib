@@ -45,7 +45,7 @@ mclib.config.appearance.user_interface_scale=Размер интерфейса
 mclib.config.comments.appearance.user_interface_scale=Размера интерфейса для модов МакХорса, используемый отдельно от такового прамаетра в "Натройках видео". Если значение параметра равняется нулю, то будет использовано значение из "Настроек видео"
 
 mclib.config.tutorials.title=Опции туториалов
-mclib.config.tutorials.tooltip=This category provides options which are useful for making tutorial videos
+mclib.config.tutorials.tooltip=Опции этой категории могут быть полезны для производства туториалов (обучающих видео)
 
 mclib.config.tutorials.enable_mouse_rendering=Курсор мыши
 mclib.config.comments.tutorials.enable_mouse_rendering=Включает отображение курсора мыши. Рекомендуется включить при записи туториалов минемой (т.к. при записи минемой курсор не отображается)
