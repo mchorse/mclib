@@ -1,5 +1,100 @@
 #PARSE_ESCAPES
+
+key.mclib.category=МакЛиб
+key.mclib.dashboard=Главная панель
+
 mclib.gui.ok=Ок
 mclib.gui.cancel=Отменить
+mclib.gui.none=(отсутствует)
 mclib.gui.multi_skin=Мультискин
-mclib.gui.no_data=Доступные данные отсутствуют...
+mclib.gui.no_data=Данные отсутствуют...
+mclib.gui.open_folder=Открыть папку
+mclib.gui.pick_texture=Открыть текстуру
+
+# Don't remove space on the end!
+mclib.gui.dashboard.category=Главная панель
+mclib.gui.dashboard.open_panel=Открыть 
+
+mclib.gui.config.title=Конфигурация
+mclib.gui.config.tooltip=Конфигурация модов
+mclib.gui.config.reload_tooltip=Перезагрузить конфигурацию из файла...
+mclib.gui.keys.list=Список комбинаций клавиш
+
+mclib.gui.transforms.x=X
+mclib.gui.transforms.y=Y
+mclib.gui.transforms.z=Z
+mclib.gui.transforms.translate=Перемещение
+mclib.gui.transforms.scale=Масштаб
+mclib.gui.transforms.rotate=Вращение
+
+# Config
+mclib.config.title=McLib
+
+mclib.config.appearance.title=Внешний вид
+mclib.config.appearance.tooltip=Общие настройки, касающиеся внешнего вида интерфейса и системы
+
+mclib.config.appearance.primary_color=Главный цвет
+mclib.config.comments.appearance.primary_color=Цвет, который повсеместно используется в системе интерфейса
+mclib.config.appearance.enable_borders=Рамки кнопок
+mclib.config.comments.appearance.enable_borders=Необходимо ли наличие рамок у кнопок и других элементов?
+mclib.config.appearance.enable_checkbox_rendering=Клетки
+mclib.config.comments.appearance.enable_checkbox_rendering=Включить клетки заместо переключателя (дело вкуса)
+mclib.config.appearance.enable_grid_rendering=Сетка редактора моделей
+mclib.config.comments.appearance.enable_grid_rendering=Включить отрисовку сетки вместо блока травы
+mclib.config.appearance.user_interface_scale=Размер интерфейса
+mclib.config.comments.appearance.user_interface_scale=Размера интерфейса для модов МакХорса, используемый отдельно от такового прамаетра в "Натройках видео". Если значение параметра равняется нулю, то будет использовано значение из "Настроек видео"
+
+mclib.config.tutorials.title=Опции туториалов
+mclib.config.tutorials.tooltip=This category provides options which are useful for making tutorial videos
+
+mclib.config.tutorials.enable_mouse_rendering=Курсор мыши
+mclib.config.comments.tutorials.enable_mouse_rendering=Включает отображение курсора мыши. Рекомендуется включить при записи туториалов минемой (т.к. при записи минемой курсор не отображается)
+mclib.config.tutorials.enable_keystrokes_rendering=Подсветка клавиш
+mclib.config.comments.tutorials.enable_keystrokes_rendering=Включает отображение подсветки клавиш. Очень полезная функция для туториалов, т.к. так можно продемонстрировать нажимаемые клавиши без танцев с бубном
+mclib.config.tutorials.keystroke_offset=Смещение подсветки клавиш
+mclib.config.comments.tutorials.keystroke_offset=Позволяет настроить на сколько пикселей от угла будет смещаться подсветка клавиш
+mclib.config.tutorials.keystroke_position=Расположение подсветки клавиш
+mclib.config.comments.tutorials.keystroke_position=Позволяет менять угол, в котором отображается подсветка клваиш 
+
+mclib.config.background.title=Задний фон
+mclib.config.background.tooltip=Настройки заднего фона, такие как цвет и фоновое изображение
+
+mclib.config.background.image=Изображение
+mclib.config.comments.background.image=Фоновое изображение, использующееся во всех меню
+mclib.config.background.color=Цвет
+mclib.config.comments.background.color=Цвет заднего фона, использующийся во всех меню. Если указано изображение, то цвет будет использован в качестве оттенка для заднего фона
+
+mclib.config.scrollbars.title=Поля прокрутки
+mclib.config.scrollbars.tooltip=Настройки полей, такие как цвет и фоновое изображение
+
+mclib.config.scrollbars.flat=Одноцветные поля прокрутки
+mclib.config.comments.scrollbars.flat=Вернуть вид одноцветных полей прокрутки
+mclib.config.scrollbars.shadow=Цвет затенения
+mclib.config.comments.scrollbars.shadow=Позволяетвам устанавливать цвет затенения полей прокрутки
+mclib.config.scrollbars.width=Толщина
+mclib.config.comments.scrollbars.width=Позволяет вам настроить толщину (ширину полей прокрутки)
+
+mclib.config.vanilla.title=Ванильные ухищрения
+mclib.config.vanilla.tooltip=Опции, затрагивающие махинации-ухищрения, проводимые с кодом Майнкрафта
+
+mclib.config.vanilla.max_packet_size=Максимальный размер пакетов
+mclib.config.comments.vanilla.max_packet_size=Позволяет вам настраивать максимальный размер модифицированного отсылаемого пакета (в байтах). Внимание! Не меняйте это значение на публичных серверах, так как это позволит очень легко провести DDoS-атаку. Меняйте этот параметр исключительно в одиночной игре!
+
+# Interpolations
+mclib.interpolations.linear=Линейная
+mclib.interpolations.quad_in=Квадратическое Ускорение
+mclib.interpolations.quad_out=Квадратическое Замедление
+mclib.interpolations.quad_inout=Квадратическое Торможение
+mclib.interpolations.cubic_in=Кубическое Ускорение
+mclib.interpolations.cubic_out=Кубическое Замедление
+mclib.interpolations.cubic_inout=Кубическое Торможение
+mclib.interpolations.exp_in=Экспоненциальное Ускорение
+mclib.interpolations.exp_out=Экспоненциальное Замедление
+mclib.interpolations.exp_inout=Экспоненциальное Торможение
+
+# Keystroke modes
+mclib.keystrokes_position.auto=Автоматически
+mclib.keystrokes_position.bottom_left=Слева снизу
+mclib.keystrokes_position.bottom_right=Справа снизу
+mclib.keystrokes_position.top_right=Справа сверху
+mclib.keystrokes_position.top_left=Слева сверху
