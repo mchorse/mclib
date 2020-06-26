@@ -28,7 +28,7 @@ mclib.gui.transforms.scale=Масштаб
 mclib.gui.transforms.rotate=Вращение
 
 # Config
-mclib.config.title=McLib
+mclib.config.title=МакЛиб
 
 mclib.config.appearance.title=Внешний вид
 mclib.config.appearance.tooltip=Общие настройки, касающиеся внешнего вида интерфейса и системы
