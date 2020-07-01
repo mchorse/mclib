@@ -1,5 +1,99 @@
 #PARSE_ESCAPES
-mclib.gui.ok=好
+
+key.mclib.category=McLib
+key.mclib.dashboard=儀表盤
+mclib.gui.ok=確定
 mclib.gui.cancel=取消
+mclib.gui.none=(無)
 mclib.gui.multi_skin=多皮膚
-mclib.gui.no_data=沒有資料可用……
+mclib.gui.no_data=無可用的數據...
+mclib.gui.open_folder=打開文件夾
+mclib.gui.pick_texture=選擇材質
+
+# Don't remove space on the end!
+mclib.gui.dashboard.category=儀表盤
+mclib.gui.dashboard.open_panel=打開 
+
+mclib.gui.config.title=選項
+mclib.gui.config.tooltip=模組選項
+mclib.gui.config.reload_tooltip=從文件重載選項...
+mclib.gui.keys.list=快捷鍵列表
+
+mclib.gui.transforms.x=X
+mclib.gui.transforms.y=Y
+mclib.gui.transforms.z=Z
+mclib.gui.transforms.translate=平移
+mclib.gui.transforms.scale=縮放
+mclib.gui.transforms.rotate=旋轉
+
+# Config
+mclib.config.title=McLib
+
+mclib.config.appearance.title=外觀
+mclib.config.appearance.tooltip=有關 GUI 和框架外觀的常規選項
+
+mclib.config.appearance.primary_color=主色調
+mclib.config.comments.appearance.primary_color=GUI 系統中最常見的顏色
+mclib.config.appearance.enable_borders=按鈕邊框
+mclib.config.comments.appearance.enable_borders=按鈕與其他控件是否顯示邊框?
+mclib.config.appearance.enable_checkbox_rendering=復選框
+mclib.config.comments.appearance.enable_checkbox_rendering=啟用復選框呈現而不是開關元件 (憑個人喜好)
+mclib.config.appearance.enable_grid_rendering=模型網絡
+mclib.config.comments.appearance.enable_grid_rendering=啟用網絡地面呈現而非草方塊地面
+mclib.config.appearance.user_interface_scale=GUI 尺寸
+mclib.config.comments.appearance.user_interface_scale=McHorse 的模組的 GUI 尺寸, 代替視頻設置中的界面尺寸。若設為 0, 則會使用 Minecraft 的界面尺寸設置
+
+mclib.config.tutorials.title=教學選項
+mclib.config.tutorials.tooltip=該分類提供了利於制作教程視頻的選項
+
+mclib.config.tutorials.enable_mouse_rendering=鼠標光標
+mclib.config.comments.tutorials.enable_mouse_rendering=啟用鼠標光標的顯示。在使用 Minema mod 錄制教程並且沒有光標顯示時十分有用
+mclib.config.tutorials.enable_keystrokes_rendering=按鍵顯示
+mclib.config.comments.tutorials.enable_keystrokes_rendering=啟用按鍵顯示。在需要展示按了哪些按鍵的教程中十分有用
+mclib.config.tutorials.keystroke_offset=按鍵顯示偏移
+mclib.config.comments.tutorials.keystroke_offset=允許設置按鍵顯示行從邊角處起的偏移像素數量
+mclib.config.tutorials.keystroke_position=按鍵顯示位置
+mclib.config.comments.tutorials.keystroke_position=允許更改按鍵顯示行處於哪個角落 
+
+mclib.config.background.title=背景
+mclib.config.background.tooltip=背景選項, 例如使用的顏色和材質
+
+mclib.config.background.image=圖片
+mclib.config.comments.background.image=應用於所有菜單的背景圖片
+mclib.config.background.color=顏色
+mclib.config.comments.background.color=應用於所有菜單的背景顏色。若指定了圖片, 則會作為背景圖片的色調
+
+mclib.config.scrollbars.title=滾動條
+mclib.config.scrollbars.tooltip=背景選項, 例如使用的顏色和材質
+
+mclib.config.scrollbars.flat=扁平滾動條
+mclib.config.comments.scrollbars.flat=回退至扁平顏色外觀的滾動條
+mclib.config.scrollbars.shadow=陰影顏色
+mclib.config.comments.scrollbars.shadow=用於設置滾動條陰影的顏色
+mclib.config.scrollbars.width=厚度
+mclib.config.comments.scrollbars.width=用於設置厚度 (滾動條寬度)
+
+mclib.config.vanilla.title=原版屬性微調
+mclib.config.vanilla.tooltip=關於對 Minecraft 的代碼進行微調的選項
+
+mclib.config.vanilla.max_packet_size=最大數據包大小
+mclib.config.comments.vanilla.max_packet_size=用於配置模型數據包的最大大小 (以字節為單位)。警告: 請勿在公開服務器中修改該屬性, 因為這會讓服務器更容易遭到 DDoS。該選項是為單人模式設計的!
+
+# Interpolations
+mclib.interpolations.linear=線性
+mclib.interpolations.quad_in=二次方緩入
+mclib.interpolations.quad_out=二次方緩出
+mclib.interpolations.quad_inout=二次方緩入/緩出
+mclib.interpolations.cubic_in=三次曲線緩入
+mclib.interpolations.cubic_out=三次曲線緩出
+mclib.interpolations.cubic_inout=三次曲線緩入/緩出
+mclib.interpolations.exp_in=指數緩入
+mclib.interpolations.exp_out=指數緩出
+mclib.interpolations.exp_inout=指數緩入/緩出
+
+# Keystroke modes
+mclib.keystrokes_position.auto=自動
+mclib.keystrokes_position.bottom_left=左下
+mclib.keystrokes_position.bottom_right=右下
+mclib.keystrokes_position.top_right=右上
+mclib.keystrokes_position.top_left=左上
