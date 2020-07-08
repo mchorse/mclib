@@ -450,6 +450,7 @@ public class GuiTexturePicker extends GuiElement
         /* Draw preview */
         if (loc != null)
         {
+            GlStateManager.color(1, 1, 1, 1);
             this.mc.renderEngine.bindTexture(loc);
 
             int w = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
