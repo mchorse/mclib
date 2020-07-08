@@ -5,9 +5,12 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueString;
+import mchorse.mclib.utils.Patterns;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import java.util.function.Consumer;
@@ -18,10 +21,10 @@ import java.util.regex.Pattern;
  * 
  * This element is a wrapper for the text field class
  */
+@SideOnly(Side.CLIENT)
 public class GuiTextElement extends GuiBaseTextElement implements GuiResponder
 {
-    public static final Pattern FILENAME = Pattern.compile("^[\\w\\d-_.]*$");
-    public static final Predicate<String> FILENAME_PREDICATE = (s) -> FILENAME.matcher(s).find();
+    public static final Predicate<String> FILENAME_PREDICATE = (s) -> Patterns.FILENAME.matcher(s).find();
 
     public Consumer<String> callback;
 
