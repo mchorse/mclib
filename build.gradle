@@ -92,7 +92,7 @@ artifacts {
 /* Comparing keys */
 task compareLangFiles {
     doLast {
-        def help = file("src/main/resources/assets/mclib/lang/")
+        def help = file("src/main/resources/assets/${project.archivesBaseName}/lang/")
         def parse = { File file ->
             def map = new HashMap()
             def splits = file.text.split("\n");
