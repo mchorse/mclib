@@ -2,7 +2,6 @@ package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
-
 import mchorse.mclib.client.gui.utils.ScrollArea;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,6 +27,13 @@ public class GuiScrollElement extends GuiElement
         this.area = this.scroll = new ScrollArea(0);
         this.scroll.direction = direction;
         this.scroll.scrollSpeed = 20;
+    }
+
+    public GuiScrollElement cancelScrollEdge()
+    {
+        this.scroll.cancelScrollEdge = true;
+
+        return this;
     }
 
     private void apply(GuiContext context)

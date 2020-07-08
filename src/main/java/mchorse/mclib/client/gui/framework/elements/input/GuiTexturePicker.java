@@ -89,6 +89,7 @@ public class GuiTexturePicker extends GuiElement
                 GuiTexturePicker.this.updateFolderButton();
             }
         };
+        this.picker.cancelScrollEdge();
 
         this.multi = new GuiButtonElement(mc, IKey.lang("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
         this.multiList = new GuiResourceLocationListElement(mc, (list) -> this.displayCurrent(list.get(0)));

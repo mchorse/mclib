@@ -58,6 +58,12 @@ public class ScrollArea extends Area
      */
     public int scrollbarWidth = -1;
 
+    /**
+     * Whether this scroll area should cancel mouse events when mouse scroll
+     * reaches the end
+     */
+    public boolean cancelScrollEdge = false;
+
     public ScrollArea(int x, int y, int w, int h)
     {
         super(x, y, w, h);
@@ -224,7 +230,7 @@ public class ScrollArea extends Area
             this.scrollBy((int) Math.copySign(this.scrollSpeed, scroll));
         }
 
-        return isInside && lastScroll != this.scroll;
+        return isInside && (this.cancelScrollEdge || lastScroll != this.scroll);
     }
 
     @SideOnly(Side.CLIENT)

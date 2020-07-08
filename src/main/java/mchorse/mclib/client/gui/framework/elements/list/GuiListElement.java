@@ -118,6 +118,13 @@ public abstract class GuiListElement<T> extends GuiElement
         return this;
     }
 
+    public GuiListElement<T> cancelScrollEdge()
+    {
+        this.scroll.cancelScrollEdge = true;
+
+        return this;
+    }
+
     public boolean isHorizontal()
     {
         return this.scroll.direction == ScrollArea.ScrollDirection.HORIZONTAL;
