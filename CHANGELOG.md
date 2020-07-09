@@ -2,6 +2,15 @@
 
 McLib's change log.
 
+## Version 2.0.1
+
+This is a small quick patch.
+
+* Added more characters which are allowed to be input into text fields with filename constraint (`[`, `]`, `!`, `@`, `#`, `$`, `%`, `^`, `&`, `(` and `)`)
+* Fixed yellow highlight in the texture picker
+* Fixed mouse wheel scrolling going through when scrollbar reaches the end in the texture picker (suggested by Lucatim)
+* Updated Chinese strings for 2.0 (thanks to Chunk7, KuenYo_ and H2SO4GepaoAX)
+
 ## Version 2.0
 
 This enormous update drastically improves the GUI system that is used in my mods, as well as adding its own configuration system, and different APIs to make it easier to develop GUI stuff. It's also allows you to slightly personalize the GUI.

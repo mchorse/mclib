@@ -1,6 +1,7 @@
 {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/mchorses-mclib/",
     "1.12.2": {
+        "2.0.1": "This is a small quick patch.",
         "2.0": "This enormous update drastically improves the GUI system that is used in my mods, as well as adding its own configuration system, and different APIs to make it easier to develop GUI stuff. It's also allows you to slightly personalize the GUI.",
         "1.0.4": "This is a patch update which reworks file tree system, improves texture picker GUI and a couple of other neat features.",
         "1.0.3": "A small patch update which is accompanied by Aperture 1.3.2 release.",
@@ -24,8 +25,8 @@
     },
     
     "promos": {
-        "1.12.2-latest": "2.0",
-        "1.12.2-recommended": "2.0",
+        "1.12.2-latest": "2.0.1",
+        "1.12.2-recommended": "2.0.1",
         "1.10.2-latest": "1.0.4",
         "1.10.2-recommended": "1.0.4",
         "1.11.2-latest": "1.0.4",
