@@ -92,6 +92,17 @@ mclib.interpolations.exp_in=Exponential In
 mclib.interpolations.exp_out=Exponential Out
 mclib.interpolations.exp_inout=Exponential In/out
 
+mclib.interpolations.const=Constant
+mclib.interpolations.quad=Quadratic
+mclib.interpolations.cubic=Cubic
+mclib.interpolations.hermite=Hermite
+mclib.interpolations.exp=Exponential
+mclib.interpolations.bezier=Bezier
+
+mclib.easing.in=Ease in
+mclib.easing.out=Ease out
+mclib.easing.inout=Ease in/out
+
 # Keystroke modes
 mclib.keystrokes_position.auto=Auto
 mclib.keystrokes_position.bottom_left=Bottom left
