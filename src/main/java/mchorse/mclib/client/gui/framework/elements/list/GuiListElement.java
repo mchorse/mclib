@@ -173,7 +173,20 @@ public abstract class GuiListElement<T> extends GuiElement
 
     public boolean isDeselected()
     {
-        return this.current.isEmpty();
+        if (this.current.isEmpty())
+        {
+            return true;
+        }
+
+        for (Integer index : this.current)
+        {
+            if (this.exists(index))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public List<T> getCurrent()
@@ -195,7 +208,12 @@ public abstract class GuiListElement<T> extends GuiElement
     {
         if (!this.current.isEmpty())
         {
-            return this.list.get(this.current.get(0));
+            int index = this.current.get(0);
+
+            if (this.exists(index))
+            {
+                return this.list.get(index);
+            }
         }
 
         return null;
@@ -203,7 +221,14 @@ public abstract class GuiListElement<T> extends GuiElement
 
     public int getIndex()
     {
-        return this.current.isEmpty() ? -1 : this.current.get(0);
+        if (this.current.isEmpty())
+        {
+            return -1;
+        }
+
+        int index = this.current.get(0);
+
+        return this.exists(index) ? index : -1;
     }
 
     public void setIndex(int index)
