@@ -51,7 +51,7 @@ public class GuiPromptModal extends GuiModal
         return this;
     }
 
-    private void send()
+    public void send()
     {
         String text = this.text.field.getText();
 

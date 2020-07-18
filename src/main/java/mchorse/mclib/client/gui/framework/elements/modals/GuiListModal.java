@@ -16,9 +16,9 @@ public class GuiListModal extends GuiModal
     public Consumer<String> callback;
     public String label;
 
-    private GuiButtonElement pick;
-    private GuiButtonElement cancel;
-    private GuiStringListElement limbs;
+    public GuiButtonElement pick;
+    public GuiButtonElement cancel;
+    public GuiStringListElement limbs;
 
     public GuiListModal(Minecraft mc, IKey label, Consumer<String> callback)
     {
@@ -61,7 +61,7 @@ public class GuiListModal extends GuiModal
         return this;
     }
 
-    private void send()
+    public void send()
     {
         if (this.limbs.isDeselected())
         {
