@@ -9,46 +9,60 @@ import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class GuiListModal extends GuiModal
 {
-    public Consumer<String> callback;
+    public Consumer<List<String>> callback;
     public String label;
 
     public GuiButtonElement pick;
     public GuiButtonElement cancel;
-    public GuiStringListElement limbs;
+    public GuiStringListElement list;
 
     public GuiListModal(Minecraft mc, IKey label, Consumer<String> callback)
     {
         super(mc, label);
 
-        this.callback = callback;
+        this.callback = (list) ->
+        {
+            if (callback != null)
+            {
+                callback.accept(this.list.getIndex() == 0 ? "" : this.list.getCurrentFirst());
+            }
+        };
 
         this.pick = new GuiButtonElement(mc, IKey.lang("mclib.gui.ok"), (b) -> this.send());
         this.cancel = new GuiButtonElement(mc, IKey.lang("mclib.gui.cancel"), (b) -> this.removeFromParent());
-        this.limbs = new GuiStringListElement(mc, null);
+        this.list = new GuiStringListElement(mc, null);
 
         this.pick.flex().relative(this.area).set(10, 0, 0, 20).y(1, -30).w(0.5F, -15);
         this.cancel.flex().relative(this.area).set(10, 0, 0, 20).y(1, -30).x(0.5F, 5).w(0.5F, -15);
 
-        this.limbs.flex().set(10, 0, 0, 0).relative(this.area).y(0.4F, 0).w(1, -20).h(0.6F, -35);
-        this.limbs.add(I18n.format("mclib.gui.none"));
-        this.limbs.setIndex(0);
+        this.list.flex().set(10, 0, 0, 0).relative(this.area).y(0.4F, 0).w(1, -20).h(0.6F, -35);
+        this.list.add(I18n.format("mclib.gui.none"));
+        this.list.setIndex(0);
 
-        this.add(this.pick, this.cancel, this.limbs);
+        this.add(this.pick, this.cancel, this.list);
+    }
+
+    public GuiListModal callback(Consumer<List<String>> callback)
+    {
+        this.callback = callback;
+
+        return this;
     }
 
     public GuiListModal setValue(String value)
     {
         if (value.isEmpty())
         {
-            this.limbs.setIndex(0);
+            this.list.setIndex(0);
         }
         else
         {
-            this.limbs.setCurrent(value);
+            this.list.setCurrent(value);
         }
 
         return this;
@@ -56,14 +70,14 @@ public class GuiListModal extends GuiModal
 
     public GuiListModal addValues(Collection<String> values)
     {
-        this.limbs.add(values);
+        this.list.add(values);
 
         return this;
     }
 
     public void send()
     {
-        if (this.limbs.isDeselected())
+        if (this.list.isDeselected())
         {
             return;
         }
@@ -72,7 +86,7 @@ public class GuiListModal extends GuiModal
 
         if (this.callback != null)
         {
-            this.callback.accept(this.limbs.getIndex() == 0 ? "" : this.limbs.getCurrentFirst());
+            this.callback.accept(this.list.getCurrent());
         }
     }
 

@@ -321,6 +321,21 @@ public abstract class GuiListElement<T> extends GuiElement
         }
     }
 
+    public void selectAll()
+    {
+        if (!this.multi)
+        {
+            return;
+        }
+
+        this.current.clear();
+
+        for (int i = 0; i < this.list.size(); i ++)
+        {
+            this.current.add(i);
+        }
+    }
+
     public List<T> getList()
     {
         return this.list;
