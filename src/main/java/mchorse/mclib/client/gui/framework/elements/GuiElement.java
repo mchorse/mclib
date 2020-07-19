@@ -16,6 +16,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -141,6 +142,29 @@ public class GuiElement extends Gui implements IGuiElement
         }
 
         return this.children.elements;
+    }
+
+    public <T extends GuiElement> List<T> getChildren(Class<T> clazz)
+    {
+        return getChildren(clazz, new ArrayList<T>());
+    }
+
+    public <T extends GuiElement> List<T> getChildren(Class<T> clazz, List<T> list)
+    {
+        for (IGuiElement element : this.getChildren())
+        {
+            if (element.getClass() == clazz)
+            {
+                list.add(clazz.cast(element));
+            }
+
+            if (element instanceof GuiElement)
+            {
+                ((GuiElement) element).getChildren(clazz, list);
+            }
+        }
+
+        return list;
     }
 
     public void prepend(IGuiElement element)
