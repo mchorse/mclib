@@ -67,7 +67,7 @@ public class GuiContext
 	}
 
 	/**
-	 * Get absolute global X
+	 * Get global X (relative to screen)
 	 */
 	public int globalX(int x)
 	{
@@ -75,11 +75,27 @@ public class GuiContext
 	}
 
 	/**
-	 * Get absolute global Y
+	 * Get global Y (relative to screen)
 	 */
 	public int globalY(int y)
 	{
 		return y - this.shiftY;
+	}
+
+	/**
+	 * Get local X (relative to current scrolling area)
+	 */
+	public int localX(int x)
+	{
+		return x + this.shiftX;
+	}
+
+	/**
+	 * Get local Y (relative to current scrolling area)
+	 */
+	public int localY(int y)
+	{
+		return y + this.shiftY;
 	}
 
 	public void setMouse(int mouseX, int mouseY)

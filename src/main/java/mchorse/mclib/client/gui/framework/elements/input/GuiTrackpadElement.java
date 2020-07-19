@@ -16,6 +16,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -41,7 +42,8 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     /* Value dragging fields */
     private boolean dragging;
     private int lastX;
-    private int lastY;
+    private int initialX;
+    private int initialY;
     private double lastValue;
 
     private long time;
@@ -51,7 +53,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     static
     {
         FORMAT = new DecimalFormat("#.###");
-        FORMAT.setRoundingMode(RoundingMode.CEILING);
+        FORMAT.setRoundingMode(RoundingMode.HALF_EVEN);
     }
 
     public GuiTrackpadElement(Minecraft mc, ValueInt value)
@@ -289,8 +291,8 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                 }
 
                 this.dragging = true;
-                this.lastX = context.mouseX;
-                this.lastY = context.mouseY;
+                this.lastX = this.initialX = context.mouseX;
+                this.initialY = context.mouseY;
                 this.lastValue = this.value;
                 this.time = System.currentTimeMillis();
             }
@@ -395,7 +397,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
             int color = McLib.primaryColor.get();
             int fx = MathUtils.clamp(context.mouseX, this.area.x + padding, this.area.ex() - padding);
 
-            Gui.drawRect(Math.min(fx, this.lastX), this.area.y + padding, Math.max(fx, this.lastX), this.area.ey() - padding, 0xff000000 + color);
+            Gui.drawRect(Math.min(fx, this.initialX), this.area.y + padding, Math.max(fx, this.initialX), this.area.ey() - padding, 0xff000000 + color);
         }
         else if (plus)
         {
@@ -423,15 +425,33 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
         if (dragging)
         {
+            float factor = this.mc.displayWidth / (float) context.screen.width;
+            int lastMouseX = context.mouseX;
+            int mouseX = context.globalX(context.mouseX);
+
+            if (mouseX <= 3)
+            {
+                Mouse.setCursorPosition(this.mc.displayWidth - (int) (factor * 4), Mouse.getY());
+
+                context.mouseX = this.lastX = context.localX(context.screen.width - 4);
+                this.lastValue = this.value;
+            }
+            else if (mouseX >= context.screen.width - 3)
+            {
+                Mouse.setCursorPosition((int) (factor * 4), Mouse.getY());
+
+                context.mouseX = this.lastX = context.localX(4);
+                this.lastValue = this.value;
+            }
+
             if (this.isFocused())
             {
                 context.unfocus();
             }
 
             int dx = context.mouseX - this.lastX;
-            int dy = context.mouseY - this.lastY;
 
-            if (dx != 0 || dy != 0)
+            if (dx != 0)
             {
                 double value = this.normal;
 
@@ -444,7 +464,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                     value = this.weak;
                 }
 
-                double diff = ((int) Math.sqrt(dx * dx + dy * dy) - 3) * value;
+                double diff = Math.abs(dx) * value;
                 double newValue = this.lastValue + (dx < 0 ? -diff : diff);
 
                 newValue = diff < 0 ? this.lastValue : Math.round(newValue * 1000F) / 1000F;
@@ -455,11 +475,10 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                 }
             }
 
+            context.mouseX = lastMouseX;
+
             /* Draw active element */
-            Gui.drawRect(this.lastX - 4, this.lastY - 4, this.lastX - 3, this.lastY + 4, 0xffffffff);
-            Gui.drawRect(this.lastX + 3, this.lastY - 4, this.lastX + 4, this.lastY + 4, 0xffffffff);
-            Gui.drawRect(this.lastX - 3, this.lastY - 4, this.lastX + 3, this.lastY - 3, 0xffffffff);
-            Gui.drawRect(this.lastX - 3, this.lastY + 3, this.lastX + 3, this.lastY + 4, 0xffffffff);
+            GuiDraw.drawOutlineCenter(this.initialX, this.initialY, 4, 0xffffffff);
         }
 
         GuiDraw.drawLockedArea(this);
