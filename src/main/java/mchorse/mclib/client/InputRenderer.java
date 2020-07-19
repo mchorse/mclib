@@ -192,7 +192,7 @@ public class InputRenderer
 
                 GuiDraw.drawDropShadow(x, y, x + 10 + key.width, y + 20, 4, 0x44000000, 0);
                 Gui.drawRect(x, y, x + 10 + key.width, y + 20, 0xff000000 + McLib.primaryColor.get());
-                font.drawStringWithShadow(key.name, x + 5, y + 6, 0xffffff);
+                font.drawStringWithShadow(key.getLabel(), x + 5, y + 6, 0xffffff);
             }
         }
 
@@ -215,18 +215,28 @@ public class InputRenderer
             }
 
             PressedKey last = null;
+            int offset = -1000;
 
             for (PressedKey pressed : this.pressedKeys)
             {
                 if (pressed.key == key)
                 {
-                    return;
+                    offset = pressed.increment();
+                }
+                else if (offset != -1000)
+                {
+                    pressed.x += offset;
                 }
 
                 last = pressed;
             }
 
-            int offset = McLib.keystrokeOffset.get();
+            if (offset != -1000)
+            {
+                return;
+            }
+
+            offset = McLib.keystrokeOffset.get();
             int x = last == null ? 0 : last.x + last.width + 5;
             PressedKey newKey = new PressedKey(key, x);
 
@@ -263,7 +273,8 @@ public class InputRenderer
 
         public String name;
         public int width;
-        public int i = 0;
+        public int i;
+        public int times = 1;
 
         public PressedKey(int key, int x)
         {
@@ -289,6 +300,26 @@ public class InputRenderer
             }
 
             return System.currentTimeMillis() - this.time > 1500;
+        }
+
+        public String getLabel()
+        {
+            if (this.times > 1)
+            {
+                return this.name + " (" + this.times + ")";
+            }
+
+            return this.name;
+        }
+
+        public int increment()
+        {
+            int lastWidth = this.width;
+
+            this.times ++;
+            this.width = Minecraft.getMinecraft().fontRenderer.getStringWidth(this.getLabel());
+
+            return this.width - lastWidth;
         }
     }
 }
