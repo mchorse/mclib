@@ -41,10 +41,13 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
     /* Value dragging fields */
     private boolean dragging;
-    private int lastX;
+    private int shiftX;
     private int initialX;
     private int initialY;
     private double lastValue;
+
+    private boolean changed;
+    private int lastX;
 
     private long time;
     private Area plusOne = new Area();
@@ -291,7 +294,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                 }
 
                 this.dragging = true;
-                this.lastX = this.initialX = context.mouseX;
+                this.initialX = context.mouseX;
                 this.initialY = context.mouseY;
                 this.lastValue = this.value;
                 this.time = System.currentTimeMillis();
@@ -320,6 +323,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         }
 
         this.dragging = false;
+        this.shiftX = 0;
 
         super.mouseReleased(context);
     }
@@ -429,19 +433,28 @@ public class GuiTrackpadElement extends GuiBaseTextElement
             int lastMouseX = context.mouseX;
             int mouseX = context.globalX(context.mouseX);
 
-            if (mouseX <= 3)
+            /* Mouse doesn't change immediately the next frame after Mouse.setCursorPosition(),
+             * so this is a hack that stops for double shifting */
+            if (this.lastX != context.mouseX)
             {
-                Mouse.setCursorPosition(this.mc.displayWidth - (int) (factor * 4), Mouse.getY());
+                this.lastX = 0;
 
-                context.mouseX = this.lastX = context.localX(context.screen.width - 4);
-                this.lastValue = this.value;
-            }
-            else if (mouseX >= context.screen.width - 3)
-            {
-                Mouse.setCursorPosition((int) (factor * 4), Mouse.getY());
+                if (mouseX <= 3)
+                {
+                    Mouse.setCursorPosition(this.mc.displayWidth - (int) (factor * 4), Mouse.getY());
 
-                context.mouseX = this.lastX = context.localX(4);
-                this.lastValue = this.value;
+                    context.mouseX = context.localX(context.screen.width - 4);
+                    this.shiftX -= context.screen.width - 8;
+                    this.lastX = context.mouseX;
+                }
+                else if (mouseX >= context.screen.width - 3)
+                {
+                    Mouse.setCursorPosition((int) (factor * 4), Mouse.getY());
+
+                    context.mouseX = context.localX(4);
+                    this.shiftX += context.screen.width - 8;
+                    this.lastX = context.mouseX;
+                }
             }
 
             if (this.isFocused())
@@ -449,7 +462,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                 context.unfocus();
             }
 
-            int dx = context.mouseX - this.lastX;
+            int dx = (this.shiftX + context.mouseX) - this.initialX;
 
             if (dx != 0)
             {
@@ -464,7 +477,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                     value = this.weak;
                 }
 
-                double diff = Math.abs(dx) * value;
+                double diff = (Math.abs(dx) - 3) * value;
                 double newValue = this.lastValue + (dx < 0 ? -diff : diff);
 
                 newValue = diff < 0 ? this.lastValue : Math.round(newValue * 1000F) / 1000F;
