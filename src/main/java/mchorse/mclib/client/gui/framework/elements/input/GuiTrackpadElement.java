@@ -9,6 +9,7 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueDouble;
 import mchorse.mclib.config.values.ValueFloat;
 import mchorse.mclib.config.values.ValueInt;
+import mchorse.mclib.math.MathBuilder;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
@@ -349,6 +350,17 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                 context.unfocus();
 
                 return true;
+            }
+            else if (context.keyCode == Keyboard.KEY_RETURN && GuiScreen.isAltKeyDown())
+            {
+                try
+                {
+                    MathBuilder builder = new MathBuilder();
+
+                    this.setValueAndNotify(builder.parse(this.field.getText()).get());
+                }
+                catch (Exception e)
+                {}
             }
         }
 
