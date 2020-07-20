@@ -441,7 +441,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
         if (dragging)
         {
-            float factor = this.mc.displayWidth / (float) context.screen.width;
+            double factor = Math.ceil(this.mc.displayWidth / (double) context.screen.width);
             int lastMouseX = context.mouseX;
             int mouseX = context.globalX(context.mouseX);
 
@@ -449,22 +449,25 @@ public class GuiTrackpadElement extends GuiBaseTextElement
              * so this is a hack that stops for double shifting */
             if (this.lastX != context.mouseX)
             {
-                this.lastX = 0;
+                final int border = 5;
+                final int borderPadding = border + 1;
 
-                if (mouseX <= 3)
+                this.lastX = -100;
+
+                if (mouseX <= border)
                 {
-                    Mouse.setCursorPosition(this.mc.displayWidth - (int) (factor * 4), Mouse.getY());
+                    Mouse.setCursorPosition(this.mc.displayWidth - (int) (factor * borderPadding), Mouse.getY());
 
-                    context.mouseX = context.localX(context.screen.width - 4);
-                    this.shiftX -= context.screen.width - 8;
+                    context.mouseX = context.localX(context.screen.width - borderPadding);
+                    this.shiftX -= context.screen.width - borderPadding * 2;
                     this.lastX = context.mouseX;
                 }
-                else if (mouseX >= context.screen.width - 3)
+                else if (mouseX >= context.screen.width - border)
                 {
-                    Mouse.setCursorPosition((int) (factor * 4), Mouse.getY());
+                    Mouse.setCursorPosition((int) (factor * borderPadding), Mouse.getY());
 
-                    context.mouseX = context.localX(4);
-                    this.shiftX += context.screen.width - 8;
+                    context.mouseX = context.localX(borderPadding);
+                    this.shiftX += context.screen.width - borderPadding * 2;
                     this.lastX = context.mouseX;
                 }
             }
