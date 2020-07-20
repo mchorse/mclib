@@ -3,7 +3,6 @@ package mchorse.mclib;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.ConfigBuilder;
 import mchorse.mclib.config.values.ValueBoolean;
-import mchorse.mclib.config.values.ValueFloat;
 import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.config.values.ValueRL;
 import mchorse.mclib.events.RegisterConfigEvent;

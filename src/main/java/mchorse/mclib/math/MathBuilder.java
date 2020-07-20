@@ -498,11 +498,11 @@ public class MathBuilder
                 if (symbol.startsWith("-"))
                 {
                     symbol = symbol.substring(1);
-                    IValue value = this.getVariable(symbol);
+                    Variable value = this.getVariable(symbol);
 
-                    if (value instanceof Variable)
+                    if (value != null)
                     {
-                        return ((Variable) value).negative;
+                        return new Negative(value);
                     }
                 }
                 else
