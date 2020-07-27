@@ -92,6 +92,17 @@ mclib.interpolations.exp_in=Экспоненциальное Ускорение
 mclib.interpolations.exp_out=Экспоненциальное Замедление
 mclib.interpolations.exp_inout=Экспоненциальное Торможение
 
+mclib.interpolations.const=Постоянная
+mclib.interpolations.quad=Квадратическая
+mclib.interpolations.cubic=Кубическая
+mclib.interpolations.hermite=Сплайновая
+mclib.interpolations.exp=Экспоненциальная
+mclib.interpolations.bezier=Безье
+
+mclib.easing.in=Ускорение
+mclib.easing.out=Замедление
+mclib.easing.inout=Торможение
+
 # Keystroke modes
 mclib.keystrokes_position.auto=Автоматически
 mclib.keystrokes_position.bottom_left=Слева снизу
