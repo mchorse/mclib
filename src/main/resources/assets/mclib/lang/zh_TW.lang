@@ -91,6 +91,17 @@ mclib.interpolations.exp_in=指數緩入
 mclib.interpolations.exp_out=指數緩出
 mclib.interpolations.exp_inout=指數緩入/緩出
 
+mclib.interpolations.const=連續的
+mclib.interpolations.quad=二次方
+mclib.interpolations.cubic=三次曲線
+mclib.interpolations.hermite=艾米插值
+mclib.interpolations.exp=指數
+mclib.interpolations.bezier=貝塞爾曲線
+
+mclib.easing.in=緩入
+mclib.easing.out=緩出
+mclib.easing.inout=緩入/緩出
+
 # Keystroke modes
 mclib.keystrokes_position.auto=自動
 mclib.keystrokes_position.bottom_left=左下
