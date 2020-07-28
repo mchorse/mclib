@@ -6,6 +6,9 @@ import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.config.values.ValueRL;
 import mchorse.mclib.events.RegisterConfigEvent;
+import mchorse.mclib.math.IValue;
+import mchorse.mclib.math.MathBuilder;
+import mchorse.mclib.math.Variable;
 import mchorse.mclib.utils.PayloadASM;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -112,5 +115,13 @@ public class McLib
     public boolean checkModDependencies(Map<String, String> map, Side side)
     {
         return true;
+    }
+
+    public static void main(String[] args) throws Exception
+    {
+        MathBuilder test = new MathBuilder();
+        IValue value = test.parse("2 + 2");
+
+        System.out.println(value.get());
     }
 }

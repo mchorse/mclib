@@ -119,11 +119,6 @@ public class MathBuilder
         /* Remove all spaces, and leading and trailing parenthesis */
         expression = expression.replaceAll("\\s+", "");
 
-        if (expression.startsWith("(") && expression.endsWith(")"))
-        {
-            expression = expression.replaceAll("^\\(", "").replaceAll("\\)$", "");
-        }
-
         String[] chars = expression.split("(?!^)");
 
         int left = 0;
