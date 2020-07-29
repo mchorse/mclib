@@ -279,6 +279,10 @@ public abstract class GuiModelRenderer extends GuiElement
 
                 double xx = -(this.lastX - mouseX) / 60F;
                 double yy = -(this.lastY - mouseY) / 60F;
+                float factor = this.getZoomFactor();
+
+                xx *= factor / 0.1F;
+                yy *= factor / 0.1F;
 
                 if (xx != 0 || yy != 0)
                 {
