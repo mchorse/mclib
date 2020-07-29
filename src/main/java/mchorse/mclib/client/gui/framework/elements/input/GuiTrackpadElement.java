@@ -12,6 +12,7 @@ import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.math.MathBuilder;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
+import mchorse.mclib.utils.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
@@ -47,8 +48,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     private int initialY;
     private double lastValue;
 
-    private boolean changed;
-    private int lastX;
+    private Timer changed = new Timer(75);
 
     private long time;
     private Area plusOne = new Area();
@@ -447,12 +447,10 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
             /* Mouse doesn't change immediately the next frame after Mouse.setCursorPosition(),
              * so this is a hack that stops for double shifting */
-            if (this.lastX != context.mouseX)
+            if (!this.changed.checkReset())
             {
                 final int border = 5;
                 final int borderPadding = border + 1;
-
-                this.lastX = -100;
 
                 if (mouseX <= border)
                 {
@@ -460,7 +458,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
                     context.mouseX = context.localX(context.screen.width - borderPadding);
                     this.shiftX -= context.screen.width - borderPadding * 2;
-                    this.lastX = context.mouseX;
+                    this.changed.mark();
                 }
                 else if (mouseX >= context.screen.width - border)
                 {
@@ -468,7 +466,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
                     context.mouseX = context.localX(borderPadding);
                     this.shiftX += context.screen.width - borderPadding * 2;
-                    this.lastX = context.mouseX;
+                    this.changed.mark();
                 }
             }
 
