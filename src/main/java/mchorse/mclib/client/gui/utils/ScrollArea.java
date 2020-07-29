@@ -40,7 +40,7 @@ public class ScrollArea extends Area
     /**
      * Speed of how fast shit's scrolling  
      */
-    public int scrollSpeed = 5;
+    public int scrollSpeed = 10;
 
     /**
      * Scroll direction, used primarily in the {@link #clamp()} method 

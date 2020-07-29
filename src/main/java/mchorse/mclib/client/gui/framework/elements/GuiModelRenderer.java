@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
@@ -146,11 +147,21 @@ public abstract class GuiModelRenderer extends GuiElement
 
         if (this.area.isInside(context))
         {
-            this.scale += Math.copySign(0.25F, context.mouseWheel);
+            this.scale += Math.copySign(this.getZoomFactor(), context.mouseWheel);
             this.scale = MathUtils.clamp(this.scale, 0, 100);
         }
 
         return this.area.isInside(context);
+    }
+
+    protected float getZoomFactor()
+    {
+        if (this.scale < 1) return 0.05F;
+        if (this.scale > 30) return 5F;
+        if (this.scale > 10) return 1F;
+        if (this.scale > 3) return 0.5F;
+
+        return 0.1F;
     }
 
     @Override
