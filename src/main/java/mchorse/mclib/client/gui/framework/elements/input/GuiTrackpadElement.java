@@ -48,7 +48,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     private int initialY;
     private double lastValue;
 
-    private Timer changed = new Timer(75);
+    private Timer changed = new Timer(30);
 
     private long time;
     private Area plusOne = new Area();
@@ -442,66 +442,67 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         if (dragging)
         {
             double factor = Math.ceil(this.mc.displayWidth / (double) context.screen.width);
-            int lastMouseX = context.mouseX;
             int mouseX = context.globalX(context.mouseX);
 
             /* Mouse doesn't change immediately the next frame after Mouse.setCursorPosition(),
              * so this is a hack that stops for double shifting */
-            if (!this.changed.checkReset())
+            if (this.changed.isTime())
             {
                 final int border = 5;
                 final int borderPadding = border + 1;
+                boolean stop = false;
 
                 if (mouseX <= border)
                 {
                     Mouse.setCursorPosition(this.mc.displayWidth - (int) (factor * borderPadding), Mouse.getY());
 
-                    context.mouseX = context.localX(context.screen.width - borderPadding);
                     this.shiftX -= context.screen.width - borderPadding * 2;
                     this.changed.mark();
+                    stop = true;
                 }
                 else if (mouseX >= context.screen.width - border)
                 {
                     Mouse.setCursorPosition((int) (factor * borderPadding), Mouse.getY());
 
-                    context.mouseX = context.localX(borderPadding);
                     this.shiftX += context.screen.width - borderPadding * 2;
                     this.changed.mark();
+                    stop = true;
+                }
+
+                if (!stop)
+                {
+                    if (this.isFocused())
+                    {
+                        context.unfocus();
+                    }
+
+                    int dx = (this.shiftX + context.mouseX) - this.initialX;
+
+                    if (dx != 0)
+                    {
+                        double value = this.normal;
+
+                        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+                        {
+                            value = this.strong;
+                        }
+                        else if (Keyboard.isKeyDown(Keyboard.KEY_LMENU))
+                        {
+                            value = this.weak;
+                        }
+
+                        double diff = (Math.abs(dx) - 3) * value;
+                        double newValue = this.lastValue + (dx < 0 ? -diff : diff);
+
+                        newValue = diff < 0 ? this.lastValue : Math.round(newValue * 1000F) / 1000F;
+
+                        if (this.value != newValue)
+                        {
+                            this.setValueAndNotify(MathUtils.clamp(newValue, this.min, this.max));
+                        }
+                    }
                 }
             }
-
-            if (this.isFocused())
-            {
-                context.unfocus();
-            }
-
-            int dx = (this.shiftX + context.mouseX) - this.initialX;
-
-            if (dx != 0)
-            {
-                double value = this.normal;
-
-                if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-                {
-                    value = this.strong;
-                }
-                else if (Keyboard.isKeyDown(Keyboard.KEY_LMENU))
-                {
-                    value = this.weak;
-                }
-
-                double diff = (Math.abs(dx) - 3) * value;
-                double newValue = this.lastValue + (dx < 0 ? -diff : diff);
-
-                newValue = diff < 0 ? this.lastValue : Math.round(newValue * 1000F) / 1000F;
-
-                if (this.value != newValue)
-                {
-                    this.setValueAndNotify(MathUtils.clamp(newValue, this.min, this.max));
-                }
-            }
-
-            context.mouseX = lastMouseX;
 
             /* Draw active element */
             GuiDraw.drawOutlineCenter(this.initialX, this.initialY, 4, 0xffffffff);

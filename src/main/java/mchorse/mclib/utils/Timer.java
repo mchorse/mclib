@@ -46,9 +46,12 @@ public class Timer
 
 	public boolean check()
 	{
-		long time = System.currentTimeMillis();
+		return this.enabled && this.isTime();
+	}
 
-		return this.enabled && time >= this.time;
+	public boolean isTime()
+	{
+		return System.currentTimeMillis() >= this.time;
 	}
 
 	public boolean checkRepeat()
