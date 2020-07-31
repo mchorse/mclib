@@ -2,6 +2,19 @@
 
 McLib's change log.
 
+## Version 2.0.2
+
+This is a small quick patch which features a couple of neat GUI tweaks.
+
+* Added a feature to shift the mouse cursor to the opposite side of the screen when dragging trackpad fields
+* Added tracking of how many times keystrokes were pressed recently
+* Added evaluating of math expressions within trackpad fields upon pressing Alt + Enter when focused
+* Changed trackpad fields to use horizontal mouse offset, instead of distance
+* Changed zooming in/out in model renderers be more adaptive (zoom factor changes depending on current scale, which makes it faster to zoom in and out)
+* Fixed crash with index out of bounds with list elements (reported by Lycoon)
+* Fixed bug with math expressions having `(` in the beginning and `)` in the end of the expression being invalid
+* Moved keyframe code from Aperture (for future features)
+
 ## Version 2.0.1
 
 This is a small quick patch.
