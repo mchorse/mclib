@@ -36,9 +36,9 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
 
         this.frameButtons = new GuiElement(mc);
         this.frameButtons.setVisible(false);
-        this.tick = new GuiTrackpadElement(mc, (value) -> this.setTick(value.longValue()));
+        this.tick = new GuiTrackpadElement(mc, this::setTick);
         this.tick.limit(Integer.MIN_VALUE, Integer.MAX_VALUE, true).tooltip(IKey.lang("aperture.gui.panels.tick"));
-        this.value = new GuiTrackpadElement(mc, (value) -> this.setValue(value.floatValue()));
+        this.value = new GuiTrackpadElement(mc, this::setValue);
         this.value.tooltip(IKey.lang("aperture.gui.panels.value"));
         this.interp = new GuiButtonElement(mc, IKey.lang(""), (b) -> this.interpolations.toggleVisible());
         this.interpolations = new GuiKeyframeInterpolationsList(mc, (interp) -> this.pickInterpolation(interp.get(0)));
@@ -145,7 +145,7 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         return super.mouseScrolled(context) || this.area.isInside(context.mouseX, context.mouseY);
     }
 
-    public void setTick(long value)
+    public void setTick(double value)
     {
         this.graph.which.setX(this.graph.getCurrent(), value);
         this.graph.setSliding();
@@ -180,13 +180,16 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
 
     public void fillData(Keyframe frame)
     {
-        this.frameButtons.setVisible(frame != null);
+        boolean show = frame != null && this.graph.which != Selection.NOT_SELECTED;
 
-        if (frame == null)
+        this.frameButtons.setVisible(show);
+
+        if (!show)
         {
             return;
         }
 
+        this.tick.integer = this.graph.which == Selection.KEYFRAME;
         this.tick.setValue(this.graph.which.getX(frame));
         this.value.setValue(this.graph.which.getY(frame));
         this.interp.label.set(frame.interp.getKey());
