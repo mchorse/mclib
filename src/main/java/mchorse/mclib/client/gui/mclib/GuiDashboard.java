@@ -41,7 +41,12 @@ public class GuiDashboard extends GuiBase
 
 		this.panels.flex().relative(this.viewport).wh(1F, 1F);
 		this.panels.registerPanel(this.config = new GuiConfig(mc, this), IKey.lang("mclib.gui.config.tooltip"), Icons.GEAR);
-		// this.panels.registerPanel(new GuiTest(mc, this), IKey.str("Test"), Icons.POSE);
+
+		if (McLib.debugPanel.get())
+		{
+			this.panels.registerPanel(new GuiDebugPanel(mc, this), IKey.str("Debug"), Icons.POSE);
+		}
+
 		McLib.EVENT_BUS.post(new RegisterDashboardPanels(this));
 
 		this.panels.setPanel(this.config);
@@ -91,27 +96,5 @@ public class GuiDashboard extends GuiBase
 		}
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
-	}
-
-	public static class GuiTest extends GuiDashboardPanel
-	{
-		public GuiTest(Minecraft mc, GuiDashboard dashboard)
-		{
-			super(mc, dashboard);
-
-			GuiModelRenderer modelRenderer = new GuiModelRenderer(mc)
-			{
-				@Override
-				protected void drawUserModel(GuiContext context)
-				{}
-			};
-
-			GuiToggleElement toggleElement = new GuiToggleElement(mc, IKey.str("Test"), null);
-
-			toggleElement.setEnabled(false);
-			toggleElement.flex().relative(this.area).xy(10, 10).w(100);
-			modelRenderer.flex().relative(this.area).wh(1F, 1F);
-			this.add(modelRenderer, toggleElement);
-		}
 	}
 }

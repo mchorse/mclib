@@ -14,6 +14,7 @@ public abstract class GuiKeyframeElement extends GuiElement
     public static final Color color = new Color();
 
     public Consumer<Keyframe> callback;
+    public Selection which = Selection.NOT_SELECTED;
 
     public GuiKeyframeElement(Minecraft mc, Consumer<Keyframe> callback)
     {
@@ -96,4 +97,5 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     protected void drawCursor(GuiContext context)
     {}
+
 }

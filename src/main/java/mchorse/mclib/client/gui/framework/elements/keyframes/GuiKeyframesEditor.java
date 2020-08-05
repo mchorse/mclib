@@ -147,13 +147,13 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
 
     public void setTick(long value)
     {
-        this.graph.getCurrent().setTick(value);
+        this.graph.which.setX(this.graph.getCurrent(), value);
         this.graph.setSliding();
     }
 
     public void setValue(double value)
     {
-        this.graph.getCurrent().setValue(value);
+        this.graph.which.setY(this.graph.getCurrent(), value);
     }
 
     public void pickInterpolation(KeyframeInterpolation interp)
@@ -187,8 +187,8 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
             return;
         }
 
-        this.tick.setValue(frame.tick);
-        this.value.setValue(frame.value);
+        this.tick.setValue(this.graph.which.getX(frame));
+        this.value.setValue(this.graph.which.getY(frame));
         this.interp.label.set(frame.interp.getKey());
         this.interpolations.setCurrent(frame.interp);
         this.easing.setValue(frame.easing.ordinal());

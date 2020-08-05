@@ -43,6 +43,7 @@ public class McLib
     public static final EventBus EVENT_BUS = new EventBus();
 
     /* Configuration */
+    public static ValueBoolean debugPanel;
     public static ValueInt primaryColor;
     public static ValueBoolean enableBorders;
     public static ValueBoolean enableCheckboxRendering;
@@ -68,7 +69,9 @@ public class McLib
     {
         ConfigBuilder builder = event.createBuilder(MOD_ID);
 
-        primaryColor = builder.category("appearance").getInt("primary_color", 0x0088ff).color();
+        debugPanel = builder.category("appearance").getBoolean("debug_panel", false);
+        primaryColor = builder.getInt("primary_color", 0x0088ff).color();
+        debugPanel.invisible();
         enableBorders = builder.getBoolean("enable_borders", false);
         enableCheckboxRendering = builder.getBoolean("enable_checkbox_rendering", false);
         enableGridRendering = builder.getBoolean("enable_grid_rendering", true);

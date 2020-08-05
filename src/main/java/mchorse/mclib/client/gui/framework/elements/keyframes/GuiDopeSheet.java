@@ -371,12 +371,14 @@ public class GuiDopeSheet extends GuiKeyframeElement
         /* Draw shit */
         this.area.draw(0x88000000);
 
-        int w = this.area.w;
-        int leftBorder = (int) this.toGraph(0);
-        int rightBorder = (int) this.toGraph(this.duration);
+        if (this.duration > 0)
+        {
+            int leftBorder = this.toGraph(0);
+            int rightBorder = this.toGraph(this.duration);
 
-        if (leftBorder > 0) Gui.drawRect(0, this.area.y, leftBorder, this.area.y + this.area.h, 0x88000000);
-        if (rightBorder < w) Gui.drawRect(rightBorder, this.area.y, w, this.area.y + this.area.h, 0x88000000);
+            if (leftBorder > this.area.x) Gui.drawRect(this.area.x, this.area.y, leftBorder, this.area.y + this.area.h, 0x88000000);
+            if (rightBorder < this.area.ex()) Gui.drawRect(rightBorder, this.area.y, this.area.ex() , this.area.y + this.area.h, 0x88000000);
+        }
 
         /* Draw scaling grid */
         int hx = this.duration / this.scale.mult;

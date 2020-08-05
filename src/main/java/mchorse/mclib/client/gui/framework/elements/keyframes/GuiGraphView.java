@@ -29,7 +29,6 @@ public class GuiGraphView extends GuiKeyframeElement
     public boolean dragging = false;
     private boolean moving = false;
     private boolean scrolling = false;
-    public int which = 0;
     private int lastX;
     private int lastY;
     private double lastT;
@@ -76,11 +75,11 @@ public class GuiGraphView extends GuiKeyframeElement
     @Override
     public void doubleClick(int mouseX, int mouseY)
     {
-        if (this.which == -1)
+        if (this.which == Selection.NOT_SELECTED)
         {
             this.addCurrent((long) this.fromGraphX(mouseX), this.fromGraphY(mouseY));
         }
-        else if (this.which == 0)
+        else if (this.which == Selection.KEYFRAME)
         {
             this.removeCurrent();
         }
@@ -121,7 +120,7 @@ public class GuiGraphView extends GuiKeyframeElement
 
         this.channel.remove(this.selected);
         this.selected -= 1;
-        this.which = -1;
+        this.which = Selection.NOT_SELECTED;
     }
 
     /* Graphing code */
@@ -260,7 +259,7 @@ public class GuiGraphView extends GuiKeyframeElement
             if (context.mouseButton == 0)
             {
                 /* Duplicate the keyframe */
-                if (GuiScreen.isAltKeyDown() && this.which == 0)
+                if (GuiScreen.isAltKeyDown() && this.which == Selection.KEYFRAME)
                 {
                     Keyframe frame = this.getCurrent();
 
@@ -277,7 +276,7 @@ public class GuiGraphView extends GuiKeyframeElement
                     return false;
                 }
 
-                this.which = -1;
+                this.which = Selection.NOT_SELECTED;
                 this.selected = -1;
 
                 Keyframe prev = null;
@@ -291,7 +290,7 @@ public class GuiGraphView extends GuiKeyframeElement
 
                     if (left || right || point)
                     {
-                        this.which = left ? 1 : (right ? 2 : 0);
+                        this.which = left ? Selection.LEFT_HANDLE : (right ? Selection.RIGHT_HANDLE : Selection.KEYFRAME);
                         this.selected = index;
                         this.setKeyframe(frame);
 
@@ -460,12 +459,12 @@ public class GuiGraphView extends GuiKeyframeElement
             if (GuiScreen.isShiftKeyDown()) x = this.lastT;
             if (GuiScreen.isCtrlKeyDown()) y = this.lastV;
 
-            if (this.which == 0)
+            if (this.which == Selection.KEYFRAME)
             {
                 frame.setTick((long) x);
                 frame.setValue(y);
             }
-            else if (this.which == 1)
+            else if (this.which == Selection.LEFT_HANDLE)
             {
                 frame.lx = (float) -(x - frame.tick);
                 frame.ly = (float) (y - frame.value);
@@ -476,7 +475,7 @@ public class GuiGraphView extends GuiKeyframeElement
                     frame.ry = -frame.ly;
                 }
             }
-            else if (this.which == 2)
+            else if (this.which == Selection.RIGHT_HANDLE)
             {
                 frame.rx = (float) x - frame.tick;
                 frame.ry = (float) (y - frame.value);
@@ -487,7 +486,7 @@ public class GuiGraphView extends GuiKeyframeElement
                     frame.ly = -frame.ry;
                 }
             }
-            else if (this.which == -1 && this.parent != null)
+            else if (this.which == Selection.NOT_SELECTED && this.parent != null)
             {
                 this.moveNoKeyframe(context, frame, x, y);
             }
@@ -495,11 +494,14 @@ public class GuiGraphView extends GuiKeyframeElement
             this.setKeyframe(this.getCurrent());
         }
 
-        int leftBorder = this.toGraphX(0);
-        int rightBorder = this.toGraphX(this.duration);
+        if (this.duration > 0)
+        {
+            int leftBorder = this.toGraphX(0);
+            int rightBorder = this.toGraphX(this.duration);
 
-        if (leftBorder > this.area.x) Gui.drawRect(this.area.x, this.area.y, leftBorder, this.area.y + this.area.h, 0x88000000);
-        if (rightBorder < this.area.ex()) Gui.drawRect(rightBorder, this.area.y, this.area.ex() , this.area.y + this.area.h, 0x88000000);
+            if (leftBorder > this.area.x) Gui.drawRect(this.area.x, this.area.y, leftBorder, this.area.y + this.area.h, 0x88000000);
+            if (rightBorder < this.area.ex()) Gui.drawRect(rightBorder, this.area.y, this.area.ex() , this.area.y + this.area.h, 0x88000000);
+        }
 
         /* Draw scaling grid */
         int hx = this.duration / this.scaleX.mult;
@@ -621,9 +623,23 @@ public class GuiGraphView extends GuiKeyframeElement
         /* Draw points */
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
+        prev = null;
+
         for (Keyframe frame : this.channel.getKeyframes())
         {
             this.drawRect(vb, this.toGraphX(frame.tick), this.toGraphY(frame.value), 3, 0xffffff);
+
+            if (frame.interp == KeyframeInterpolation.BEZIER)
+            {
+                this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 3, 0xffffff);
+            }
+
+            if (prev != null && prev.interp == KeyframeInterpolation.BEZIER)
+            {
+                this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly), 3, 0xffffff);
+            }
+
+            prev = frame;
         }
 
         int i = 0;
@@ -631,16 +647,16 @@ public class GuiGraphView extends GuiKeyframeElement
 
         for (Keyframe frame : this.channel.getKeyframes())
         {
-            this.drawRect(vb, this.toGraphX(frame.tick), this.toGraphY(frame.value), 2, this.selected == i ? 0x0080ff : 0);
+            this.drawRect(vb, this.toGraphX(frame.tick), this.toGraphY(frame.value), 2, this.selected == i && this.which == Selection.KEYFRAME ? 0x0080ff : 0);
 
             if (frame.interp == KeyframeInterpolation.BEZIER)
             {
-                this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 2, this.selected != i ? 0xffffff : 0x0080ff);
+                this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 2, this.selected == i && this.which == Selection.RIGHT_HANDLE ? 0x0080ff : 0);
             }
 
             if (prev != null && prev.interp == KeyframeInterpolation.BEZIER)
             {
-                this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly), 2, this.selected != i ? 0xffffff : 0x0080ff);
+                this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly), 2, this.selected == i && this.which == Selection.LEFT_HANDLE ? 0x0080ff : 0);
             }
 
             prev = frame;
