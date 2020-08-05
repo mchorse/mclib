@@ -101,6 +101,24 @@ public class Area implements IResizer
         this.h = h;
     }
 
+    public void setPoints(int x1, int y1, int x2, int y2)
+    {
+        this.setPoints(x1, y1, x2, y2, 0);
+    }
+
+    public void setPoints(int x1, int y1, int x2, int y2, int offset)
+    {
+        int mx = Math.max(x1, x2);
+        int my = Math.max(y1, y2);
+        int nx = Math.min(x1, x2);
+        int ny = Math.min(y1, y2);
+
+        this.x = nx - offset;
+        this.y = ny - offset;
+        this.w = mx - nx + offset;
+        this.h = my - ny + offset;
+    }
+
     /**
      * Copy properties from other area 
      */

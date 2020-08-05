@@ -4,6 +4,8 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.keyframes.Keyframe;
+import mchorse.mclib.utils.keyframes.KeyframeEasing;
+import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 
@@ -31,15 +33,27 @@ public abstract class GuiKeyframeElement extends GuiElement
         }
     }
 
+    /* Setters */
+
+    public abstract void setTick(double tick);
+
+    public abstract void setValue(double value);
+
+    public abstract void setInterpolation(KeyframeInterpolation interp);
+
+    public abstract void setEasing(KeyframeEasing easing);
+
+    /* Abstract methods */
+
     public abstract Keyframe getCurrent();
 
     public abstract void setDuration(long duration);
 
-    public abstract void setSliding();
-
     public abstract void selectByDuration(long duration);
 
     public abstract void doubleClick(int mouseX, int mouseY);
+
+    /* Common hooks */
 
     protected void updateMoved()
     {}

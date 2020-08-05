@@ -42,6 +42,7 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         this.value.tooltip(IKey.lang("aperture.gui.panels.value"));
         this.interp = new GuiButtonElement(mc, IKey.lang(""), (b) -> this.interpolations.toggleVisible());
         this.interpolations = new GuiKeyframeInterpolationsList(mc, (interp) -> this.pickInterpolation(interp.get(0)));
+        this.interpolations.setVisible(false);
 
         this.easing = new GuiCirculateElement(mc, (b) -> this.changeEasing());
 
@@ -79,9 +80,7 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         int factor = GuiScreen.isShiftKeyDown() ? -1 : 1;
         int index = MathUtils.cycler(interp.ordinal() + factor, 0, KeyframeInterpolation.values().length - 1);
 
-        interp = KeyframeInterpolation.values()[index];
-        this.graph.getCurrent().setInterpolation(interp);
-        this.interp.label.set(interp.getKey());
+        this.pickInterpolation(KeyframeInterpolation.values()[index]);
         this.interpolations.setCurrent(interp);
         GuiUtils.playClick();
     }
@@ -145,37 +144,26 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         return super.mouseScrolled(context) || this.area.isInside(context.mouseX, context.mouseY);
     }
 
-    public void setTick(double value)
+    public void setTick(double tick)
     {
-        this.graph.which.setX(this.graph.getCurrent(), value);
-        this.graph.setSliding();
+        this.graph.setTick(tick);
     }
 
     public void setValue(double value)
     {
-        this.graph.which.setY(this.graph.getCurrent(), value);
+        this.graph.setValue(value);
     }
 
     public void pickInterpolation(KeyframeInterpolation interp)
     {
-        if (this.graph.getCurrent() == null)
-        {
-            return;
-        }
-
-        this.graph.getCurrent().setInterpolation(interp);
+        this.graph.setInterpolation(interp);
         this.interp.label.set(interp.getKey());
         this.interpolations.setVisible(false);
     }
 
     public void changeEasing()
     {
-        if (this.graph.getCurrent() == null)
-        {
-            return;
-        }
-
-        this.graph.getCurrent().setEasing(KeyframeEasing.values()[this.easing.getValue()]);
+        this.graph.setEasing(KeyframeEasing.values()[this.easing.getValue()]);
     }
 
     public void fillData(Keyframe frame)

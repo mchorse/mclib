@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements.keyframes;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Scale;
 import mchorse.mclib.utils.keyframes.Keyframe;
 import mchorse.mclib.utils.keyframes.KeyframeChannel;
@@ -16,6 +17,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class GuiGraphView extends GuiKeyframeElement
@@ -23,16 +26,17 @@ public class GuiGraphView extends GuiKeyframeElement
     public KeyframeChannel channel;
     public int duration;
     public int color;
-    public int selected = -1;
+    public List<Integer> selected = new ArrayList<Integer>();
 
-    public boolean sliding = false;
-    public boolean dragging = false;
-    private boolean moving = false;
-    private boolean scrolling = false;
+    public boolean sliding;
+    public boolean dragging;
+    private boolean moving;
+    private boolean scrolling;
     private int lastX;
     private int lastY;
     private double lastT;
     private double lastV;
+    private long dragTime;
 
     private Scale scaleX = new Scale(false);
     private Scale scaleY = new Scale(true);
@@ -44,9 +48,124 @@ public class GuiGraphView extends GuiKeyframeElement
 
     /* Implementation of abstract methods */
 
+    @Override
+    public void setTick(double tick)
+    {
+        if (this.isMultipleSelected())
+        {
+            tick = (long) tick;
+
+            int i = 0;
+            double dx = 0;
+
+            for (int index : this.selected)
+            {
+                Keyframe keyframe = this.channel.get(index);
+
+                if (keyframe != null)
+                {
+                    if (i == 0)
+                    {
+                        dx = tick - keyframe.tick;
+                        keyframe.setTick((long) tick);
+                    }
+                    else
+                    {
+                        keyframe.setTick((long) (keyframe.tick + dx));
+                    }
+                }
+
+                i ++;
+            }
+        }
+        else
+        {
+            this.which.setX(this.getCurrent(), tick);
+        }
+
+        this.sliding = true;
+    }
+
+    @Override
+    public void setValue(double value)
+    {
+        if (this.isMultipleSelected())
+        {
+            int i = 0;
+            double dx = 0;
+
+            for (int index : this.selected)
+            {
+                Keyframe keyframe = this.channel.get(index);
+
+                if (keyframe != null)
+                {
+                    if (i == 0)
+                    {
+                        dx = value - keyframe.value;
+                        keyframe.setValue(value);
+                    }
+                    else
+                    {
+                        keyframe.setValue(keyframe.value + dx);
+                    }
+                }
+
+                i ++;
+            }
+        }
+        else
+        {
+            this.which.setY(this.getCurrent(), value);
+        }
+    }
+
+    @Override
+    public void setInterpolation(KeyframeInterpolation interp)
+    {
+        for (int index : this.selected)
+        {
+            Keyframe keyframe = this.channel.get(index);
+
+            if (keyframe != null)
+            {
+                keyframe.setInterpolation(interp);
+            }
+        }
+    }
+
+    @Override
+    public void setEasing(KeyframeEasing easing)
+    {
+        for (int index : this.selected)
+        {
+            Keyframe keyframe = this.channel.get(index);
+
+            if (keyframe != null)
+            {
+                keyframe.setEasing(easing);
+            }
+        }
+    }
+
+    public boolean isMultipleSelected()
+    {
+        return this.selected.size() > 1;
+    }
+
+    public boolean isGrabbing()
+    {
+        return this.dragging && System.currentTimeMillis() > this.dragTime + 50 && this.which == Selection.NOT_SELECTED;
+    }
+
     public Keyframe getCurrent()
     {
-        return this.channel.get(this.selected);
+        if (this.selected.isEmpty())
+        {
+            return null;
+        }
+
+        return this.channel.get(this.selected.get(0));
     }
 
     public void setChannel(KeyframeChannel channel)
@@ -64,12 +183,6 @@ public class GuiGraphView extends GuiKeyframeElement
     public void setDuration(long duration)
     {
         this.duration = (int) duration;
-    }
-
-    @Override
-    public void setSliding()
-    {
-        this.sliding = true;
     }
 
     @Override
@@ -99,7 +212,8 @@ public class GuiGraphView extends GuiKeyframeElement
             oldTick = frame.tick;
         }
 
-        this.selected = this.channel.insert(tick, value);
+        this.selected.clear();
+        this.selected.add(this.channel.insert(tick, value));
 
         if (oldTick != tick)
         {
@@ -118,8 +232,8 @@ public class GuiGraphView extends GuiKeyframeElement
             return;
         }
 
-        this.channel.remove(this.selected);
-        this.selected -= 1;
+        this.channel.remove(this.selected.get(0));
+        this.selected.clear();
         this.which = Selection.NOT_SELECTED;
     }
 
@@ -223,13 +337,13 @@ public class GuiGraphView extends GuiKeyframeElement
         }
 
         int i = 0;
-        this.selected = -1;
+        this.selected.clear();
 
         for (Keyframe frame : this.channel.getKeyframes())
         {
             if (frame.tick >= duration)
             {
-                this.selected = i;
+                this.selected.add(i);
 
                 break;
             }
@@ -268,7 +382,8 @@ public class GuiGraphView extends GuiKeyframeElement
                         long offset = (long) this.fromGraphX(mouseX);
                         Keyframe created = this.channel.get(this.channel.insert(offset, frame.value));
 
-                        this.selected = this.channel.getKeyframes().indexOf(created);
+                        this.selected.clear();
+                        this.selected.add(this.channel.getKeyframes().indexOf(created));
                         created.copy(frame);
                         created.tick = offset;
                     }
@@ -276,8 +391,8 @@ public class GuiGraphView extends GuiKeyframeElement
                     return false;
                 }
 
-                this.which = Selection.NOT_SELECTED;
-                this.selected = -1;
+                this.lastX = mouseX;
+                this.lastY = mouseY;
 
                 Keyframe prev = null;
                 int index = 0;
@@ -290,15 +405,25 @@ public class GuiGraphView extends GuiKeyframeElement
 
                     if (left || right || point)
                     {
-                        this.which = left ? Selection.LEFT_HANDLE : (right ? Selection.RIGHT_HANDLE : Selection.KEYFRAME);
-                        this.selected = index;
-                        this.setKeyframe(frame);
+                        if (this.isMultipleSelected())
+                        {
+                            Keyframe keyframe = this.getCurrent();
 
-                        this.lastT = left ? frame.tick - frame.lx : (right ? frame.tick + frame.rx : frame.tick);
-                        this.lastV = left ? frame.value + frame.ly : (right ? frame.value + frame.ry : frame.value);
+                            this.which = Selection.KEYFRAME;
+                            this.lastT = keyframe.tick;
+                            this.lastV = keyframe.value;
+                        }
+                        else
+                        {
+                            this.which = left ? Selection.LEFT_HANDLE : (right ? Selection.RIGHT_HANDLE : Selection.KEYFRAME);
+                            this.selected.clear();
+                            this.selected.add(index);
+                            this.setKeyframe(frame);
 
-                        this.lastX = mouseX;
-                        this.lastY = mouseY;
+                            this.lastT = left ? frame.tick - frame.lx : (right ? frame.tick + frame.rx : frame.tick);
+                            this.lastV = left ? frame.value + frame.ly : (right ? frame.value + frame.ry : frame.value);
+                        }
+
                         this.dragging = true;
 
                         return false;
@@ -308,10 +433,13 @@ public class GuiGraphView extends GuiKeyframeElement
                     index++;
                 }
 
-                if (this.parent != null)
-                {
-                    this.dragging = true;
-                }
+                this.which = Selection.NOT_SELECTED;
+                this.selected.clear();
+
+                this.dragging = true;
+                this.dragTime = System.currentTimeMillis();
+
+                this.setKeyframe(null);
             }
             else if (context.mouseButton == 2)
             {
@@ -384,21 +512,63 @@ public class GuiGraphView extends GuiKeyframeElement
     {
         super.mouseReleased(context);
 
-        if (this.selected != -1)
+        if (!this.selected.isEmpty())
         {
             if (this.sliding)
             {
                 /* Resort after dragging the tick thing */
-                Keyframe frame = this.getCurrent();
+                List<Keyframe> keyframes = new ArrayList<Keyframe>();
+
+                for (int index : this.selected)
+                {
+                    Keyframe keyframe = this.channel.get(index);
+
+                    if (keyframe != null)
+                    {
+                        keyframes.add(keyframe);
+                    }
+                }
 
                 this.channel.sort();
                 this.sliding = false;
-                this.selected = this.channel.getKeyframes().indexOf(frame);
+
+                this.selected.clear();
+
+                for (Keyframe keyframe : keyframes)
+                {
+                    this.selected.add(this.channel.getKeyframes().indexOf(keyframe));
+                }
             }
 
             if (this.moving)
             {
                 this.updateMoved();
+            }
+        }
+
+        if (this.isGrabbing() && !this.isMultipleSelected())
+        {
+            /* Multi select */
+            this.selected.clear();
+
+            Area area = new Area();
+
+            area.setPoints(this.lastX, this.lastY, context.mouseX, context.mouseY, 3);
+
+            for (int i = 0, c = this.channel.getKeyframes().size(); i < c; i ++)
+            {
+                Keyframe keyframe = this.channel.get(i);
+
+                if (area.isInside(this.toGraphX(keyframe.tick), this.toGraphY(keyframe.value)))
+                {
+                    this.selected.add(i);
+                }
+            }
+
+            if (!this.selected.isEmpty())
+            {
+                this.which = Selection.KEYFRAME;
+                this.setKeyframe(this.getCurrent());
             }
         }
 
@@ -444,55 +614,7 @@ public class GuiGraphView extends GuiKeyframeElement
             return;
         }
 
-        if (this.scrolling)
-        {
-            this.scaleX.shift = -(mouseX - this.lastX) / this.scaleX.zoom + this.lastT;
-            this.scaleY.shift = (mouseY - this.lastY) / this.scaleY.zoom + this.lastV;
-        }
-        /* Move the current keyframe */
-        else if (this.moving)
-        {
-            Keyframe frame = this.channel.get(this.selected);
-            double x = this.fromGraphX(mouseX);
-            double y = this.fromGraphY(mouseY);
-
-            if (GuiScreen.isShiftKeyDown()) x = this.lastT;
-            if (GuiScreen.isCtrlKeyDown()) y = this.lastV;
-
-            if (this.which == Selection.KEYFRAME)
-            {
-                frame.setTick((long) x);
-                frame.setValue(y);
-            }
-            else if (this.which == Selection.LEFT_HANDLE)
-            {
-                frame.lx = (float) -(x - frame.tick);
-                frame.ly = (float) (y - frame.value);
-
-                if (!GuiScreen.isAltKeyDown())
-                {
-                    frame.rx = frame.lx;
-                    frame.ry = -frame.ly;
-                }
-            }
-            else if (this.which == Selection.RIGHT_HANDLE)
-            {
-                frame.rx = (float) x - frame.tick;
-                frame.ry = (float) (y - frame.value);
-
-                if (!GuiScreen.isAltKeyDown())
-                {
-                    frame.lx = frame.rx;
-                    frame.ly = -frame.ry;
-                }
-            }
-            else if (this.which == Selection.NOT_SELECTED && this.parent != null)
-            {
-                this.moveNoKeyframe(context, frame, x, y);
-            }
-
-            this.setKeyframe(this.getCurrent());
-        }
+        this.handleMouse(context, mouseX, mouseY, w, h);
 
         if (this.duration > 0)
         {
@@ -647,16 +769,18 @@ public class GuiGraphView extends GuiKeyframeElement
 
         for (Keyframe frame : this.channel.getKeyframes())
         {
-            this.drawRect(vb, this.toGraphX(frame.tick), this.toGraphY(frame.value), 2, this.selected == i && this.which == Selection.KEYFRAME ? 0x0080ff : 0);
+            boolean has = this.selected.contains(i);
+
+            this.drawRect(vb, this.toGraphX(frame.tick), this.toGraphY(frame.value), 2, has && this.which == Selection.KEYFRAME ? 0x0080ff : 0);
 
             if (frame.interp == KeyframeInterpolation.BEZIER)
             {
-                this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 2, this.selected == i && this.which == Selection.RIGHT_HANDLE ? 0x0080ff : 0);
+                this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 2, has && this.which == Selection.RIGHT_HANDLE ? 0x0080ff : 0);
             }
 
             if (prev != null && prev.interp == KeyframeInterpolation.BEZIER)
             {
-                this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly), 2, this.selected == i && this.which == Selection.LEFT_HANDLE ? 0x0080ff : 0);
+                this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), this.toGraphY(frame.value + frame.ly), 2, has && this.which == Selection.LEFT_HANDLE ? 0x0080ff : 0);
             }
 
             prev = frame;
@@ -665,7 +789,81 @@ public class GuiGraphView extends GuiKeyframeElement
 
         Tessellator.getInstance().draw();
 
+        /* Draw selection */
+        if (this.isGrabbing())
+        {
+            Gui.drawRect(this.lastX, this.lastY, mouseX, mouseY, 0x440088ff);
+        }
+
         GlStateManager.disableBlend();
         GlStateManager.enableTexture2D();
+    }
+
+    private void handleMouse(GuiContext context, int mouseX, int mouseY, int w, int h)
+    {
+        if (this.scrolling)
+        {
+            this.scaleX.shift = -(mouseX - this.lastX) / this.scaleX.zoom + this.lastT;
+            this.scaleY.shift = (mouseY - this.lastY) / this.scaleY.zoom + this.lastV;
+        }
+        /* Move the current keyframe */
+        else if (this.moving)
+        {
+            Keyframe frame = this.getCurrent();
+            double x = this.fromGraphX(mouseX);
+            double y = this.fromGraphY(mouseY);
+
+            if (GuiScreen.isShiftKeyDown()) x = this.lastT;
+            if (GuiScreen.isCtrlKeyDown()) y = this.lastV;
+
+            if (this.which == Selection.KEYFRAME)
+            {
+                if (this.isMultipleSelected())
+                {
+                    int dx = mouseX - this.lastX;
+                    int dy = mouseY - this.lastY;
+
+                    int xx = this.toGraphX(this.lastT);
+                    int yy = this.toGraphY(this.lastV);
+
+                    x = this.fromGraphX(xx + dx);
+                    y = this.fromGraphY(yy + dy);
+
+                    if (GuiScreen.isShiftKeyDown()) x = this.lastT;
+                    if (GuiScreen.isCtrlKeyDown()) y = this.lastV;
+                }
+
+                this.setTick(x);
+                this.setValue(y);
+            }
+            else if (this.which == Selection.LEFT_HANDLE)
+            {
+                frame.lx = (float) -(x - frame.tick);
+                frame.ly = (float) (y - frame.value);
+
+                if (!GuiScreen.isAltKeyDown())
+                {
+                    frame.rx = frame.lx;
+                    frame.ry = -frame.ly;
+                }
+            }
+            else if (this.which == Selection.RIGHT_HANDLE)
+            {
+                frame.rx = (float) x - frame.tick;
+                frame.ry = (float) (y - frame.value);
+
+                if (!GuiScreen.isAltKeyDown())
+                {
+                    frame.lx = frame.rx;
+                    frame.ly = -frame.ry;
+                }
+            }
+            else if (this.which == Selection.NOT_SELECTED && this.parent != null)
+            {
+                this.moveNoKeyframe(context, frame, x, y);
+            }
+
+            this.setKeyframe(this.getCurrent());
+        }
     }
 }
