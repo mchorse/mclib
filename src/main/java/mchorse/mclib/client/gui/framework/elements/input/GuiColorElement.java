@@ -35,6 +35,7 @@ public class GuiColorElement extends GuiElement
 	public GuiColorPickerElement picker;
 	public boolean label = true;
 	public Direction direction;
+	public GuiElement target;
 
 	public GuiColorElement(Minecraft mc, ValueInt value)
 	{
@@ -69,7 +70,7 @@ public class GuiColorElement extends GuiElement
 				callback.accept(color);
 			}
 		});
-		this.picker.flex().wh(200, 85).bounds(GuiBase.getCurrent(), 2);
+		this.picker.markIgnored().flex().wh(200, 85).bounds(GuiBase.getCurrent(), 2);
 
 		this.direction(Direction.BOTTOM).flex().h(20);
 	}
@@ -94,6 +95,13 @@ public class GuiColorElement extends GuiElement
 		return this;
 	}
 
+	public GuiColorElement target(GuiElement target)
+	{
+		this.target = target;
+
+		return this;
+	}
+
 	@Override
 	public boolean mouseClicked(GuiContext context)
 	{
@@ -109,7 +117,7 @@ public class GuiColorElement extends GuiElement
 				int x = context.globalX(this.area.x(this.direction.anchorX) + 2 * this.direction.factorX);
 				int y = context.globalY(this.area.y(this.direction.anchorY) + 2 * this.direction.factorY);
 
-				this.getParentContainer().add(this.picker);
+				(this.target == null ? this.getParentContainer() : this.target).add(this.picker);
 				this.picker.flex().xy(x, y);
 				this.picker.resize();
 			}
