@@ -205,6 +205,12 @@ public enum Interpolation
     @SideOnly(Side.CLIENT)
     public String getName()
     {
-        return I18n.format("mclib.interpolations." + this.key);
+        return I18n.format(this.getKey());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public String getKey()
+    {
+        return "mclib.interpolations." + this.key;
     }
 }
