@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.mclib;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiDopeSheet;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiGraphView;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiKeyframesEditor;
+import mchorse.mclib.client.gui.framework.elements.keyframes.GuiSheet;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.keyframes.Keyframe;
@@ -52,7 +53,7 @@ public class GuiDebugPanel extends GuiDashboardPanel
 
 			c.copy(channel);
 
-			this.dopesheet.graph.sheets.add(new GuiDopeSheet.GuiSheet(IKey.str("Test " + i), new Color((float) Math.random(), (float) Math.random(), (float) Math.random()).getRGBColor(), c));
+			this.dopesheet.graph.sheets.add(new GuiSheet(IKey.str("Test " + i), new Color((float) Math.random(), (float) Math.random(), (float) Math.random()).getRGBColor(), c));
 		}
 
 		this.dopesheet.graph.duration = 100;

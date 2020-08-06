@@ -2,17 +2,18 @@ package mchorse.mclib.client.gui.framework.elements.keyframes;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
-import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Scale;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.keyframes.Keyframe;
 import mchorse.mclib.utils.keyframes.KeyframeEasing;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class GuiKeyframeElement extends GuiElement
@@ -28,7 +29,9 @@ public abstract class GuiKeyframeElement extends GuiElement
     protected boolean moving;
     protected boolean scrolling;
     protected int lastX;
+    protected int lastY;
     protected double lastT;
+    protected double lastV;
 
     protected Scale scaleX = new Scale(false);
 
@@ -116,6 +119,9 @@ public abstract class GuiKeyframeElement extends GuiElement
     public void selectByDuration(long duration)
     {}
 
+    public void clearSelection()
+    {}
+
     public void doubleClick(int mouseX, int mouseY)
     {
         if (this.which == Selection.NOT_SELECTED)
@@ -153,7 +159,69 @@ public abstract class GuiKeyframeElement extends GuiElement
     protected void drawCursor(GuiContext context)
     {}
 
-    /* Mouse handling */
+    /* Mouse input handling */
+
+    @Override
+    public boolean mouseClicked(GuiContext context)
+    {
+        if (super.mouseClicked(context))
+        {
+            return true;
+        }
+
+        int mouseX = context.mouseX;
+        int mouseY = context.mouseY;
+
+        /* Select current point with a mouse click */
+        if (this.area.isInside(mouseX, mouseY))
+        {
+            if (context.mouseButton == 0)
+            {
+                /* Duplicate the keyframe */
+                if (GuiScreen.isAltKeyDown() && this.which == Selection.KEYFRAME)
+                {
+                    Keyframe frame = this.getCurrent();
+
+                    if (frame != null)
+                    {
+                        this.duplicateKeyframe(frame, context, mouseX, mouseY);
+                    }
+
+                    return false;
+                }
+
+                this.lastX = mouseX;
+                this.lastY = mouseY;
+
+                if (!this.pickKeyframe(context, mouseX, mouseY))
+                {
+                    this.clearSelection();
+                    this.setKeyframe(null);
+                }
+
+                this.dragging = true;
+            }
+            else if (context.mouseButton == 2)
+            {
+                this.setupScrolling(context, mouseX, mouseY);
+            }
+        }
+
+        return false;
+    }
+
+    protected void duplicateKeyframe(Keyframe frame, GuiContext context, int mouseX, int mouseY)
+    {}
+
+    protected abstract boolean pickKeyframe(GuiContext context, int mouseX, int mouseY);
+
+    protected void setupScrolling(GuiContext context, int mouseX, int mouseY)
+    {
+        this.scrolling = true;
+        this.lastX = mouseX;
+        this.lastY = mouseY;
+        this.lastT = this.scaleX.shift;
+    }
 
     @Override
     public boolean mouseScrolled(GuiContext context)
@@ -228,5 +296,107 @@ public abstract class GuiKeyframeElement extends GuiElement
         this.dragging = false;
         this.moving = false;
         this.scrolling = false;
+    }
+
+    /* Rendering */
+
+    @Override
+    public void draw(GuiContext context)
+    {
+        this.handleMouse(context, context.mouseX, context.mouseY);
+        this.drawBackground(context);
+
+        GuiDraw.scissor(this.area.x, this.area.y, this.area.w, this.area.h, context);
+
+        this.drawGrid(context);
+        this.drawCursor(context);
+
+        /* Draw graph of the keyframe channel */
+        GlStateManager.glLineWidth(Minecraft.getMinecraft().gameSettings.guiScale * 1.5F);
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+        this.drawGraph(context, context.mouseX, context.mouseY);
+
+        /* Draw selection */
+        if (this.isGrabbing())
+        {
+            Gui.drawRect(this.lastX, this.lastY, context.mouseX, context.mouseY, 0x440088ff);
+        }
+
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
+
+        GuiDraw.unscissor(context);
+
+        super.draw(context);
+    }
+
+    protected void drawBackground(GuiContext context)
+    {
+        this.area.draw(0x88000000);
+
+        if (this.duration > 0)
+        {
+            int leftBorder = this.toGraphX(0);
+            int rightBorder = this.toGraphX(this.duration);
+
+            if (leftBorder > this.area.x) Gui.drawRect(this.area.x, this.area.y, leftBorder, this.area.y + this.area.h, 0x88000000);
+            if (rightBorder < this.area.ex()) Gui.drawRect(rightBorder, this.area.y, this.area.ex() , this.area.y + this.area.h, 0x88000000);
+        }
+    }
+
+    protected void drawGrid(GuiContext context)
+    {
+        /* Draw scaling grid */
+        int hx = this.duration / this.scaleX.mult;
+        int ht = (int) this.fromGraphX(this.area.x);
+
+        for (int j = Math.max(ht / this.scaleX.mult, 0); j <= hx; j++)
+        {
+            int x = this.toGraphX(j * this.scaleX.mult);
+
+            if (x >= this.area.ex())
+            {
+                break;
+            }
+
+            Gui.drawRect(x, this.area.y, x + 1, this.area.ey(), 0x44ffffff);
+            this.font.drawString(String.valueOf(j * this.scaleX.mult), x + 4, this.area.y + 4, 0xffffff);
+        }
+    }
+
+    protected abstract void drawGraph(GuiContext context, int mouseX, int mouseY);
+
+    /* Handling dragging */
+
+    protected void handleMouse(GuiContext context, int mouseX, int mouseY)
+    {
+        if (this.dragging && !this.moving && (Math.abs(this.lastX - mouseX) > 3 || Math.abs(this.lastY - mouseY) > 3))
+        {
+            this.moving = true;
+            this.sliding = true;
+        }
+
+        if (this.scrolling)
+        {
+            this.scrolling(mouseX, mouseY);
+        }
+        /* Move the current keyframe */
+        else if (this.moving)
+        {
+            this.setKeyframe(this.moving(context, mouseX, mouseY));
+        }
+    }
+
+    protected void scrolling(int mouseX, int mouseY)
+    {
+        this.scaleX.shift = -(mouseX - this.lastX) / this.scaleX.zoom + this.lastT;
+    }
+
+    protected Keyframe moving(GuiContext context, int mouseX, int mouseY)
+    {
+        return null;
     }
 }
