@@ -302,19 +302,20 @@ public class GuiDopeSheet extends GuiKeyframeElement
 	@Override
 	protected boolean pickKeyframe(GuiContext context, int mouseX, int mouseY)
 	{
-		int count = this.sheets.size();
-		int h = (this.area.h - 15) / count;
-		int y = this.area.ey() - h * count;
+		int sheetCount = this.sheets.size();
+		int h = (this.area.h - 15) / sheetCount;
+		int y = this.area.ey() - h * sheetCount;
 
 		for (GuiSheet sheet : this.sheets)
 		{
-			Keyframe prev = null;
 			int index = 0;
+			int count = sheet.channel.getKeyframes().size();
+			Keyframe prev = null;
 
 			for (Keyframe frame : sheet.channel.getKeyframes())
 			{
 				boolean left = sheet.handles && prev != null && prev.interp == KeyframeInterpolation.BEZIER && this.isInside(this.toGraphX(frame.tick - frame.lx), y + h / 2, mouseX, mouseY);
-				boolean right = sheet.handles && frame.interp == KeyframeInterpolation.BEZIER && this.isInside(this.toGraphX(frame.tick + frame.rx), y + h / 2, mouseX, mouseY);
+				boolean right = sheet.handles && frame.interp == KeyframeInterpolation.BEZIER && this.isInside(this.toGraphX(frame.tick + frame.rx), y + h / 2, mouseX, mouseY) && index != count - 1;
 				boolean point = this.isInside(this.toGraphX(frame.tick), y + h / 2, mouseX, mouseY);
 
 				if (left || right || point)
@@ -329,6 +330,8 @@ public class GuiDopeSheet extends GuiKeyframeElement
 					}
 					else
 					{
+						this.clearSelection();
+
 						this.which = left ? Selection.LEFT_HANDLE : (right ? Selection.RIGHT_HANDLE : Selection.KEYFRAME);
 						sheet.selected.clear();
 						sheet.selected.add(index);
@@ -422,9 +425,9 @@ public class GuiDopeSheet extends GuiKeyframeElement
 	protected void drawGraph(GuiContext context, int mouseX, int mouseY)
 	{
 		/* Draw dope sheet */
-		int count = this.sheets.size();
-		int h = (this.area.h - 15) / count;
-		int y = this.area.ey() - h * count;
+		int sheetCount = this.sheets.size();
+		int h = (this.area.h - 15) / sheetCount;
+		int y = this.area.ey() - h * sheetCount;
 
 		BufferBuilder vb = Tessellator.getInstance().getBuffer();
 
@@ -443,46 +446,47 @@ public class GuiDopeSheet extends GuiKeyframeElement
 			/* Draw points */
 			vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
+			int index = 0;
+			int count = sheet.channel.getKeyframes().size();
 			Keyframe prev = null;
-			int i = 0;
 
 			for (Keyframe frame : sheet.channel.getKeyframes())
 			{
-				this.drawRect(vb, this.toGraphX(frame.tick), y + h / 2, 3, sheet.hasSelected(i) ? 0xffffff : sheet.color);
+				this.drawRect(vb, this.toGraphX(frame.tick), y + h / 2, 3, sheet.hasSelected(index) ? 0xffffff : sheet.color);
 
-				if (frame.interp == KeyframeInterpolation.BEZIER && sheet.handles)
+				if (frame.interp == KeyframeInterpolation.BEZIER && sheet.handles && index != count - 1)
 				{
-					this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), y + h / 2, 2, sheet.hasSelected(i) ? 0xffffff : sheet.color);
+					this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), y + h / 2, 2, sheet.hasSelected(index) ? 0xffffff : sheet.color);
 				}
 
 				if (prev != null && prev.interp == KeyframeInterpolation.BEZIER && sheet.handles)
 				{
-					this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), y + h / 2, 2, sheet.hasSelected(i) ? 0xffffff : sheet.color);
+					this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), y + h / 2, 2, sheet.hasSelected(index) ? 0xffffff : sheet.color);
 				}
 
 				prev = frame;
-				i++;
+				index++;
 			}
 
+			index = 0;
 			prev = null;
-			i = 0;
 
 			for (Keyframe frame : sheet.channel.getKeyframes())
 			{
-				this.drawRect(vb, this.toGraphX(frame.tick), y + h / 2, 2, this.which == Selection.KEYFRAME && sheet.hasSelected(i) ? 0x0080ff : 0);
+				this.drawRect(vb, this.toGraphX(frame.tick), y + h / 2, 2, this.which == Selection.KEYFRAME && sheet.hasSelected(index) ? 0x0080ff : 0);
 
-				if (frame.interp == KeyframeInterpolation.BEZIER && sheet.handles)
+				if (frame.interp == KeyframeInterpolation.BEZIER && sheet.handles && index != count - 1)
 				{
-					this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), y + h / 2, 1, this.which == Selection.RIGHT_HANDLE && sheet.hasSelected(i) ? 0x0080ff : 0);
+					this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), y + h / 2, 1, this.which == Selection.RIGHT_HANDLE && sheet.hasSelected(index) ? 0x0080ff : 0);
 				}
 
 				if (prev != null && prev.interp == KeyframeInterpolation.BEZIER && sheet.handles)
 				{
-					this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), y + h / 2, 1, this.which == Selection.LEFT_HANDLE && sheet.hasSelected(i) ? 0x0080ff : 0);
+					this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), y + h / 2, 1, this.which == Selection.LEFT_HANDLE && sheet.hasSelected(index) ? 0x0080ff : 0);
 				}
 
 				prev = frame;
-				i++;
+				index++;
 			}
 
 			Tessellator.getInstance().draw();

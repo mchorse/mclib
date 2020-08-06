@@ -344,13 +344,14 @@ public class GuiGraphView extends GuiKeyframeElement
     @Override
     protected boolean pickKeyframe(GuiContext context, int mouseX, int mouseY)
     {
-        Keyframe prev = null;
         int index = 0;
+        int count = this.channel.getKeyframes().size();
+        Keyframe prev = null;
 
         for (Keyframe frame : this.channel.getKeyframes())
         {
             boolean left = prev != null && prev.interp == KeyframeInterpolation.BEZIER && this.isInside(frame.tick - frame.lx, frame.value + frame.ly, mouseX, mouseY);
-            boolean right = frame.interp == KeyframeInterpolation.BEZIER && this.isInside(frame.tick + frame.rx, frame.value + frame.ry, mouseX, mouseY);
+            boolean right = frame.interp == KeyframeInterpolation.BEZIER && this.isInside(frame.tick + frame.rx, frame.value + frame.ry, mouseX, mouseY) && index != count - 1;
             boolean point = this.isInside(frame.tick, frame.value, mouseX, mouseY);
 
             if (left || right || point)
@@ -532,6 +533,8 @@ public class GuiGraphView extends GuiKeyframeElement
         /* Draw the graph */
         vb.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 
+        int index = 0;
+        int count = this.channel.getKeyframes().size();
         Keyframe prev = null;
 
         for (Keyframe frame : this.channel.getKeyframes())
@@ -568,13 +571,14 @@ public class GuiGraphView extends GuiKeyframeElement
                 vb.pos(this.toGraphX(frame.tick), this.toGraphY(frame.value), 0).color(r, g, b, 1).endVertex();
             }
 
-            if (frame.interp == KeyframeInterpolation.BEZIER)
+            if (frame.interp == KeyframeInterpolation.BEZIER && index != count - 1)
             {
                 vb.pos(this.toGraphX(frame.tick), this.toGraphY(frame.value), 0).color(r, g, b, 0.6F).endVertex();
                 vb.pos(this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 0).color(r, g, b, 0.6F).endVertex();
             }
 
             prev = frame;
+            index++;
         }
 
         vb.pos(this.toGraphX(prev.tick), this.toGraphY(prev.value), 0).color(r, g, b, 1).endVertex();
@@ -585,13 +589,14 @@ public class GuiGraphView extends GuiKeyframeElement
         /* Draw points */
         vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
+        index = 0;
         prev = null;
 
         for (Keyframe frame : this.channel.getKeyframes())
         {
             this.drawRect(vb, this.toGraphX(frame.tick), this.toGraphY(frame.value), 3, 0xffffff);
 
-            if (frame.interp == KeyframeInterpolation.BEZIER)
+            if (frame.interp == KeyframeInterpolation.BEZIER && index != count - 1)
             {
                 this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 3, 0xffffff);
             }
@@ -602,18 +607,19 @@ public class GuiGraphView extends GuiKeyframeElement
             }
 
             prev = frame;
+            index++;
         }
 
-        int i = 0;
+        index = 0;
         prev = null;
 
         for (Keyframe frame : this.channel.getKeyframes())
         {
-            boolean has = this.selected.contains(i);
+            boolean has = this.selected.contains(index);
 
             this.drawRect(vb, this.toGraphX(frame.tick), this.toGraphY(frame.value), 2, has && this.which == Selection.KEYFRAME ? 0x0080ff : 0);
 
-            if (frame.interp == KeyframeInterpolation.BEZIER)
+            if (frame.interp == KeyframeInterpolation.BEZIER && index != count - 1)
             {
                 this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), this.toGraphY(frame.value + frame.ry), 2, has && this.which == Selection.RIGHT_HANDLE ? 0x0080ff : 0);
             }
@@ -624,7 +630,7 @@ public class GuiGraphView extends GuiKeyframeElement
             }
 
             prev = frame;
-            i++;
+            index++;
         }
 
         Tessellator.getInstance().draw();
