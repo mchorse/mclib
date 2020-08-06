@@ -6,12 +6,15 @@ import mchorse.mclib.utils.keyframes.KeyframeChannel;
 import mchorse.mclib.utils.keyframes.KeyframeEasing;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GuiSheet
 {
 	public IKey title;
 	public int color;
 	public KeyframeChannel channel;
-	public int selected = -1;
+	public List<Integer> selected = new ArrayList<Integer>();
 	public boolean handles = true;
 
 	public GuiSheet(IKey title, int color, KeyframeChannel channel, boolean handles)
@@ -30,59 +33,75 @@ public class GuiSheet
 
 	public void sort()
 	{
-		Keyframe frame = this.getKeyframe();
+		List<Keyframe> keyframes = new ArrayList<Keyframe>();
+
+		for (int index : this.selected)
+		{
+			Keyframe keyframe = this.channel.get(index);
+
+			if (keyframe != null)
+			{
+				keyframes.add(keyframe);
+			}
+		}
 
 		this.channel.sort();
-		this.selected = this.channel.getKeyframes().indexOf(frame);
-	}
+		this.selected.clear();
 
-	public void setTick(double tick, Selection which)
-	{
-        Keyframe keyframe = this.getKeyframe();
-
-        if (keyframe != null)
-        {
-	        which.setX(keyframe, tick);
-        }
-	}
-
-	public void setValue(double value, Selection which)
-	{
-        Keyframe keyframe = this.getKeyframe();
-
-        if (keyframe != null)
-        {
-	        which.setY(keyframe, value);
-        }
+		for (Keyframe keyframe : keyframes)
+		{
+			this.selected.add(this.channel.getKeyframes().indexOf(keyframe));
+		}
 	}
 
 	public void setInterpolation(KeyframeInterpolation interp)
 	{
-        Keyframe keyframe = this.getKeyframe();
+		for (int index : this.selected)
+		{
+			Keyframe keyframe = this.channel.get(index);
 
-        if (keyframe != null)
-        {
-	        keyframe.setInterpolation(interp);
-        }
+			if (keyframe != null)
+			{
+				keyframe.setInterpolation(interp);
+			}
+		}
 	}
 
 	public void setEasing(KeyframeEasing easing)
 	{
-		Keyframe keyframe = this.getKeyframe();
-
-		if (keyframe != null)
+		for (int index : this.selected)
 		{
-			keyframe.setEasing(easing);
+			Keyframe keyframe = this.channel.get(index);
+
+			if (keyframe != null)
+			{
+				keyframe.setEasing(easing);
+			}
 		}
 	}
 
 	public Keyframe getKeyframe()
 	{
-		return this.channel.get(this.selected);
+		if (this.selected.isEmpty())
+		{
+			return null;
+		}
+
+		return this.channel.get(this.selected.get(0));
+	}
+
+	public boolean hasSelected(int i)
+	{
+		return this.selected.contains(i);
 	}
 
 	public void clearSelection()
 	{
-		this.selected = -1;
+		this.selected.clear();
+	}
+
+	public int getSelectedCount()
+	{
+		return this.selected.size();
 	}
 }

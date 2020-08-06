@@ -119,8 +119,9 @@ public abstract class GuiKeyframeElement extends GuiElement
     public void selectByDuration(long duration)
     {}
 
-    public void clearSelection()
-    {}
+    public abstract boolean isMultipleSelected();
+
+    public abstract void clearSelection();
 
     public void doubleClick(int mouseX, int mouseY)
     {
@@ -193,7 +194,7 @@ public abstract class GuiKeyframeElement extends GuiElement
                 this.lastX = mouseX;
                 this.lastY = mouseY;
 
-                if (!this.pickKeyframe(context, mouseX, mouseY))
+                if (!this.pickKeyframe(context, mouseX, mouseY) && !GuiScreen.isShiftKeyDown())
                 {
                     this.clearSelection();
                     this.setKeyframe(null);

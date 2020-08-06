@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements.keyframes;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.utils.keyframes.Keyframe;
 import mchorse.mclib.utils.keyframes.KeyframeEasing;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
@@ -28,7 +29,6 @@ import java.util.function.Consumer;
 public class GuiDopeSheet extends GuiKeyframeElement
 {
     public List<GuiSheet> sheets = new ArrayList<GuiSheet>();
-    public GuiSheet current;
 
     public GuiDopeSheet(Minecraft mc, Consumer<Keyframe> callback)
     {
@@ -40,19 +40,79 @@ public class GuiDopeSheet extends GuiKeyframeElement
     @Override
     public void setTick(double tick)
     {
-        for (GuiSheet sheet : this.sheets)
-        {
-            sheet.setTick(tick, this.which);
-        }
+	    if (this.isMultipleSelected())
+	    {
+		    tick = (long) tick;
+
+		    int i = 0;
+		    double dx = 0;
+
+		    for (GuiSheet sheet : this.sheets)
+		    {
+			    for (int index : sheet.selected)
+			    {
+				    Keyframe keyframe = sheet.channel.get(index);
+
+				    if (keyframe != null)
+				    {
+					    if (i == 0)
+					    {
+						    dx = tick - keyframe.tick;
+						    keyframe.setTick((long) tick);
+					    }
+					    else
+					    {
+						    keyframe.setTick((long) (keyframe.tick + dx));
+					    }
+				    }
+
+				    i ++;
+			    }
+		    }
+	    }
+	    else
+	    {
+		    this.which.setX(this.getCurrent(), tick);
+	    }
+
+	    this.sliding = true;
     }
 
     @Override
     public void setValue(double value)
     {
-        for (GuiSheet sheet : this.sheets)
-        {
-            sheet.setValue(value, this.which);
-        }
+	    if (this.isMultipleSelected())
+	    {
+		    int i = 0;
+		    double dx = 0;
+
+		    for (GuiSheet sheet : this.sheets)
+		    {
+			    for (int index : sheet.selected)
+			    {
+				    Keyframe keyframe = sheet.channel.get(index);
+
+				    if (keyframe != null)
+				    {
+					    if (i == 0)
+					    {
+						    dx = value - keyframe.value;
+						    keyframe.setValue(value);
+					    }
+					    else
+					    {
+						    keyframe.setValue(keyframe.value + dx);
+					    }
+				    }
+
+				    i ++;
+			    }
+		    }
+	    }
+	    else
+	    {
+		    this.which.setY(this.getCurrent(), value);
+	    }
     }
 
     @Override
@@ -118,13 +178,41 @@ public class GuiDopeSheet extends GuiKeyframeElement
     @Override
     public Keyframe getCurrent()
     {
-        if (this.current != null)
-        {
-            return this.current.getKeyframe();
-        }
+    	GuiSheet current = this.getCurrentSheet();
 
-        return null;
+    	return current == null ? null : current.getKeyframe();
     }
+
+	public GuiSheet getCurrentSheet()
+	{
+		for (GuiSheet sheet : this.sheets)
+		{
+			if (!sheet.selected.isEmpty())
+			{
+				return sheet;
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public boolean isMultipleSelected()
+	{
+		int i = 0;
+
+		for (GuiSheet sheet : this.sheets)
+		{
+			i += sheet.getSelectedCount();
+
+			if (i >= 2)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	@Override
 	public void clearSelection()
@@ -149,8 +237,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
 			return;
 		}
 
-		this.current = this.sheets.get(i);
-
+		GuiSheet sheet = this.sheets.get(i);
 		KeyframeEasing easing = KeyframeEasing.IN;
 		KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
 		Keyframe frame = this.getCurrent();
@@ -164,7 +251,8 @@ public class GuiDopeSheet extends GuiKeyframeElement
 			oldTick = frame.tick;
 		}
 
-		this.current.selected = this.current.channel.insert(tick, this.current.channel.interpolate(tick));
+		sheet.selected.clear();
+		sheet.selected.add(sheet.channel.insert(tick, sheet.channel.interpolate(tick)));
 		frame = this.getCurrent();
 
 		if (oldTick != tick)
@@ -189,8 +277,10 @@ public class GuiDopeSheet extends GuiKeyframeElement
 			return;
 		}
 
-		this.current.channel.remove(this.current.selected);
-		this.current.selected -= 1;
+		GuiSheet current = this.getCurrentSheet();
+
+		current.channel.remove(current.selected.get(0));
+		current.selected.clear();
 		this.which = Selection.NOT_SELECTED;
 	}
 
@@ -200,9 +290,12 @@ public class GuiDopeSheet extends GuiKeyframeElement
 	protected void duplicateKeyframe(Keyframe frame, GuiContext context, int mouseX, int mouseY)
 	{
 		long offset = (long) this.fromGraphX(mouseX);
-		Keyframe created = this.current.channel.get(this.current.channel.insert(offset, frame.value));
+		GuiSheet current = this.getCurrentSheet();
+		int index = current.channel.insert(offset, frame.value);
+		Keyframe created = current.channel.get(index);
 
-		this.current.selected = this.current.channel.getKeyframes().indexOf(created);
+		current.selected.clear();
+		current.selected.add(index);
 		created.copy(frame);
 		created.tick = offset;
 	}
@@ -217,8 +310,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
 		for (GuiSheet sheet : this.sheets)
 		{
 			Keyframe prev = null;
-			int i = 0;
-			sheet.selected = -1;
+			int index = 0;
 
 			for (Keyframe frame : sheet.channel.getKeyframes())
 			{
@@ -228,19 +320,30 @@ public class GuiDopeSheet extends GuiKeyframeElement
 
 				if (left || right || point)
 				{
-					this.which = left ? Selection.LEFT_HANDLE : (right ? Selection.RIGHT_HANDLE : Selection.KEYFRAME);
-					this.current = sheet;
-					this.setKeyframe(frame);
+					if (this.isMultipleSelected())
+					{
+						Keyframe keyframe = this.getCurrent();
 
-					this.lastT = frame.tick;
+						this.which = Selection.KEYFRAME;
+						this.lastT = keyframe.tick;
+						this.lastV = keyframe.value;
+					}
+					else
+					{
+						this.which = left ? Selection.LEFT_HANDLE : (right ? Selection.RIGHT_HANDLE : Selection.KEYFRAME);
+						sheet.selected.clear();
+						sheet.selected.add(index);
+						this.setKeyframe(frame);
 
-					sheet.selected = i;
+						this.lastT = left ? frame.tick - frame.lx : (right ? frame.tick + frame.rx : frame.tick);
+						this.lastV = left ? frame.value + frame.ly : (right ? frame.value + frame.ry : frame.value);
+					}
 
 					return true;
 				}
 
 				prev = frame;
-				i++;
+				index++;
 			}
 
 			y += h;
@@ -260,8 +363,58 @@ public class GuiDopeSheet extends GuiKeyframeElement
 	protected void postSlideSort(GuiContext context)
 	{
 		/* Resort after dragging the tick thing */
-		this.current.sort();
+		for (GuiSheet sheet : this.sheets)
+		{
+			if (!sheet.selected.isEmpty())
+			{
+				sheet.sort();
+			}
+		}
+
 		this.sliding = false;
+	}
+
+	@Override
+	protected void resetMouseReleased(GuiContext context)
+	{
+		if (this.isGrabbing() && !this.isMultipleSelected())
+		{
+			/* Multi select */
+			Area area = new Area();
+
+			area.setPoints(this.lastX, this.lastY, context.mouseX, context.mouseY, 3);
+
+			int count = this.sheets.size();
+			int h = (this.area.h - 15) / count;
+			int y = this.area.ey() - h * count;
+			int c = 0;
+
+			for (GuiSheet sheet : this.sheets)
+			{
+				int i = 0;
+
+				for (Keyframe keyframe : sheet.channel.getKeyframes())
+				{
+					if (area.isInside(this.toGraphX(keyframe.tick), y + h / 2))
+					{
+						sheet.selected.add(i);
+						c++;
+					}
+
+					i++;
+				}
+
+				y += h;
+			}
+
+			if (c > 0)
+			{
+				this.which = Selection.KEYFRAME;
+				this.setKeyframe(this.getCurrent());
+			}
+		}
+
+		super.resetMouseReleased(context);
 	}
 
 	/* Rendering */
@@ -296,16 +449,16 @@ public class GuiDopeSheet extends GuiKeyframeElement
 
 			for (Keyframe frame : sheet.channel.getKeyframes())
 			{
-				this.drawRect(vb, this.toGraphX(frame.tick), y + h / 2, 3, this.current == sheet && i == sheet.selected ? 0xffffff : sheet.color);
+				this.drawRect(vb, this.toGraphX(frame.tick), y + h / 2, 3, sheet.hasSelected(i) ? 0xffffff : sheet.color);
 
 				if (frame.interp == KeyframeInterpolation.BEZIER && sheet.handles)
 				{
-					this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), y + h / 2, 2, this.current == sheet && i == sheet.selected ? 0xffffff : sheet.color);
+					this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), y + h / 2, 2, sheet.hasSelected(i) ? 0xffffff : sheet.color);
 				}
 
 				if (prev != null && prev.interp == KeyframeInterpolation.BEZIER && sheet.handles)
 				{
-					this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), y + h / 2, 2, this.current == sheet && i == sheet.selected ? 0xffffff : sheet.color);
+					this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), y + h / 2, 2, sheet.hasSelected(i) ? 0xffffff : sheet.color);
 				}
 
 				prev = frame;
@@ -317,16 +470,16 @@ public class GuiDopeSheet extends GuiKeyframeElement
 
 			for (Keyframe frame : sheet.channel.getKeyframes())
 			{
-				this.drawRect(vb, this.toGraphX(frame.tick), y + h / 2, 2, this.current == sheet && i == sheet.selected && this.which == Selection.KEYFRAME ? 0x0080ff : 0);
+				this.drawRect(vb, this.toGraphX(frame.tick), y + h / 2, 2, this.which == Selection.KEYFRAME && sheet.hasSelected(i) ? 0x0080ff : 0);
 
 				if (frame.interp == KeyframeInterpolation.BEZIER && sheet.handles)
 				{
-					this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), y + h / 2, 1, this.current == sheet && i == sheet.selected && this.which == Selection.RIGHT_HANDLE ? 0x0080ff : 0);
+					this.drawRect(vb, this.toGraphX(frame.tick + frame.rx), y + h / 2, 1, this.which == Selection.RIGHT_HANDLE && sheet.hasSelected(i) ? 0x0080ff : 0);
 				}
 
 				if (prev != null && prev.interp == KeyframeInterpolation.BEZIER && sheet.handles)
 				{
-					this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), y + h / 2, 1, this.current == sheet && i == sheet.selected && this.which == Selection.LEFT_HANDLE ? 0x0080ff : 0);
+					this.drawRect(vb, this.toGraphX(frame.tick - frame.lx), y + h / 2, 1, this.which == Selection.LEFT_HANDLE && sheet.hasSelected(i) ? 0x0080ff : 0);
 				}
 
 				prev = frame;
@@ -355,7 +508,15 @@ public class GuiDopeSheet extends GuiKeyframeElement
 
 		if (this.which == Selection.KEYFRAME)
 		{
-			frame.setTick((long) x);
+			if (this.isMultipleSelected())
+			{
+				int dx = mouseX - this.lastX;
+				int xx = this.toGraphX(this.lastT);
+
+				x = this.fromGraphX(xx + dx);
+			}
+
+			this.setTick(x);
 		}
 		else if (this.which == Selection.LEFT_HANDLE)
 		{

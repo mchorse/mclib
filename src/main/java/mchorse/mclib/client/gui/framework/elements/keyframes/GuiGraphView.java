@@ -221,11 +221,6 @@ public class GuiGraphView extends GuiKeyframeElement
         this.recalcMultipliers();
     }
 
-    public boolean isMultipleSelected()
-    {
-        return this.selected.size() > 1;
-    }
-
     @Override
     public Keyframe getCurrent()
     {
@@ -235,6 +230,12 @@ public class GuiGraphView extends GuiKeyframeElement
         }
 
         return this.channel.get(this.selected.get(0));
+    }
+
+    @Override
+    public boolean isMultipleSelected()
+    {
+        return this.selected.size() > 1;
     }
 
     @Override
@@ -439,7 +440,6 @@ public class GuiGraphView extends GuiKeyframeElement
 
         this.channel.sort();
         this.sliding = false;
-
         this.selected.clear();
 
         for (Keyframe keyframe : keyframes)
