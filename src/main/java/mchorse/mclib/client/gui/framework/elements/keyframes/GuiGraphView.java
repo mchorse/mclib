@@ -21,24 +21,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Graph view
+ *
+ * This GUI element is responsible for displaying and editing of
+ * keyframe channel (keyframes and its bezier handles)
+ */
 public class GuiGraphView extends GuiKeyframeElement
 {
     public KeyframeChannel channel;
-    public int duration;
     public int color;
     public List<Integer> selected = new ArrayList<Integer>();
 
-    public boolean sliding;
-    public boolean dragging;
-    private boolean moving;
-    private boolean scrolling;
-    private int lastX;
     private int lastY;
-    private double lastT;
     private double lastV;
-    private long dragTime;
-
-    private Scale scaleX = new Scale(false);
+    
     private Scale scaleY = new Scale(true);
 
     public GuiGraphView(Minecraft mc, Consumer<Keyframe> callback)
@@ -46,7 +43,18 @@ public class GuiGraphView extends GuiKeyframeElement
         super(mc, callback);
     }
 
-    /* Implementation of abstract methods */
+    public void setChannel(KeyframeChannel channel)
+    {
+        this.channel = channel;
+        this.resetView();
+    }
+
+    public void setColor(int color)
+    {
+        this.color = color;
+    }
+
+    /* Implementation of setters */
 
     @Override
     public void setTick(double tick)
@@ -148,110 +156,11 @@ public class GuiGraphView extends GuiKeyframeElement
         }
     }
 
-    public boolean isMultipleSelected()
-    {
-        return this.selected.size() > 1;
-    }
-
-    public boolean isGrabbing()
-    {
-        return this.dragging && System.currentTimeMillis() > this.dragTime + 50 && this.which == Selection.NOT_SELECTED;
-    }
-
-    public Keyframe getCurrent()
-    {
-        if (this.selected.isEmpty())
-        {
-            return null;
-        }
-
-        return this.channel.get(this.selected.get(0));
-    }
-
-    public void setChannel(KeyframeChannel channel)
-    {
-        this.channel = channel;
-        this.resetView();
-    }
-
-    public void setColor(int color)
-    {
-        this.color = color;
-    }
-
-    @Override
-    public void setDuration(long duration)
-    {
-        this.duration = (int) duration;
-    }
-
-    @Override
-    public void doubleClick(int mouseX, int mouseY)
-    {
-        if (this.which == Selection.NOT_SELECTED)
-        {
-            this.addCurrent((long) this.fromGraphX(mouseX), this.fromGraphY(mouseY));
-        }
-        else if (this.which == Selection.KEYFRAME)
-        {
-            this.removeCurrent();
-        }
-    }
-
-    public void addCurrent(long tick, double value)
-    {
-        KeyframeEasing easing = KeyframeEasing.IN;
-        KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
-        Keyframe frame = this.getCurrent();
-        long oldTick = tick;
-
-        if (frame != null)
-        {
-            easing = frame.easing;
-            interp = frame.interp;
-            oldTick = frame.tick;
-        }
-
-        this.selected.clear();
-        this.selected.add(this.channel.insert(tick, value));
-
-        if (oldTick != tick)
-        {
-            frame = this.getCurrent();
-            frame.setEasing(easing);
-            frame.setInterpolation(interp);
-        }
-    }
-
-    public void removeCurrent()
-    {
-        Keyframe frame = this.getCurrent();
-
-        if (frame == null)
-        {
-            return;
-        }
-
-        this.channel.remove(this.selected.get(0));
-        this.selected.clear();
-        this.which = Selection.NOT_SELECTED;
-    }
-
     /* Graphing code */
-
-    public int toGraphX(double tick)
-    {
-        return (int) (this.scaleX.to(tick)) + this.area.mx();
-    }
 
     public int toGraphY(double value)
     {
         return (int) (this.scaleY.to(value)) + this.area.my();
-    }
-
-    public double fromGraphX(int mouseX)
-    {
-        return this.scaleX.from(mouseX - this.area.mx());
     }
 
     public double fromGraphY(int mouseY)
@@ -259,9 +168,7 @@ public class GuiGraphView extends GuiKeyframeElement
         return this.scaleY.from(mouseY - this.area.my());
     }
 
-    /**
-     * Resets the view  
-     */
+    @Override
     public void resetView()
     {
         this.scaleX.set(0, 2);
@@ -317,17 +224,79 @@ public class GuiGraphView extends GuiKeyframeElement
         this.recalcMultipliers();
     }
 
-    /**
-     * Recalculate grid's multipliers 
-     */
-    private void recalcMultipliers()
+    public boolean isMultipleSelected()
     {
-        this.scaleX.mult = this.recalcMultiplier(this.scaleX.zoom);
+        return this.selected.size() > 1;
+    }
+
+    @Override
+    public Keyframe getCurrent()
+    {
+        if (this.selected.isEmpty())
+        {
+            return null;
+        }
+
+        return this.channel.get(this.selected.get(0));
+    }
+
+    @Override
+    public void addCurrent(int mouseX, int mouseY)
+    {
+        long tick = (long) this.fromGraphX(mouseX);
+        double value = this.fromGraphY(mouseY);
+
+        KeyframeEasing easing = KeyframeEasing.IN;
+        KeyframeInterpolation interp = KeyframeInterpolation.LINEAR;
+        Keyframe frame = this.getCurrent();
+        long oldTick = tick;
+
+        if (frame != null)
+        {
+            easing = frame.easing;
+            interp = frame.interp;
+            oldTick = frame.tick;
+        }
+
+        this.selected.clear();
+        this.selected.add(this.channel.insert(tick, value));
+
+        if (oldTick != tick)
+        {
+            frame = this.getCurrent();
+            frame.setEasing(easing);
+            frame.setInterpolation(interp);
+        }
+    }
+
+    @Override
+    public void removeCurrent()
+    {
+        Keyframe frame = this.getCurrent();
+
+        if (frame == null)
+        {
+            return;
+        }
+
+        this.channel.remove(this.selected.get(0));
+        this.selected.clear();
+        this.which = Selection.NOT_SELECTED;
+    }
+
+    /**
+     * Recalculate grid's multipliers
+     */
+    @Override
+    protected void recalcMultipliers()
+    {
+        super.recalcMultipliers();
+
         this.scaleY.mult = this.recalcMultiplier(this.scaleY.zoom);
     }
 
     /**
-     * Make current keyframe by given duration 
+     * Make current keyframe by given duration
      */
     public void selectByDuration(long duration)
     {
@@ -437,7 +406,6 @@ public class GuiGraphView extends GuiKeyframeElement
                 this.selected.clear();
 
                 this.dragging = true;
-                this.dragTime = System.currentTimeMillis();
 
                 this.setKeyframe(null);
             }
@@ -464,88 +432,55 @@ public class GuiGraphView extends GuiKeyframeElement
     }
 
     @Override
-    public boolean mouseScrolled(GuiContext context)
+    protected void zoom(int scroll)
     {
-        if (super.mouseScrolled(context))
+        boolean x = GuiScreen.isShiftKeyDown();
+        boolean y = GuiScreen.isCtrlKeyDown();
+        boolean none = !x && !y;
+
+        /* Scaling X */
+        if (x && !y || none)
         {
-            return true;
+            this.scaleX.zoom(Math.copySign(this.getZoomFactor(this.scaleX.zoom), scroll), 0.01F, 50F);
         }
 
-        int mouseX = context.mouseX;
-        int mouseY = context.mouseY;
-
-        if (this.area.isInside(mouseX, mouseY) && !this.scrolling)
+        /* Scaling Y */
+        if (y && !x || none)
         {
-            int scroll = context.mouseWheel;
-
-            if (!Minecraft.IS_RUNNING_ON_MAC)
-            {
-                scroll = -scroll;
-            }
-
-            boolean x = GuiScreen.isShiftKeyDown();
-            boolean y = GuiScreen.isCtrlKeyDown();
-            boolean none = !x && !y;
-
-            /* Scaling X */
-            if (x && !y || none)
-            {
-                this.scaleX.zoom(Math.copySign(this.getZoomFactor(this.scaleX.zoom), scroll), 0.01F, 50F);
-            }
-
-            /* Scaling Y */
-            if (y && !x || none)
-            {
-                this.scaleY.zoom(Math.copySign(this.getZoomFactor(this.scaleY.zoom), scroll), 0.01F, 50F);
-            }
-
-            this.recalcMultipliers();
-
-            return true;
+            this.scaleY.zoom(Math.copySign(this.getZoomFactor(this.scaleY.zoom), scroll), 0.01F, 50F);
         }
-
-        return false;
     }
 
     @Override
-    public void mouseReleased(GuiContext context)
+    protected void postSlideSort(GuiContext context)
     {
-        super.mouseReleased(context);
+        /* Resort after dragging the tick thing */
+        List<Keyframe> keyframes = new ArrayList<Keyframe>();
 
-        if (!this.selected.isEmpty())
+        for (int index : this.selected)
         {
-            if (this.sliding)
+            Keyframe keyframe = this.channel.get(index);
+
+            if (keyframe != null)
             {
-                /* Resort after dragging the tick thing */
-                List<Keyframe> keyframes = new ArrayList<Keyframe>();
-
-                for (int index : this.selected)
-                {
-                    Keyframe keyframe = this.channel.get(index);
-
-                    if (keyframe != null)
-                    {
-                        keyframes.add(keyframe);
-                    }
-                }
-
-                this.channel.sort();
-                this.sliding = false;
-
-                this.selected.clear();
-
-                for (Keyframe keyframe : keyframes)
-                {
-                    this.selected.add(this.channel.getKeyframes().indexOf(keyframe));
-                }
-            }
-
-            if (this.moving)
-            {
-                this.updateMoved();
+                keyframes.add(keyframe);
             }
         }
 
+        this.channel.sort();
+        this.sliding = false;
+
+        this.selected.clear();
+
+        for (Keyframe keyframe : keyframes)
+        {
+            this.selected.add(this.channel.getKeyframes().indexOf(keyframe));
+        }
+    }
+
+    @Override
+    protected void resetMouseReleased(GuiContext context)
+    {
         if (this.isGrabbing() && !this.isMultipleSelected())
         {
             /* Multi select */
@@ -572,9 +507,7 @@ public class GuiGraphView extends GuiKeyframeElement
             }
         }
 
-        this.dragging = false;
-        this.moving = false;
-        this.scrolling = false;
+        super.resetMouseReleased(context);
     }
 
     /* Rendering */
@@ -582,22 +515,13 @@ public class GuiGraphView extends GuiKeyframeElement
     @Override
     public void draw(GuiContext context)
     {
-        GuiScreen screen = this.mc.currentScreen;
-        int w = screen.width;
-        int h = screen.height;
-        int mouseX = context.mouseX;
+            int mouseX = context.mouseX;
         int mouseY = context.mouseY;
 
-        if (this.dragging && !this.moving && (Math.abs(this.lastX - mouseX) > 3 || Math.abs(this.lastY - mouseY) > 3))
-        {
-            this.moving = true;
-            this.sliding = true;
-        }
-
         this.area.draw(0x88000000);
-        GuiDraw.scissor(this.area.x, this.area.y, this.area.w, this.area.h, w, h);
+        GuiDraw.scissor(this.area.x, this.area.y, this.area.w, this.area.h, context);
 
-        this.drawGraph(context, mouseX, mouseY, w, h);
+        this.drawGraph(context, mouseX, mouseY);
 
         GuiDraw.unscissor(context);
 
@@ -605,16 +529,16 @@ public class GuiGraphView extends GuiKeyframeElement
     }
 
     /**
-     * Render the graph 
+     * Render the graph
      */
-    private void drawGraph(GuiContext context, int mouseX, int mouseY, int w, int h)
+    private void drawGraph(GuiContext context, int mouseX, int mouseY)
     {
+        this.handleMouse(context, mouseX, mouseY);
+
         if (this.channel == null)
         {
             return;
         }
-
-        this.handleMouse(context, mouseX, mouseY, w, h);
 
         if (this.duration > 0)
         {
@@ -689,7 +613,7 @@ public class GuiGraphView extends GuiKeyframeElement
 
         GlStateManager.color(1, 1, 1, 1);
 
-        /* Draw lines */
+        /* Draw the graph */
         vb.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 
         Keyframe prev = null;
@@ -738,7 +662,7 @@ public class GuiGraphView extends GuiKeyframeElement
         }
 
         vb.pos(this.toGraphX(prev.tick), this.toGraphY(prev.value), 0).color(r, g, b, 1).endVertex();
-        vb.pos(w, this.toGraphY(prev.value), 0).color(r, g, b, 1).endVertex();
+        vb.pos(this.area.ex(), this.toGraphY(prev.value), 0).color(r, g, b, 1).endVertex();
 
         Tessellator.getInstance().draw();
 
@@ -799,8 +723,14 @@ public class GuiGraphView extends GuiKeyframeElement
         GlStateManager.enableTexture2D();
     }
 
-    private void handleMouse(GuiContext context, int mouseX, int mouseY, int w, int h)
+    private void handleMouse(GuiContext context, int mouseX, int mouseY)
     {
+        if (this.dragging && !this.moving && (Math.abs(this.lastX - mouseX) > 3 || Math.abs(this.lastY - mouseY) > 3))
+        {
+            this.moving = true;
+            this.sliding = true;
+        }
+
         if (this.scrolling)
         {
             this.scaleX.shift = -(mouseX - this.lastX) / this.scaleX.zoom + this.lastT;

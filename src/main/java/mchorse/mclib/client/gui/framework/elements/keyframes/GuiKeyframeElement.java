@@ -2,6 +2,8 @@ package mchorse.mclib.client.gui.framework.elements.keyframes;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.Scale;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.keyframes.Keyframe;
 import mchorse.mclib.utils.keyframes.KeyframeEasing;
@@ -9,6 +11,8 @@ import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class GuiKeyframeElement extends GuiElement
@@ -17,6 +21,16 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     public Consumer<Keyframe> callback;
     public Selection which = Selection.NOT_SELECTED;
+    public int duration;
+
+    public boolean sliding;
+    public boolean dragging;
+    protected boolean moving;
+    protected boolean scrolling;
+    protected int lastX;
+    protected double lastT;
+
+    protected Scale scaleX = new Scale(false);
 
     public GuiKeyframeElement(Minecraft mc, Consumer<Keyframe> callback)
     {
@@ -43,22 +57,22 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     public abstract void setEasing(KeyframeEasing easing);
 
-    /* Abstract methods */
+    public void setDuration(long duration)
+    {
+        this.duration = (int) duration;
+    }
 
-    public abstract Keyframe getCurrent();
+    /* Graphing code */
 
-    public abstract void setDuration(long duration);
+    public abstract void resetView();
 
-    public abstract void selectByDuration(long duration);
-
-    public abstract void doubleClick(int mouseX, int mouseY);
-
-    /* Common hooks */
-
-    protected void updateMoved()
-    {}
-
-    /* Offsets/multipliers */
+    /**
+     * Recalculate grid's multipliers
+     */
+    protected void recalcMultipliers()
+    {
+        this.scaleX.mult = this.recalcMultiplier(this.scaleX.zoom);
+    }
 
     protected int recalcMultiplier(double zoom)
     {
@@ -80,21 +94,48 @@ public abstract class GuiKeyframeElement extends GuiElement
         return factor <= 0 ? 1 : factor;
     }
 
-    /**
-     * Get zoom factor based by current zoom value 
-     */
-    protected double getZoomFactor(double zoom)
+    public int toGraphX(double tick)
     {
-        double factor = 0;
-
-        if (zoom < 0.2F) factor = 0.005F;
-        else if (zoom < 1.0F) factor = 0.025F;
-        else if (zoom < 2.0F) factor = 0.1F;
-        else if (zoom < 15.0F) factor = 0.5F;
-        else if (zoom <= 50.0F) factor = 1F;
-
-        return factor;
+        return (int) (this.scaleX.to(tick)) + this.area.mx();
     }
+
+    public double fromGraphX(int mouseX)
+    {
+        return this.scaleX.from(mouseX - this.area.mx());
+    }
+
+    /* Abstract methods */
+
+    public abstract Keyframe getCurrent();
+
+    public boolean isGrabbing()
+    {
+        return this.dragging && this.moving && this.which == Selection.NOT_SELECTED;
+    }
+
+    public void selectByDuration(long duration)
+    {}
+
+    public void doubleClick(int mouseX, int mouseY)
+    {
+        if (this.which == Selection.NOT_SELECTED)
+        {
+            this.addCurrent(mouseX, mouseY);
+        }
+        else if (this.which == Selection.KEYFRAME)
+        {
+            this.removeCurrent();
+        }
+    }
+
+    public abstract void addCurrent(int mouseX, int mouseY);
+
+    public abstract void removeCurrent();
+
+    /* Common hooks */
+
+    protected void updateMoved()
+    {}
 
     protected void drawRect(BufferBuilder builder, int x, int y, int offset, int c)
     {
@@ -112,4 +153,80 @@ public abstract class GuiKeyframeElement extends GuiElement
     protected void drawCursor(GuiContext context)
     {}
 
+    /* Mouse handling */
+
+    @Override
+    public boolean mouseScrolled(GuiContext context)
+    {
+        if (super.mouseScrolled(context))
+        {
+            return true;
+        }
+
+        if (this.area.isInside(context.mouseX, context.mouseY) && !this.scrolling)
+        {
+            int scroll = context.mouseWheel;
+
+            if (!Minecraft.IS_RUNNING_ON_MAC)
+            {
+                scroll = -scroll;
+            }
+
+            this.zoom(scroll);
+            this.recalcMultipliers();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected void zoom(int scroll)
+    {
+        this.scaleX.zoom(Math.copySign(this.getZoomFactor(this.scaleX.zoom), scroll), 0.01F, 50F);
+    }
+
+    protected double getZoomFactor(double zoom)
+    {
+        double factor = 0;
+
+        if (zoom < 0.2F) factor = 0.005F;
+        else if (zoom < 1.0F) factor = 0.025F;
+        else if (zoom < 2.0F) factor = 0.1F;
+        else if (zoom < 15.0F) factor = 0.5F;
+        else if (zoom <= 50.0F) factor = 1F;
+
+        return factor;
+    }
+
+    @Override
+    public void mouseReleased(GuiContext context)
+    {
+        super.mouseReleased(context);
+
+        if (this.which == Selection.KEYFRAME)
+        {
+            if (this.sliding)
+            {
+                this.postSlideSort(context);
+            }
+
+            if (this.moving)
+            {
+                this.updateMoved();
+            }
+        }
+
+        this.resetMouseReleased(context);
+    }
+
+    protected void postSlideSort(GuiContext context)
+    {}
+
+    protected void resetMouseReleased(GuiContext context)
+    {
+        this.dragging = false;
+        this.moving = false;
+        this.scrolling = false;
+    }
 }
