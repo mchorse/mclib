@@ -7,7 +7,6 @@ import mchorse.mclib.utils.keyframes.Keyframe;
 import mchorse.mclib.utils.keyframes.KeyframeEasing;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -377,7 +376,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
 	@Override
 	protected void resetMouseReleased(GuiContext context)
 	{
-		if (this.isGrabbing() && !this.isMultipleSelected())
+		if (this.isSelecting())
 		{
 			/* Multi select */
 			Area area = new Area();
@@ -395,7 +394,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
 
 				for (Keyframe keyframe : sheet.channel.getKeyframes())
 				{
-					if (area.isInside(this.toGraphX(keyframe.tick), y + h / 2))
+					if (area.isInside(this.toGraphX(keyframe.tick), y + h / 2) && !sheet.selected.contains(i))
 					{
 						sheet.selected.add(i);
 						c++;
@@ -536,7 +535,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
 				frame.lx = frame.rx;
 			}
 		}
-		else if (this.which == Selection.NOT_SELECTED && this.parent != null)
+		else if (this.which == Selection.NOT_SELECTED)
 		{
 			this.moveNoKeyframe(context, frame, x, 0);
 		}

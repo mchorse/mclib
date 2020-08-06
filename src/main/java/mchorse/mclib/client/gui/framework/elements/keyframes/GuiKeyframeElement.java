@@ -28,6 +28,7 @@ public abstract class GuiKeyframeElement extends GuiElement
     public boolean dragging;
     protected boolean moving;
     protected boolean scrolling;
+    protected boolean selecting;
     protected int lastX;
     protected int lastY;
     protected double lastT;
@@ -111,9 +112,9 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     public abstract Keyframe getCurrent();
 
-    public boolean isGrabbing()
+    public boolean isSelecting()
     {
-        return this.dragging && this.moving && this.which == Selection.NOT_SELECTED;
+        return this.dragging && this.moving && this.selecting;
     }
 
     public void selectByDuration(long duration)
@@ -194,7 +195,11 @@ public abstract class GuiKeyframeElement extends GuiElement
                 this.lastX = mouseX;
                 this.lastY = mouseY;
 
-                if (!this.pickKeyframe(context, mouseX, mouseY) && !GuiScreen.isShiftKeyDown())
+                if (GuiScreen.isShiftKeyDown())
+                {
+                    this.selecting = true;
+                }
+                else if (!this.pickKeyframe(context, mouseX, mouseY))
                 {
                     this.clearSelection();
                     this.setKeyframe(null);
@@ -294,6 +299,7 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     protected void resetMouseReleased(GuiContext context)
     {
+        this.selecting = false;
         this.dragging = false;
         this.moving = false;
         this.scrolling = false;
@@ -320,8 +326,8 @@ public abstract class GuiKeyframeElement extends GuiElement
 
         this.drawGraph(context, context.mouseX, context.mouseY);
 
-        /* Draw selection */
-        if (this.isGrabbing())
+        /* Draw selection box */
+        if (this.isSelecting())
         {
             Gui.drawRect(this.lastX, this.lastY, context.mouseX, context.mouseY, 0x440088ff);
         }
@@ -385,7 +391,7 @@ public abstract class GuiKeyframeElement extends GuiElement
             this.scrolling(mouseX, mouseY);
         }
         /* Move the current keyframe */
-        else if (this.moving)
+        else if (this.moving && !this.selecting)
         {
             this.setKeyframe(this.moving(context, mouseX, mouseY));
         }

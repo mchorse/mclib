@@ -1,7 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements.keyframes;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
-import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Scale;
 import mchorse.mclib.utils.keyframes.Keyframe;
@@ -451,11 +450,9 @@ public class GuiGraphView extends GuiKeyframeElement
     @Override
     protected void resetMouseReleased(GuiContext context)
     {
-        if (this.isGrabbing() && !this.isMultipleSelected())
+        if (this.isSelecting())
         {
             /* Multi select */
-            this.selected.clear();
-
             Area area = new Area();
 
             area.setPoints(this.lastX, this.lastY, context.mouseX, context.mouseY, 3);
@@ -464,7 +461,7 @@ public class GuiGraphView extends GuiKeyframeElement
             {
                 Keyframe keyframe = this.channel.get(i);
 
-                if (area.isInside(this.toGraphX(keyframe.tick), this.toGraphY(keyframe.value)))
+                if (area.isInside(this.toGraphX(keyframe.tick), this.toGraphY(keyframe.value)) && !this.selected.contains(i))
                 {
                     this.selected.add(i);
                 }
@@ -695,7 +692,7 @@ public class GuiGraphView extends GuiKeyframeElement
                 frame.ly = -frame.ry;
             }
         }
-        else if (this.which == Selection.NOT_SELECTED && this.parent != null)
+        else if (this.which == Selection.NOT_SELECTED)
         {
             this.moveNoKeyframe(context, frame, x, y);
         }
