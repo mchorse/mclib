@@ -43,6 +43,9 @@ public class Icons
 	public static final Icon MOVE_LEFT = new Icon(ICONS, 144, 16, 8, 16);
 	public static final Icon MOVE_RIGHT = new Icon(ICONS, 152, 16, 8, 16);
 	public static final Icon HELP = new Icon(ICONS, 160, 16);
+	public static final Icon LEFT_HANDLE = new Icon(ICONS, 176, 16);
+	public static final Icon MAIN_HANDLE = new Icon(ICONS, 192, 16);
+	public static final Icon RIGHT_HANDLE = new Icon(ICONS, 208, 16);
 
 	public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240, 16, 16);
 }

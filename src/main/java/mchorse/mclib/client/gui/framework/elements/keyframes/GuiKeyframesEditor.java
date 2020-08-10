@@ -4,10 +4,13 @@ import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiCirculateElement;
+import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
+import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.GuiUtils;
+import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.MathUtils;
 import mchorse.mclib.utils.keyframes.Keyframe;
@@ -67,6 +70,8 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         this.frameButtons.add(this.tick, this.value, this.interp, this.easing, this.interpolations);
     }
 
+    protected abstract T createElement(Minecraft mc);
+
     protected void toggleInterpolation()
     {
         Keyframe keyframe = this.graph.getCurrent();
@@ -89,8 +94,6 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
     {
         this.easing.clickItself(GuiBase.getCurrent(), GuiScreen.isShiftKeyDown() ? 1 : 0);
     }
-
-    protected abstract T createElement(Minecraft mc);
 
     @Override
     public boolean mouseClicked(GuiContext context)
@@ -132,6 +135,21 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         return this.area.isInside(mouseX, mouseY);
     }
 
+    @Override
+    public GuiContextMenu createContextMenu(GuiContext context)
+    {
+        if (this.graph.which != Selection.NOT_SELECTED)
+        {
+            GuiSimpleContextMenu menu = new GuiSimpleContextMenu(this.mc);
+
+            menu.action(Icons.REMOVE, IKey.lang("mclib.gui.keyframes.context.remove"), this::removeSelectedKeyframes);
+
+            return menu;
+        }
+
+        return super.createContextMenu(context);
+    }
+
     protected void doubleClick(int mouseX, int mouseY)
     {
         this.graph.doubleClick(mouseX, mouseY);
@@ -142,6 +160,11 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
     public boolean mouseScrolled(GuiContext context)
     {
         return super.mouseScrolled(context) || this.area.isInside(context.mouseX, context.mouseY);
+    }
+
+    public void removeSelectedKeyframes()
+    {
+        this.graph.removeSelectedKeyframes();
     }
 
     public void setTick(double tick)

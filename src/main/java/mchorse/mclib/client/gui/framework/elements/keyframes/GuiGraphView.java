@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -286,6 +287,24 @@ public class GuiGraphView extends GuiKeyframeElement
         this.channel.remove(this.selected.get(0));
         this.selected.clear();
         this.which = Selection.NOT_SELECTED;
+    }
+
+    @Override
+    public void removeSelectedKeyframes()
+    {
+        List<Integer> sorted = new ArrayList<Integer>(this.selected);
+
+        Collections.sort(sorted);
+        Collections.reverse(sorted);
+
+        this.clearSelection();
+
+        for (int index : sorted)
+        {
+            this.channel.remove(index);
+        }
+
+        this.setKeyframe(null);
     }
 
     /**

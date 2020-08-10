@@ -7,6 +7,7 @@ import mchorse.mclib.utils.keyframes.KeyframeEasing;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GuiSheet
@@ -103,5 +104,20 @@ public class GuiSheet
 	public int getSelectedCount()
 	{
 		return this.selected.size();
+	}
+
+	public void removeKeyframes()
+	{
+		List<Integer> sorted = new ArrayList<Integer>(this.selected);
+
+		Collections.sort(sorted);
+		Collections.reverse(sorted);
+
+		this.clearSelection();
+
+		for (int index : sorted)
+		{
+			this.channel.remove(index);
+		}
 	}
 }

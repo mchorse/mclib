@@ -278,6 +278,17 @@ public class GuiDopeSheet extends GuiKeyframeElement
 		this.which = Selection.NOT_SELECTED;
 	}
 
+	@Override
+	public void removeSelectedKeyframes()
+	{
+		for (GuiSheet sheet : this.sheets)
+		{
+			sheet.removeKeyframes();
+		}
+
+		this.setKeyframe(null);
+	}
+
 	/* Mouse input handling */
 
 	@Override

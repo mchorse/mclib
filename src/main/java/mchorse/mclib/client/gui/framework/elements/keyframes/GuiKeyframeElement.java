@@ -150,6 +150,8 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     public abstract void removeCurrent();
 
+    public abstract void removeSelectedKeyframes();
+
     /* Common hooks */
 
     protected void updateMoved()

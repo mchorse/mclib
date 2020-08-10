@@ -27,6 +27,8 @@ mclib.gui.transforms.translate=Translate
 mclib.gui.transforms.scale=Scale
 mclib.gui.transforms.rotate=Rotate
 
+mclib.gui.keyframes.context.remove=Remove keyframe(s)
+
 # Config
 mclib.config.title=McLib
 
