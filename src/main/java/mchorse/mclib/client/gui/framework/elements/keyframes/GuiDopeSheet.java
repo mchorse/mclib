@@ -196,21 +196,16 @@ public class GuiDopeSheet extends GuiKeyframeElement
 	}
 
 	@Override
-	public boolean isMultipleSelected()
+	public int getSelectedCount()
 	{
 		int i = 0;
 
 		for (GuiSheet sheet : this.sheets)
 		{
 			i += sheet.getSelectedCount();
-
-			if (i >= 2)
-			{
-				return true;
-			}
 		}
 
-		return false;
+		return i;
 	}
 
 	@Override
@@ -300,7 +295,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
 	}
 
 	@Override
-	protected boolean pickKeyframe(GuiContext context, int mouseX, int mouseY)
+	protected boolean pickKeyframe(GuiContext context, int mouseX, int mouseY, boolean shift)
 	{
 		int sheetCount = this.sheets.size();
 		int h = (this.area.h - 15) / sheetCount;
@@ -320,23 +315,39 @@ public class GuiDopeSheet extends GuiKeyframeElement
 
 				if (left || right || point)
 				{
-					if (this.isMultipleSelected())
-					{
-						Keyframe keyframe = this.getCurrent();
+					int key = sheet.selected.indexOf(index);
 
-						this.which = Selection.KEYFRAME;
-						this.lastT = keyframe.tick;
-						this.lastV = keyframe.value;
-					}
-					else
+					if (!shift && key == -1)
 					{
 						this.clearSelection();
+					}
 
-						this.which = left ? Selection.LEFT_HANDLE : (right ? Selection.RIGHT_HANDLE : Selection.KEYFRAME);
-						sheet.selected.clear();
-						sheet.selected.add(index);
+					Selection which = left ? Selection.LEFT_HANDLE : (right ? Selection.RIGHT_HANDLE : Selection.KEYFRAME);
+
+					if (!shift || which == this.which)
+					{
+						this.which = which;
+
+						if (shift && this.isMultipleSelected() && key != -1)
+						{
+							sheet.selected.remove(key);
+							frame = this.getCurrent();
+						}
+						else if (key == -1)
+						{
+							sheet.selected.add(index);
+							frame = this.isMultipleSelected() ? this.getCurrent() : frame;
+						}
+						else
+						{
+							frame = this.getCurrent();
+						}
+
 						this.setKeyframe(frame);
+					}
 
+					if (frame != null)
+					{
 						this.lastT = left ? frame.tick - frame.lx : (right ? frame.tick + frame.rx : frame.tick);
 						this.lastV = left ? frame.value + frame.ly : (right ? frame.value + frame.ry : frame.value);
 					}
@@ -379,7 +390,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
 	@Override
 	protected void resetMouseReleased(GuiContext context)
 	{
-		if (this.isSelecting())
+		if (this.isGrabbing())
 		{
 			/* Multi select */
 			Area area = new Area();
@@ -433,13 +444,11 @@ public class GuiDopeSheet extends GuiKeyframeElement
 
 		for (GuiSheet sheet : this.sheets)
 		{
-			float r = (sheet.color >> 16 & 255) / 255.0F;
-			float g = (sheet.color >> 8 & 255) / 255.0F;
-			float b = (sheet.color & 255) / 255.0F;
+			COLOR.set(sheet.color, false);
 
 			vb.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-			vb.pos(this.area.x, y + h / 2, 0).color(r, g, b, 0.65F).endVertex();
-			vb.pos(this.area.ex(), y + h / 2, 0).color(r, g, b, 0.65F).endVertex();
+			vb.pos(this.area.x, y + h / 2, 0).color(COLOR.r, COLOR.g, COLOR.b, 0.65F).endVertex();
+			vb.pos(this.area.ex(), y + h / 2, 0).color(COLOR.r, COLOR.g, COLOR.b, 0.65F).endVertex();
 
 			Tessellator.getInstance().draw();
 

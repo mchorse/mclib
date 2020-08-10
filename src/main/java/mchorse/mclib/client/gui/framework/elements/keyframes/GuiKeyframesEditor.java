@@ -59,7 +59,7 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
 
         this.interp.flex().relative(this.tick).set(-90, 0, 80, 20);
         this.easing.flex().relative(this.value).set(-90, 0, 80, 20);
-        this.interpolations.flex().relative(this).set(0, 30, 80, 20).x(1, -180).h(1, -60).maxH(16 * 7);
+        this.interpolations.flex().relative(this).set(0, 30, 80, 20).x(1, -180).h(1, -30).maxH(16 * 7);
         this.graph.flex().relative(this).set(0, 0, 0, 0).w(1, 0).h(1, 0);
 
         /* Add all elements */

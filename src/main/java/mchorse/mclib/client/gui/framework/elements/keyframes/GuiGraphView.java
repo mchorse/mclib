@@ -232,9 +232,9 @@ public class GuiGraphView extends GuiKeyframeElement
     }
 
     @Override
-    public boolean isMultipleSelected()
+    public int getSelectedCount()
     {
-        return this.selected.size() > 1;
+        return this.selected.size();
     }
 
     @Override
@@ -342,7 +342,7 @@ public class GuiGraphView extends GuiKeyframeElement
     }
 
     @Override
-    protected boolean pickKeyframe(GuiContext context, int mouseX, int mouseY)
+    protected boolean pickKeyframe(GuiContext context, int mouseX, int mouseY, boolean shift)
     {
         int index = 0;
         int count = this.channel.getKeyframes().size();
@@ -356,21 +356,39 @@ public class GuiGraphView extends GuiKeyframeElement
 
             if (left || right || point)
             {
-                if (this.isMultipleSelected())
-                {
-                    Keyframe keyframe = this.getCurrent();
+                int key = this.selected.indexOf(index);
 
-                    this.which = Selection.KEYFRAME;
-                    this.lastT = keyframe.tick;
-                    this.lastV = keyframe.value;
+                if (!shift && key == -1)
+                {
+                    this.clearSelection();
                 }
-                else
-                {
-                    this.which = left ? Selection.LEFT_HANDLE : (right ? Selection.RIGHT_HANDLE : Selection.KEYFRAME);
-                    this.selected.clear();
-                    this.selected.add(index);
-                    this.setKeyframe(frame);
 
+                Selection which = left ? Selection.LEFT_HANDLE : (right ? Selection.RIGHT_HANDLE : Selection.KEYFRAME);
+
+                if (!shift || which == this.which)
+                {
+                    this.which = which;
+
+                    if (shift && this.isMultipleSelected() && key != -1)
+                    {
+                        this.selected.remove(key);
+                        frame = this.getCurrent();
+                    }
+                    else if (key == -1)
+                    {
+                        this.selected.add(index);
+                        frame = this.isMultipleSelected() ? this.getCurrent() : frame;
+                    }
+                    else
+                    {
+                        frame = this.getCurrent();
+                    }
+
+                    this.setKeyframe(frame);
+                }
+
+                if (frame != null)
+                {
                     this.lastT = left ? frame.tick - frame.lx : (right ? frame.tick + frame.rx : frame.tick);
                     this.lastV = left ? frame.value + frame.ly : (right ? frame.value + frame.ry : frame.value);
                 }
@@ -451,7 +469,7 @@ public class GuiGraphView extends GuiKeyframeElement
     @Override
     protected void resetMouseReleased(GuiContext context)
     {
-        if (this.isSelecting())
+        if (this.isGrabbing())
         {
             /* Multi select */
             Area area = new Area();
@@ -524,9 +542,10 @@ public class GuiGraphView extends GuiKeyframeElement
         BufferBuilder vb = Tessellator.getInstance().getBuffer();
 
         /* Colorize the graph for given channel */
-        float r = (this.color >> 16 & 255) / 255.0F;
-        float g = (this.color >> 8 & 255) / 255.0F;
-        float b = (this.color & 255) / 255.0F;
+        COLOR.set(this.color, false);
+        float r = COLOR.r;
+        float g = COLOR.g;
+        float b = COLOR.b;
 
         GlStateManager.color(1, 1, 1, 1);
 

@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 
 public abstract class GuiKeyframeElement extends GuiElement
 {
-    public static final Color color = new Color();
+    public static final Color COLOR = new Color();
 
     public Consumer<Keyframe> callback;
     public Selection which = Selection.NOT_SELECTED;
@@ -28,7 +28,7 @@ public abstract class GuiKeyframeElement extends GuiElement
     public boolean dragging;
     protected boolean moving;
     protected boolean scrolling;
-    protected boolean selecting;
+    protected boolean grabbing;
     protected int lastX;
     protected int lastY;
     protected double lastT;
@@ -112,15 +112,25 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     public abstract Keyframe getCurrent();
 
-    public boolean isSelecting()
+    public boolean isGrabbing()
     {
-        return this.dragging && this.moving && this.selecting;
+        return this.dragging && this.moving && this.grabbing;
     }
 
     public void selectByDuration(long duration)
     {}
 
-    public abstract boolean isMultipleSelected();
+    public abstract int getSelectedCount();
+
+    public boolean isMultipleSelected()
+    {
+        return this.getSelectedCount() > 1;
+    }
+
+    public boolean hasSelected()
+    {
+        return this.getSelectedCount() > 0;
+    }
 
     public abstract void clearSelection();
 
@@ -130,7 +140,7 @@ public abstract class GuiKeyframeElement extends GuiElement
         {
             this.addCurrent(mouseX, mouseY);
         }
-        else if (this.which == Selection.KEYFRAME)
+        else if (this.which == Selection.KEYFRAME && !this.isMultipleSelected())
         {
             this.removeCurrent();
         }
@@ -144,16 +154,6 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     protected void updateMoved()
     {}
-
-    protected void drawRect(BufferBuilder builder, int x, int y, int offset, int c)
-    {
-        color.set(c, false);
-
-        builder.pos(x - offset, y + offset, 0.0D).color(color.r, color.g, color.b, 1F).endVertex();
-        builder.pos(x + offset, y + offset, 0.0D).color(color.r, color.g, color.b, 1F).endVertex();
-        builder.pos(x + offset, y - offset, 0.0D).color(color.r, color.g, color.b, 1F).endVertex();
-        builder.pos(x - offset, y - offset, 0.0D).color(color.r, color.g, color.b, 1F).endVertex();
-    }
 
     protected void moveNoKeyframe(GuiContext context, Keyframe frame, double x, double y)
     {}
@@ -192,14 +192,16 @@ public abstract class GuiKeyframeElement extends GuiElement
                     return false;
                 }
 
+                boolean shift = GuiScreen.isShiftKeyDown();
                 this.lastX = mouseX;
                 this.lastY = mouseY;
 
-                if (GuiScreen.isShiftKeyDown())
+                if (shift)
                 {
-                    this.selecting = true;
+                    this.grabbing = true;
                 }
-                else if (!this.pickKeyframe(context, mouseX, mouseY))
+
+                if (!this.pickKeyframe(context, mouseX, mouseY, shift) && !shift)
                 {
                     this.clearSelection();
                     this.setKeyframe(null);
@@ -219,7 +221,7 @@ public abstract class GuiKeyframeElement extends GuiElement
     protected void duplicateKeyframe(Keyframe frame, GuiContext context, int mouseX, int mouseY)
     {}
 
-    protected abstract boolean pickKeyframe(GuiContext context, int mouseX, int mouseY);
+    protected abstract boolean pickKeyframe(GuiContext context, int mouseX, int mouseY, boolean multi);
 
     protected void setupScrolling(GuiContext context, int mouseX, int mouseY)
     {
@@ -299,7 +301,7 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     protected void resetMouseReleased(GuiContext context)
     {
-        this.selecting = false;
+        this.grabbing = false;
         this.dragging = false;
         this.moving = false;
         this.scrolling = false;
@@ -327,7 +329,7 @@ public abstract class GuiKeyframeElement extends GuiElement
         this.drawGraph(context, context.mouseX, context.mouseY);
 
         /* Draw selection box */
-        if (this.isSelecting())
+        if (this.isGrabbing())
         {
             Gui.drawRect(this.lastX, this.lastY, context.mouseX, context.mouseY, 0x440088ff);
         }
@@ -376,6 +378,16 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     protected abstract void drawGraph(GuiContext context, int mouseX, int mouseY);
 
+    protected void drawRect(BufferBuilder builder, int x, int y, int offset, int c)
+    {
+        COLOR.set(c, false);
+
+        builder.pos(x - offset, y + offset, 0.0D).color(COLOR.r, COLOR.g, COLOR.b, 1F).endVertex();
+        builder.pos(x + offset, y + offset, 0.0D).color(COLOR.r, COLOR.g, COLOR.b, 1F).endVertex();
+        builder.pos(x + offset, y - offset, 0.0D).color(COLOR.r, COLOR.g, COLOR.b, 1F).endVertex();
+        builder.pos(x - offset, y - offset, 0.0D).color(COLOR.r, COLOR.g, COLOR.b, 1F).endVertex();
+    }
+
     /* Handling dragging */
 
     protected void handleMouse(GuiContext context, int mouseX, int mouseY)
@@ -391,7 +403,7 @@ public abstract class GuiKeyframeElement extends GuiElement
             this.scrolling(mouseX, mouseY);
         }
         /* Move the current keyframe */
-        else if (this.moving && !this.selecting)
+        else if (this.moving && !this.grabbing)
         {
             this.setKeyframe(this.moving(context, mouseX, mouseY));
         }
