@@ -27,6 +27,8 @@ mclib.gui.transforms.translate=Translate
 mclib.gui.transforms.scale=Scale
 mclib.gui.transforms.rotate=Rotate
 
+mclib.gui.keyframes.tick=Tick
+mclib.gui.keyframes.value=Value
 mclib.gui.keyframes.context.remove=Remove keyframe(s)
 mclib.gui.keyframes.context.to_left=Switch to left handles
 mclib.gui.keyframes.context.to_main=Switch to main handles

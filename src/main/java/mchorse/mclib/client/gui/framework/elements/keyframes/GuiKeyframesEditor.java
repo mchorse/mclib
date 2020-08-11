@@ -40,9 +40,9 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         this.frameButtons = new GuiElement(mc);
         this.frameButtons.setVisible(false);
         this.tick = new GuiTrackpadElement(mc, this::setTick);
-        this.tick.limit(Integer.MIN_VALUE, Integer.MAX_VALUE, true).tooltip(IKey.lang("aperture.gui.panels.tick"));
+        this.tick.limit(Integer.MIN_VALUE, Integer.MAX_VALUE, true).tooltip(IKey.lang("mclib.gui.keyframes.tick"));
         this.value = new GuiTrackpadElement(mc, this::setValue);
-        this.value.tooltip(IKey.lang("aperture.gui.panels.value"));
+        this.value.tooltip(IKey.lang("mclib.gui.keyframes.value"));
         this.interp = new GuiButtonElement(mc, IKey.lang(""), (b) -> this.interpolations.toggleVisible());
         this.interpolations = new GuiKeyframeInterpolationsList(mc, (interp) -> this.pickInterpolation(interp.get(0)));
         this.interpolations.setVisible(false);

@@ -26,6 +26,9 @@ mclib.gui.transforms.translate=平移
 mclib.gui.transforms.scale=縮放
 mclib.gui.transforms.rotate=旋轉
 
+mclib.gui.keyframes.tick=Tick
+mclib.gui.keyframes.value=值
+
 # Config
 mclib.config.title=McLib
 

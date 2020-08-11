@@ -27,6 +27,9 @@ mclib.gui.transforms.translate=Перемещение
 mclib.gui.transforms.scale=Масштаб
 mclib.gui.transforms.rotate=Вращение
 
+mclib.gui.keyframes.tick=Тик
+mclib.gui.keyframes.value=Значение
+
 # Config
 mclib.config.title=МакЛиб
 
