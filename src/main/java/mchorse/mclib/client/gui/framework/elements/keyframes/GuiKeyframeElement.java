@@ -53,9 +53,9 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     /* Setters */
 
-    public abstract void setTick(double tick);
+    public abstract void setTick(double tick, boolean opposite);
 
-    public abstract void setValue(double value);
+    public abstract void setValue(double value, boolean opposite);
 
     public abstract void setInterpolation(KeyframeInterpolation interp);
 

@@ -28,6 +28,9 @@ mclib.gui.transforms.scale=Scale
 mclib.gui.transforms.rotate=Rotate
 
 mclib.gui.keyframes.context.remove=Remove keyframe(s)
+mclib.gui.keyframes.context.to_left=Switch to left handles
+mclib.gui.keyframes.context.to_main=Switch to main handles
+mclib.gui.keyframes.context.to_right=Switch to right handles
 
 # Config
 mclib.config.title=McLib

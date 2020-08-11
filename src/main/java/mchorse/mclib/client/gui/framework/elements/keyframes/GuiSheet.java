@@ -55,6 +55,32 @@ public class GuiSheet
 		}
 	}
 
+	public void setTick(double dx, Selection selection, boolean opposite)
+	{
+		for (int index : this.selected)
+		{
+			Keyframe keyframe = this.channel.get(index);
+
+			if (keyframe != null)
+			{
+				selection.setX(keyframe, selection.getX(keyframe) + dx, opposite);
+			}
+		}
+	}
+
+	public void setValue(double dy, Selection selection, boolean opposite)
+	{
+		for (int index : this.selected)
+		{
+			Keyframe keyframe = this.channel.get(index);
+
+			if (keyframe != null)
+			{
+				selection.setY(keyframe, selection.getY(keyframe) + dy, opposite);
+			}
+		}
+	}
+
 	public void setInterpolation(KeyframeInterpolation interp)
 	{
 		for (int index : this.selected)
@@ -106,7 +132,7 @@ public class GuiSheet
 		return this.selected.size();
 	}
 
-	public void removeKeyframes()
+	public void removeSelectedKeyframes()
 	{
 		List<Integer> sorted = new ArrayList<Integer>(this.selected);
 
@@ -119,5 +145,7 @@ public class GuiSheet
 		{
 			this.channel.remove(index);
 		}
+
+		this.clearSelection();
 	}
 }

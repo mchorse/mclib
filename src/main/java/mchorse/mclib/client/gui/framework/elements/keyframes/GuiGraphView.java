@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.keyframes;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Scale;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.keyframes.Keyframe;
 import mchorse.mclib.utils.keyframes.KeyframeChannel;
 import mchorse.mclib.utils.keyframes.KeyframeEasing;
@@ -16,9 +17,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -29,9 +27,7 @@ import java.util.function.Consumer;
  */
 public class GuiGraphView extends GuiKeyframeElement
 {
-    public KeyframeChannel channel;
-    public int color;
-    public List<Integer> selected = new ArrayList<Integer>();
+    public GuiSheet sheet = new GuiSheet(IKey.str(""), 0, null);
     
     private Scale scaleY = new Scale(true);
 
@@ -40,117 +36,63 @@ public class GuiGraphView extends GuiKeyframeElement
         super(mc, callback);
     }
 
-    public void setChannel(KeyframeChannel channel)
+    public void setChannel(KeyframeChannel channel, int color)
     {
-        this.channel = channel;
+        this.sheet.channel = channel;
+        this.sheet.color = color;
         this.resetView();
     }
 
     public void setColor(int color)
     {
-        this.color = color;
+        this.sheet.color = color;
     }
 
     /* Implementation of setters */
 
     @Override
-    public void setTick(double tick)
+    public void setTick(double tick, boolean opposite)
     {
         if (this.isMultipleSelected())
         {
-            tick = (long) tick;
-
-            int i = 0;
-            double dx = 0;
-
-            for (int index : this.selected)
+            if (this.which == Selection.KEYFRAME)
             {
-                Keyframe keyframe = this.channel.get(index);
-
-                if (keyframe != null)
-                {
-                    if (i == 0)
-                    {
-                        dx = tick - keyframe.tick;
-                        keyframe.setTick((long) tick);
-                    }
-                    else
-                    {
-                        keyframe.setTick((long) (keyframe.tick + dx));
-                    }
-                }
-
-                i ++;
+                tick = (long) tick;
             }
+
+            this.sheet.setTick(tick - this.which.getX(this.getCurrent()), this.which, opposite);
         }
         else
         {
-            this.which.setX(this.getCurrent(), tick);
+            this.which.setX(this.getCurrent(), tick, opposite);
         }
 
         this.sliding = true;
     }
 
     @Override
-    public void setValue(double value)
+    public void setValue(double value, boolean opposite)
     {
         if (this.isMultipleSelected())
         {
-            int i = 0;
-            double dx = 0;
-
-            for (int index : this.selected)
-            {
-                Keyframe keyframe = this.channel.get(index);
-
-                if (keyframe != null)
-                {
-                    if (i == 0)
-                    {
-                        dx = value - keyframe.value;
-                        keyframe.setValue(value);
-                    }
-                    else
-                    {
-                        keyframe.setValue(keyframe.value + dx);
-                    }
-                }
-
-                i ++;
-            }
+            this.sheet.setValue(value - this.which.getY(this.getCurrent()), this.which, opposite);
         }
         else
         {
-            this.which.setY(this.getCurrent(), value);
+            this.which.setY(this.getCurrent(), value, opposite);
         }
     }
 
     @Override
     public void setInterpolation(KeyframeInterpolation interp)
     {
-        for (int index : this.selected)
-        {
-            Keyframe keyframe = this.channel.get(index);
-
-            if (keyframe != null)
-            {
-                keyframe.setInterpolation(interp);
-            }
-        }
+        this.sheet.setInterpolation(interp);
     }
 
     @Override
     public void setEasing(KeyframeEasing easing)
     {
-        for (int index : this.selected)
-        {
-            Keyframe keyframe = this.channel.get(index);
-
-            if (keyframe != null)
-            {
-                keyframe.setEasing(easing);
-            }
-        }
+        this.sheet.setEasing(easing);
     }
 
     /* Graphing code */
@@ -171,7 +113,8 @@ public class GuiGraphView extends GuiKeyframeElement
         this.scaleX.set(0, 2);
         this.scaleY.set(0, 2);
 
-        int c = this.channel.getKeyframes().size();
+        KeyframeChannel channel = this.sheet.channel;
+        int c = channel.getKeyframes().size();
 
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
@@ -180,7 +123,7 @@ public class GuiGraphView extends GuiKeyframeElement
 
         if (c > 1)
         {
-            for (Keyframe frame : this.channel.getKeyframes())
+            for (Keyframe frame : channel.getKeyframes())
             {
                 minX = Math.min(minX, frame.tick);
                 minY = Math.min(minY, frame.value);
@@ -197,7 +140,7 @@ public class GuiGraphView extends GuiKeyframeElement
 
             if (c == 1)
             {
-                Keyframe first = this.channel.get(0);
+                Keyframe first = channel.get(0);
 
                 minX = Math.min(0, first.tick);
                 maxX = Math.max(this.duration, first.tick);
@@ -224,25 +167,20 @@ public class GuiGraphView extends GuiKeyframeElement
     @Override
     public Keyframe getCurrent()
     {
-        if (this.selected.isEmpty())
-        {
-            return null;
-        }
-
-        return this.channel.get(this.selected.get(0));
+        return this.sheet.getKeyframe();
     }
 
     @Override
     public int getSelectedCount()
     {
-        return this.selected.size();
+        return this.sheet.getSelectedCount();
     }
 
     @Override
     public void clearSelection()
     {
         this.which = Selection.NOT_SELECTED;
-        this.selected.clear();
+        this.sheet.selected.clear();
     }
 
     @Override
@@ -263,8 +201,8 @@ public class GuiGraphView extends GuiKeyframeElement
             oldTick = frame.tick;
         }
 
-        this.selected.clear();
-        this.selected.add(this.channel.insert(tick, value));
+        this.sheet.selected.clear();
+        this.sheet.selected.add(this.sheet.channel.insert(tick, value));
 
         if (oldTick != tick)
         {
@@ -284,27 +222,17 @@ public class GuiGraphView extends GuiKeyframeElement
             return;
         }
 
-        this.channel.remove(this.selected.get(0));
-        this.selected.clear();
+        this.sheet.channel.remove(this.sheet.selected.get(0));
+        this.sheet.clearSelection();
         this.which = Selection.NOT_SELECTED;
     }
 
     @Override
     public void removeSelectedKeyframes()
     {
-        List<Integer> sorted = new ArrayList<Integer>(this.selected);
-
-        Collections.sort(sorted);
-        Collections.reverse(sorted);
-
-        this.clearSelection();
-
-        for (int index : sorted)
-        {
-            this.channel.remove(index);
-        }
-
+        this.sheet.removeSelectedKeyframes();
         this.setKeyframe(null);
+        this.which = Selection.NOT_SELECTED;
     }
 
     /**
@@ -323,19 +251,19 @@ public class GuiGraphView extends GuiKeyframeElement
      */
     public void selectByDuration(long duration)
     {
-        if (this.channel == null)
+        if (this.sheet.channel == null)
         {
             return;
         }
 
         int i = 0;
-        this.selected.clear();
+        this.sheet.selected.clear();
 
-        for (Keyframe frame : this.channel.getKeyframes())
+        for (Keyframe frame : this.sheet.channel.getKeyframes())
         {
             if (frame.tick >= duration)
             {
-                this.selected.add(i);
+                this.sheet.selected.add(i);
 
                 break;
             }
@@ -352,10 +280,11 @@ public class GuiGraphView extends GuiKeyframeElement
     protected void duplicateKeyframe(Keyframe frame, GuiContext context, int mouseX, int mouseY)
     {
         long offset = (long) this.fromGraphX(mouseX);
-        Keyframe created = this.channel.get(this.channel.insert(offset, frame.value));
+        KeyframeChannel channel = this.sheet.channel;
+        Keyframe created = channel.get(channel.insert(offset, frame.value));
 
-        this.selected.clear();
-        this.selected.add(this.channel.getKeyframes().indexOf(created));
+        this.sheet.selected.clear();
+        this.sheet.selected.add(channel.getKeyframes().indexOf(created));
         created.copy(frame);
         created.tick = offset;
     }
@@ -364,10 +293,10 @@ public class GuiGraphView extends GuiKeyframeElement
     protected boolean pickKeyframe(GuiContext context, int mouseX, int mouseY, boolean shift)
     {
         int index = 0;
-        int count = this.channel.getKeyframes().size();
+        int count = this.sheet.channel.getKeyframes().size();
         Keyframe prev = null;
 
-        for (Keyframe frame : this.channel.getKeyframes())
+        for (Keyframe frame : this.sheet.channel.getKeyframes())
         {
             boolean left = prev != null && prev.interp == KeyframeInterpolation.BEZIER && this.isInside(frame.tick - frame.lx, frame.value + frame.ly, mouseX, mouseY);
             boolean right = frame.interp == KeyframeInterpolation.BEZIER && this.isInside(frame.tick + frame.rx, frame.value + frame.ry, mouseX, mouseY) && index != count - 1;
@@ -375,7 +304,7 @@ public class GuiGraphView extends GuiKeyframeElement
 
             if (left || right || point)
             {
-                int key = this.selected.indexOf(index);
+                int key = this.sheet.selected.indexOf(index);
 
                 if (!shift && key == -1)
                 {
@@ -390,12 +319,12 @@ public class GuiGraphView extends GuiKeyframeElement
 
                     if (shift && this.isMultipleSelected() && key != -1)
                     {
-                        this.selected.remove(key);
+                        this.sheet.selected.remove(key);
                         frame = this.getCurrent();
                     }
                     else if (key == -1)
                     {
-                        this.selected.add(index);
+                        this.sheet.selected.add(index);
                         frame = this.isMultipleSelected() ? this.getCurrent() : frame;
                     }
                     else
@@ -463,26 +392,8 @@ public class GuiGraphView extends GuiKeyframeElement
     protected void postSlideSort(GuiContext context)
     {
         /* Resort after dragging the tick thing */
-        List<Keyframe> keyframes = new ArrayList<Keyframe>();
-
-        for (int index : this.selected)
-        {
-            Keyframe keyframe = this.channel.get(index);
-
-            if (keyframe != null)
-            {
-                keyframes.add(keyframe);
-            }
-        }
-
-        this.channel.sort();
+        this.sheet.sort();
         this.sliding = false;
-        this.selected.clear();
-
-        for (Keyframe keyframe : keyframes)
-        {
-            this.selected.add(this.channel.getKeyframes().indexOf(keyframe));
-        }
     }
 
     @Override
@@ -492,20 +403,21 @@ public class GuiGraphView extends GuiKeyframeElement
         {
             /* Multi select */
             Area area = new Area();
+            KeyframeChannel channel = this.sheet.channel;
 
             area.setPoints(this.lastX, this.lastY, context.mouseX, context.mouseY, 3);
 
-            for (int i = 0, c = this.channel.getKeyframes().size(); i < c; i ++)
+            for (int i = 0, c = channel.getKeyframes().size(); i < c; i ++)
             {
-                Keyframe keyframe = this.channel.get(i);
+                Keyframe keyframe = channel.get(i);
 
-                if (area.isInside(this.toGraphX(keyframe.tick), this.toGraphY(keyframe.value)) && !this.selected.contains(i))
+                if (area.isInside(this.toGraphX(keyframe.tick), this.toGraphY(keyframe.value)) && !this.sheet.selected.contains(i))
                 {
-                    this.selected.add(i);
+                    this.sheet.selected.add(i);
                 }
             }
 
-            if (!this.selected.isEmpty())
+            if (!this.sheet.selected.isEmpty())
             {
                 this.which = Selection.KEYFRAME;
                 this.setKeyframe(this.getCurrent());
@@ -553,15 +465,16 @@ public class GuiGraphView extends GuiKeyframeElement
     @Override
     protected void drawGraph(GuiContext context, int mouseX, int mouseY)
     {
-        if (this.channel == null || this.channel.isEmpty())
+        if (this.sheet.channel == null || this.sheet.channel.isEmpty())
         {
             return;
         }
 
         BufferBuilder vb = Tessellator.getInstance().getBuffer();
+        KeyframeChannel channel = this.sheet.channel;
 
         /* Colorize the graph for given channel */
-        COLOR.set(this.color, false);
+        COLOR.set(this.sheet.color, false);
         float r = COLOR.r;
         float g = COLOR.g;
         float b = COLOR.b;
@@ -572,10 +485,10 @@ public class GuiGraphView extends GuiKeyframeElement
         vb.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 
         int index = 0;
-        int count = this.channel.getKeyframes().size();
+        int count = channel.getKeyframes().size();
         Keyframe prev = null;
 
-        for (Keyframe frame : this.channel.getKeyframes())
+        for (Keyframe frame : channel.getKeyframes())
         {
             if (prev != null)
             {
@@ -630,7 +543,7 @@ public class GuiGraphView extends GuiKeyframeElement
         index = 0;
         prev = null;
 
-        for (Keyframe frame : this.channel.getKeyframes())
+        for (Keyframe frame : channel.getKeyframes())
         {
             this.drawRect(vb, this.toGraphX(frame.tick), this.toGraphY(frame.value), 3, 0xffffff);
 
@@ -651,9 +564,9 @@ public class GuiGraphView extends GuiKeyframeElement
         index = 0;
         prev = null;
 
-        for (Keyframe frame : this.channel.getKeyframes())
+        for (Keyframe frame : channel.getKeyframes())
         {
-            boolean has = this.selected.contains(index);
+            boolean has = this.sheet.selected.contains(index);
 
             this.drawRect(vb, this.toGraphX(frame.tick), this.toGraphY(frame.value), 2, has && this.which == Selection.KEYFRAME ? 0x0080ff : 0);
 
@@ -691,10 +604,11 @@ public class GuiGraphView extends GuiKeyframeElement
         double x = this.fromGraphX(mouseX);
         double y = this.fromGraphY(mouseY);
 
-        if (GuiScreen.isShiftKeyDown()) x = this.lastT;
-        if (GuiScreen.isCtrlKeyDown()) y = this.lastV;
-
-        if (this.which == Selection.KEYFRAME)
+        if (this.which == Selection.NOT_SELECTED)
+        {
+            this.moveNoKeyframe(context, frame, x, y);
+        }
+        else
         {
             if (this.isMultipleSelected())
             {
@@ -706,39 +620,24 @@ public class GuiGraphView extends GuiKeyframeElement
 
                 x = this.fromGraphX(xx + dx);
                 y = this.fromGraphY(yy + dy);
-
-                if (GuiScreen.isShiftKeyDown()) x = this.lastT;
-                if (GuiScreen.isCtrlKeyDown()) y = this.lastV;
             }
 
-            this.setTick(x);
-            this.setValue(y);
-        }
-        else if (this.which == Selection.LEFT_HANDLE)
-        {
-            frame.lx = (float) -(x - frame.tick);
-            frame.ly = (float) (y - frame.value);
+            if (GuiScreen.isShiftKeyDown()) x = this.lastT;
+            if (GuiScreen.isCtrlKeyDown()) y = this.lastV;
 
-            if (!GuiScreen.isAltKeyDown())
+            if (this.which == Selection.LEFT_HANDLE)
             {
-                frame.rx = frame.lx;
-                frame.ry = -frame.ly;
+                x = -(x - frame.tick);
+                y = y - frame.value;
             }
-        }
-        else if (this.which == Selection.RIGHT_HANDLE)
-        {
-            frame.rx = (float) x - frame.tick;
-            frame.ry = (float) (y - frame.value);
-
-            if (!GuiScreen.isAltKeyDown())
+            else if (this.which == Selection.RIGHT_HANDLE)
             {
-                frame.lx = frame.rx;
-                frame.ly = -frame.ry;
+                x = x - frame.tick;
+                y = y - frame.value;
             }
-        }
-        else if (this.which == Selection.NOT_SELECTED)
-        {
-            this.moveNoKeyframe(context, frame, x, y);
+
+            this.setTick(x, !GuiScreen.isAltKeyDown());
+            this.setValue(y, !GuiScreen.isAltKeyDown());
         }
 
         return frame;

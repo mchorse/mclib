@@ -19,13 +19,13 @@ public enum Selection
         }
 
         @Override
-        public void setX(Keyframe keyframe, double x)
+        public void setX(Keyframe keyframe, double x, boolean opposite)
         {
             throw new IllegalStateException("Not supported by NOT_SELECTED!");
         }
 
         @Override
-        public void setY(Keyframe keyframe, double y)
+        public void setY(Keyframe keyframe, double y, boolean opposite)
         {
             throw new IllegalStateException("Not supported by NOT_SELECTED!");
         }
@@ -45,13 +45,13 @@ public enum Selection
         }
 
         @Override
-        public void setX(Keyframe keyframe, double x)
+        public void setX(Keyframe keyframe, double x, boolean opposite)
         {
             keyframe.setTick((long) x);
         }
 
         @Override
-        public void setY(Keyframe keyframe, double y)
+        public void setY(Keyframe keyframe, double y, boolean opposite)
         {
             keyframe.setValue(y);
         }
@@ -71,15 +71,25 @@ public enum Selection
         }
 
         @Override
-        public void setX(Keyframe keyframe, double x)
+        public void setX(Keyframe keyframe, double x, boolean opposite)
         {
             keyframe.lx = (float) x;
+
+            if (opposite)
+            {
+                keyframe.rx = keyframe.lx;
+            }
         }
 
         @Override
-        public void setY(Keyframe keyframe, double y)
+        public void setY(Keyframe keyframe, double y, boolean opposite)
         {
             keyframe.ly = (float) y;
+
+            if (opposite)
+            {
+                keyframe.ry = -keyframe.ly;
+            }
         }
     },
     RIGHT_HANDLE
@@ -97,15 +107,25 @@ public enum Selection
         }
 
         @Override
-        public void setX(Keyframe keyframe, double x)
+        public void setX(Keyframe keyframe, double x, boolean opposite)
         {
             keyframe.rx = (float) x;
+
+            if (opposite)
+            {
+                keyframe.lx = keyframe.rx;
+            }
         }
 
         @Override
-        public void setY(Keyframe keyframe, double y)
+        public void setY(Keyframe keyframe, double y, boolean opposite)
         {
             keyframe.ry = (float) y;
+
+            if (opposite)
+            {
+                keyframe.ly = -keyframe.ry;
+            }
         }
     };
 
@@ -113,7 +133,7 @@ public enum Selection
 
     public abstract double getY(Keyframe keyframe);
 
-    public abstract void setX(Keyframe keyframe, double x);
+    public abstract void setX(Keyframe keyframe, double x, boolean opposite);
 
-    public abstract void setY(Keyframe keyframe, double y);
+    public abstract void setY(Keyframe keyframe, double y, boolean opposite);
 }

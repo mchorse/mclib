@@ -57,8 +57,7 @@ public class GuiDebugPanel extends GuiDashboardPanel
 		}
 
 		this.dopesheet.graph.duration = 100;
-		this.graph.graph.setChannel(channel);
-		this.graph.graph.color = 0x0088ff;
+		this.graph.graph.setChannel(channel, 0x0088ff);
 		this.graph.graph.duration = 100;
 
 		this.dopesheet.flex().relative(this).y(0).wh(1F, 0.5F);

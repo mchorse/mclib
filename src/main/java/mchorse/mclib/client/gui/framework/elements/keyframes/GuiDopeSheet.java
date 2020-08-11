@@ -37,80 +37,45 @@ public class GuiDopeSheet extends GuiKeyframeElement
     /* Implementation of setters */
 
     @Override
-    public void setTick(double tick)
+    public void setTick(double tick, boolean opposite)
     {
 	    if (this.isMultipleSelected())
 	    {
-		    tick = (long) tick;
+		    if (this.which == Selection.KEYFRAME)
+		    {
+			    tick = (long) tick;
+		    }
 
-		    int i = 0;
-		    double dx = 0;
+		    double dx = tick - this.which.getX(this.getCurrent());
 
 		    for (GuiSheet sheet : this.sheets)
 		    {
-			    for (int index : sheet.selected)
-			    {
-				    Keyframe keyframe = sheet.channel.get(index);
-
-				    if (keyframe != null)
-				    {
-					    if (i == 0)
-					    {
-						    dx = tick - keyframe.tick;
-						    keyframe.setTick((long) tick);
-					    }
-					    else
-					    {
-						    keyframe.setTick((long) (keyframe.tick + dx));
-					    }
-				    }
-
-				    i ++;
-			    }
+			    sheet.setTick(dx, this.which, opposite);
 		    }
 	    }
 	    else
 	    {
-		    this.which.setX(this.getCurrent(), tick);
+		    this.which.setX(this.getCurrent(), tick, opposite);
 	    }
 
 	    this.sliding = true;
     }
 
     @Override
-    public void setValue(double value)
+    public void setValue(double value, boolean opposite)
     {
 	    if (this.isMultipleSelected())
 	    {
-		    int i = 0;
-		    double dx = 0;
+		    double dy = value - this.which.getX(this.getCurrent());
 
 		    for (GuiSheet sheet : this.sheets)
 		    {
-			    for (int index : sheet.selected)
-			    {
-				    Keyframe keyframe = sheet.channel.get(index);
-
-				    if (keyframe != null)
-				    {
-					    if (i == 0)
-					    {
-						    dx = value - keyframe.value;
-						    keyframe.setValue(value);
-					    }
-					    else
-					    {
-						    keyframe.setValue(keyframe.value + dx);
-					    }
-				    }
-
-				    i ++;
-			    }
+			    sheet.setValue(dy, this.which, opposite);
 		    }
 	    }
 	    else
 	    {
-		    this.which.setY(this.getCurrent(), value);
+		    this.which.setY(this.getCurrent(), value, opposite);
 	    }
     }
 
@@ -283,10 +248,11 @@ public class GuiDopeSheet extends GuiKeyframeElement
 	{
 		for (GuiSheet sheet : this.sheets)
 		{
-			sheet.removeKeyframes();
+			sheet.removeSelectedKeyframes();
 		}
 
 		this.setKeyframe(null);
+		this.which = Selection.NOT_SELECTED;
 	}
 
 	/* Mouse input handling */
@@ -529,7 +495,11 @@ public class GuiDopeSheet extends GuiKeyframeElement
 		Keyframe frame = this.getCurrent();
 		double x = this.fromGraphX(mouseX);
 
-		if (this.which == Selection.KEYFRAME)
+		if (this.which == Selection.NOT_SELECTED)
+		{
+			this.moveNoKeyframe(context, frame, x, 0);
+		}
+		else
 		{
 			if (this.isMultipleSelected())
 			{
@@ -539,29 +509,16 @@ public class GuiDopeSheet extends GuiKeyframeElement
 				x = this.fromGraphX(xx + dx);
 			}
 
-			this.setTick(x);
-		}
-		else if (this.which == Selection.LEFT_HANDLE)
-		{
-			frame.lx = (int) -(x - frame.tick);
-
-			if (!GuiScreen.isAltKeyDown())
+			if (this.which == Selection.LEFT_HANDLE)
 			{
-				frame.rx = frame.lx;
+				x = (int) -(x - frame.tick);
 			}
-		}
-		else if (this.which == Selection.RIGHT_HANDLE)
-		{
-			frame.rx = (int) x - frame.tick;
-
-			if (!GuiScreen.isAltKeyDown())
+			else if (this.which == Selection.RIGHT_HANDLE)
 			{
-				frame.lx = frame.rx;
+				x = (int) x - frame.tick;
 			}
-		}
-		else if (this.which == Selection.NOT_SELECTED)
-		{
-			this.moveNoKeyframe(context, frame, x, 0);
+
+			this.setTick(x, !GuiScreen.isAltKeyDown());
 		}
 
 		return frame;

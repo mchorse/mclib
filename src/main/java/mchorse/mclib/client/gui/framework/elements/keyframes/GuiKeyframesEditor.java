@@ -144,6 +144,13 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
 
             menu.action(Icons.REMOVE, IKey.lang("mclib.gui.keyframes.context.remove"), this::removeSelectedKeyframes);
 
+            if (this.graph.which != Selection.NOT_SELECTED && this.graph.isMultipleSelected())
+            {
+                menu.action(Icons.LEFT_HANDLE, IKey.lang("mclib.gui.keyframes.context.to_left"), () -> this.graph.which = Selection.LEFT_HANDLE);
+                menu.action(Icons.MAIN_HANDLE, IKey.lang("mclib.gui.keyframes.context.to_main"), () -> this.graph.which = Selection.KEYFRAME);
+                menu.action(Icons.RIGHT_HANDLE, IKey.lang("mclib.gui.keyframes.context.to_right"), () -> this.graph.which = Selection.RIGHT_HANDLE);
+            }
+
             return menu;
         }
 
@@ -169,12 +176,12 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
 
     public void setTick(double tick)
     {
-        this.graph.setTick(tick);
+        this.graph.setTick(tick, false);
     }
 
     public void setValue(double value)
     {
-        this.graph.setValue(value);
+        this.graph.setValue(value, false);
     }
 
     public void pickInterpolation(KeyframeInterpolation interp)
