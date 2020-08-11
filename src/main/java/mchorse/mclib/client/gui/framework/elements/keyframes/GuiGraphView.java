@@ -502,7 +502,14 @@ public class GuiGraphView extends GuiKeyframeElement
                 }
                 else
                 {
-                    for (int i = 0; i < 10; i++)
+                    int seg = 10;
+
+                    if (frame.interp == KeyframeInterpolation.BOUNCE || frame.interp == KeyframeInterpolation.ELASTIC)
+                    {
+                        seg = 30;
+                    }
+
+                    for (int i = 0; i < seg; i++)
                     {
                         vb.pos(px + (fx - px) * (i / 10F), this.toGraphY(prev.interpolate(frame, i / 10F)), 0).color(r, g, b, 1).endVertex();
                         vb.pos(px + (fx - px) * ((i + 1) / 10F), this.toGraphY(prev.interpolate(frame, (i + 1) / 10F)), 0).color(r, g, b, 1).endVertex();

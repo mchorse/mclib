@@ -99,12 +99,25 @@ mclib.interpolations.exp_in=Exponential In
 mclib.interpolations.exp_out=Exponential Out
 mclib.interpolations.exp_inout=Exponential In/out
 
+mclib.interpolations.back_in=Back In
+mclib.interpolations.back_out=Back Out
+mclib.interpolations.back_inout=Back In/out
+mclib.interpolations.elastic_in=Elastic In
+mclib.interpolations.elastic_out=Elastic Out
+mclib.interpolations.elastic_inout=Elastic In/out
+mclib.interpolations.bounce_in=Bounce In
+mclib.interpolations.bounce_out=Bounce Out
+mclib.interpolations.bounce_inout=Bounce In/out
+
 mclib.interpolations.const=Constant
 mclib.interpolations.quad=Quadratic
 mclib.interpolations.cubic=Cubic
 mclib.interpolations.hermite=Hermite
 mclib.interpolations.exp=Exponential
 mclib.interpolations.bezier=Bezier
+mclib.interpolations.back=Back
+mclib.interpolations.elastic=Elastic
+mclib.interpolations.bounce=Bounce
 
 mclib.easing.in=Ease in
 mclib.easing.out=Ease out
