@@ -2,6 +2,7 @@
 
 key.mclib.category=McLib
 key.mclib.dashboard=儀表盤
+
 mclib.gui.ok=確定
 mclib.gui.cancel=取消
 mclib.gui.none=(無)
@@ -28,6 +29,10 @@ mclib.gui.transforms.rotate=旋轉
 
 mclib.gui.keyframes.tick=Tick
 mclib.gui.keyframes.value=值
+mclib.gui.keyframes.context.remove=移除關鍵幀
+mclib.gui.keyframes.context.to_left=選中左側手柄
+mclib.gui.keyframes.context.to_main=選中主手柄
+mclib.gui.keyframes.context.to_right=選中右側手柄
 
 # Config
 mclib.config.title=McLib
@@ -94,12 +99,25 @@ mclib.interpolations.exp_in=指數緩入
 mclib.interpolations.exp_out=指數緩出
 mclib.interpolations.exp_inout=指數緩入/緩出
 
+mclib.interpolations.back_in=回彈緩入
+mclib.interpolations.back_out=回彈緩出
+mclib.interpolations.back_inout=回彈緩入/緩出
+mclib.interpolations.elastic_in=彈性緩入
+mclib.interpolations.elastic_out=彈性緩出
+mclib.interpolations.elastic_inout=彈性緩入/緩出
+mclib.interpolations.bounce_in=彈跳緩入
+mclib.interpolations.bounce_out=彈跳緩出
+mclib.interpolations.bounce_inout=彈跳緩入/緩出
+
 mclib.interpolations.const=連續的
 mclib.interpolations.quad=二次方
 mclib.interpolations.cubic=三次曲線
 mclib.interpolations.hermite=艾米插值
 mclib.interpolations.exp=指數
 mclib.interpolations.bezier=貝塞爾曲線
+mclib.interpolations.back=回彈
+mclib.interpolations.elastic=彈性
+mclib.interpolations.bounce=彈跳
 
 mclib.easing.in=緩入
 mclib.easing.out=緩出

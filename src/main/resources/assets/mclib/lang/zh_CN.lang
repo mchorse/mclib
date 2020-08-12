@@ -29,6 +29,10 @@ mclib.gui.transforms.rotate=旋转
 
 mclib.gui.keyframes.tick=Tick
 mclib.gui.keyframes.value=值
+mclib.gui.keyframes.context.remove=移除关键帧
+mclib.gui.keyframes.context.to_left=选中左侧手柄
+mclib.gui.keyframes.context.to_main=选中主手柄
+mclib.gui.keyframes.context.to_right=选中右侧手柄
 
 # Config
 mclib.config.title=McLib
@@ -95,12 +99,25 @@ mclib.interpolations.exp_in=指数缓入
 mclib.interpolations.exp_out=指数缓出
 mclib.interpolations.exp_inout=指数缓入/缓出
 
+mclib.interpolations.back_in=回弹缓入
+mclib.interpolations.back_out=回弹缓出
+mclib.interpolations.back_inout=回弹缓入/缓出
+mclib.interpolations.elastic_in=弹性缓入
+mclib.interpolations.elastic_out=弹性缓出
+mclib.interpolations.elastic_inout=弹性缓入/缓出
+mclib.interpolations.bounce_in=弹跳缓入
+mclib.interpolations.bounce_out=弹跳缓出
+mclib.interpolations.bounce_inout=弹跳缓入/缓出
+
 mclib.interpolations.const=连续的
 mclib.interpolations.quad=二次方
 mclib.interpolations.cubic=三次曲线
 mclib.interpolations.hermite=艾米插值
 mclib.interpolations.exp=指数
 mclib.interpolations.bezier=贝塞尔曲线
+mclib.interpolations.back=回弹
+mclib.interpolations.elastic=弹性
+mclib.interpolations.bounce=弹跳
 
 mclib.easing.in=缓入
 mclib.easing.out=缓出
