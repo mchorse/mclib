@@ -29,6 +29,10 @@ mclib.gui.transforms.rotate=Вращение
 
 mclib.gui.keyframes.tick=Тик
 mclib.gui.keyframes.value=Значение
+mclib.gui.keyframes.context.remove=Удалить ключевые кадры
+mclib.gui.keyframes.context.to_left=Switch to left handles
+mclib.gui.keyframes.context.to_main=Switch to main handles
+mclib.gui.keyframes.context.to_right=Switch to right handles
 
 # Config
 mclib.config.title=МакЛиб
@@ -95,13 +99,26 @@ mclib.interpolations.exp_in=Экспоненциальное Ускорение
 mclib.interpolations.exp_out=Экспоненциальное Замедление
 mclib.interpolations.exp_inout=Экспоненциальное Торможение
 
+mclib.interpolations.back_in=Заскакивающее Ускорение
+mclib.interpolations.back_out=Заскакивающее Замедление
+mclib.interpolations.back_inout=Заскакивающее Торможение
+mclib.interpolations.elastic_in=Упругое Ускорение
+mclib.interpolations.elastic_out=Упругое Замедление
+mclib.interpolations.elastic_inout=Упругое Торможение
+mclib.interpolations.bounce_in=Пружинистое Ускорение
+mclib.interpolations.bounce_out=Пружинистое Замедление
+mclib.interpolations.bounce_inout=Пружинистое Торможение
+
 mclib.interpolations.const=Постоянная
 mclib.interpolations.quad=Квадратическая
 mclib.interpolations.cubic=Кубическая
 mclib.interpolations.hermite=Сплайновая
 mclib.interpolations.exp=Экспоненциальная
 mclib.interpolations.bezier=Безье
-
+mclib.interpolations.back=Заскакивающая
+mclib.interpolations.elastic=Упругая
+mclib.interpolations.bounce=Пружинистая
+#Примечание переводчика: Буду благодарен, если кто-нибудь напишет правильные названия интерполяций back, elastic и bounce, т.к. их перевод я брал с головы.
 mclib.easing.in=Ускорение
 mclib.easing.out=Замедление
 mclib.easing.inout=Торможение
