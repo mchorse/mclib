@@ -30,9 +30,9 @@ mclib.gui.transforms.rotate=Вращение
 mclib.gui.keyframes.tick=Тик
 mclib.gui.keyframes.value=Значение
 mclib.gui.keyframes.context.remove=Удалить ключевые кадры
-mclib.gui.keyframes.context.to_left=Switch to left handles
-mclib.gui.keyframes.context.to_main=Switch to main handles
-mclib.gui.keyframes.context.to_right=Switch to right handles
+mclib.gui.keyframes.context.to_left=Выбрать только левые стрелки
+mclib.gui.keyframes.context.to_main=Выбрать только кадры без стрелок
+mclib.gui.keyframes.context.to_right=Выбрать только правые стрелки
 
 # Config
 mclib.config.title=МакЛиб
