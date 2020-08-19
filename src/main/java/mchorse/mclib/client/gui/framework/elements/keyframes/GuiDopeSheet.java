@@ -258,17 +258,16 @@ public class GuiDopeSheet extends GuiKeyframeElement
 	/* Mouse input handling */
 
 	@Override
-	protected void duplicateKeyframe(Keyframe frame, GuiContext context, int mouseX, int mouseY)
+	protected void duplicateKeyframe(GuiContext context, int mouseX, int mouseY)
 	{
 		long offset = (long) this.fromGraphX(mouseX);
-		GuiSheet current = this.getCurrentSheet();
-		int index = current.channel.insert(offset, frame.value);
-		Keyframe created = current.channel.get(index);
 
-		current.selected.clear();
-		current.selected.add(index);
-		created.copy(frame);
-		created.tick = offset;
+		for (GuiSheet sheet : this.sheets)
+		{
+			sheet.duplicate(offset);
+		}
+
+		this.setKeyframe(this.getCurrent());
 	}
 
 	@Override

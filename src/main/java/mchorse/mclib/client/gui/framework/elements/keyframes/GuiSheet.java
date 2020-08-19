@@ -8,6 +8,7 @@ import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class GuiSheet
@@ -147,5 +148,46 @@ public class GuiSheet
 		}
 
 		this.clearSelection();
+	}
+
+	public void duplicate(long tick)
+	{
+		List<Keyframe> selected = new ArrayList<Keyframe>();
+		List<Keyframe> created = new ArrayList<Keyframe>();
+
+		long minTick = Integer.MAX_VALUE;
+
+		for (int index : this.selected)
+		{
+			Keyframe keyframe = this.channel.get(index);
+
+			if (keyframe != null)
+			{
+				selected.add(keyframe);
+				minTick = Math.min(keyframe.tick, minTick);
+			}
+		}
+
+		selected.sort(Comparator.comparingLong(a -> a.tick));
+
+		long diff = tick - minTick;
+
+		for (Keyframe keyframe : selected)
+		{
+			long fin = keyframe.tick + diff;
+			int index = this.channel.insert(fin, keyframe.value);
+			Keyframe current = this.channel.get(index);
+
+			current.copy(keyframe);
+			current.tick = fin;
+			created.add(current);
+		}
+
+		this.clearSelection();
+
+		for (Keyframe keyframe : created)
+		{
+			this.selected.add(this.channel.getKeyframes().indexOf(keyframe));
+		}
 	}
 }

@@ -184,12 +184,7 @@ public abstract class GuiKeyframeElement extends GuiElement
                 /* Duplicate the keyframe */
                 if (GuiScreen.isAltKeyDown() && this.which == Selection.KEYFRAME)
                 {
-                    Keyframe frame = this.getCurrent();
-
-                    if (frame != null)
-                    {
-                        this.duplicateKeyframe(frame, context, mouseX, mouseY);
-                    }
+                    this.duplicateKeyframe(context, mouseX, mouseY);
 
                     return false;
                 }
@@ -220,8 +215,7 @@ public abstract class GuiKeyframeElement extends GuiElement
         return false;
     }
 
-    protected void duplicateKeyframe(Keyframe frame, GuiContext context, int mouseX, int mouseY)
-    {}
+    protected abstract void duplicateKeyframe(GuiContext context, int mouseX, int mouseY);
 
     protected abstract boolean pickKeyframe(GuiContext context, int mouseX, int mouseY, boolean multi);
 

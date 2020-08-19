@@ -277,16 +277,10 @@ public class GuiGraphView extends GuiKeyframeElement
     /* Mouse input handling */
 
     @Override
-    protected void duplicateKeyframe(Keyframe frame, GuiContext context, int mouseX, int mouseY)
+    protected void duplicateKeyframe(GuiContext context, int mouseX, int mouseY)
     {
-        long offset = (long) this.fromGraphX(mouseX);
-        KeyframeChannel channel = this.sheet.channel;
-        Keyframe created = channel.get(channel.insert(offset, frame.value));
-
-        this.sheet.selected.clear();
-        this.sheet.selected.add(channel.getKeyframes().indexOf(created));
-        created.copy(frame);
-        created.tick = offset;
+        this.sheet.duplicate((long) this.fromGraphX(mouseX));
+        this.setKeyframe(this.getCurrent());
     }
 
     @Override
