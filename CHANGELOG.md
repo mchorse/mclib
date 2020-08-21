@@ -1,6 +1,21 @@
-# Change Log
+## Version 2.0.3
 
-McLib's change log.
+This minor patch features enormous improvements to keyframe editing GUIs.
+
+<a href="https://youtu.be/6eil_zvv1KI"><img src="https://img.youtube.com/vi/6eil_zvv1KI/0.jpg"></a> 
+
+* Added value editing through the value field in the dope sheet editor
+* Added bezier handles editing in tick and value fields when selecting them (instead of showing tick and value of the keyframe)
+* Added multi-selection of keyframes in graph/dope sheet GUI elements:
+    * You can select them by Shift + Dragging an area in which all the keyframes will be selected
+    * You can select individual keyframes by Shift + clicking on them to select not selected keyframe or deselect selected keyframe
+    * You can move multiple-selected keyframes or its handles (depending on selection mode) by editing tick or value fields or dragging
+    * You can also duplicate multiple selected keyframes using the same old way of holding alt while clicking else where to duplicate
+* Added context menu to graph/dope sheet elements to:
+    * Remove selected keyframes
+    * Switch selection between keyframe or its handles
+* Added new interpolations (with in, out, in/out easings): back, elastic and bounce
+* Fixed last keyframe's right bezier handle being editable
 
 ## Version 2.0.2
 

@@ -1,6 +1,7 @@
 {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/mchorses-mclib/",
     "1.12.2": {
+        "2.0.3": "This minor patch features enormous improvements to keyframe editing GUIs.",
         "2.0.2": "This is a small quick patch which features a couple of neat GUI tweaks.",
         "2.0.1": "This is a small quick patch.",
         "2.0": "This enormous update drastically improves the GUI system that is used in my mods, as well as adding its own configuration system, and different APIs to make it easier to develop GUI stuff. It's also allows you to slightly personalize the GUI.",
@@ -26,8 +27,8 @@
     },
     
     "promos": {
-        "1.12.2-latest": "2.0.2",
-        "1.12.2-recommended": "2.0.2",
+        "1.12.2-latest": "2.0.3",
+        "1.12.2-recommended": "2.0.3",
         "1.10.2-latest": "1.0.4",
         "1.10.2-recommended": "1.0.4",
         "1.11.2-latest": "1.0.4",
