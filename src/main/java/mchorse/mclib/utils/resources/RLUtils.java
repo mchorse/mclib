@@ -49,29 +49,8 @@ public class RLUtils
 
         try
         {
-            IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
-            BufferedImage image = ImageIO.read(manager.getResource(multi.children.get(0)).getInputStream());
-            Graphics g = image.getGraphics();
-
-            for (int i = 1; i < multi.children.size(); i++)
-            {
-                ResourceLocation child = multi.children.get(i);
-
-                try
-                {
-                    IResource resource = manager.getResource(child);
-                    BufferedImage childImage = ImageIO.read(resource.getInputStream());
-
-                    g.drawImage(childImage, 0, 0, null);
-                }
-                catch (Exception e)
-                {}
-            }
-
-            g.dispose();
-
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", stream);
+            ImageIO.write(TextureProcessor.process(multi), "png", stream);
 
             return new SimpleResource("McLib multiskin handler", multi, new ByteArrayInputStream(stream.toByteArray()), null, null);
         }
@@ -116,23 +95,21 @@ public class RLUtils
 
     public static ResourceLocation create(NBTBase base)
     {
-        if (base instanceof NBTTagList)
+        ResourceLocation location = MultiResourceLocation.from(base);
+
+        if (location != null)
         {
-            NBTTagList list = (NBTTagList) base;
-
-            if (!list.hasNoTags())
-            {
-                MultiResourceLocation multi = new MultiResourceLocation(list.getStringTagAt(0));
-
-                for (int i = 1; i < list.tagCount(); i++)
-                {
-                    multi.children.add(create(list.getStringTagAt(i)));
-                }
-
-                return multi;
-            }
+            return location;
         }
-        else if (base instanceof NBTTagString)
+
+        location = FilteredResourceLocation.from(base);
+
+        if (location != null)
+        {
+            return location;
+        }
+
+        if (base instanceof NBTTagString)
         {
             return create(((NBTTagString) base).getString());
         }
@@ -140,33 +117,25 @@ public class RLUtils
         return null;
     }
 
-    public static ResourceLocation create(JsonElement jsonElement)
+    public static ResourceLocation create(JsonElement element)
     {
-        if (jsonElement.isJsonArray())
+        ResourceLocation location = MultiResourceLocation.from(element);
+
+        if (location != null)
         {
-            JsonArray array = jsonElement.getAsJsonArray();
-            int size = array.size();
-
-            if (size > 0)
-            {
-                JsonElement first = array.get(0);
-
-                if (first.isJsonPrimitive())
-                {
-                    MultiResourceLocation location = new MultiResourceLocation(first.getAsString());
-
-                    for (int i = 1; i < size; i++)
-                    {
-                        location.children.add(create(array.get(i)));
-                    }
-
-                    return location;
-                }
-            }
+            return location;
         }
-        else if (jsonElement.isJsonPrimitive())
+
+        location = FilteredResourceLocation.from(element);
+
+        if (location != null)
         {
-            return create(jsonElement.getAsString());
+            return location;
+        }
+
+        if (element.isJsonPrimitive())
+        {
+            return create(element.getAsString());
         }
 
         return null;
@@ -174,17 +143,9 @@ public class RLUtils
 
     public static NBTBase writeNbt(ResourceLocation location)
     {
-        if (location instanceof MultiResourceLocation)
+        if (location instanceof IWritableLocation)
         {
-            MultiResourceLocation multi = (MultiResourceLocation) location;
-            NBTTagList list = new NBTTagList();
-
-            for (ResourceLocation child : multi.children)
-            {
-                list.appendTag(new NBTTagString(child.toString()));
-            }
-
-            return list;
+            return ((IWritableLocation) location).writeNbt();
         }
         else if (location != null)
         {
@@ -196,17 +157,9 @@ public class RLUtils
 
     public static JsonElement writeJson(ResourceLocation location)
     {
-        if (location instanceof MultiResourceLocation)
+        if (location instanceof IWritableLocation)
         {
-            MultiResourceLocation multi = (MultiResourceLocation) location;
-            JsonArray array = new JsonArray();
-
-            for (ResourceLocation child : multi.children)
-            {
-                array.add(new JsonPrimitive(child.toString()));
-            }
-
-            return array;
+            return ((IWritableLocation) location).writeJson();
         }
         else if (location != null)
         {
@@ -218,15 +171,9 @@ public class RLUtils
 
     public static ResourceLocation clone(ResourceLocation location)
     {
-        if (location instanceof MultiResourceLocation)
+        if (location instanceof IWritableLocation)
         {
-            MultiResourceLocation multi = (MultiResourceLocation) location;
-            MultiResourceLocation newMulti = new MultiResourceLocation(multi.toString());
-
-            newMulti.children.clear();
-            newMulti.children.addAll(multi.children);
-
-            return newMulti;
+            return ((IWritableLocation) location).clone();
         }
         else if (location != null)
         {

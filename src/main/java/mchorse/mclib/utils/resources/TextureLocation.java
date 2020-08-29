@@ -24,8 +24,13 @@ public class TextureLocation extends ResourceLocation
     {
         super(string);
 
-        String[] split = string.split(":");
-        String domain = split.length > 0 ? split[0] : "blockbuster.actors";
+        this.set(string);
+    }
+
+    protected void set(String location)
+    {
+        String[] split = location.split(":");
+        String domain = split.length > 0 ? split[0] : "minecraft";
         String path = split.length > 1 ? split[1] : "";
 
         this.set(domain, path);
