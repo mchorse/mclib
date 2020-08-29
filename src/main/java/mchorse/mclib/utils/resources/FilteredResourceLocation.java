@@ -8,8 +8,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 
-public class FilteredResourceLocation extends TextureLocation implements IWritableLocation
+public class FilteredResourceLocation implements IWritableLocation
 {
+	public ResourceLocation path;
+
 	public float scale = 1F;
 	public boolean scaleToLargest;
 	public int shiftX;
@@ -17,56 +19,54 @@ public class FilteredResourceLocation extends TextureLocation implements IWritab
 
 	public static FilteredResourceLocation from(NBTBase base)
 	{
-		if (base instanceof NBTTagCompound)
+		try
 		{
-			try
-			{
-				FilteredResourceLocation location = new FilteredResourceLocation("");
+			FilteredResourceLocation location = new FilteredResourceLocation();
 
-				location.fromNbt(base);
+			location.fromNbt(base);
 
-				return location;
-			}
-			catch (Exception e)
-			{}
+			return location;
 		}
+		catch (Exception e)
+		{}
 
 		return null;
 	}
 
 	public static FilteredResourceLocation from(JsonElement element)
 	{
-		if (element.isJsonObject())
+		try
 		{
-			try
-			{
-				FilteredResourceLocation location = new FilteredResourceLocation("");
+			FilteredResourceLocation location = new FilteredResourceLocation();
 
-				location.fromJson(element);
+			location.fromJson(element);
 
-				return location;
-			}
-			catch (Exception e)
-			{}
+			return location;
 		}
+		catch (Exception e)
+		{}
 
 		return null;
 	}
 
-	public FilteredResourceLocation(String domain, String path)
+	public FilteredResourceLocation()
+	{}
+
+	public FilteredResourceLocation(ResourceLocation path)
 	{
-		super(domain, path);
+		this.path = path;
 	}
 
-	public FilteredResourceLocation(String string)
+	@Override
+	public String toString()
 	{
-		super(string);
+		return this.path == null ? "" : this.path.toString();
 	}
 
 	@Override
 	public int hashCode()
 	{
-		int hashCode = (super.hashCode() + (this.scaleToLargest ? 1 : 0)) * 31;
+		int hashCode = (this.path.hashCode() + (this.scaleToLargest ? 1 : 0)) * 31;
 
 		if (this.scale != 1) hashCode = (hashCode + (int) (this.scale * 1000)) * 31;
 		if (this.shiftX != 0) hashCode = (hashCode + this.shiftX) * 31;
@@ -83,9 +83,16 @@ public class FilteredResourceLocation extends TextureLocation implements IWritab
 	@Override
 	public void fromNbt(NBTBase nbt) throws Exception
 	{
+		if (nbt instanceof NBTTagString)
+		{
+			this.path = RLUtils.create(nbt);
+
+			return;
+		}
+
 		NBTTagCompound tag = (NBTTagCompound) nbt;
 
-		this.set(tag.getString("Path"));
+		this.path = RLUtils.create(tag.getString("Path"));
 
 		if (tag.hasKey("Scale"))
 		{
@@ -111,9 +118,16 @@ public class FilteredResourceLocation extends TextureLocation implements IWritab
 	@Override
 	public void fromJson(JsonElement element) throws Exception
 	{
+		if (element.isJsonPrimitive())
+		{
+			this.path = RLUtils.create(element);
+
+			return;
+		}
+
 		JsonObject object = element.getAsJsonObject();
 
-		this.set(object.get("path").getAsString());
+		this.path = RLUtils.create(object.get("path").getAsString());
 
 		if (object.has("scale"))
 		{
@@ -179,13 +193,11 @@ public class FilteredResourceLocation extends TextureLocation implements IWritab
 	@Override
 	public ResourceLocation clone()
 	{
-		FilteredResourceLocation location = new FilteredResourceLocation(this.toString());
+		return RLUtils.clone(this.path);
+	}
 
-		location.scale = this.scale;
-		location.scaleToLargest = this.scaleToLargest;
-		location.shiftX = this.shiftX;
-		location.shiftY = this.shiftY;
-
-		return location;
+	public FilteredResourceLocation copy()
+	{
+		return FilteredResourceLocation.from(this.writeNbt());
 	}
 }

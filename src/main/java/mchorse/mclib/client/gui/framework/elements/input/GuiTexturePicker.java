@@ -6,7 +6,7 @@ import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.input.multiskin.GuiMultiSkinEditor;
 import mchorse.mclib.client.gui.framework.elements.list.GuiFolderEntryListElement;
-import mchorse.mclib.client.gui.framework.elements.list.GuiResourceLocationListElement;
+import mchorse.mclib.client.gui.framework.elements.list.GuiListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
@@ -30,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -49,7 +50,7 @@ public class GuiTexturePicker extends GuiElement
     public GuiFolderEntryListElement picker;
 
     public GuiButtonElement multi;
-    public GuiResourceLocationListElement multiList;
+    public GuiFRLListElement multiList;
     public GuiMultiSkinEditor editor;
 
     public GuiElement buttons;
@@ -60,6 +61,7 @@ public class GuiTexturePicker extends GuiElement
     public Consumer<ResourceLocation> callback;
 
     public MultiResourceLocation multiRL;
+    public FilteredResourceLocation currentFRL;
     public ResourceLocation current;
     public FileTree tree = GlobalTree.TREE;
 
@@ -81,7 +83,7 @@ public class GuiTexturePicker extends GuiElement
 
             this.selectCurrent(rl);
             this.text.setText(rl == null ? "" : rl.toString());
-        })  {
+        }) {
             @Override
             public void setFolder(FolderEntry folder)
             {
@@ -93,7 +95,7 @@ public class GuiTexturePicker extends GuiElement
         this.picker.cancelScrollEdge();
 
         this.multi = new GuiButtonElement(mc, IKey.lang("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
-        this.multiList = new GuiResourceLocationListElement(mc, (list) -> this.displayCurrent(list.get(0)));
+        this.multiList = new GuiFRLListElement(mc, (list) -> this.setFRL(list.get(0)));
         this.editor = new GuiMultiSkinEditor(mc, this);
         this.editor.setVisible(false);
 
@@ -109,8 +111,8 @@ public class GuiTexturePicker extends GuiElement
         this.picker.flex().relative(this.right).set(10, 30, 0, 0).w(1, -10).h(1, -30);
 
         this.multi.flex().relative(this).set(10, 10, 100, 20);
-        this.multiList.flex().set(10, 35, 100, 0).relative(this).hTo(this.buttons.flex());
-        this.editor.flex().set(120, 0, 0, 0).w(1F, -120).h(1F);
+        this.multiList.flex().relative(this).set(10, 35, 100, 0).hTo(this.buttons.flex());
+        this.editor.flex().relative(this).set(120, 0, 0, 0).w(1F, -120).h(1F);
 
         this.buttons.flex().relative(this).y(1F, -20).wTo(this.right.area).h(20);
         this.add.flex().relative(this.buttons).set(0, 0, 20, 20);
@@ -166,16 +168,11 @@ public class GuiTexturePicker extends GuiElement
      */
     private void addMultiSkin()
     {
-        ResourceLocation rl = this.current;
-
-        if (rl == null && !this.text.field.getText().isEmpty())
-        {
-            rl = RLUtils.create(this.text.field.getText());
-        }
+        FilteredResourceLocation rl = this.currentFRL.copy();
 
         this.multiList.add(rl);
         this.multiList.setIndex(this.multiList.getList().size() - 1);
-        this.displayCurrent(this.multiList.getCurrent().get(0));
+        this.setFRL(this.multiList.getCurrent().get(0));
     }
 
     /**
@@ -193,9 +190,16 @@ public class GuiTexturePicker extends GuiElement
 
             if (this.multiList.getIndex() >= 0)
             {
-                this.displayCurrent(this.multiList.getCurrent().get(0));
+                this.setFRL(this.multiList.getCurrent().get(0));
             }
         }
+    }
+
+    private void setFRL(FilteredResourceLocation location)
+    {
+        this.currentFRL = location;
+        this.displayCurrent(location.path);
+        this.editor.setLocation(location);
     }
 
     private void toggleEditor()
@@ -251,30 +255,16 @@ public class GuiTexturePicker extends GuiElement
             return;
         }
 
-        if (this.current instanceof FilteredResourceLocation)
+        if (this.multiRL != null)
         {
-            FilteredResourceLocation location = (FilteredResourceLocation) this.current;
-
-            location.set(rl.toString());
-            this.picker.rl = location;
+            this.currentFRL.path = rl;
         }
         else
         {
             this.current = rl;
-            this.picker.rl = rl;
-
-            if (this.multiRL != null)
-            {
-                int index = this.multiList.getIndex();
-
-                if (index != -1 && rl != null)
-                {
-                    this.multiList.getList().set(index, rl);
-                }
-
-                rl = this.multiRL;
-            }
         }
+
+        this.picker.rl = rl;
 
         if (this.callback != null)
         {
@@ -286,7 +276,12 @@ public class GuiTexturePicker extends GuiElement
     {
         if (this.multiRL != null)
         {
-            this.setMultiSkin(this.multiRL.children.get(0), true);
+            this.setMultiSkin(this.multiRL.children.get(0).path, true);
+
+            if (this.editor.isVisible())
+            {
+                this.toggleEditor();
+            }
         }
         else if (this.current != null)
         {
@@ -309,8 +304,8 @@ public class GuiTexturePicker extends GuiElement
 
         if (show)
         {
-            this.multiRL = (MultiResourceLocation) skin;
-            this.displayCurrent(this.multiRL.children.get(0));
+            this.multiRL = (MultiResourceLocation) ((MultiResourceLocation) skin).clone();
+            this.setFRL(this.multiRL.children.get(0));
 
             this.multiList.setIndex(this.multiRL.children.isEmpty() ? -1 : 0);;
             this.multiList.setList(this.multiRL.children);
@@ -332,8 +327,14 @@ public class GuiTexturePicker extends GuiElement
 
         if (notify)
         {
-            if (show) if (this.callback != null) this.callback.accept(skin);
-            else this.selectCurrent(skin);
+            if (show && this.callback != null)
+            {
+                this.callback.accept(skin);
+            }
+            else
+            {
+                this.selectCurrent(skin);
+            }
         }
 
         this.multiList.setVisible(show);
@@ -533,6 +534,24 @@ public class GuiTexturePicker extends GuiElement
                 this.mc.renderEngine.bindTexture(loc);
                 GuiDraw.drawBillboard(x, y, 0, 0, fw, fh, fw, fh);
             }
+        }
+    }
+
+    public static class GuiFRLListElement extends GuiListElement<FilteredResourceLocation>
+    {
+        public GuiFRLListElement(Minecraft mc, Consumer<List<FilteredResourceLocation>> callback)
+        {
+            super(mc, callback);
+
+            this.scroll.scrollItemSize = 16;
+        }
+
+        @Override
+        protected boolean sortElements()
+        {
+            Collections.sort(this.list, (a, b) -> a.toString().compareToIgnoreCase(b.toString()));
+
+            return true;
         }
     }
 }

@@ -3,7 +3,6 @@ package mchorse.mclib.utils.resources;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -23,11 +22,11 @@ public class TextureProcessor
 
 		for (int i = 0; i < multi.children.size(); i++)
 		{
-			ResourceLocation child = multi.children.get(i);
+			FilteredResourceLocation child = multi.children.get(i);
 
 			try
 			{
-				IResource resource = manager.getResource(child);
+				IResource resource = manager.getResource(child.path);
 				BufferedImage image = ImageIO.read(resource.getInputStream());
 
 				images.add(image);
@@ -44,36 +43,26 @@ public class TextureProcessor
 
 		for (int i = 0; i < multi.children.size(); i++)
 		{
-			ResourceLocation location = multi.children.get(i);
 			BufferedImage child = images.get(i);
+			FilteredResourceLocation filter = multi.children.get(i);
+			int iw = child.getWidth();
+			int ih = child.getHeight();
 
-			if (location instanceof FilteredResourceLocation)
+			if (filter.scaleToLargest)
 			{
-				FilteredResourceLocation filter = (FilteredResourceLocation) location;
-				int iw = child.getWidth();
-				int ih = child.getHeight();
-
-				if (filter.scaleToLargest)
-				{
-					iw = w;
-					ih = h;
-				}
-				else if (filter.scale != 0 && filter.scale > 0)
-				{
-					iw = (int) (iw * filter.scale);
-					ih = (int) (ih * filter.scale);
-				}
-
-				if (iw > 0 && ih > 0)
-				{
-					g.drawImage(child, filter.shiftX, filter.shiftY, iw, ih, null);
-				}
+				iw = w;
+				ih = h;
 			}
-			else
+			else if (filter.scale != 0 && filter.scale > 0)
 			{
-				g.drawImage(child, 0, 0, null);
+				iw = (int) (iw * filter.scale);
+				ih = (int) (ih * filter.scale);
 			}
 
+			if (iw > 0 && ih > 0)
+			{
+				g.drawImage(child, filter.shiftX, filter.shiftY, iw, ih, null);
+			}
 		}
 
 		g.dispose();

@@ -94,13 +94,6 @@ public class RLUtils
             return location;
         }
 
-        location = FilteredResourceLocation.from(base);
-
-        if (location != null)
-        {
-            return location;
-        }
-
         if (base instanceof NBTTagString)
         {
             return create(((NBTTagString) base).getString());
@@ -112,13 +105,6 @@ public class RLUtils
     public static ResourceLocation create(JsonElement element)
     {
         ResourceLocation location = MultiResourceLocation.from(element);
-
-        if (location != null)
-        {
-            return location;
-        }
-
-        location = FilteredResourceLocation.from(element);
 
         if (location != null)
         {

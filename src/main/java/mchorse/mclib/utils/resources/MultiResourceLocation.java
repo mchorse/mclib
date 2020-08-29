@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class MultiResourceLocation extends ResourceLocation implements IWritableLocation
 {
-    public List<ResourceLocation> children = new ArrayList<ResourceLocation>();
+    public List<FilteredResourceLocation> children = new ArrayList<FilteredResourceLocation>();
 
     public static MultiResourceLocation from(NBTBase nbt)
     {
@@ -70,13 +70,13 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
     public MultiResourceLocation(String resourceName)
     {
         this();
-        this.children.add(RLUtils.create(resourceName));
+        this.children.add(new FilteredResourceLocation(RLUtils.create(resourceName)));
     }
 
     public MultiResourceLocation(String resourceDomainIn, String resourcePathIn)
     {
         this();
-        this.children.add(RLUtils.create(resourceDomainIn, resourcePathIn));
+        this.children.add(new FilteredResourceLocation(RLUtils.create(resourceDomainIn, resourcePathIn)));
     }
 
     public MultiResourceLocation()
@@ -89,13 +89,13 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
     @Override
     public String getResourceDomain()
     {
-        return this.children.isEmpty() ? "" : this.children.get(0).getResourceDomain();
+        return this.children.isEmpty() ? "" : this.children.get(0).path.getResourceDomain();
     }
 
     @Override
     public String getResourcePath()
     {
-        return this.children.isEmpty() ? "" : this.children.get(0).getResourcePath();
+        return this.children.isEmpty() ? "" : this.children.get(0).path.getResourcePath();
     }
 
     /**
@@ -151,7 +151,7 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
 
         for (int i = 0; i < list.tagCount(); i++)
         {
-            ResourceLocation location = RLUtils.create(list.get(i));
+            FilteredResourceLocation location = FilteredResourceLocation.from(list.get(i));
 
             if (location != null)
             {
@@ -167,7 +167,7 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
 
         for (int i = 0; i < array.size(); i++)
         {
-            ResourceLocation location = RLUtils.create(array.get(i));
+            FilteredResourceLocation location = FilteredResourceLocation.from(array.get(i));
 
             if (location != null)
             {
@@ -181,9 +181,9 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
     {
         NBTTagList list = new NBTTagList();
 
-        for (ResourceLocation child : this.children)
+        for (FilteredResourceLocation child : this.children)
         {
-            NBTBase tag = RLUtils.writeNbt(child);
+            NBTBase tag = child.writeNbt();
 
             if (tag != null)
             {
@@ -199,9 +199,9 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
     {
         JsonArray array = new JsonArray();
 
-        for (ResourceLocation child : this.children)
+        for (FilteredResourceLocation child : this.children)
         {
-            JsonElement element = RLUtils.writeJson(child);
+            JsonElement element = child.writeJson();
 
             if (element != null)
             {
@@ -217,16 +217,9 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
     {
         MultiResourceLocation newMulti = new MultiResourceLocation();
 
-        for (ResourceLocation child : this.children)
+        for (FilteredResourceLocation child : this.children)
         {
-            if (child instanceof IWritableLocation)
-            {
-                newMulti.children.add(((IWritableLocation) child).clone());
-            }
-            else
-            {
-                newMulti.children.add(RLUtils.create(child.toString()));
-            }
+            newMulti.children.add(child.copy());
         }
 
         return newMulti;
