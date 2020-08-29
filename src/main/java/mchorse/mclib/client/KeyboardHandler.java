@@ -3,6 +3,7 @@ package mchorse.mclib.client;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.mclib.GuiDashboard;
+import mchorse.mclib.config.values.ValueRL;
 import mchorse.mclib.events.RemoveDashboardPanels;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -71,6 +72,7 @@ public class KeyboardHandler
 			if (event.getGui() instanceof GuiMainMenu)
 			{
 				GuiDashboard.dashboard = null;
+				ValueRL.picker = null;
 				McLib.EVENT_BUS.post(new RemoveDashboardPanels());
 			}
 		}

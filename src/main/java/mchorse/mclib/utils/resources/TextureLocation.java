@@ -27,7 +27,7 @@ public class TextureLocation extends ResourceLocation
         this.set(string);
     }
 
-    protected void set(String location)
+    public void set(String location)
     {
         String[] split = location.split(":");
         String domain = split.length > 0 ? split[0] : "minecraft";
@@ -36,7 +36,7 @@ public class TextureLocation extends ResourceLocation
         this.set(domain, path);
     }
 
-    protected void set(String domain, String path)
+    public void set(String domain, String path)
     {
         /* Guess what it does */
         Field[] fields = ResourceLocation.class.getDeclaredFields();

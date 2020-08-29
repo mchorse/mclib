@@ -1,37 +1,32 @@
 package mchorse.mclib.client.gui.framework.elements.input;
 
 import mchorse.mclib.McLib;
-import mchorse.mclib.client.gui.framework.GuiBase;
-import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
+import mchorse.mclib.client.gui.framework.elements.input.multiskin.GuiMultiSkinEditor;
 import mchorse.mclib.client.gui.framework.elements.list.GuiFolderEntryListElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiResourceLocationListElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.client.gui.utils.keys.LangKey;
-import mchorse.mclib.client.gui.utils.keys.StringKey;
 import mchorse.mclib.utils.Timer;
 import mchorse.mclib.utils.files.FileTree;
 import mchorse.mclib.utils.files.GlobalTree;
 import mchorse.mclib.utils.files.entries.AbstractEntry;
 import mchorse.mclib.utils.files.entries.FileEntry;
 import mchorse.mclib.utils.files.entries.FolderEntry;
+import mchorse.mclib.utils.resources.FilteredResourceLocation;
 import mchorse.mclib.utils.resources.MultiResourceLocation;
 import mchorse.mclib.utils.resources.RLUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -47,15 +42,20 @@ import java.util.function.Consumer;
  */
 public class GuiTexturePicker extends GuiElement
 {
+    public GuiElement right;
     public GuiTextElement text;
     public GuiButtonElement close;
     public GuiButtonElement folder;
     public GuiFolderEntryListElement picker;
 
     public GuiButtonElement multi;
+    public GuiResourceLocationListElement multiList;
+    public GuiMultiSkinEditor editor;
+
+    public GuiElement buttons;
     public GuiIconElement add;
     public GuiIconElement remove;
-    public GuiResourceLocationListElement multiList;
+    public GuiIconElement edit;
 
     public Consumer<ResourceLocation> callback;
 
@@ -71,8 +71,9 @@ public class GuiTexturePicker extends GuiElement
     {
         super(mc);
 
+        this.right = new GuiElement(mc);
         this.text = new GuiTextElement(mc, 1000, (str) -> this.selectCurrent(str.isEmpty() ? null : RLUtils.create(str)));
-        this.close = new GuiButtonElement(mc, IKey.str("X"), (b) -> this.removeFromParent());
+        this.close = new GuiButtonElement(mc, IKey.str("X"), (b) -> this.close());
         this.folder = new GuiButtonElement(mc, IKey.lang("mclib.gui.open_folder"), (b) -> this.openFolder());
         this.picker = new GuiFolderEntryListElement(mc, (entry) ->
         {
@@ -93,24 +94,47 @@ public class GuiTexturePicker extends GuiElement
 
         this.multi = new GuiButtonElement(mc, IKey.lang("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
         this.multiList = new GuiResourceLocationListElement(mc, (list) -> this.displayCurrent(list.get(0)));
+        this.editor = new GuiMultiSkinEditor(mc, this);
+        this.editor.setVisible(false);
+
+        this.buttons = new GuiElement(mc);
         this.add = new GuiIconElement(mc, Icons.ADD, (b) -> this.addMultiSkin());
         this.remove = new GuiIconElement(mc, Icons.REMOVE, (b) -> this.removeMultiSkin());
+        this.edit = new GuiIconElement(mc, Icons.EDIT, (b) -> this.toggleEditor());
 
-        this.text.flex().set(115, 5, 0, 20).relative(this).w(1, -145);
-        this.close.flex().set(0, 5, 20, 20).relative(this).x(1, -25);
-        this.folder.flex().set(0, 0, 80, 20).relative(this).x(1, -90).y(1, - 30);
-        this.picker.flex().set(115, 30, 0, 0).relative(this).w(1, -120).h(1, -30);
+        this.right.flex().relative(this).wh(1F, 1F);
+        this.text.flex().relative(this.multi).x(1F, 20).wTo(this.close.flex(), -5).h(20);
+        this.close.flex().relative(this).set(0, 10, 20, 20).x(1, -30);
+        this.folder.flex().relative(this.right).set(0, 0, 80, 20).x(1, -10).y(1, -10).anchor(1F, 1F);
+        this.picker.flex().relative(this.right).set(10, 30, 0, 0).w(1, -10).h(1, -30);
 
-        this.multi.flex().relative(this).set(5, 5, 100, 20);
-        this.add.flex().relative(this).set(67, 7, 16, 16);
-        this.remove.flex().relative(this.add).set(20, 0, 16, 16);
-        this.multiList.flex().set(5, 35, 100, 0).relative(this).h(1, -40);
+        this.multi.flex().relative(this).set(10, 10, 100, 20);
+        this.multiList.flex().set(10, 35, 100, 0).relative(this).hTo(this.buttons.flex());
+        this.editor.flex().set(120, 0, 0, 0).w(1F, -120).h(1F);
 
-        this.add(this.picker, this.multi, this.multiList, this.text, this.close, this.folder, this.add, this.remove);
+        this.buttons.flex().relative(this).y(1F, -20).wTo(this.right.area).h(20);
+        this.add.flex().relative(this.buttons).set(0, 0, 20, 20);
+        this.remove.flex().relative(this.add).set(20, 0, 20, 20);
+        this.edit.flex().relative(this.buttons).wh(20, 20).x(1F, -20);
+
+        this.right.add(this.text, this.picker, this.folder);
+        this.buttons.add(this.add, this.remove, this.edit);
+        this.add(this.multi, this.multiList, this.close, this.right, this.editor, this.buttons);
+
         this.callback = callback;
 
         this.fill(null);
         this.markContainer();
+    }
+
+    public void close()
+    {
+        this.removeFromParent();
+
+        if (this.callback != null)
+        {
+            this.callback.accept(this.multiRL != null ? this.multiRL : this.current);
+        }
     }
 
     public void refresh()
@@ -174,6 +198,12 @@ public class GuiTexturePicker extends GuiElement
         }
     }
 
+    private void toggleEditor()
+    {
+        this.editor.toggleVisible();
+        this.right.setVisible(!this.editor.isVisible());
+    }
+
     /**
      * Display current resource location (it's just for visual, not 
      * logic)
@@ -221,19 +251,29 @@ public class GuiTexturePicker extends GuiElement
             return;
         }
 
-        this.current = rl;
-        this.picker.rl = rl;
-
-        if (this.multiRL != null)
+        if (this.current instanceof FilteredResourceLocation)
         {
-            int index = this.multiList.getIndex();
+            FilteredResourceLocation location = (FilteredResourceLocation) this.current;
 
-            if (index != -1 && rl != null)
+            location.set(rl.toString());
+            this.picker.rl = location;
+        }
+        else
+        {
+            this.current = rl;
+            this.picker.rl = rl;
+
+            if (this.multiRL != null)
             {
-                this.multiList.getList().set(index, rl);
-            }
+                int index = this.multiList.getIndex();
 
-            rl = this.multiRL;
+                if (index != -1 && rl != null)
+                {
+                    this.multiList.getList().set(index, rl);
+                }
+
+                rl = this.multiRL;
+            }
         }
 
         if (this.callback != null)
@@ -275,16 +315,18 @@ public class GuiTexturePicker extends GuiElement
             this.multiList.setIndex(this.multiRL.children.isEmpty() ? -1 : 0);;
             this.multiList.setList(this.multiRL.children);
 
-            this.picker.flex().set(115, 30, 0, 0).relative(this).w(1, -120).h(1, -30);
-            this.multi.flex().set(5, 5, 60, 20).relative(this);
+            if (this.current != null)
+            {
+                this.multiList.setIndex(0);
+            }
+
+            this.right.flex().x(120).w(1F, -120);
         }
         else
         {
             this.multiRL = null;
 
-            this.picker.flex().set(5, 30, 0, 0).relative(this).w(1, -10).h(1, -30);
-            this.multi.flex().set(5, 5, 100, 20).relative(this);
-
+            this.right.flex().x(0).w(1F);
             this.displayCurrent(skin);
         }
 
@@ -295,11 +337,9 @@ public class GuiTexturePicker extends GuiElement
         }
 
         this.multiList.setVisible(show);
-        this.add.setVisible(show);
-        this.remove.setVisible(show);
+        this.buttons.setVisible(show);
 
-        this.picker.resize();
-        this.multi.resize();
+        this.resize();
         this.updateFolderButton();
     }
 
@@ -349,7 +389,7 @@ public class GuiTexturePicker extends GuiElement
         }
         else if (keyCode == Keyboard.KEY_ESCAPE)
         {
-            this.removeFromParent();
+            this.close();
 
             return true;
         }
@@ -419,71 +459,80 @@ public class GuiTexturePicker extends GuiElement
             }
         }
 
-        /* Draw the GUI */
+        /* Draw the background */
         drawGradientRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 0x88000000, 0xff000000);
 
         if (this.multiList.isVisible())
         {
-            drawRect(this.area.x, this.area.y, this.area.x + 110, this.area.ey(), 0xff181818);
-            drawRect(this.area.x, this.area.y, this.area.x + 110, this.area.y + 30, 0x44000000);
-            drawGradientRect(this.area.x, this.area.ey() - 20, this.area.x + 110, this.area.ey(), 0x00, 0x88000000);
+            drawRect(this.area.x, this.area.y, this.area.x + 120, this.area.ey(), 0xff181818);
+            drawRect(this.area.x, this.area.y, this.area.x + 120, this.area.y + 30, 0x44000000);
+            drawGradientRect(this.area.x, this.area.ey() - 20, this.buttons.area.ex(), this.area.ey(), 0x00, 0x88000000);
         }
 
-        if (this.picker.getList().isEmpty())
+        if (this.editor.isVisible())
         {
-            this.drawCenteredString(this.font, I18n.format("mclib.gui.no_data"), this.area.mx(), this.area.my(), 0xffffff);
+            this.edit.area.draw(0x88000000 + McLib.primaryColor.get());
         }
 
         super.draw(context);
 
-        if (!this.lastTyped.check() && this.lastTyped.enabled)
+        /* Draw the overlays */
+        if (this.right.isVisible())
         {
-            int w = this.font.getStringWidth(this.typed);
-            int x = this.text.area.x;
-            int y = this.text.area.ey();
-
-            Gui.drawRect(x, y, x + w + 4, y + 4 + this.font.FONT_HEIGHT, 0x88000000 + McLib.primaryColor.get());
-            this.font.drawStringWithShadow(this.typed, x + 2, y + 2, 0xffffff);
-        }
-
-        ResourceLocation loc = this.current;
-
-        /* Draw preview */
-        if (loc != null)
-        {
-            GlStateManager.color(1, 1, 1, 1);
-            this.mc.renderEngine.bindTexture(loc);
-
-            int w = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
-            int h = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
-
-            int x = this.area.ex();
-            int y = this.area.ey();
-            int fw = w;
-            int fh = h;
-
-            if (fw > 128 || fh > 128)
+            if (this.picker.getList().isEmpty())
             {
-                fw = fh = 128;
-
-                if (w > h)
-                {
-                    fh = (int) ((h / (float) w) * fw);
-                }
-                else if (h > w)
-                {
-                    fw = (int) ((w / (float) h) * fh);
-                }
+                this.drawCenteredString(this.font, I18n.format("mclib.gui.no_data"), this.picker.area.mx(), this.picker.area.my() - 8, 0xffffff);
             }
 
-            x -= fw + 10;
-            y -= fh + 40;
+            if (!this.lastTyped.check() && this.lastTyped.enabled)
+            {
+                int w = this.font.getStringWidth(this.typed);
+                int x = this.text.area.x;
+                int y = this.text.area.ey();
 
-            Icons.CHECKBOARD.renderArea(x, y, fw, fh);
+                Gui.drawRect(x, y, x + w + 4, y + 4 + this.font.FONT_HEIGHT, 0x88000000 + McLib.primaryColor.get());
+                this.font.drawStringWithShadow(this.typed, x + 2, y + 2, 0xffffff);
+            }
 
-            GlStateManager.enableAlpha();
-            this.mc.renderEngine.bindTexture(loc);
-            GuiDraw.drawBillboard(x, y, 0, 0, fw, fh, fw, fh);
+            ResourceLocation loc = this.current;
+
+            /* Draw preview */
+            if (loc != null)
+            {
+                GlStateManager.color(1, 1, 1, 1);
+                this.mc.renderEngine.bindTexture(loc);
+
+                int w = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
+                int h = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+
+                int x = this.area.ex();
+                int y = this.area.ey();
+                int fw = w;
+                int fh = h;
+
+                if (fw > 128 || fh > 128)
+                {
+                    fw = fh = 128;
+
+                    if (w > h)
+                    {
+                        fh = (int) ((h / (float) w) * fw);
+                    }
+                    else if (h > w)
+                    {
+                        fw = (int) ((w / (float) h) * fh);
+                    }
+                }
+
+                x -= fw + 10;
+                y -= fh + 35;
+
+                Icons.CHECKBOARD.renderArea(x, y, fw, fh);
+
+                GlStateManager.enableAlpha();
+                this.mc.renderEngine.bindTexture(loc);
+                GuiDraw.drawBillboard(x, y, 0, 0, fw, fh, fw, fh);
+            }
         }
     }
 }
