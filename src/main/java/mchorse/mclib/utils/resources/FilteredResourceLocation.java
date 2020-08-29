@@ -12,6 +12,7 @@ public class FilteredResourceLocation implements IWritableLocation
 {
 	public ResourceLocation path;
 
+	public int color = 0xffffff;
 	public float scale = 1F;
 	public boolean scaleToLargest;
 	public int shiftX;
@@ -68,6 +69,7 @@ public class FilteredResourceLocation implements IWritableLocation
 	{
 		int hashCode = (this.path.hashCode() + (this.scaleToLargest ? 1 : 0)) * 31;
 
+		if (this.color != 0xffffff) hashCode = (hashCode + this.color) * 31;
 		if (this.scale != 1) hashCode = (hashCode + (int) (this.scale * 1000)) * 31;
 		if (this.shiftX != 0) hashCode = (hashCode + this.shiftX) * 31;
 		if (this.shiftY != 0) hashCode = (hashCode + this.shiftY) * 31;
@@ -77,7 +79,7 @@ public class FilteredResourceLocation implements IWritableLocation
 
 	public boolean isDefault()
 	{
-		return !this.scaleToLargest && this.scale == 1F && this.shiftX == 0 && this.shiftY == 0;
+		return this.color == 0xffffff && !this.scaleToLargest && this.scale == 1F && this.shiftX == 0 && this.shiftY == 0;
 	}
 
 	@Override
@@ -93,6 +95,11 @@ public class FilteredResourceLocation implements IWritableLocation
 		NBTTagCompound tag = (NBTTagCompound) nbt;
 
 		this.path = RLUtils.create(tag.getString("Path"));
+
+		if (tag.hasKey("Color"))
+		{
+			this.color = tag.getInteger("Color");
+		}
 
 		if (tag.hasKey("Scale"))
 		{
@@ -129,6 +136,11 @@ public class FilteredResourceLocation implements IWritableLocation
 
 		this.path = RLUtils.create(object.get("path").getAsString());
 
+		if (object.has("color"))
+		{
+			this.color = object.get("color").getAsInt();
+		}
+
 		if (object.has("scale"))
 		{
 			this.scale = object.get("scale").getAsFloat();
@@ -162,6 +174,7 @@ public class FilteredResourceLocation implements IWritableLocation
 
 		tag.setString("Path", this.toString());
 
+		if (this.color != 0xffffff) tag.setInteger("Color", this.color);
 		if (this.scale != 1) tag.setFloat("Scale", this.scale);
 		if (this.scaleToLargest) tag.setBoolean("ScaleToLargest", this.scaleToLargest);
 		if (this.shiftX != 0) tag.setInteger("ShiftX", this.shiftX);
@@ -182,6 +195,7 @@ public class FilteredResourceLocation implements IWritableLocation
 
 		object.addProperty("path", this.toString());
 
+		if (this.color != 0xffffff) object.addProperty("color", this.color);
 		if (this.scale != 1) object.addProperty("scale", this.scale);
 		if (this.scaleToLargest) object.addProperty("scaleToLargest", this.scaleToLargest);
 		if (this.shiftX != 0) object.addProperty("shiftX", this.shiftX);

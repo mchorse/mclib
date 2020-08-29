@@ -1,5 +1,6 @@
 package mchorse.mclib.utils.resources;
 
+import mchorse.mclib.utils.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
@@ -7,6 +8,7 @@ import net.minecraft.client.resources.IResourceManager;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +63,11 @@ public class TextureProcessor
 
 			if (iw > 0 && ih > 0)
 			{
+				if (filter.color != 0xffffff)
+				{
+					applyColor(child, filter.color);
+				}
+
 				g.drawImage(child, filter.shiftX, filter.shiftY, iw, ih, null);
 			}
 		}
@@ -68,5 +75,46 @@ public class TextureProcessor
 		g.dispose();
 
 		return image;
+	}
+
+	/**
+	 * Apply given color
+	 */
+	private static void applyColor(BufferedImage child, int color)
+	{
+		byte[] pixels = ((DataBufferByte) child.getRaster().getDataBuffer()).getData();
+		final int pixelLength = child.getAlphaRaster() != null ? 4 : 3;
+		Color filter = new Color().set(color, false);
+		float r, g, b;
+
+		for (int i = 0, c = pixels.length / pixelLength; i < c; i++)
+		{
+			int offset = 0;
+			int index = i * pixelLength;
+
+			if (pixelLength == 4)
+			{
+				if (((int) pixels[index + offset] & 0xff) == 0)
+				{
+					continue;
+				}
+
+				offset += 1;
+			}
+
+			b = ((int) pixels[index + offset++] & 0xff) / 255F * filter.b;
+			g = ((int) pixels[index + offset++] & 0xff) / 255F * filter.g;
+			r = ((int) pixels[index + offset] & 0xff) / 255F * filter.r;
+			offset = 0;
+
+			if (pixelLength == 4)
+			{
+				offset += 1;
+			}
+
+			pixels[index + offset++] = (byte) (b * 0xff);
+			pixels[index + offset++] = (byte) (g * 0xff);
+			pixels[index + offset] = (byte) (r * 0xff);
+		}
 	}
 }

@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements.input.multiskin;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTexturePicker;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiCanvas;
@@ -11,6 +12,8 @@ import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.utils.ColorUtils;
+import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.resources.FilteredResourceLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -24,6 +27,7 @@ public class GuiMultiSkinEditor extends GuiCanvas
 	public FilteredResourceLocation location;
 
 	public GuiElement editor;
+	public GuiColorElement color;
 	public GuiTrackpadElement scale;
 	public GuiToggleElement scaleToLargest;
 	public GuiTrackpadElement shiftX;
@@ -38,6 +42,8 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		this.editor = new GuiElement(mc);
 		this.editor.flex().relative(this).xy(1F, 1F).w(130).anchor(1F, 1F).column(5).stretch().vertical().padding(10);
 
+		this.color = new GuiColorElement(mc, (value) -> this.location.color = value);
+		this.color.direction(Direction.TOP);
 		this.scale = new GuiTrackpadElement(mc, (value) -> this.location.scale = value.floatValue());
 		this.scaleToLargest = new GuiToggleElement(mc, IKey.str("Scale to largest"), (toggle) -> this.location.scaleToLargest = toggle.isToggled());
 		this.shiftX = new GuiTrackpadElement(mc, (value) -> this.location.shiftX = value.intValue());
@@ -45,6 +51,7 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		this.shiftY = new GuiTrackpadElement(mc, (value) -> this.location.shiftY = value.intValue());
 		this.shiftY.integer();
 
+		this.editor.add(this.color);
 		this.editor.add(Elements.label(IKey.str("Scale")).background(0x88000000), this.scale, this.scaleToLargest);
 		this.editor.add(Elements.label(IKey.str("Shift")).background(0x88000000), this.shiftX, this.shiftY);
 		this.add(this.editor);
@@ -54,6 +61,7 @@ public class GuiMultiSkinEditor extends GuiCanvas
 	{
 		this.location = location;
 
+		this.color.picker.setColor(location.color);
 		this.scale.setValue(location.scale);
 		this.scaleToLargest.toggled(location.scaleToLargest);
 		this.shiftX.setValue(location.shiftX);
@@ -148,15 +156,16 @@ public class GuiMultiSkinEditor extends GuiCanvas
 				if (child == this.picker.currentFRL)
 				{
 					Gui.drawRect(area.x, area.y, area.ex(), area.ey(), 0x44ff0000);
-					GlStateManager.color(1F, 1F, 1F);
 					GlStateManager.enableBlend();
 					GlStateManager.enableAlpha();
 				}
 
+				ColorUtils.bindColor(0xff000000 + child.color);
 				GuiDraw.drawBillboard(area.x, area.y, 0, 0, area.w, area.h, area.w, area.h);
 			}
 		}
 
+		GlStateManager.color(1F, 1F, 1F);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		GuiDraw.unscissor(context);
 	}
