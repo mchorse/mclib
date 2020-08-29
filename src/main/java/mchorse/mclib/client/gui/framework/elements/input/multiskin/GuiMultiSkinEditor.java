@@ -58,6 +58,29 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		this.add(this.editor);
 	}
 
+	public void resetView()
+	{
+		int w = 0;
+		int h = 0;
+
+		for (FilteredResourceLocation child : this.picker.multiRL.children)
+		{
+			this.mc.renderEngine.bindTexture(child.path);
+			w = Math.max(w, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH));
+			h = Math.max(h, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT));
+		}
+
+		this.scaleX.set(0, 2);
+		this.scaleY.set(0, 2);
+		this.scaleX.view(-w / 2, w / 2, this.area.w, 20);
+		this.scaleY.view(-h / 2, h / 2, this.area.h, 20);
+
+		double min = Math.min(this.scaleX.zoom, this.scaleY.zoom);
+
+		this.scaleX.zoom = min;
+		this.scaleY.zoom = min;
+	}
+
 	public void setLocation(FilteredResourceLocation location)
 	{
 		this.location = location;

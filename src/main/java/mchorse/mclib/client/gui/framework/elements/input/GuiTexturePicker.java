@@ -207,6 +207,11 @@ public class GuiTexturePicker extends GuiElement
     {
         this.editor.toggleVisible();
         this.right.setVisible(!this.editor.isVisible());
+
+        if (this.editor.isVisible())
+        {
+            this.editor.resetView();
+        }
     }
 
     /**
