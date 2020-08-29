@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.utils;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.resizers.IResizer;
+import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.gui.Gui;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -72,6 +73,51 @@ public class Area implements IResizer
     {
         return this.x < area.x + area.w && this.y < area.y + area.h
             && area.x < this.x + this.w && area.y < this.y + this.h;
+    }
+
+    /**
+     * Clamp given area inside of this one
+     */
+    public void clamp(Area area)
+    {
+        int x1 = area.x;
+        int y1 = area.y;
+        int x2 = area.ex();
+        int y2 = area.ey();
+
+        x1 = MathUtils.clamp(x1, this.x, this.ex());
+        y1 = MathUtils.clamp(y1, this.y, this.ey());
+        x2 = MathUtils.clamp(x2, this.x, this.ex());
+        y2 = MathUtils.clamp(y2, this.y, this.ey());
+
+        area.setPoints(x1, y1, x2, y2);
+    }
+
+    /**
+     * Expand the area either inwards or outwards
+     */
+    public void offset(int offset)
+    {
+        this.offsetX(offset);
+        this.offsetY(offset);
+    }
+
+    /**
+     * Expand the area either inwards or outwards (horizontally)
+     */
+    public void offsetX(int offset)
+    {
+        this.x -= offset;
+        this.w += offset * 2;
+    }
+
+    /**
+     * Expand the area either inwards or outwards (horizontally)
+     */
+    public void offsetY(int offset)
+    {
+        this.y -= offset;
+        this.h += offset * 2;
     }
 
     /**

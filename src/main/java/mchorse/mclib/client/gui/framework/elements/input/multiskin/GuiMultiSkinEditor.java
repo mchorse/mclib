@@ -117,16 +117,22 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		}
 
 		Area area = this.calculate(-w / 2, -h / 2, w / 2, h / 2);
-		int x = area.x;
-		int y = area.y;
-		int fw = area.w;
-		int fh = area.h;
 
-		Gui.drawRect(x - 1, y - 1, x + fw + 1, y + fh + 1, 0xff181818);
+		Gui.drawRect(area.x - 1, area.y - 1, area.ex() + 1, area.ey() + 1, 0xff181818);
 		GlStateManager.color(1, 1, 1, 1);
-		Icons.CHECKBOARD.renderArea(x, y, fw, fh);
 
-		GuiDraw.scissor(x, y, fw, fh, context);
+		GuiDraw.scissor(area.x, area.y, area.w, area.h, context);
+
+		int ox = (this.area.x - area.x) % 16;
+		int oy = (this.area.y - area.y) % 16;
+
+		Area processed = new Area();
+		processed.copy(this.area);
+		processed.offsetX(ox < 0 ? 16 + ox : ox);
+		processed.offsetY(oy < 0 ? 16 + oy : oy);
+		processed.clamp(area);
+		Icons.CHECKBOARD.renderArea(area.x, area.y, area.w, area.h);
+
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
 		GlStateManager.enableBlend();
 		GlStateManager.enableAlpha();
