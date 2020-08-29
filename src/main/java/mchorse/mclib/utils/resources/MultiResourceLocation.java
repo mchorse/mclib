@@ -151,7 +151,12 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
 
         for (int i = 0; i < list.tagCount(); i++)
         {
-            this.children.add(RLUtils.create(list.get(i)));
+            ResourceLocation location = RLUtils.create(list.get(i));
+
+            if (location != null)
+            {
+                this.children.add(location);
+            }
         }
     }
 
@@ -162,7 +167,12 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
 
         for (int i = 0; i < array.size(); i++)
         {
-            this.children.add(RLUtils.create(array.get(i)));
+            ResourceLocation location = RLUtils.create(array.get(i));
+
+            if (location != null)
+            {
+                this.children.add(location);
+            }
         }
     }
 

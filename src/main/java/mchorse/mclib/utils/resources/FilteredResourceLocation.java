@@ -10,7 +10,10 @@ import net.minecraft.util.ResourceLocation;
 
 public class FilteredResourceLocation extends TextureLocation implements IWritableLocation
 {
+	public float scale = 1F;
 	public boolean scaleToLargest;
+	public int shiftX;
+	public int shiftY;
 
 	public static FilteredResourceLocation from(NBTBase base)
 	{
@@ -63,12 +66,18 @@ public class FilteredResourceLocation extends TextureLocation implements IWritab
 	@Override
 	public int hashCode()
 	{
-		return super.hashCode() + (this.scaleToLargest ? 1 : 0) * 31;
+		int hashCode = (super.hashCode() + (this.scaleToLargest ? 1 : 0)) * 31;
+
+		if (this.scale != 1) hashCode = (hashCode + (int) (this.scale * 1000)) * 31;
+		if (this.shiftX != 0) hashCode = (hashCode + this.shiftX) * 31;
+		if (this.shiftY != 0) hashCode = (hashCode + this.shiftY) * 31;
+
+		return hashCode;
 	}
 
 	public boolean isDefault()
 	{
-		return !this.scaleToLargest;
+		return !this.scaleToLargest && this.scale == 1F && this.shiftX == 0 && this.shiftY == 0;
 	}
 
 	@Override
@@ -77,7 +86,26 @@ public class FilteredResourceLocation extends TextureLocation implements IWritab
 		NBTTagCompound tag = (NBTTagCompound) nbt;
 
 		this.set(tag.getString("Path"));
-		this.scaleToLargest = tag.getBoolean("ScaleToLargest");
+
+		if (tag.hasKey("Scale"))
+		{
+			this.scale = tag.getInteger("Scale");
+		}
+
+		if (tag.hasKey("ScaleToLargest"))
+		{
+			this.scaleToLargest = tag.getBoolean("ScaleToLargest");
+		}
+
+		if (tag.hasKey("ShiftX"))
+		{
+			this.shiftX = tag.getInteger("ShiftX");
+		}
+
+		if (tag.hasKey("ShiftY"))
+		{
+			this.shiftY = tag.getInteger("ShiftY");
+		}
 	}
 
 	@Override
@@ -86,7 +114,26 @@ public class FilteredResourceLocation extends TextureLocation implements IWritab
 		JsonObject object = element.getAsJsonObject();
 
 		this.set(object.get("path").getAsString());
-		this.scaleToLargest = object.get("scaleToLargest").getAsBoolean();
+
+		if (object.has("scale"))
+		{
+			this.scale = object.get("scale").getAsFloat();
+		}
+
+		if (object.has("scaleToLargest"))
+		{
+			this.scaleToLargest = object.get("scaleToLargest").getAsBoolean();
+		}
+
+		if (object.has("shiftX"))
+		{
+			this.shiftX = object.get("shiftX").getAsInt();
+		}
+
+		if (object.has("shiftY"))
+		{
+			this.shiftY = object.get("shiftY").getAsInt();
+		}
 	}
 
 	@Override
@@ -100,7 +147,11 @@ public class FilteredResourceLocation extends TextureLocation implements IWritab
 		NBTTagCompound tag = new NBTTagCompound();
 
 		tag.setString("Path", this.toString());
-		tag.setBoolean("ScaleToLargest", this.scaleToLargest);
+
+		if (this.scale != 1) tag.setFloat("Scale", this.scale);
+		if (this.scaleToLargest) tag.setBoolean("ScaleToLargest", this.scaleToLargest);
+		if (this.shiftX != 0) tag.setInteger("ShiftX", this.shiftX);
+		if (this.shiftY != 0) tag.setInteger("ShiftY", this.shiftY);
 
 		return tag;
 	}
@@ -116,7 +167,11 @@ public class FilteredResourceLocation extends TextureLocation implements IWritab
 		JsonObject object = new JsonObject();
 
 		object.addProperty("path", this.toString());
-		object.addProperty("scaleToLargest", this.scaleToLargest);
+
+		if (this.scale != 1) object.addProperty("scale", this.scale);
+		if (this.scaleToLargest) object.addProperty("scaleToLargest", this.scaleToLargest);
+		if (this.shiftX != 0) object.addProperty("shiftX", this.shiftX);
+		if (this.shiftY != 0) object.addProperty("shiftY", this.shiftY);
 
 		return object;
 	}
@@ -126,7 +181,10 @@ public class FilteredResourceLocation extends TextureLocation implements IWritab
 	{
 		FilteredResourceLocation location = new FilteredResourceLocation(this.toString());
 
+		location.scale = this.scale;
 		location.scaleToLargest = this.scaleToLargest;
+		location.shiftX = this.shiftX;
+		location.shiftY = this.shiftY;
 
 		return location;
 	}

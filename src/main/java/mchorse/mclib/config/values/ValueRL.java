@@ -94,6 +94,8 @@ public class ValueRL extends Value
 	public void fromJSON(JsonElement element)
 	{
 		this.value = RLUtils.create(element);
+
+		System.out.println("Hello");
 	}
 
 	@Override

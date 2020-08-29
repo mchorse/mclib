@@ -50,14 +50,23 @@ public class TextureProcessor
 			if (location instanceof FilteredResourceLocation)
 			{
 				FilteredResourceLocation filter = (FilteredResourceLocation) location;
+				int iw = child.getWidth();
+				int ih = child.getHeight();
 
 				if (filter.scaleToLargest)
 				{
-					g.drawImage(child, 0, 0, w, h, null);
+					iw = w;
+					ih = h;
 				}
-				else
+				else if (filter.scale != 0 && filter.scale > 0)
 				{
-					g.drawImage(child, 0, 0, null);
+					iw = (int) (iw * filter.scale);
+					ih = (int) (ih * filter.scale);
+				}
+
+				if (iw > 0 && ih > 0)
+				{
+					g.drawImage(child, filter.shiftX, filter.shiftY, iw, ih, null);
 				}
 			}
 			else

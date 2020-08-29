@@ -1,30 +1,22 @@
 package mchorse.mclib.utils.resources;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonPrimitive;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.SimpleResource;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonPrimitive;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.SimpleResource;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * {@link ResourceLocation} utility methods
