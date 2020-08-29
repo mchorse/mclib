@@ -43,18 +43,18 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		this.editor.flex().relative(this).xy(1F, 1F).w(130).anchor(1F, 1F).column(5).stretch().vertical().padding(10);
 
 		this.color = new GuiColorElement(mc, (value) -> this.location.color = value);
-		this.color.direction(Direction.TOP);
+		this.color.direction(Direction.TOP).tooltip(IKey.lang("mclib.gui.multiskin.color"));
 		this.scale = new GuiTrackpadElement(mc, (value) -> this.location.scale = value.floatValue());
 		this.scale.limit(0).metric();
-		this.scaleToLargest = new GuiToggleElement(mc, IKey.str("Scale to largest"), (toggle) -> this.location.scaleToLargest = toggle.isToggled());
+		this.scaleToLargest = new GuiToggleElement(mc, IKey.lang("mclib.gui.multiskin.scale_to_largest"), (toggle) -> this.location.scaleToLargest = toggle.isToggled());
 		this.shiftX = new GuiTrackpadElement(mc, (value) -> this.location.shiftX = value.intValue());
 		this.shiftX.integer();
 		this.shiftY = new GuiTrackpadElement(mc, (value) -> this.location.shiftY = value.intValue());
 		this.shiftY.integer();
 
 		this.editor.add(this.color);
-		this.editor.add(Elements.label(IKey.str("Scale")).background(0x88000000), this.scale, this.scaleToLargest);
-		this.editor.add(Elements.label(IKey.str("Shift")).background(0x88000000), this.shiftX, this.shiftY);
+		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.scale")).background(0x88000000), this.scale, this.scaleToLargest);
+		this.editor.add(Elements.label(IKey.str("mclib.gui.multiskin.shift")).background(0x88000000), this.shiftX, this.shiftY);
 		this.add(this.editor);
 	}
 
