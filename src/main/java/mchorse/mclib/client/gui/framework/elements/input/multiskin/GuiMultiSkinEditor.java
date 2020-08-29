@@ -45,6 +45,7 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		this.color = new GuiColorElement(mc, (value) -> this.location.color = value);
 		this.color.direction(Direction.TOP);
 		this.scale = new GuiTrackpadElement(mc, (value) -> this.location.scale = value.floatValue());
+		this.scale.limit(0).metric();
 		this.scaleToLargest = new GuiToggleElement(mc, IKey.str("Scale to largest"), (toggle) -> this.location.scaleToLargest = toggle.isToggled());
 		this.shiftX = new GuiTrackpadElement(mc, (value) -> this.location.shiftX = value.intValue());
 		this.shiftX.integer();

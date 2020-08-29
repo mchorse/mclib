@@ -96,6 +96,7 @@ public class GuiTexturePicker extends GuiElement
 
         this.multi = new GuiButtonElement(mc, IKey.lang("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
         this.multiList = new GuiFRLListElement(mc, (list) -> this.setFRL(list.get(0)));
+        this.multiList.sorting();
         this.editor = new GuiMultiSkinEditor(mc, this);
         this.editor.setVisible(false);
 

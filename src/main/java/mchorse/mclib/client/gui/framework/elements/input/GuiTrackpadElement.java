@@ -196,6 +196,11 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         return this.increment(1 / 16D).values(1 / 32D, 1 / 128D, 1 / 2D);
     }
 
+    public GuiTrackpadElement metric()
+    {
+        return this.values(0.1D, 0.01D, 1);
+    }
+
     /**
      * Whether this trackpad is dragging
      */
