@@ -62,6 +62,8 @@ public class McLib
     public static ValueInt scrollbarShadow;
     public static ValueInt scrollbarWidth;
 
+    public static ValueBoolean multiskinMultiThreaded;
+
     public static ValueInt maxPacketSize;
 
     @SubscribeEvent
@@ -94,6 +96,8 @@ public class McLib
         scrollbarFlat = builder.category("scrollbars").getBoolean("flat", false);
         scrollbarShadow = builder.getInt("shadow", 0x88000000).colorAlpha();
         scrollbarWidth = builder.getInt("width", 4, 2, 10);
+
+        multiskinMultiThreaded = builder.category("multiskin").getBoolean("multithreaded", true);
 
         maxPacketSize = builder.category("vanilla").getInt("max_packet_size", PayloadASM.MIN_SIZE, PayloadASM.MIN_SIZE, Integer.MAX_VALUE);
 

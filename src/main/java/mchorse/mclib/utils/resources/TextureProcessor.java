@@ -78,7 +78,7 @@ public class TextureProcessor
 	}
 
 	/**
-	 * Apply given color
+	 * Apply filters
 	 */
 	private static void processImage(BufferedImage child, FilteredResourceLocation frl)
 	{

@@ -3,6 +3,8 @@ package mchorse.mclib.utils.resources;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
+import mchorse.mclib.McLib;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.SimpleResource;
 import net.minecraft.nbt.NBTBase;
@@ -27,6 +29,7 @@ import java.util.List;
 public class RLUtils
 {
     private static List<IResourceTransformer> transformers = new ArrayList<IResourceTransformer>();
+    private static ResourceLocation pixel = new ResourceLocation("mclib:textures/pixel.png");
 
     /**
      * Get stream for multi resource location 
@@ -41,10 +44,19 @@ public class RLUtils
 
         try
         {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            ImageIO.write(TextureProcessor.process(multi), "png", stream);
+            if (McLib.multiskinMultiThreaded.get())
+            {
+                MultiskinThread.add(multi);
 
-            return new SimpleResource("McLib multiskin handler", multi, new ByteArrayInputStream(stream.toByteArray()), null, null);
+                return Minecraft.getMinecraft().getResourceManager().getResource(pixel);
+            }
+            else
+            {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                ImageIO.write(TextureProcessor.process(multi), "png", stream);
+
+                return new SimpleResource("McLib multiskin handler", multi, new ByteArrayInputStream(stream.toByteArray()), null, null);
+            }
         }
         catch (IOException e)
         {
@@ -52,7 +64,7 @@ public class RLUtils
         }
         catch (Exception e)
         {
-            throw new IOException(e.getMessage());
+            throw new IOException(e);
         }
     }
 
