@@ -87,6 +87,12 @@ mclib.config.comments.scrollbars.shadow=Allows you to set shadow color of scroll
 mclib.config.scrollbars.width=Thickness
 mclib.config.comments.scrollbars.width=Allows you to setup the thickness (width of scrollbars)
 
+mclib.config.multiskin.title=Multi-skin
+mclib.config.multiskin.tooltip=Options regarding Multi-skin feature
+
+mclib.config.multiskin.multithreaded=Multi-threaded processing
+mclib.config.comments.multiskin.multithreaded=Allows you to enable multi-threaded processing of multi-skins, which should fix the lag at cost of longer processing
+
 mclib.config.vanilla.title=Vanilla tweaks
 mclib.config.vanilla.tooltip=Options regarding to tweaks done to Minecraft's code
 
