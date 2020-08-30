@@ -8,6 +8,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.Objects;
+
 public class FilteredResourceLocation implements IWritableLocation
 {
 	public ResourceLocation path;
@@ -68,15 +70,40 @@ public class FilteredResourceLocation implements IWritableLocation
 	}
 
 	@Override
+	public boolean equals(Object obj)
+	{
+		if (super.equals(obj))
+		{
+			return true;
+		}
+
+		if (obj instanceof FilteredResourceLocation)
+		{
+			FilteredResourceLocation frl = (FilteredResourceLocation) obj;
+
+			return Objects.equals(this.path, frl.path)
+				&& this.scaleToLargest == frl.scaleToLargest
+				&& this.color == frl.color
+				&& this.scale == frl.scale
+				&& this.shiftX == frl.shiftX
+				&& this.shiftY == frl.shiftY
+				&& this.pixelate == frl.pixelate;
+		}
+
+		return false;
+	}
+
+	@Override
 	public int hashCode()
 	{
-		int hashCode = (this.path.hashCode() + (this.scaleToLargest ? 1 : 0)) * 31;
+		int hashCode = this.path.hashCode();
 
-		if (this.color != 0xffffff) hashCode = (hashCode + this.color) * 31;
-		if (this.scale != 1) hashCode = (hashCode + (int) (this.scale * 1000)) * 31;
-		if (this.shiftX != 0) hashCode = (hashCode + this.shiftX) * 31;
-		if (this.shiftY != 0) hashCode = (hashCode + this.shiftY) * 31;
-		if (this.pixelate > 1) hashCode = (hashCode + this.pixelate) * 31;
+		hashCode = 31 * hashCode + (this.scaleToLargest ? 1 : 0);
+		hashCode = 31 * hashCode + this.color;
+		hashCode = 31 * hashCode + (int) (this.scale * 1000);
+		hashCode = 31 * hashCode + this.shiftX;
+		hashCode = 31 * hashCode + this.shiftY;
+		hashCode = 31 * hashCode + this.pixelate;
 
 		return hashCode;
 	}
