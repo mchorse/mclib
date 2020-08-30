@@ -5,12 +5,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-import java.util.Map;
 import java.util.Stack;
 
 public class MultiskinThread implements Runnable
@@ -21,26 +19,21 @@ public class MultiskinThread implements Runnable
 
 	public static synchronized void add(MultiResourceLocation location)
 	{
-		if (instance != null && instance.locations.isEmpty())
-		{
-			instance = null;
-		}
-
 		if (instance == null)
 		{
 			instance = new MultiskinThread();
-			instance.addLocation(location);
+			instance.locations.add(location);
 			new Thread(instance).start();
 		}
 		else
 		{
-			instance.addLocation(location);
+			instance.locations.add(location);
 		}
 	}
 
-	public void addLocation(MultiResourceLocation location)
+	public static void clear()
 	{
-		this.locations.add(location);
+		instance = null;
 	}
 
 	/**
@@ -77,38 +70,29 @@ public class MultiskinThread implements Runnable
 	@Override
 	public void run()
 	{
-		while (!this.locations.isEmpty())
+		while (!this.locations.isEmpty() && instance != null)
 		{
-			try
+			MultiResourceLocation location = this.locations.pop();
+			ITextureObject texture = ReflectionUtils.getTextures(Minecraft.getMinecraft().renderEngine).get(location);
+
+			if (texture != null)
 			{
-				Map<ResourceLocation, ITextureObject> map = ReflectionUtils.getTextures(Minecraft.getMinecraft().renderEngine);
-				MultiResourceLocation location = this.locations.pop();
-				ITextureObject texture = map.get(location);
+				BufferedImage image = TextureProcessor.process(location);
+				int w = image.getWidth();
+				int h = image.getHeight();
+				ByteBuffer buffer = bytesFromBuffer(image);
 
-				if (texture != null)
+				Minecraft.getMinecraft().addScheduledTask(() ->
 				{
-					BufferedImage image = TextureProcessor.process(location);
-					int w = image.getWidth();
-					int h = image.getHeight();
-					ByteBuffer buffer = bytesFromBuffer(image);
+					TextureUtil.allocateTexture(texture.getGlTextureId(), w, h);
 
-					Minecraft.getMinecraft().addScheduledTask(() ->
-					{
-						TextureUtil.allocateTexture(texture.getGlTextureId(), w, h);
-
-						GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, w, h, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-					});
-				}
-				else
-				{
-					this.locations.add(location);
-				}
-
-				Thread.sleep(200);
+					GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getGlTextureId());
+					GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, w, h, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+				});
 			}
-			catch (InterruptedException e)
+			else
 			{
-				e.printStackTrace();
+				this.locations.add(location);
 			}
 		}
 

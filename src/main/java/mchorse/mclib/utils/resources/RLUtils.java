@@ -52,6 +52,7 @@ public class RLUtils
             }
             else
             {
+                MultiskinThread.clear();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 ImageIO.write(TextureProcessor.process(multi), "png", stream);
 
