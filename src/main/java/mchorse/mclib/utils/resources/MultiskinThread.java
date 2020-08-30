@@ -3,6 +3,7 @@ package mchorse.mclib.utils.resources;
 import mchorse.mclib.utils.ReflectionUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import org.lwjgl.opengl.GL11;
@@ -87,6 +88,8 @@ public class MultiskinThread implements Runnable
 					TextureUtil.allocateTexture(texture.getGlTextureId(), w, h);
 
 					GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getGlTextureId());
+					GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+					GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 					GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, w, h, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 				});
 			}
