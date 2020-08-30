@@ -63,9 +63,9 @@ public class TextureProcessor
 
 			if (iw > 0 && ih > 0)
 			{
-				if (filter.color != 0xffffff)
+				if (filter.color != 0xffffff || filter.pixelate > 1)
 				{
-					applyColor(child, filter.color);
+					processImage(child, filter);
 				}
 
 				g.drawImage(child, filter.shiftX, filter.shiftY, iw, ih, null);
@@ -80,11 +80,12 @@ public class TextureProcessor
 	/**
 	 * Apply given color
 	 */
-	private static void applyColor(BufferedImage child, int color)
+	private static void processImage(BufferedImage child, FilteredResourceLocation frl)
 	{
 		byte[] pixels = ((DataBufferByte) child.getRaster().getDataBuffer()).getData();
-		final int pixelLength = child.getAlphaRaster() != null ? 4 : 3;
-		Color filter = new Color().set(color, false);
+		int pixelLength = child.getAlphaRaster() != null ? 4 : 3;
+		int width = child.getWidth();
+		Color filter = new Color().set(frl.color, false);
 		float r, g, b;
 
 		for (int i = 0, c = pixels.length / pixelLength; i < c; i++)
@@ -100,6 +101,31 @@ public class TextureProcessor
 				}
 
 				offset += 1;
+			}
+
+			if (frl.pixelate > 1)
+			{
+				int x = i % width;
+				int y = i / width;
+				boolean origin = x % frl.pixelate == 0 && y % frl.pixelate == 0;
+
+				x = x - x % frl.pixelate;
+				y = y - y % frl.pixelate;
+				int target = (y * width + x) * pixelLength;
+
+				pixels[index] = pixels[target];
+				pixels[index + 1] = pixels[target + 1];
+				pixels[index + 2] = pixels[target + 2];
+
+				if (pixelLength == 4)
+				{
+					pixels[index + 3] = pixels[target + 3];
+				}
+
+				if (!origin)
+				{
+					continue;
+				}
 			}
 
 			b = ((int) pixels[index + offset++] & 0xff) / 255F * filter.b;

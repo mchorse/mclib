@@ -18,6 +18,9 @@ public class FilteredResourceLocation implements IWritableLocation
 	public int shiftX;
 	public int shiftY;
 
+	/* Filters */
+	public int pixelate = 1;
+
 	public static FilteredResourceLocation from(NBTBase base)
 	{
 		try
@@ -73,13 +76,14 @@ public class FilteredResourceLocation implements IWritableLocation
 		if (this.scale != 1) hashCode = (hashCode + (int) (this.scale * 1000)) * 31;
 		if (this.shiftX != 0) hashCode = (hashCode + this.shiftX) * 31;
 		if (this.shiftY != 0) hashCode = (hashCode + this.shiftY) * 31;
+		if (this.pixelate > 1) hashCode = (hashCode + this.pixelate) * 31;
 
 		return hashCode;
 	}
 
 	public boolean isDefault()
 	{
-		return this.color == 0xffffff && !this.scaleToLargest && this.scale == 1F && this.shiftX == 0 && this.shiftY == 0;
+		return this.color == 0xffffff && !this.scaleToLargest && this.scale == 1F && this.shiftX == 0 && this.shiftY == 0 && this.pixelate > 1;
 	}
 
 	@Override
@@ -119,6 +123,11 @@ public class FilteredResourceLocation implements IWritableLocation
 		if (tag.hasKey("ShiftY"))
 		{
 			this.shiftY = tag.getInteger("ShiftY");
+		}
+
+		if (tag.hasKey("Pixelate"))
+		{
+			this.pixelate = tag.getInteger("Pixelate");
 		}
 	}
 
@@ -160,6 +169,11 @@ public class FilteredResourceLocation implements IWritableLocation
 		{
 			this.shiftY = object.get("shiftY").getAsInt();
 		}
+
+		if (object.has("pixelate"))
+		{
+			this.pixelate = object.get("pixelate").getAsInt();
+		}
 	}
 
 	@Override
@@ -179,6 +193,7 @@ public class FilteredResourceLocation implements IWritableLocation
 		if (this.scaleToLargest) tag.setBoolean("ScaleToLargest", this.scaleToLargest);
 		if (this.shiftX != 0) tag.setInteger("ShiftX", this.shiftX);
 		if (this.shiftY != 0) tag.setInteger("ShiftY", this.shiftY);
+		if (this.pixelate > 1) tag.setInteger("Pixelate", this.pixelate);
 
 		return tag;
 	}
@@ -200,6 +215,7 @@ public class FilteredResourceLocation implements IWritableLocation
 		if (this.scaleToLargest) object.addProperty("scaleToLargest", this.scaleToLargest);
 		if (this.shiftX != 0) object.addProperty("shiftX", this.shiftX);
 		if (this.shiftY != 0) object.addProperty("shiftY", this.shiftY);
+		if (this.pixelate > 1) object.addProperty("pixelate", this.pixelate);
 
 		return object;
 	}

@@ -15,14 +15,23 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.resources.FilteredResourceLocation;
+import mchorse.mclib.utils.shaders.Shader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 public class GuiMultiSkinEditor extends GuiCanvas
 {
+	public static Shader shader;
+	public static int uTexture;
+	public static int uSize;
+	public static int uPixelate;
+	public static int uColor;
+
 	public GuiTexturePicker picker;
 	public FilteredResourceLocation location;
 
@@ -32,6 +41,8 @@ public class GuiMultiSkinEditor extends GuiCanvas
 	public GuiToggleElement scaleToLargest;
 	public GuiTrackpadElement shiftX;
 	public GuiTrackpadElement shiftY;
+
+	public GuiTrackpadElement pixelate;
 
 	public GuiMultiSkinEditor(Minecraft mc, GuiTexturePicker picker)
 	{
@@ -52,10 +63,35 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		this.shiftY = new GuiTrackpadElement(mc, (value) -> this.location.shiftY = value.intValue());
 		this.shiftY.integer();
 
+		this.pixelate = new GuiTrackpadElement(mc, (value) -> this.location.pixelate = value.intValue());
+		this.pixelate.integer().limit(1);
+
 		this.editor.add(this.color);
 		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.scale")).background(0x88000000), this.scale, this.scaleToLargest);
-		this.editor.add(Elements.label(IKey.str("mclib.gui.multiskin.shift")).background(0x88000000), this.shiftX, this.shiftY);
+		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.shift")).background(0x88000000), this.shiftX, this.shiftY);
+		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.pixelate")).background(0x88000000), this.pixelate);
 		this.add(this.editor);
+
+		if (shader == null)
+		{
+			try
+			{
+				String vert = IOUtils.toString(this.getClass().getResourceAsStream("/assets/mclib/shaders/preview.vert"));
+				String frag = IOUtils.toString(this.getClass().getResourceAsStream("/assets/mclib/shaders/preview.frag"));
+
+				shader = new Shader();
+				shader.compile(vert, frag, true);
+
+				uTexture = GL20.glGetUniformLocation(shader.programId, "texture");
+				uSize = GL20.glGetUniformLocation(shader.programId, "size");
+				uPixelate = GL20.glGetUniformLocation(shader.programId, "pixelate");
+				uColor = GL20.glGetUniformLocation(shader.programId, "color");
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void resetView()
@@ -90,6 +126,8 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		this.scaleToLargest.toggled(location.scaleToLargest);
 		this.shiftX.setValue(location.shiftX);
 		this.shiftY.setValue(location.shiftY);
+
+		this.pixelate.setValue(location.pixelate);
 	}
 
 	@Override
@@ -165,8 +203,10 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		{
 			this.mc.renderEngine.bindTexture(child.path);
 
-			int ww = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
-			int hh = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+			int ow = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
+			int oh = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+			int ww = ow;
+			int hh = oh;
 
 			if (child.scaleToLargest)
 			{
@@ -191,7 +231,22 @@ public class GuiMultiSkinEditor extends GuiCanvas
 				}
 
 				ColorUtils.bindColor(0xff000000 + child.color);
+
+				if (child.pixelate > 1)
+				{
+					shader.bind();
+					GL20.glUniform1i(uTexture, 0);
+					GL20.glUniform2f(uSize, ow, oh);
+					GL20.glUniform1i(uPixelate, child.pixelate);
+					GL20.glUniform4f(uColor, ColorUtils.COLOR.r, ColorUtils.COLOR.g, ColorUtils.COLOR.b, ColorUtils.COLOR.a);
+				}
+
 				GuiDraw.drawBillboard(area.x, area.y, 0, 0, area.w, area.h, area.w, area.h);
+
+				if (child.pixelate > 1)
+				{
+					shader.unbind();
+				}
 			}
 		}
 

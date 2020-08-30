@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.GlStateManager;
 
 public class ColorUtils
 {
-	private static final Color COLOR = new Color();
+	public static final Color COLOR = new Color();
 
 	public static int multiplyColor(int color, float factor)
 	{

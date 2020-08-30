@@ -34,6 +34,12 @@ mclib.gui.keyframes.context.to_left=Switch to left handles
 mclib.gui.keyframes.context.to_main=Switch to main handles
 mclib.gui.keyframes.context.to_right=Switch to right handles
 
+mclib.gui.multiskin.color=With this color element, you can adjust color (RGB) channels. It works best with white/grayscale images.
+mclib.gui.multiskin.scale=Scale
+mclib.gui.multiskin.scale_to_largest=Scale to largest
+mclib.gui.multiskin.shift=Shift
+mclib.gui.multiskin.pixelate=Pixelate
+
 # Config
 mclib.config.title=McLib
 
