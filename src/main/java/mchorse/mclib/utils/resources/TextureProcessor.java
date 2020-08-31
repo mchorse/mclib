@@ -37,7 +37,9 @@ public class TextureProcessor
 				h = Math.max(h, image.getHeight());
 			}
 			catch (Exception e)
-			{}
+			{
+				e.printStackTrace();
+			}
 		}
 
 		BufferedImage image = new BufferedImage(w, h, images.get(0).getType());

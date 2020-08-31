@@ -15,16 +15,23 @@ import java.util.Stack;
 public class MultiskinThread implements Runnable
 {
 	private static MultiskinThread instance;
+	private static Thread thread;
 
 	public Stack<MultiResourceLocation> locations = new Stack<MultiResourceLocation>();
 
 	public static synchronized void add(MultiResourceLocation location)
 	{
+		if (instance != null && !thread.isAlive())
+		{
+			instance = null;
+		}
+
 		if (instance == null)
 		{
 			instance = new MultiskinThread();
 			instance.locations.add(location);
-			new Thread(instance).start();
+			thread = new Thread(instance);
+			thread.start();
 		}
 		else
 		{
@@ -78,20 +85,27 @@ public class MultiskinThread implements Runnable
 
 			if (texture != null)
 			{
-				BufferedImage image = TextureProcessor.process(location);
-				int w = image.getWidth();
-				int h = image.getHeight();
-				ByteBuffer buffer = bytesFromBuffer(image);
-
-				Minecraft.getMinecraft().addScheduledTask(() ->
+				try
 				{
-					TextureUtil.allocateTexture(texture.getGlTextureId(), w, h);
+					BufferedImage image = TextureProcessor.process(location);
+					int w = image.getWidth();
+					int h = image.getHeight();
+					ByteBuffer buffer = bytesFromBuffer(image);
 
-					GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getGlTextureId());
-					GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-					GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-					GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, w, h, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-				});
+					Minecraft.getMinecraft().addScheduledTask(() ->
+					{
+						TextureUtil.allocateTexture(texture.getGlTextureId(), w, h);
+
+						GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getGlTextureId());
+						GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+						GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+						GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, w, h, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+					});
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
 			else
 			{
@@ -100,5 +114,6 @@ public class MultiskinThread implements Runnable
 		}
 
 		instance = null;
+		thread = null;
 	}
 }
