@@ -1,12 +1,8 @@
 package mchorse.mclib.utils;
 
-import java.util.Arrays;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
 
 /**
@@ -25,9 +21,9 @@ public class DummyEntity extends EntityLivingBase
     {
         super(worldIn);
 
-        this.right = new ItemStack(Items.DIAMOND_SWORD);
-        this.left = new ItemStack(Items.GOLDEN_SWORD);
-        this.held = new ItemStack[] {ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
+        this.right = new ItemStack(Items.diamond_sword);
+        this.left = new ItemStack(Items.golden_sword);
+        this.held = new ItemStack[] {null, null, null, null, null, null};
     }
 
     public void setItems(ItemStack left, ItemStack right)
@@ -38,41 +34,43 @@ public class DummyEntity extends EntityLivingBase
 
     public void toggleItems(boolean toggle)
     {
-        int main = EntityEquipmentSlot.MAINHAND.getSlotIndex();
-        int off = EntityEquipmentSlot.OFFHAND.getSlotIndex();
-
         if (toggle)
         {
-            this.held[main] = this.right;
-            this.held[off] = this.left;
+            this.held[0] = this.right;
         }
         else
         {
-            this.held[main] = this.held[off] = ItemStack.EMPTY;
+            this.held[0] = null;
         }
     }
 
     @Override
-    public Iterable<ItemStack> getArmorInventoryList()
+    public ItemStack getHeldItem()
     {
-        return Arrays.asList(this.held);
+        return this.held[0];
     }
 
     @Override
-    public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn)
+    public ItemStack getEquipmentInSlot(int slotIn)
     {
-        return this.held[slotIn.getSlotIndex()];
+        return this.held[slotIn];
     }
 
     @Override
-    public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack)
+    public ItemStack getCurrentArmor(int slotIn)
     {
-        this.held[slotIn.getSlotIndex()] = stack;
+        return this.held[1 + slotIn];
     }
 
     @Override
-    public EnumHandSide getPrimaryHand()
+    public void setCurrentItemOrArmor(int slotIn, ItemStack stack)
     {
-        return EnumHandSide.RIGHT;
+        this.held[slotIn] = stack;
+    }
+
+    @Override
+    public ItemStack[] getInventory()
+    {
+        return this.held;
     }
 }

@@ -59,7 +59,7 @@ public class Keys
 			case Keyboard.KEY_LMENU:
 				return "L. Alt";
 			case Keyboard.KEY_LMETA:
-				return Minecraft.IS_RUNNING_ON_MAC ? "L. Cmd" : "L. Win";
+				return Minecraft.isRunningOnMac ? "L. Cmd" : "L. Win";
 			case Keyboard.KEY_RSHIFT:
 				return "R. Shift";
 			case Keyboard.KEY_RCONTROL:
@@ -67,7 +67,7 @@ public class Keys
 			case Keyboard.KEY_RMENU:
 				return "R. Alt";
 			case Keyboard.KEY_RMETA:
-				return Minecraft.IS_RUNNING_ON_MAC ? "R. Cmd" : "R. Win";
+				return Minecraft.isRunningOnMac ? "R. Cmd" : "R. Win";
 			case Keyboard.KEY_DIVIDE:
 				return "Numpad /";
 			case Keyboard.KEY_MULTIPLY:

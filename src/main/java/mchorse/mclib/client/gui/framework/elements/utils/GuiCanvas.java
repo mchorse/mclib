@@ -84,7 +84,7 @@ public class GuiCanvas extends GuiElement
 		{
 			int scroll = context.mouseWheel;
 
-			if (!Minecraft.IS_RUNNING_ON_MAC)
+			if (!Minecraft.isRunningOnMac)
 			{
 				scroll = -scroll;
 			}

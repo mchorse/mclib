@@ -131,7 +131,7 @@ public class GuiFolderEntryListElement extends GuiListElement<AbstractEntry>
     {
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
-        this.mc.renderEngine.bindTexture(GuiBase.ICONS);
+        this.mc.renderEngine.bindTexture(GuiBase.icons);
 
         GlStateManager.color(1, 1, 1, hover ? 0.8F : 0.6F);
 

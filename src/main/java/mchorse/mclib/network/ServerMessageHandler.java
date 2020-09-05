@@ -2,7 +2,7 @@ package mchorse.mclib.network;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
@@ -20,7 +20,7 @@ public abstract class ServerMessageHandler<T extends IMessage> extends AbstractM
     @Override
     public IMessage handleServerMessage(final EntityPlayerMP player, final T message)
     {
-        player.getServer().addScheduledTask(new Runnable()
+        player.mcServer.addScheduledTask(new Runnable()
         {
             @Override
             public void run()

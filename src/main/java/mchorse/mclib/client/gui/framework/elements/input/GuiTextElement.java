@@ -14,7 +14,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 /**
  * GUI text element
@@ -54,7 +53,7 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder
     {
         super(mc);
 
-        this.field.setGuiResponder(this);
+        this.field.func_175207_a(this);
         this.callback = callback;
 
         this.flex().h(20);
@@ -67,7 +66,7 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder
 
     public GuiTextElement validator(Predicate<String> validator)
     {
-        this.field.setValidator(validator);
+        this.field.func_175205_a(validator);
 
         return this;
     }
@@ -84,19 +83,19 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder
     }
 
     @Override
-    public void setEntryValue(int id, boolean value)
+    public void func_175321_a(int p_175321_1_, boolean p_175321_2_)
     {}
 
     @Override
-    public void setEntryValue(int id, float value)
+    public void onTick(int id, float value)
     {}
 
     @Override
-    public void setEntryValue(int id, String value)
+    public void func_175319_a(int p_175319_1_, String p_175319_2_)
     {
         if (this.callback != null)
         {
-            this.callback.accept(value);
+            this.callback.accept(p_175319_2_);
         }
     }
 
@@ -105,8 +104,8 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder
     {
         super.resize();
 
-        this.field.x = this.area.x + 1;
-        this.field.y = this.area.y + 1;
+        this.field.xPosition = this.area.x + 1;
+        this.field.yPosition = this.area.y + 1;
         this.field.width = this.area.w - 2;
         this.field.height = this.area.h - 2;
     }

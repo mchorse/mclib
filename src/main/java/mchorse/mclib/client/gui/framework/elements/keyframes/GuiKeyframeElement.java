@@ -11,8 +11,9 @@ import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.WorldRenderer;
+import org.lwjgl.opengl.GL11;
 
 import java.util.function.Consumer;
 
@@ -239,7 +240,7 @@ public abstract class GuiKeyframeElement extends GuiElement
         {
             int scroll = context.mouseWheel;
 
-            if (!Minecraft.IS_RUNNING_ON_MAC)
+            if (!Minecraft.isRunningOnMac)
             {
                 scroll = -scroll;
             }
@@ -317,10 +318,10 @@ public abstract class GuiKeyframeElement extends GuiElement
         this.drawCursor(context);
 
         /* Draw graph of the keyframe channel */
-        GlStateManager.glLineWidth(Minecraft.getMinecraft().gameSettings.guiScale * 1.5F);
+        GL11.glLineWidth(Minecraft.getMinecraft().gameSettings.guiScale * 1.5F);
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         this.drawGraph(context, context.mouseX, context.mouseY);
 
@@ -374,7 +375,7 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     protected abstract void drawGraph(GuiContext context, int mouseX, int mouseY);
 
-    protected void drawRect(BufferBuilder builder, int x, int y, int offset, int c)
+    protected void drawRect(WorldRenderer builder, int x, int y, int offset, int c)
     {
         COLOR.set(c, false);
 

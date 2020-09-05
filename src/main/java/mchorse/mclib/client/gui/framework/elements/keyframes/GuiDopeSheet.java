@@ -8,9 +8,9 @@ import mchorse.mclib.utils.keyframes.KeyframeEasing;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
@@ -416,7 +416,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
 		int h = (this.area.h - 15) / sheetCount;
 		int y = this.area.ey() - h * sheetCount;
 
-		BufferBuilder vb = Tessellator.getInstance().getBuffer();
+		WorldRenderer vb = Tessellator.getInstance().getWorldRenderer();
 
 		for (GuiSheet sheet : this.sheets)
 		{

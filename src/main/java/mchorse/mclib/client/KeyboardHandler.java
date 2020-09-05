@@ -47,7 +47,7 @@ public class KeyboardHandler
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event)
 	{
-		if (event.getGui() instanceof GuiBase)
+		if (event.gui instanceof GuiBase)
 		{
 			if (this.lastGuiScale == -1)
 			{
@@ -69,7 +69,7 @@ public class KeyboardHandler
 				this.lastGuiScale = -1;
 			}
 
-			if (event.getGui() instanceof GuiMainMenu)
+			if (event.gui instanceof GuiMainMenu)
 			{
 				GuiDashboard.dashboard = null;
 				ValueRL.picker = null;

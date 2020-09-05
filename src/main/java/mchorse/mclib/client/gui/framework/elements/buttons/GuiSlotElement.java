@@ -28,7 +28,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 	public static final ResourceLocation HELMET = new ResourceLocation("minecraft:textures/items/empty_armor_slot_helmet.png");
 
 	public int slot;
-	public ItemStack stack = ItemStack.EMPTY;
+	public ItemStack stack = null;
 	public GuiInventoryElement inventory;
 
 	public GuiSlotElement(Minecraft mc, int slot, GuiInventoryElement inventory)
@@ -67,7 +67,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 				/* TODO: do something about it */
 				.action(Icons.DOWNLOAD, IKey.str("Drop item down"), () -> {})
 				.action(Icons.CLOSE, IKey.str("Clear item"), () -> {
-					this.stack = ItemStack.EMPTY;
+					this.stack = null;
 				});
 		}
 
@@ -95,7 +95,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 		int x = this.area.mx() - 8;
 		int y = this.area.my() - 8;
 
-		if (this.stack.isEmpty() && this.slot != 0)
+		if (this.stack == null && this.slot != 0)
 		{
 			GlStateManager.enableAlpha();
 			GlStateManager.color(1, 1, 1, 1);
@@ -148,6 +148,6 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 	{
 		super.drawTooltip(context, area);
 
-		GuiInventoryElement.drawItemTooltip(this.stack, this.mc.player, this.font, context.mouseX, context.mouseY);
+		GuiInventoryElement.drawItemTooltip(this.stack, this.mc.thePlayer, this.font, context.mouseX, context.mouseY);
 	}
 }

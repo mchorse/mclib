@@ -15,9 +15,9 @@ import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
@@ -418,11 +418,11 @@ public class GuiColorElement extends GuiElement
 			GlStateManager.disableTexture2D();
 			GlStateManager.enableBlend();
 			GlStateManager.enableAlpha();
-			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 			GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
 			Tessellator tessellator = Tessellator.getInstance();
-			BufferBuilder vertexbuffer = tessellator.getBuffer();
+			WorldRenderer vertexbuffer = tessellator.getWorldRenderer();
 			vertexbuffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
 			vertexbuffer.pos(x1, y1, 0).color(this.color.r, this.color.g, this.color.b, 1).endVertex();
 			vertexbuffer.pos(x1, y2, 0).color(this.color.r, this.color.g, this.color.b, 1).endVertex();

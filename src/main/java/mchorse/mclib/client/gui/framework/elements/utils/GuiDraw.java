@@ -10,9 +10,9 @@ import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -121,11 +121,11 @@ public class GuiDraw
 	    GlStateManager.disableTexture2D();
 	    GlStateManager.enableBlend();
 	    GlStateManager.disableAlpha();
-	    GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+	    GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 	    GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
 	    Tessellator tessellator = Tessellator.getInstance();
-	    BufferBuilder buffer = tessellator.getBuffer();
+	    WorldRenderer buffer = tessellator.getWorldRenderer();
 
 	    buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 	    buffer.pos(right, top, zLevel).color(r2, g2, b2, a2).endVertex();
@@ -152,14 +152,14 @@ public class GuiDraw
 	public static void drawBillboard(int x, int y, int u, int v, int w, int h, int textureW, int textureH, float z)
 	{
 	    Tessellator tessellator = Tessellator.getInstance();
-	    BufferBuilder buffer = tessellator.getBuffer();
+		WorldRenderer buffer = tessellator.getWorldRenderer();
 
 	    buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 	    drawBillboard(buffer, x, y, u, v, w, h, textureW, textureH, z);
 	    tessellator.draw();
 	}
 
-	public static void drawBillboard(BufferBuilder buffer, int x, int y, int u, int v, int w, int h, int textureW, int textureH, float z)
+	public static void drawBillboard(WorldRenderer buffer, int x, int y, int u, int v, int w, int h, int textureW, int textureH, float z)
 	{
 		float tw = 1F / textureW;
 		float th = 1F / textureH;
@@ -268,11 +268,11 @@ public class GuiDraw
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.disableAlpha();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		WorldRenderer buffer = tessellator.getWorldRenderer();
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
@@ -328,11 +328,11 @@ public class GuiDraw
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.disableAlpha();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		WorldRenderer buffer = tessellator.getWorldRenderer();
 
 		buffer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
 
@@ -374,11 +374,11 @@ public class GuiDraw
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.disableAlpha();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		WorldRenderer buffer = tessellator.getWorldRenderer();
 
 		/* Draw opaque base */
 		buffer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
@@ -489,7 +489,7 @@ public class GuiDraw
 		int fillerY = h - (countY - 1) * tileH;
 
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		WorldRenderer buffer = tessellator.getWorldRenderer();
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 

@@ -1,6 +1,6 @@
 package mchorse.mclib.utils;
 
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 
 /**
  * Interpolation methods
@@ -31,8 +31,8 @@ public class Interpolations
      */
     public static float lerpYaw(float a, float b, float position)
     {
-        a = MathHelper.wrapDegrees(a);
-        b = MathHelper.wrapDegrees(b);
+        a = MathHelper.wrapAngleTo180_float(a);
+        b = MathHelper.wrapAngleTo180_float(b);
 
         return lerp(a, normalizeYaw(a, b), position);
     }
@@ -61,10 +61,10 @@ public class Interpolations
      */
     public static double cubicHermiteYaw(float y0, float y1, float y2, float y3, float position)
     {
-        y0 = MathHelper.wrapDegrees(y0);
-        y1 = MathHelper.wrapDegrees(y1);
-        y2 = MathHelper.wrapDegrees(y2);
-        y3 = MathHelper.wrapDegrees(y3);
+        y0 = MathHelper.wrapAngleTo180_float(y0);
+        y1 = MathHelper.wrapAngleTo180_float(y1);
+        y2 = MathHelper.wrapAngleTo180_float(y2);
+        y3 = MathHelper.wrapAngleTo180_float(y3);
 
         y1 = normalizeYaw(y0, y1);
         y2 = normalizeYaw(y1, y2);
@@ -96,10 +96,10 @@ public class Interpolations
      */
     public static float cubicYaw(float y0, float y1, float y2, float y3, float position)
     {
-        y0 = MathHelper.wrapDegrees(y0);
-        y1 = MathHelper.wrapDegrees(y1);
-        y2 = MathHelper.wrapDegrees(y2);
-        y3 = MathHelper.wrapDegrees(y3);
+        y0 = MathHelper.wrapAngleTo180_float(y0);
+        y1 = MathHelper.wrapAngleTo180_float(y1);
+        y2 = MathHelper.wrapAngleTo180_float(y2);
+        y3 = MathHelper.wrapAngleTo180_float(y3);
 
         y1 = normalizeYaw(y0, y1);
         y2 = normalizeYaw(y1, y2);
@@ -229,8 +229,8 @@ public class Interpolations
      */
     public static double lerpYaw(double a, double b, double position)
     {
-        a = MathHelper.wrapDegrees(a);
-        b = MathHelper.wrapDegrees(b);
+        a = MathHelper.wrapAngleTo180_double(a);
+        b = MathHelper.wrapAngleTo180_double(b);
 
         return lerp(a, normalizeYaw(a, b), position);
     }
@@ -258,10 +258,10 @@ public class Interpolations
      */
     public static double cubicYaw(double y0, double y1, double y2, double y3, double position)
     {
-        y0 = MathHelper.wrapDegrees(y0);
-        y1 = MathHelper.wrapDegrees(y1);
-        y2 = MathHelper.wrapDegrees(y2);
-        y3 = MathHelper.wrapDegrees(y3);
+        y0 = MathHelper.wrapAngleTo180_double(y0);
+        y1 = MathHelper.wrapAngleTo180_double(y1);
+        y2 = MathHelper.wrapAngleTo180_double(y2);
+        y3 = MathHelper.wrapAngleTo180_double(y3);
 
         y1 = normalizeYaw(y0, y1);
         y2 = normalizeYaw(y1, y2);

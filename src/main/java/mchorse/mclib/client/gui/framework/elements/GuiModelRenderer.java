@@ -9,11 +9,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
@@ -39,7 +39,7 @@ public abstract class GuiModelRenderer extends GuiElement
     private static Matrix3d mat = new Matrix3d();
 
     protected EntityLivingBase entity;
-    protected IBlockState block = Blocks.GRASS.getDefaultState();
+    protected IBlockState block = Blocks.grass.getDefaultState();
 
     protected int timer;
     protected boolean dragging;
@@ -69,7 +69,7 @@ public abstract class GuiModelRenderer extends GuiElement
     {
         super(mc);
 
-        this.entity = new DummyEntity(mc.world);
+        this.entity = new DummyEntity(mc.theWorld);
         this.entity.rotationYaw = this.entity.prevRotationYaw = 0.0F;
         this.entity.rotationPitch = this.entity.prevRotationPitch = 0.0F;
         this.entity.rotationYawHead = this.entity.prevRotationYawHead = 0.0F;
@@ -214,7 +214,7 @@ public abstract class GuiModelRenderer extends GuiElement
      */
     protected void update()
     {
-        this.timer = this.mc.player != null ? this.mc.player.ticksExisted : this.timer + 1;
+        this.timer = this.mc.thePlayer != null ? this.mc.thePlayer.ticksExisted : this.timer + 1;
         this.entity.ticksExisted = this.timer;
     }
 
@@ -418,7 +418,7 @@ public abstract class GuiModelRenderer extends GuiElement
         if (McLib.enableGridRendering.get())
         {
             Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder buffer = tessellator.getBuffer();
+            WorldRenderer buffer = tessellator.getWorldRenderer();
 
             GL11.glLineWidth(3);
             GlStateManager.disableTexture2D();
@@ -464,7 +464,7 @@ public abstract class GuiModelRenderer extends GuiElement
         {
             BlockRendererDispatcher renderer = this.mc.getBlockRendererDispatcher();
 
-            this.mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            this.mc.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, -0.5F, 0);

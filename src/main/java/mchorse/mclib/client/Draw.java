@@ -1,7 +1,7 @@
 package mchorse.mclib.client;
 
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
@@ -10,7 +10,7 @@ public class Draw
 	public static void axis(float length)
 	{
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		WorldRenderer buffer = tessellator.getWorldRenderer();
 
 		GL11.glLineWidth(5);
 		buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
@@ -55,14 +55,14 @@ public class Draw
 	public static void cube(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float red, float green, float blue, float alpha)
 	{
 		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+		WorldRenderer buffer = tessellator.getWorldRenderer();
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 		cube(buffer, minX, minY, minZ, maxX, maxY, maxZ, red, green, blue, alpha);
 		tessellator.draw();
 	}
 
-	public static void cube(BufferBuilder buffer, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float red, float green, float blue, float alpha)
+	public static void cube(WorldRenderer buffer, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, float red, float green, float blue, float alpha)
 	{
 		/* Top */
 		buffer.pos(minX, maxY, minZ).color(red, green, blue, alpha).endVertex();

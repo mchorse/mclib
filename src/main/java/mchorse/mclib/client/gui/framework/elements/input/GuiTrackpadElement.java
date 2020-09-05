@@ -438,8 +438,8 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
         int width = MathUtils.clamp(this.font.getStringWidth(this.field.getText()), 0, w - 16);
 
-        this.field.x = this.area.mx(width);
-        this.field.y = this.area.my() - 4;
+        this.field.xPosition = this.area.mx(width);
+        this.field.yPosition = this.area.my() - 4;
         this.field.width = width + 6;
         this.field.height = 9;
         this.field.drawTextBox();

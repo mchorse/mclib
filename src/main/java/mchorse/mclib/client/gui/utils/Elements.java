@@ -33,7 +33,7 @@ public class Elements
 
 	public static GuiLabel label(IKey label)
 	{
-		return label(label, Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT);
+		return label(label, Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT);
 	}
 
 	public static GuiLabel label(IKey label, int height)

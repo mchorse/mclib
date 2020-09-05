@@ -4,11 +4,11 @@ import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
-import mchorse.mclib.client.gui.utils.KeybindManager;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.KeybindManager;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.client.gui.utils.resizers.IResizer;
 import mchorse.mclib.client.gui.utils.resizers.Flex;
+import mchorse.mclib.client.gui.utils.resizers.IResizer;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -99,7 +99,7 @@ public class GuiElement extends Gui implements IGuiElement
     public GuiElement(Minecraft mc)
     {
         this.mc = mc;
-        this.font = mc.fontRenderer;
+        this.font = mc.fontRendererObj;
     }
 
     /* Hierarchy management */

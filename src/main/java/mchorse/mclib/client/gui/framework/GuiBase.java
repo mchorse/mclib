@@ -35,7 +35,7 @@ public class GuiBase extends GuiScreen
         current = this.context;
 
         this.context.mc = Minecraft.getMinecraft();
-        this.context.font = this.context.mc.fontRenderer;
+        this.context.font = this.context.mc.fontRendererObj;
 
         this.root = new GuiRootElement(this.context.mc);
         this.root.markContainer().flex().relative(this.viewport).wh(1F, 1F);
@@ -170,7 +170,7 @@ public class GuiBase extends GuiScreen
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         this.context.setMouse(mouseX, mouseY);
-        this.context.partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+        this.context.partialTicks = partialTicks;
 
         if (this.root.isVisible())
         {

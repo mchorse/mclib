@@ -12,11 +12,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -29,7 +27,7 @@ public class GuiInventoryElement extends GuiElement
 	protected Area inventory = new Area();
 	protected Area hotbar = new Area();
 
-	private ItemStack active = ItemStack.EMPTY;
+	private ItemStack active = null;
 
 	public static void drawItemStack(ItemStack stack, int x, int y, String altText)
 	{
@@ -50,8 +48,8 @@ public class GuiInventoryElement extends GuiElement
 		itemRender.zLevel = z;
 
 		FontRenderer font = null;
-		if (!stack.isEmpty()) font = stack.getItem().getFontRenderer(stack);
-		if (font == null) font = Minecraft.getMinecraft().fontRenderer;
+		if (stack == null) font = stack.getItem().getFontRenderer(stack);
+		if (font == null) font = Minecraft.getMinecraft().fontRendererObj;
 
 		itemRender.renderItemAndEffectIntoGUI(stack, x, y);
 		itemRender.renderItemOverlayIntoGUI(font, stack, x, y, altText);
@@ -64,12 +62,12 @@ public class GuiInventoryElement extends GuiElement
 	 */
 	public static void drawItemTooltip(ItemStack stack, EntityPlayerSP player, FontRenderer providedFont, int x, int y)
 	{
-		if (stack.isEmpty())
+		if (stack == null)
 		{
 			return;
 		}
 
-		List<String> list = stack.getTooltip(player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL);
+		List<String> list = stack.getTooltip(player, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
 		FontRenderer font = stack.getItem().getFontRenderer(stack);
 
 		for (int i = 0; i < list.size(); ++i)
@@ -80,15 +78,13 @@ public class GuiInventoryElement extends GuiElement
 			}
 			else
 			{
-				list.set(i, TextFormatting.GRAY + list.get(i));
+				list.set(i, EnumChatFormatting.GRAY + list.get(i));
 			}
 		}   
 
 		GuiScreen screen = Minecraft.getMinecraft().currentScreen;
 
-		net.minecraftforge.fml.client.config.GuiUtils.preItemToolTip(stack);
 		net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText(list, x, y, screen.width, screen.height, -1, font == null ? providedFont : font);
-		net.minecraftforge.fml.client.config.GuiUtils.postItemToolTip();
 	}
 
 	public GuiInventoryElement(Minecraft mc, Consumer<ItemStack> callback)
@@ -163,7 +159,7 @@ public class GuiInventoryElement extends GuiElement
 
 			if (this.callback != null)
 			{
-				this.callback.accept(Minecraft.getMinecraft().player.inventory.mainInventory.get(index));
+				this.callback.accept(Minecraft.getMinecraft().thePlayer.inventory.mainInventory[index]);
 
 				return true;
 			}
@@ -200,16 +196,16 @@ public class GuiInventoryElement extends GuiElement
 		RenderHelper.enableGUIStandardItemLighting();
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 
-		EntityPlayerSP player = Minecraft.getMinecraft().player;
-		NonNullList<ItemStack> inventory = player.inventory.mainInventory;
+		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+		ItemStack[] inventory = player.inventory.mainInventory;
 
-		int index = this.drawGrid(context, this.inventory, inventory, -1, 9, inventory.size());
+		int index = this.drawGrid(context, this.inventory, inventory, -1, 9, inventory.length);
 		index = this.drawGrid(context, this.hotbar, inventory, index, 0, 9);
 
 		if (index != -1)
 		{
 			context.tooltip.set(context, this);
-			this.active = inventory.get(index);
+			this.active = inventory[index];
 		}
 
 		GlStateManager.disableDepth();
@@ -220,12 +216,12 @@ public class GuiInventoryElement extends GuiElement
 		super.draw(context);
 	}
 
-	private int drawGrid(GuiContext context, Area area, NonNullList<ItemStack> inventory, int index, int i, int c)
+	private int drawGrid(GuiContext context, Area area, ItemStack[] inventory, int index, int i, int c)
 	{
 		for (int j = 0; j < c - i; j ++)
 		{
 			int k = i + j;
-			ItemStack stack = inventory.get(k);
+			ItemStack stack = inventory[k];
 
 			int x = j % 9;
 			int y = j / 9;
@@ -257,6 +253,6 @@ public class GuiInventoryElement extends GuiElement
 	{
 		super.drawTooltip(context, area);
 
-		GuiInventoryElement.drawItemTooltip(this.active, this.mc.player, this.font, context.mouseX, context.mouseY);
+		GuiInventoryElement.drawItemTooltip(this.active, this.mc.thePlayer, this.font, context.mouseX, context.mouseY);
 	}
 }

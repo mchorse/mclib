@@ -41,7 +41,7 @@ public abstract class AbstractDispatcher
      */
     public void sendToTracked(Entity entity, IMessage message)
     {
-        EntityTracker tracker = ((WorldServer) entity.world).getEntityTracker();
+        EntityTracker tracker = ((WorldServer) entity.worldObj).getEntityTracker();
 
         for (EntityPlayer player : tracker.getTrackingPlayers(entity))
         {
