@@ -17,7 +17,7 @@ public class SimpleReloadableResourceManagerTransformer extends ClassMethodTrans
     public SimpleReloadableResourceManagerTransformer()
     {
         this.setMcp("getResource", "(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/resources/IResource;");
-        this.setNotch("a", "(Lnf;)Lceo;");
+        this.setNotch("a", "(Ljy;)Lbnh;");
     }
 
     @Override
@@ -28,7 +28,7 @@ public class SimpleReloadableResourceManagerTransformer extends ClassMethodTrans
         if (label != null)
         {
             InsnList list = new InsnList();
-            String desc = "(Lmchorse/mclib/utils/resources/MultiResourceLocation;)L" + CoreClassTransformer.get("ceo", "net/minecraft/client/resources/IResource") + ";";
+            String desc = "(Lmchorse/mclib/utils/resources/MultiResourceLocation;)L" + CoreClassTransformer.get("bnh", "net/minecraft/client/resources/IResource") + ";";
 
             list.add(new VarInsnNode(Opcodes.ALOAD, 1));
             list.add(new TypeInsnNode(Opcodes.INSTANCEOF, "mchorse/mclib/utils/resources/MultiResourceLocation"));
