@@ -18,11 +18,11 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.Vec3d;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
+import javax.vecmath.Matrix3d;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
@@ -35,6 +35,8 @@ import java.util.function.Consumer;
 public abstract class GuiModelRenderer extends GuiElement
 {
     private static boolean rendering;
+    private static Vector3d vec = new Vector3d();
+    private static Matrix3d mat = new Matrix3d();
 
     protected EntityLivingBase entity;
     protected IBlockState block = Blocks.GRASS.getDefaultState();
@@ -286,10 +288,8 @@ public abstract class GuiModelRenderer extends GuiElement
 
                 if (xx != 0 || yy != 0)
                 {
-                    Vec3d vec = new Vec3d(xx, yy, 0);
-
-                    vec = vec.rotatePitch(-this.pitch / 180 * (float) Math.PI);
-                    vec = vec.rotateYaw((180 - this.yaw) / 180 * (float) Math.PI);
+                    vec.set(xx, yy, 0);
+                    this.rotateVector(vec);
 
                     x += vec.x;
                     y += vec.y;
@@ -309,14 +309,21 @@ public abstract class GuiModelRenderer extends GuiElement
         }
 
         this.temp = new Vector3f(this.pos);
-        Vec3d vec = new Vec3d(0, 0, -this.scale);
 
-        vec = vec.rotatePitch(-this.pitch / 180 * (float) Math.PI);
-        vec = vec.rotateYaw((180 - this.yaw) / 180 * (float) Math.PI);
+        vec.set(0, 0, -this.scale);
+        this.rotateVector(vec);
 
         this.temp.x += vec.x;
         this.temp.y += vec.y;
         this.temp.z += vec.z;
+    }
+
+    private void rotateVector(Vector3d vec)
+    {
+        mat.rotX(this.pitch / 180 * (float) Math.PI);
+        mat.transform(vec);
+        mat.rotY((180 - this.yaw) / 180 * (float) Math.PI);
+        mat.transform(vec);
     }
 
     protected void setupViewport(GuiContext context)
