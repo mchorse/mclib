@@ -42,7 +42,7 @@ public class TextureProcessor
 			}
 		}
 
-		BufferedImage image = new BufferedImage(w, h, images.get(0).getType());
+		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = image.getGraphics();
 
 		for (int i = 0; i < multi.children.size(); i++)
