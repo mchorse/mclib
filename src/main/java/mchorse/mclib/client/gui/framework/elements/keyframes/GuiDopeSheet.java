@@ -66,7 +66,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
     {
 	    if (this.isMultipleSelected())
 	    {
-		    double dy = value - this.which.getX(this.getCurrent());
+		    double dy = value - this.which.getY(this.getCurrent());
 
 		    for (GuiSheet sheet : this.sheets)
 		    {
