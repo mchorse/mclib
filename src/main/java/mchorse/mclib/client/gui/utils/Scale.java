@@ -1,6 +1,6 @@
 package mchorse.mclib.client.gui.utils;
 
-import net.minecraft.util.math.MathHelper;
+import mchorse.mclib.utils.MathUtils;
 
 /**
  * This class represents a scale of an axis 
@@ -55,6 +55,6 @@ public class Scale
     public void zoom(double amount, double min, double max)
     {
         this.zoom += amount;
-        this.zoom = MathHelper.clamp(this.zoom, min, max);
+        this.zoom = MathUtils.clamp(this.zoom, min, max);
     }
 }

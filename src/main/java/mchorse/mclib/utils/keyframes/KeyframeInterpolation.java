@@ -2,7 +2,7 @@ package mchorse.mclib.utils.keyframes;
 
 import mchorse.mclib.utils.Interpolation;
 import mchorse.mclib.utils.Interpolations;
-import net.minecraft.util.math.MathHelper;
+import mchorse.mclib.utils.MathUtils;
 
 public enum KeyframeInterpolation
 {
@@ -90,8 +90,8 @@ public enum KeyframeInterpolation
             double e = 0.0005;
 
             e = h == 0 ? e : Math.max(Math.min(e, 1 / h * e), 0.00001);
-            x1 = MathHelper.clamp(x1, 0, 1);
-            x2 = MathHelper.clamp(x2, 0, 1);
+            x1 = MathUtils.clamp(x1, 0, 1);
+            x2 = MathUtils.clamp(x2, 0, 1);
 
             return Interpolations.bezier(0, y1, y2, 1, Interpolations.bezierX(x1, x2, x, e)) * h + a.value;
         }

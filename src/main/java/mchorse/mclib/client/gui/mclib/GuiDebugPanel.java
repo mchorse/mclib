@@ -1,9 +1,11 @@
 package mchorse.mclib.client.gui.mclib;
 
+import mchorse.mclib.client.gui.framework.elements.GuiModelRenderer;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiDopeSheet;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiGraphView;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiKeyframesEditor;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiSheet;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.keyframes.Keyframe;
@@ -15,6 +17,7 @@ public class GuiDebugPanel extends GuiDashboardPanel
 {
 	public GuiKeyframesEditor<GuiDopeSheet> dopesheet;
 	public GuiKeyframesEditor<GuiGraphView> graph;
+	public GuiModelRenderer renderer;
 
 	public GuiDebugPanel(Minecraft mc, GuiDashboard dashboard)
 	{
@@ -62,7 +65,17 @@ public class GuiDebugPanel extends GuiDashboardPanel
 
 		this.dopesheet.flex().relative(this).y(0).wh(1F, 0.5F);
 		this.graph.flex().relative(this).y(0.5F).wh(1F, 0.5F);
-		this.add(this.dopesheet, this.graph);
+		// this.add(this.dopesheet, this.graph);
+
+		this.renderer = new GuiModelRenderer(mc)
+		{
+			@Override
+			protected void drawUserModel(GuiContext context)
+			{}
+		};
+
+		this.renderer.flex().relative(this).wh(1F, 1F);
+		this.add(this.renderer);
 	}
 
 	@Override
@@ -77,6 +90,6 @@ public class GuiDebugPanel extends GuiDashboardPanel
 	@Override
 	public boolean needsBackground()
 	{
-		return false;
+		return true;
 	}
 }
