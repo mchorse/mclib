@@ -3,7 +3,6 @@ package mchorse.mclib.math.functions.limit;
 import mchorse.mclib.math.IValue;
 import mchorse.mclib.math.functions.Function;
 import mchorse.mclib.utils.MathUtils;
-import net.minecraft.util.math.MathHelper;
 
 public class Clamp extends Function
 {

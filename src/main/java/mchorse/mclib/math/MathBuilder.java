@@ -1,32 +1,31 @@
 package mchorse.mclib.math;
 
+import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.classic.Abs;
+import mchorse.mclib.math.functions.classic.Cos;
+import mchorse.mclib.math.functions.classic.Exp;
+import mchorse.mclib.math.functions.classic.Ln;
+import mchorse.mclib.math.functions.classic.Mod;
+import mchorse.mclib.math.functions.classic.Pow;
+import mchorse.mclib.math.functions.classic.Sin;
+import mchorse.mclib.math.functions.classic.Sqrt;
+import mchorse.mclib.math.functions.limit.Clamp;
+import mchorse.mclib.math.functions.limit.Max;
+import mchorse.mclib.math.functions.limit.Min;
+import mchorse.mclib.math.functions.rounding.Ceil;
+import mchorse.mclib.math.functions.rounding.Floor;
+import mchorse.mclib.math.functions.rounding.Round;
+import mchorse.mclib.math.functions.rounding.Trunc;
+import mchorse.mclib.math.functions.utility.Lerp;
+import mchorse.mclib.math.functions.utility.LerpRotate;
+import mchorse.mclib.math.functions.utility.Random;
+import mchorse.mclib.utils.MathUtils;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import mchorse.mclib.math.functions.classic.Abs;
-import mchorse.mclib.math.functions.classic.Mod;
-import mchorse.mclib.math.functions.classic.Pow;
-import mchorse.mclib.math.functions.rounding.Ceil;
-import mchorse.mclib.math.functions.limit.Clamp;
-import mchorse.mclib.math.functions.classic.Cos;
-import mchorse.mclib.math.functions.classic.Exp;
-import mchorse.mclib.math.functions.rounding.Floor;
-import mchorse.mclib.math.functions.Function;
-import mchorse.mclib.math.functions.utility.Lerp;
-import mchorse.mclib.math.functions.classic.Ln;
-import mchorse.mclib.math.functions.limit.Max;
-import mchorse.mclib.math.functions.limit.Min;
-import mchorse.mclib.math.functions.utility.LerpRotate;
-import mchorse.mclib.math.functions.utility.Random;
-import mchorse.mclib.math.functions.rounding.Round;
-import mchorse.mclib.math.functions.classic.Sin;
-import mchorse.mclib.math.functions.classic.Sqrt;
-import mchorse.mclib.math.functions.rounding.Trunc;
-import mchorse.mclib.utils.MathUtils;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * Math builder

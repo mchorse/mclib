@@ -7,7 +7,6 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.Direction;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 
