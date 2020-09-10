@@ -39,6 +39,8 @@ mclib.gui.multiskin.scale=Scale
 mclib.gui.multiskin.scale_to_largest=Scale to largest
 mclib.gui.multiskin.shift=Shift
 mclib.gui.multiskin.pixelate=Pixelate
+mclib.gui.multiskin.erase=Erase
+mclib.gui.multiskin.erase_tooltip=This feature allows to using current skin as difference mask, meaning, any opaque pixels will erase pixels of all skins underneath it.
 
 # Config
 mclib.config.title=McLib

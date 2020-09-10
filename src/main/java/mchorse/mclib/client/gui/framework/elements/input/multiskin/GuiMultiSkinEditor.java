@@ -22,14 +22,16 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
 public class GuiMultiSkinEditor extends GuiCanvas
 {
 	public static Shader shader;
 	public static int uTexture;
+	public static int uTextureBackground;
 	public static int uSize;
-	public static int uPixelate;
+	public static int uFilters;
 	public static int uColor;
 
 	public GuiTexturePicker picker;
@@ -43,6 +45,7 @@ public class GuiMultiSkinEditor extends GuiCanvas
 	public GuiTrackpadElement shiftY;
 
 	public GuiTrackpadElement pixelate;
+	public GuiToggleElement erase;
 
 	public GuiMultiSkinEditor(Minecraft mc, GuiTexturePicker picker)
 	{
@@ -54,6 +57,7 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		this.editor.flex().relative(this).xy(1F, 1F).w(130).anchor(1F, 1F).column(5).stretch().vertical().padding(10);
 
 		this.color = new GuiColorElement(mc, (value) -> this.location.color = value);
+		this.color.picker.editAlpha();
 		this.color.direction(Direction.TOP).tooltip(IKey.lang("mclib.gui.multiskin.color"));
 		this.scale = new GuiTrackpadElement(mc, (value) -> this.location.scale = value.floatValue());
 		this.scale.limit(0).metric();
@@ -65,11 +69,13 @@ public class GuiMultiSkinEditor extends GuiCanvas
 
 		this.pixelate = new GuiTrackpadElement(mc, (value) -> this.location.pixelate = value.intValue());
 		this.pixelate.integer().limit(1);
+		this.erase = new GuiToggleElement(mc, IKey.lang("mclib.gui.multiskin.erase"), (toggle) -> this.location.erase = toggle.isToggled());
+		this.erase.tooltip(IKey.lang("mclib.gui.multiskin.erase_tooltip"), Direction.TOP);
 
 		this.editor.add(this.color);
 		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.scale")).background(0x88000000), this.scale, this.scaleToLargest);
 		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.shift")).background(0x88000000), this.shiftX, this.shiftY);
-		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.pixelate")).background(0x88000000), this.pixelate);
+		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.pixelate")).background(0x88000000), this.pixelate, this.erase);
 		this.add(this.editor);
 
 		if (shader == null)
@@ -83,8 +89,9 @@ public class GuiMultiSkinEditor extends GuiCanvas
 				shader.compile(vert, frag, true);
 
 				uTexture = GL20.glGetUniformLocation(shader.programId, "texture");
+				uTextureBackground = GL20.glGetUniformLocation(shader.programId, "texture_background");
 				uSize = GL20.glGetUniformLocation(shader.programId, "size");
-				uPixelate = GL20.glGetUniformLocation(shader.programId, "pixelate");
+				uFilters = GL20.glGetUniformLocation(shader.programId, "filters");
 				uColor = GL20.glGetUniformLocation(shader.programId, "color");
 			}
 			catch (Exception e)
@@ -128,6 +135,7 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		this.shiftY.setValue(location.shiftY);
 
 		this.pixelate.setValue(location.pixelate);
+		this.erase.toggled(location.erase);
 	}
 
 	@Override
@@ -230,20 +238,25 @@ public class GuiMultiSkinEditor extends GuiCanvas
 					GlStateManager.enableAlpha();
 				}
 
-				ColorUtils.bindColor(0xff000000 + child.color);
+				ColorUtils.bindColor(child.color);
 
-				if (child.pixelate > 1)
+				if (child.pixelate > 1 || child.erase)
 				{
 					shader.bind();
 					GL20.glUniform1i(uTexture, 0);
+					GL20.glUniform1i(uTextureBackground, 5);
 					GL20.glUniform2f(uSize, ow, oh);
-					GL20.glUniform1i(uPixelate, child.pixelate);
+					GL20.glUniform4f(uFilters, (float) child.pixelate, child.erase ? 1F : 0F, 0, 0);
 					GL20.glUniform4f(uColor, ColorUtils.COLOR.r, ColorUtils.COLOR.g, ColorUtils.COLOR.b, ColorUtils.COLOR.a);
 				}
 
+				GlStateManager.setActiveTexture(GL13.GL_TEXTURE5);
+				this.mc.renderEngine.bindTexture(Icons.ICONS);
+				GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+
 				GuiDraw.drawBillboard(area.x, area.y, 0, 0, area.w, area.h, area.w, area.h);
 
-				if (child.pixelate > 1)
+				if (child.pixelate > 1 || child.erase)
 				{
 					shader.unbind();
 				}
