@@ -1,0 +1,131 @@
+#PARSE_ESCAPES
+
+key.mclib.category=McLib
+key.mclib.dashboard=Tablero
+
+mclib.gui.ok=Ok
+mclib.gui.cancel=Cancelar
+mclib.gui.none=(ninguno)
+mclib.gui.multi_skin=Skin múltilpe
+mclib.gui.no_data=Datos no disponibles...
+mclib.gui.open_folder=Abrir carpeta
+mclib.gui.pick_texture=Seleccionar textura
+
+# Don't remove space on the end!
+mclib.gui.dashboard.category=Tablero
+mclib.gui.dashboard.open_panel=Abrir 
+
+mclib.gui.config.title=Configuración
+mclib.gui.config.tooltip=Configuración de los mods
+mclib.gui.config.reload_tooltip=Recargar configuración desde el archivo...
+mclib.gui.keys.list=Lista de combinación de teclas
+
+mclib.gui.transforms.x=X
+mclib.gui.transforms.y=Y
+mclib.gui.transforms.z=Z
+mclib.gui.transforms.translate=Trasladar
+mclib.gui.transforms.scale=Escala
+mclib.gui.transforms.rotate=Rotar
+
+mclib.gui.keyframes.tick=Tick
+mclib.gui.keyframes.value=Valor
+mclib.gui.keyframes.context.remove=Remover fotograma clave (s)
+mclib.gui.keyframes.context.to_left=Cambiar a palancas izquierdas
+mclib.gui.keyframes.context.to_main=Cambiar a palancas principales
+mclib.gui.keyframes.context.to_right=Cambiar a palancas derechas
+
+# Config
+mclib.config.title=McLib
+
+mclib.config.appearance.title=Apariencia
+mclib.config.appearance.tooltip=Opciones generales con respecto a la apariencia de las GUIs y la estructura
+
+mclib.config.appearance.primary_color=Color principal
+mclib.config.comments.appearance.primary_color=El color que es usado en todo el sistema de la GUI
+mclib.config.appearance.enable_borders=Activar los bordes de los botones
+mclib.config.comments.appearance.enable_borders=¿Los botones y otros elementos deberían tener bordes?
+mclib.config.appearance.enable_checkbox_rendering=Activar Casillas de verificación
+mclib.config.comments.appearance.enable_checkbox_rendering=Activa la representación de Casillas de verificación en lugar de Alternar el elemento (según el gusto de cada usuario)
+mclib.config.appearance.enable_grid_rendering=Activar Piso de cuadrícula
+mclib.config.comments.appearance.enable_grid_rendering=Activa la representación de Cuadrículas en lugar del Bloque de césped
+mclib.config.appearance.user_interface_scale=Escala de la GUI
+mclib.config.comments.appearance.user_interface_scale=Escala de la GUI para los mods de McHorse en lugar de la escala de la GUI de la Configuración de video. Si se establece en 0, utilizará la configuración de escala de la GUI de Minecraft
+
+mclib.config.tutorials.title=Opciones para los tutoriales
+mclib.config.tutorials.tooltip=Esta categoría proporciona opciones que son útiles para hacer videos tutoriales
+
+mclib.config.tutorials.enable_mouse_rendering=Activar representación del cursor del mouse
+mclib.config.comments.tutorials.enable_mouse_rendering=Activa la representación del cursor del mouse. Es muy útil cuando no aparece el cursor del mouse mientras se graban tutoriales con el mod Minema
+mclib.config.tutorials.enable_keystrokes_rendering=Activar Pulsaciones de teclas
+mclib.config.comments.tutorials.enable_keystrokes_rendering=Activa la representación de Pulsaciones de teclas. Es muy útil cuando se quiere mostrar en un tutorial las teclas que se están usando
+mclib.config.tutorials.keystroke_offset=Desplazamiento de Pulsaciones de teclas
+mclib.config.comments.tutorials.keystroke_offset=Permite configurar a cuántos píxeles de la esquina se dibujará la línea de pulsación
+mclib.config.tutorials.keystroke_position=Posición de Pulsaciones de teclas
+mclib.config.comments.tutorials.keystroke_position= Permite cambiar la esquina de la línea de Pulsaciones de teclas
+
+mclib.config.background.title=Fondo
+mclib.config.background.tooltip=Opciones de fondo, ej: Color y texturas que se usarán
+
+mclib.config.background.image=Imagen
+mclib.config.comments.background.image=Imagen de fondo que se usará en cada menú
+mclib.config.background.color=Color
+mclib.config.comments.background.color=Color de fondo que se usará en cada menú. Si se especifica una imagen se utilizará como color de tinte para el fondo
+
+mclib.config.scrollbars.title=Barras de desplazamiento
+mclib.config.scrollbars.tooltip=Opciones de fondo, ej: Color y texturas que se usarán
+
+mclib.config.scrollbars.flat=Barras de desplazamiento planas
+mclib.config.comments.scrollbars.flat=Cambia a simple el aspecto de las Barras de desplazamiento
+mclib.config.scrollbars.shadow=Color de la sombra
+mclib.config.comments.scrollbars.shadow=Permite establecer el color de las sombra de las barras desplazamiento
+mclib.config.scrollbars.width=Grosor
+mclib.config.comments.scrollbars.width=Permite configurar el grosor (ancho de las barras de desplazamiento)
+
+mclib.config.vanilla.title=Ajustes de Minecraft Vanilla
+mclib.config.vanilla.tooltip=Opciones con respecto a los ajustes realizados al código de Minecraft
+
+mclib.config.vanilla.max_packet_size=Tamaño máximo del paquete
+mclib.config.comments.vanilla.max_packet_size=Permite configurar el tamaño máximo (en bytes) de un paquete del mod. Advertencia: No cambiar este valor para servidores públicos, puesto que va a permitir hacer ataques DDoS con mucha más facilidad. Esta opción está diseñada para un jugador!
+
+# Interpolations
+mclib.interpolations.linear=Lineal
+mclib.interpolations.quad_in=Cuadrático dentro
+mclib.interpolations.quad_out=Cuadrático fuera
+mclib.interpolations.quad_inout=Cuadrático dentro/fuera
+mclib.interpolations.cubic_in=Cúbico dentro
+mclib.interpolations.cubic_out=Cúbico dentro
+mclib.interpolations.cubic_inout=Cúbico dentro/fuera
+mclib.interpolations.exp_in=Exponencial dentro
+mclib.interpolations.exp_out=Exponencial fuera
+mclib.interpolations.exp_inout=Exponencial dentro/fuera
+
+mclib.interpolations.back_in=Atrás hacia adentro
+mclib.interpolations.back_out=Atrás hacia afuera
+mclib.interpolations.back_inout=Atrás hacia adentro/afuera
+mclib.interpolations.elastic_in=Elástico hacia adentro
+mclib.interpolations.elastic_out=Elástico hacia afuera
+mclib.interpolations.elastic_inout=Elástico hacia adentro/afuera
+mclib.interpolations.bounce_in=Rebotar hacia adentro
+mclib.interpolations.bounce_out=Rebotar hacia afuera
+mclib.interpolations.bounce_inout=Rebotar hacia adentro/afuera
+
+mclib.interpolations.const=Constante
+mclib.interpolations.quad=Cuadrático
+mclib.interpolations.cubic=Cúbico
+mclib.interpolations.hermite=Hermite
+mclib.interpolations.exp=Exponencial
+mclib.interpolations.bezier=Bezier
+mclib.interpolations.back=Atrás
+mclib.interpolations.elastic=Elástico
+mclib.interpolations.bounce=Rebotar
+
+mclib.easing.in=Ease dentro
+mclib.easing.out=Ease fuera
+mclib.easing.inout=Ease dentro/fuera
+
+# Keystroke modes
+mclib.keystrokes_position.auto=Automático
+mclib.keystrokes_position.bottom_left=Abajo a la izquierda
+mclib.keystrokes_position.bottom_right=Abajo a la derecha
+mclib.keystrokes_position.top_right=Parte superior derecha
+mclib.keystrokes_position.top_left=Parte superior izquierda
