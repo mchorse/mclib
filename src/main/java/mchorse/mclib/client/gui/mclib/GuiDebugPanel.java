@@ -14,7 +14,9 @@ import mchorse.mclib.utils.keyframes.Keyframe;
 import mchorse.mclib.utils.keyframes.KeyframeChannel;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 import mchorse.mclib.utils.wav.Wave;
+import mchorse.mclib.utils.wav.WavePlayer;
 import mchorse.mclib.utils.wav.WaveReader;
+import mchorse.mclib.utils.wav.Waveform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
@@ -33,12 +35,8 @@ public class GuiDebugPanel extends GuiDashboardPanel
 	public GuiModelRenderer renderer;
 	public GuiButtonElement play;
 
-	private int al = -1;
-	private int als = -1;
-	private int texture = -1;
-
-	private int w;
-	private int h;
+	private WavePlayer player;
+	private Waveform wave;
 
 	public GuiDebugPanel(Minecraft mc, GuiDashboard dashboard)
 	{
@@ -108,80 +106,16 @@ public class GuiDebugPanel extends GuiDashboardPanel
 			WaveReader reader = new WaveReader();
 			Wave data = reader.read(this.getClass().getResourceAsStream("/assets/mclib/hammer.wav"));
 
-			this.al = AL10.alGenBuffers();
-			ByteBuffer buffer = GLAllocation.createDirectByteBuffer(data.data.length);
-
-			buffer.put(data.data);
-			buffer.flip();
-
-			AL10.alBufferData(this.al, AL10.AL_FORMAT_MONO16, buffer, data.sampleRate);
-
-			this.als = AL10.alGenSources();
-			AL10.alSourcei(this.als, AL10.AL_BUFFER, this.al);
-			AL10.alSourcei(this.als, AL10.AL_SOURCE_RELATIVE, AL10.AL_TRUE);
-			AL10.alSourcePlay(this.als);
-
-			GlStateManager.deleteTexture(this.texture);
-
-			this.texture = GL11.glGenTextures();
-
-			float pixelsPerSecond = 800;
-
-			BufferedImage image = new BufferedImage((int) (data.getDuration() * pixelsPerSecond), 300, BufferedImage.TYPE_INT_ARGB);
-			Graphics g = image.getGraphics();
-
-			this.w = image.getWidth();
-			this.h = image.getHeight();
-			int region = (int) (data.sampleRate / pixelsPerSecond) * 2;
-			int offset = 0;
-
-			for (int i = 0; i < this.w; i ++)
+			if (data.getBytesPerSample() > 2)
 			{
-				offset = i * region;
-				int count = 0;
-				float avg = 0;
-				float max = 0;
-
-				for (int j = 0; j < region; j += 2)
-				{
-					if (offset + j + 1 >= data.data.length)
-					{
-						System.out.println("Whoops...");
-
-						break;
-					}
-
-					byte a = data.data[offset + j];
-					byte b = data.data[offset + j + 1];
-
-					int hmm = a + (b << 8);
-
-					max = Math.max(max, Math.abs(hmm));
-					avg += Math.abs(hmm);
-					count++;
-				}
-
-				avg /= count;
-				avg /= 0xffff / 2F;
-				max /= 0xffff / 2F;
-
-				int maxHeight = (int) (max * this.h);
-				int height = (int) (avg * (this.h - 1)) + 1;
-
-				if (height > 0)
-				{
-					g.setColor(java.awt.Color.WHITE);
-					g.drawRect(i, this.h / 2 - maxHeight / 2, 1, maxHeight);
-					g.setColor(java.awt.Color.LIGHT_GRAY);
-					g.drawRect(i, this.h / 2 - height / 2, 1, height);
-				}
+				data = data.convertTo16();
 			}
-			
-			System.out.println(offset + " " + data.data.length);
 
-			g.dispose();
+			this.player = new WavePlayer().initialize(data);
+			this.player.play();
 
-			TextureUtil.uploadTextureImage(this.texture, image);
+			this.wave = new Waveform();
+			this.wave.generate(data, 800, 300);
 		}
 		catch (Exception e)
 		{
@@ -201,28 +135,23 @@ public class GuiDebugPanel extends GuiDashboardPanel
 	@Override
 	public void draw(GuiContext context)
 	{
-		if (this.als != -1)
+		if (this.player != null && !this.player.isPlaying())
 		{
-			int playing = AL10.alGetSourcei(this.als, AL10.AL_SOURCE_STATE);
-
-			if (playing != AL10.AL_PLAYING)
-			{
-				AL10.alDeleteBuffers(this.al);
-				AL10.alDeleteSources(this.als);
-
-				this.al = -1;
-				this.als = -1;
-			}
+			this.player.delete();
+			this.player = null;
 		}
 
 		super.draw(context);
 
-		if (this.texture != -1)
+		if (this.wave != null)
 		{
+			int w = this.wave.getWidth();
+			int h = this.wave.getHeight();
+
 			GlStateManager.color(1, 1, 1, 1);
 			GlStateManager.enableTexture2D();
-			GlStateManager.bindTexture(this.texture);
-			GuiDraw.drawBillboard(this.area.x + 10, this.area.my() - this.h / 2, 0, 0, this.w, this.h, this.w, this.h);
+			GlStateManager.bindTexture(this.wave.getTexture());
+			GuiDraw.drawBillboard(this.area.x + 10, this.area.my() - h / 2, 0, 0, w, h, w, h);
 		}
 	}
 }

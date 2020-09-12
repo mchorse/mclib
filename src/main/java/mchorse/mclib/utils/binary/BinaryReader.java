@@ -60,7 +60,7 @@ public abstract class BinaryReader
 	{
 		while (bytes > 0)
 		{
-			bytes = stream.skip(bytes);
+			bytes -= stream.skip(bytes);
 		}
 	}
 }
