@@ -19,9 +19,10 @@ public class Waveform
 	public float[] average;
 	public float[] maximum;
 
-	private int texture;
+	private int texture = -1;
 	private int w;
 	private int h;
+	private int pixelsPerSecond;
 
 	public void generate(Wave data, int pixelsPerSecond, int height)
 	{
@@ -36,8 +37,7 @@ public class Waveform
 
 	public void render()
 	{
-		GlStateManager.deleteTexture(this.texture);
-
+		this.delete();
 		this.texture = GlStateManager.generateTexture();
 
 		BufferedImage image = new BufferedImage(this.w, this.h, BufferedImage.TYPE_INT_ARGB);
@@ -67,6 +67,7 @@ public class Waveform
 
 	public void populate(Wave data, int pixelsPerSecond, int height)
 	{
+		this.pixelsPerSecond = pixelsPerSecond;
 		this.w = (int) (data.getDuration() * pixelsPerSecond);
 		this.h = height;
 		this.average = new float[this.w];
@@ -106,9 +107,26 @@ public class Waveform
 		}
 	}
 
+	public void delete()
+	{
+		GlStateManager.deleteTexture(this.texture);
+
+		this.texture = -1;
+	}
+
+	public boolean isCreated()
+	{
+		return this.texture != -1;
+	}
+
 	public int getTexture()
 	{
 		return this.texture;
+	}
+
+	public int getPixelsPerSecond()
+	{
+		return this.pixelsPerSecond;
 	}
 
 	public int getWidth()
