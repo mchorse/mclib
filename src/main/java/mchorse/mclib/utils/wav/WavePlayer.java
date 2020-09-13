@@ -1,5 +1,6 @@
 package mchorse.mclib.utils.wav;
 
+import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.renderer.GLAllocation;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
@@ -10,6 +11,7 @@ public class WavePlayer
 {
 	private int buffer = -1;
 	private int source = -1;
+	private float duration;
 
 	public WavePlayer initialize(Wave wave)
 	{
@@ -21,6 +23,7 @@ public class WavePlayer
 
 		AL10.alBufferData(this.buffer, wave.getALFormat(), buffer, wave.sampleRate);
 
+		this.duration = wave.getDuration();
 		this.source = AL10.alGenSources();
 		AL10.alSourcei(this.source, AL10.AL_BUFFER, this.buffer);
 		AL10.alSourcei(this.source, AL10.AL_SOURCE_RELATIVE, AL10.AL_TRUE);
@@ -52,14 +55,26 @@ public class WavePlayer
 		AL10.alSourceStop(this.source);
 	}
 
+	public int getSourceState()
+	{
+		return AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE);
+	}
+
 	public boolean isPlaying()
 	{
-		return AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING;
+		return this.getSourceState() == AL10.AL_PLAYING;
 	}
 
 	public boolean isPaused()
 	{
-		return AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) == AL10.AL_PAUSED;
+		return this.getSourceState() == AL10.AL_PAUSED;
+	}
+
+	public boolean isStopped()
+	{
+		int state = this.getSourceState();
+
+		return state == AL10.AL_STOPPED || state == AL10.AL_INITIAL;
 	}
 
 	public float getPlaybackPosition()
@@ -69,6 +84,8 @@ public class WavePlayer
 
 	public void setPlaybackPosition(float seconds)
 	{
+		seconds = MathUtils.clamp(seconds, 0, this.duration);
+
 		AL10.alSourcef(this.source, AL11.AL_SEC_OFFSET, seconds);
 	}
 
