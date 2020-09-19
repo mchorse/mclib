@@ -261,21 +261,26 @@ public class GuiTexturePicker extends GuiElement
             return;
         }
 
+        this.current = rl;
+
         if (this.multiRL != null)
         {
-            this.currentFRL.path = rl;
+            if (rl == null && this.multiRL.children.size() == 1)
+            {
+                this.currentFRL.path = rl;
+                this.toggleMultiSkin();
+            }
+            else
+            {
+                this.currentFRL.path = rl;
+            }
         }
-        else
-        {
-            this.current = rl;
-        }
-
-        this.picker.rl = rl;
-
-        if (this.callback != null)
+        else if (this.callback != null)
         {
             this.callback.accept(rl);
         }
+
+        this.picker.rl = rl;
     }
 
     protected void toggleMultiSkin()
