@@ -22,6 +22,7 @@ public class Color
 	public Color(float r, float g, float b, float a)
 	{
 		this(r, g, b);
+
 		this.a = a;
 	}
 
@@ -71,6 +72,11 @@ public class Color
 		return this;
 	}
 
+	public Color copy()
+	{
+		return new Color().copy(this);
+	}
+
 	public Color copy(Color color)
 	{
 		this.set(color.r, color.g, color.b, color.a);
@@ -106,5 +112,18 @@ public class Color
 		}
 
 		return "#" + StringUtils.leftPad(Integer.toHexString(this.getRGBColor()), 6, '0');
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj instanceof Color)
+		{
+			Color color = (Color) obj;
+
+			return color.getRGBAColor() == this.getRGBAColor();
+		}
+
+		return super.equals(obj);
 	}
 }

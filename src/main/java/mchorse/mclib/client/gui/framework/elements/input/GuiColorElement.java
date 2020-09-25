@@ -22,6 +22,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -32,6 +34,10 @@ import java.util.function.Consumer;
  */
 public class GuiColorElement extends GuiElement
 {
+	public static final int COLOR_SLIDER_HEIGHT = 50;
+
+	public static List<Color> recentColors = new ArrayList<Color>();
+
 	public GuiColorPickerElement picker;
 	public boolean label = true;
 	public Direction direction;
@@ -118,7 +124,7 @@ public class GuiColorElement extends GuiElement
 				int y = context.globalY(this.area.y(this.direction.anchorY) + 2 * this.direction.factorY);
 
 				(this.target == null ? this.getParentContainer() : this.target).add(this.picker);
-				this.picker.flex().xy(x, y);
+				this.picker.flex().xy(x, y).h(this.picker.getHeight(200));
 				this.picker.resize();
 			}
 			else
@@ -183,6 +189,7 @@ public class GuiColorElement extends GuiElement
 		public Area green = new Area();
 		public Area blue = new Area();
 		public Area alpha = new Area();
+		public Area recent = new Area();
 
 		public int dragging = -1;
 
@@ -208,6 +215,13 @@ public class GuiColorElement extends GuiElement
 			this.input.field.setMaxStringLength(9);
 
 			return this;
+		}
+
+		public int getHeight(int width)
+		{
+			int recent = recentColors.size();
+
+			return 85 + (recent == 0 ? 0 : ((recent * 10) / (width - 10)) * 10 + 25);
 		}
 
 		public void updateField()
@@ -252,9 +266,9 @@ public class GuiColorElement extends GuiElement
 			super.resize();
 
 			int c = this.editAlpha ? 4 : 3;
-			int h = (this.area.h - 35) / c;
+			int h = COLOR_SLIDER_HEIGHT / c;
 			int w = this.area.w - 10;
-			int remainder = this.area.h - 35 - h * c;
+			int remainder = COLOR_SLIDER_HEIGHT - h * c;
 			int y = this.area.y + 30;
 
 			this.red.set(this.area.x + 5, y, w, h);
@@ -263,12 +277,20 @@ public class GuiColorElement extends GuiElement
 			{
 				this.green.set(this.area.x + 5, y + h, w, h);
 				this.blue.set(this.area.x + 5, y + h + h, w, h + remainder);
-				this.alpha.set(this.area.x + 5, this.area.ey() - 5 - h, w, h);
+				this.alpha.set(this.area.x + 5, y + COLOR_SLIDER_HEIGHT - h, w, h);
 			}
 			else
 			{
 				this.green.set(this.area.x + 5, y + h, w, h + remainder);
-				this.blue.set(this.area.x + 5, this.area.ey() - 5 - h, w, h);
+				this.blue.set(this.area.x + 5, y + COLOR_SLIDER_HEIGHT - h, w, h);
+			}
+
+			int recentCount = recentColors.size();
+
+			if (recentCount > 0)
+			{
+				this.recent.set(this.area.x + 5, this.area.y + 95, this.area.w - 10, 0);
+				this.recent.h = ((recentCount * 10) / (this.recent.w) + 1) * 10;
 			}
 		}
 
@@ -304,16 +326,47 @@ public class GuiColorElement extends GuiElement
 
 				return true;
 			}
+			else if (this.recent.isInside(context))
+			{
+				int x = (context.mouseX - this.recent.x) / 10;
+				int y = (context.mouseY - this.recent.y) / 10;
+				int index = x + y * this.recent.w / 10;
+
+				index = recentColors.size() - 1 - index;
+
+				if (index >= 0 && index < recentColors.size())
+				{
+					this.setColor(recentColors.get(index).getRGBAColor());
+					this.updateColor();
+				}
+
+				return true;
+			}
 
 			if (!this.area.isInside(context))
 			{
 				this.removeFromParent();
+				this.addToRecent();
 
 				return false;
 			}
 			else
 			{
 				return true;
+			}
+		}
+
+		private void addToRecent()
+		{
+			int i = recentColors.indexOf(this.color);
+
+			if (i == -1)
+			{
+				recentColors.add(this.color.copy());
+			}
+			else
+			{
+				recentColors.add(recentColors.remove(i));
 			}
 		}
 
@@ -396,6 +449,34 @@ public class GuiColorElement extends GuiElement
 				this.drawMarker(this.alpha.x + 7 + (int) ((this.alpha.w - 14) * this.color.a), this.alpha.my());
 			}
 
+			/* Draw recent colors panel */
+			int recentCount = recentColors.size();
+
+			if (recentCount > 0)
+			{
+				int count = this.recent.w / 10;
+
+				this.font.drawString("Recent colors", this.recent.x, this.recent.y - 10, 0x888888);
+
+				this.mc.renderEngine.bindTexture(Icons.ICONS);
+
+				if (this.recent.h > 10)
+				{
+					GuiUtils.drawContinuousTexturedBox(this.recent.x, this.recent.y, 0, 240, this.recent.w, this.recent.h - 10, 16, 16, 0, 0);
+				}
+
+				GuiUtils.drawContinuousTexturedBox(this.recent.x, this.recent.y, 0, 240, recentCount % count * 10, this.recent.h, 16, 16, 0, 0);
+
+				for (int i = recentCount - 1, j = 0; i >= 0; i--, j++)
+				{
+					Color c = recentColors.get(i);
+					int x = this.recent.x + j % count * 10;
+					int y = this.recent.y + j / count * 10;
+
+					this.drawAlphaPreviewQuad(x, y, x + 10, y + 10, c);
+				}
+			}
+
 			super.draw(context);
 		}
 
@@ -405,7 +486,7 @@ public class GuiColorElement extends GuiElement
 			{
 				this.mc.renderEngine.bindTexture(Icons.ICONS);
 				GuiUtils.drawContinuousTexturedBox(x1, y1, 0, 240, x2 - x1, y2 - y1, 16, 16, 0, 0);
-				this.drawAlphaPreviewQuad(x1, y1, x2, y2);
+				this.drawAlphaPreviewQuad(x1, y1, x2, y2, this.color);
 			}
 			else
 			{
@@ -413,7 +494,7 @@ public class GuiColorElement extends GuiElement
 			}
 		}
 
-		private void drawAlphaPreviewQuad(int x1, int y1, int x2, int y2)
+		private void drawAlphaPreviewQuad(int x1, int y1, int x2, int y2, Color color)
 		{
 			GlStateManager.disableTexture2D();
 			GlStateManager.enableBlend();
@@ -424,12 +505,12 @@ public class GuiColorElement extends GuiElement
 			Tessellator tessellator = Tessellator.getInstance();
 			BufferBuilder vertexbuffer = tessellator.getBuffer();
 			vertexbuffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-			vertexbuffer.pos(x1, y1, 0).color(this.color.r, this.color.g, this.color.b, 1).endVertex();
-			vertexbuffer.pos(x1, y2, 0).color(this.color.r, this.color.g, this.color.b, 1).endVertex();
-			vertexbuffer.pos(x2, y1, 0).color(this.color.r, this.color.g, this.color.b, 1).endVertex();
-			vertexbuffer.pos(x2, y1, 0).color(this.color.r, this.color.g, this.color.b, this.color.a).endVertex();
-			vertexbuffer.pos(x1, y2, 0).color(this.color.r, this.color.g, this.color.b, this.color.a).endVertex();
-			vertexbuffer.pos(x2, y2, 0).color(this.color.r, this.color.g, this.color.b, this.color.a).endVertex();
+			vertexbuffer.pos(x1, y1, 0).color(color.r, color.g, color.b, 1).endVertex();
+			vertexbuffer.pos(x1, y2, 0).color(color.r, color.g, color.b, 1).endVertex();
+			vertexbuffer.pos(x2, y1, 0).color(color.r, color.g, color.b, 1).endVertex();
+			vertexbuffer.pos(x2, y1, 0).color(color.r, color.g, color.b, color.a).endVertex();
+			vertexbuffer.pos(x1, y2, 0).color(color.r, color.g, color.b, color.a).endVertex();
+			vertexbuffer.pos(x2, y2, 0).color(color.r, color.g, color.b, color.a).endVertex();
 			tessellator.draw();
 
 			GlStateManager.shadeModel(GL11.GL_FLAT);
