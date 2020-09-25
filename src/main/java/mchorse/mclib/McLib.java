@@ -1,5 +1,6 @@
 package mchorse.mclib;
 
+import mchorse.mclib.client.gui.utils.ValueColors;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.ConfigBuilder;
 import mchorse.mclib.config.values.ValueBoolean;
@@ -44,6 +45,7 @@ public class McLib
 
     /* Configuration */
     public static ValueBoolean debugPanel;
+    public static ValueColors favoriteColors;
     public static ValueInt primaryColor;
     public static ValueBoolean enableBorders;
     public static ValueBoolean enableCheckboxRendering;
@@ -78,6 +80,10 @@ public class McLib
         enableCheckboxRendering = builder.getBoolean("enable_checkbox_rendering", false);
         enableGridRendering = builder.getBoolean("enable_grid_rendering", true);
         userIntefaceScale = builder.getInt("user_interface_scale", 2, 0, 4);
+
+        favoriteColors = new ValueColors("favorite_colors");
+        favoriteColors.invisible();
+        builder.register(favoriteColors);
 
         enableMouseRendering = builder.category("tutorials").getBoolean("enable_mouse_rendering", false);
         enableKeystrokeRendering = builder.getBoolean("enable_keystrokes_rendering", false);

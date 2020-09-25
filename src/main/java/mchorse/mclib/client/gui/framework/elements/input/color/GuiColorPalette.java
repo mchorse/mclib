@@ -49,6 +49,16 @@ public class GuiColorPalette extends GuiElement
 		return MathUtils.gridRows(this.colors.size(), this.cellSize, width) * this.cellSize;
 	}
 
+	public boolean hasColor(int index)
+	{
+		return index >= 0 && index < this.colors.size();
+	}
+
+	public int getIndex(GuiContext context)
+	{
+		return this.colors.size() - 1 - this.area.getIndex(context.mouseX, context.mouseY, this.cellSize);
+	}
+
 	@Override
 	public boolean mouseClicked(GuiContext context)
 	{
@@ -59,12 +69,9 @@ public class GuiColorPalette extends GuiElement
 
 		if (this.area.isInside(context) && context.mouseButton == 0)
 		{
-			int index = this.area.getIndex(context.mouseX, context.mouseY, this.cellSize);
-			int size = this.colors.size();
+			int index = this.getIndex(context);
 
-			index = size - 1 - index;
-
-			if (index >= 0 && index < size && this.callback != null)
+			if (this.hasColor(index) && this.callback != null)
 			{
 				this.callback.accept(this.colors.get(index));
 			}

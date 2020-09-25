@@ -42,6 +42,12 @@ mclib.gui.multiskin.pixelate=Pixelate
 mclib.gui.multiskin.erase=Erase
 mclib.gui.multiskin.erase_tooltip=This feature allows to using current skin as difference mask, meaning, any opaque pixels will erase pixels of all skins underneath it.
 
+mclib.gui.color.favorite=Favorite colors
+mclib.gui.color.recent=Recent colors
+
+mclib.gui.color.context.favorites.add=Add to favorites
+mclib.gui.color.context.favorites.remove=Remove from favorites
+
 # Config
 mclib.config.title=McLib
 

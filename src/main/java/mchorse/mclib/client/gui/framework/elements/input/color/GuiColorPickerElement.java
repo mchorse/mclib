@@ -1,11 +1,16 @@
 package mchorse.mclib.client.gui.framework.elements.input.color;
 
+import mchorse.mclib.McLib;
+import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
+import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
@@ -30,6 +35,8 @@ import java.util.function.Consumer;
 public class GuiColorPickerElement extends GuiElement
 {
 	public static final int COLOR_SLIDER_HEIGHT = 50;
+	public static final IKey FAVORITE = IKey.lang("mclib.gui.color.favorite");
+	public static final IKey RECENT = IKey.lang("mclib.gui.color.recent");
 
 	public static List<Color> recentColors = new ArrayList<Color>();
 
@@ -37,14 +44,16 @@ public class GuiColorPickerElement extends GuiElement
 	public Consumer<Integer> callback;
 
 	public GuiTextElement input;
+	public GuiColorPalette recent;
+	public GuiColorPalette favorite;
+
 	public boolean editAlpha;
 
 	public Area red = new Area();
 	public Area green = new Area();
 	public Area blue = new Area();
 	public Area alpha = new Area();
-
-	public GuiColorPalette recent;
+	public Area preview = new Area();
 
 	public int dragging = -1;
 
@@ -84,16 +93,52 @@ public class GuiColorPickerElement extends GuiElement
 			this.setValue(ColorUtils.parseColor(string));
 			this.callback();
 		});
+
 		this.recent = new GuiColorPalette(mc, (color) ->
 		{
 			this.setColor(color.getRGBAColor());
 			this.updateColor();
 		}).colors(recentColors);
 
-		this.input.flex().relative(this).set(5, 5, 0, 20).w(1, -35);
-		this.recent.flex().relative(this).xy(5, 95).w(1F, -10);
+		this.recent.context(() ->
+		{
+			GuiContext context = GuiBase.getCurrent();
+			int index = this.recent.getIndex(context);
 
-		this.hideTooltip().add(this.input, this.recent);
+			if (!this.recent.hasColor(index))
+			{
+				return null;
+			}
+
+			return new GuiSimpleContextMenu(Minecraft.getMinecraft())
+				.action(Icons.ADD, IKey.lang("mclib.gui.color.context.favorites.add"), () -> this.addToFavorites(this.recent.colors.get(index)));
+		});
+
+		this.favorite = new GuiColorPalette(mc, (color) ->
+		{
+			this.setColor(color.getRGBAColor());
+			this.updateColor();
+		}).colors(McLib.favoriteColors.colors);
+
+		this.favorite.context(() ->
+		{
+			GuiContext context = GuiBase.getCurrent();
+			int index = this.favorite.getIndex(context);
+
+			if (!this.favorite.hasColor(index))
+			{
+				return null;
+			}
+
+			return new GuiSimpleContextMenu(Minecraft.getMinecraft())
+				.action(Icons.REMOVE, IKey.lang("mclib.gui.color.context.favorites.remove"), () -> this.removeFromFavorites(index));
+		});
+
+		this.input.flex().relative(this).set(5, 5, 0, 20).w(1, -35);
+		this.favorite.flex().relative(this).xy(5, 95).w(1F, -10);
+		this.recent.flex().relative(this.favorite).w(1F);
+
+		this.hideTooltip().add(this.input, this.favorite, this.recent);
 	}
 
 	public GuiColorPickerElement editAlpha()
@@ -102,13 +147,6 @@ public class GuiColorPickerElement extends GuiElement
 		this.input.field.setMaxStringLength(9);
 
 		return this;
-	}
-
-	public int getHeight(int width)
-	{
-		int recent = this.recent.colors.isEmpty() ? 0 : this.recent.getHeight(width - 10) + 15;
-
-		return 85 + recent;
 	}
 
 	public void updateField()
@@ -148,6 +186,89 @@ public class GuiColorPickerElement extends GuiElement
 	}
 
 	@Override
+	public GuiContextMenu createContextMenu(GuiContext context)
+	{
+		if (!this.preview.isInside(context))
+		{
+			return super.createContextMenu(context);
+		}
+
+		return new GuiSimpleContextMenu(this.mc)
+			.action(Icons.ADD, IKey.lang("mclib.gui.color.context.favorites.add"), () -> this.addToFavorites(this.color));
+	}
+
+	public void setup(int x, int y)
+	{
+		this.flex().xy(x, y);
+		this.setupSize();
+	}
+
+	private void setupSize()
+	{
+		int width = 200;
+		int recent = this.recent.colors.isEmpty() ? 0 : this.recent.getHeight(width - 10);
+		int favorite = this.favorite.colors.isEmpty() ? 0 : this.favorite.getHeight(width - 10);
+		int base = 85;
+
+		base += favorite > 0 ? favorite + 15 : 0;
+		base += recent > 0 ? recent + 15 : 0;
+
+		this.flex().h(base);
+		this.favorite.flex().h(favorite);
+		this.recent.flex().h(recent);
+
+		if (favorite > 0)
+		{
+			this.recent.flex().y(1F, 15);
+		}
+		else
+		{
+			this.recent.flex().y(0);
+		}
+	}
+
+	/* Managing recent and favorite colors */
+
+	private void addToRecent()
+	{
+		this.addColor(recentColors, this.color);
+	}
+
+	private void addToFavorites(Color color)
+	{
+		this.addColor(McLib.favoriteColors.colors, color);
+		McLib.favoriteColors.saveLater();
+
+		this.setupSize();
+		this.resize();
+	}
+
+	private void removeFromFavorites(int index)
+	{
+		McLib.favoriteColors.colors.remove(index);
+		McLib.favoriteColors.saveLater();
+
+		this.setupSize();
+		this.resize();
+	}
+
+	private void addColor(List<Color> colors, Color color)
+	{
+		int i = colors.indexOf(color);
+
+		if (i == -1)
+		{
+			colors.add(color.copy());
+		}
+		else
+		{
+			colors.add(colors.remove(i));
+		}
+	}
+
+	/* GuiElement overrides */
+
+	@Override
 	public void resize()
 	{
 		super.resize();
@@ -158,6 +279,7 @@ public class GuiColorPickerElement extends GuiElement
 		int remainder = COLOR_SLIDER_HEIGHT - h * c;
 		int y = this.area.y + 30;
 
+		this.preview.setPoints(this.area.ex() - 25, this.area.y + 5, this.area.ex() - 5, this.area.y + 25);
 		this.red.set(this.area.x + 5, y, w, h);
 
 		if (this.editAlpha)
@@ -216,20 +338,6 @@ public class GuiColorPickerElement extends GuiElement
 		else
 		{
 			return true;
-		}
-	}
-
-	private void addToRecent()
-	{
-		int i = recentColors.indexOf(this.color);
-
-		if (i == -1)
-		{
-			recentColors.add(this.color.copy());
-		}
-		else
-		{
-			recentColors.add(recentColors.remove(i));
 		}
 	}
 
@@ -312,7 +420,15 @@ public class GuiColorPickerElement extends GuiElement
 			this.drawMarker(this.alpha.x + 7 + (int) ((this.alpha.w - 14) * this.color.a), this.alpha.my());
 		}
 
-		this.font.drawString("Recent colors", this.recent.area.x, this.recent.area.y - 10, 0x888888);
+		if (!this.favorite.colors.isEmpty())
+		{
+			this.font.drawString(FAVORITE.get(), this.favorite.area.x, this.favorite.area.y - 10, 0x888888);
+		}
+
+		if (!this.recent.colors.isEmpty())
+		{
+			this.font.drawString(RECENT.get(), this.recent.area.x, this.recent.area.y - 10, 0x888888);
+		}
 
 		super.draw(context);
 	}
@@ -336,14 +452,5 @@ public class GuiColorPickerElement extends GuiElement
 		Gui.drawRect(x - 4, y - 4, x + 4, y + 4, 0xff000000);
 		Gui.drawRect(x - 3, y - 3, x + 3, y + 3, 0xffffffff);
 		Gui.drawRect(x - 2, y - 2, x + 2, y + 2, 0xffc6c6c6);
-	}
-
-	public void setup(int x, int y)
-	{
-		int h = this.getHeight(200);
-		int hh = this.recent.getHeight(190);
-
-		this.flex().xy(x, y).h(h);
-		this.recent.flex().h(hh);
 	}
 }
