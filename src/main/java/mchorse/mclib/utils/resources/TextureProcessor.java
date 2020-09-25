@@ -1,21 +1,37 @@
 package mchorse.mclib.utils.resources;
 
+import mchorse.mclib.McLib;
+import mchorse.mclib.events.MultiskinProcessedEvent;
 import mchorse.mclib.utils.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.util.ArrayList;
 import java.util.List;
 
+@SideOnly(Side.CLIENT)
 public class TextureProcessor
 {
 	public static Pixels pixels = new Pixels();
 	public static Pixels target = new Pixels();
+
+	public static BufferedImage postProcess(MultiResourceLocation multi)
+	{
+		BufferedImage image = process(multi);
+
+		Minecraft.getMinecraft().addScheduledTask(() ->
+		{
+			McLib.EVENT_BUS.post(new MultiskinProcessedEvent(multi, image));
+		});
+
+		return image;
+	}
 
 	public static BufferedImage process(MultiResourceLocation multi)
 	{

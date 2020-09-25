@@ -87,7 +87,7 @@ public class MultiskinThread implements Runnable
 			{
 				try
 				{
-					BufferedImage image = TextureProcessor.process(location);
+					BufferedImage image = TextureProcessor.postProcess(location);
 					int w = image.getWidth();
 					int h = image.getHeight();
 					ByteBuffer buffer = bytesFromBuffer(image);
