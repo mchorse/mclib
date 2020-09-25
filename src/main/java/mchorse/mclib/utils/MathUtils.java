@@ -31,4 +31,19 @@ public class MathUtils
 	{
 		return x < min ? max : (x > max ? min : x);
 	}
+
+	public static int gridIndex(int x, int y, int size, int width)
+	{
+		x = x / size;
+		y = y / size;
+
+		return x + y * width / size;
+	}
+
+	public static int gridRows(int count, int size, int width)
+	{
+		double x = count * size / (double) width;
+
+		return count <= 0 ? 1 : (int) Math.ceil(x);
+	}
 }
