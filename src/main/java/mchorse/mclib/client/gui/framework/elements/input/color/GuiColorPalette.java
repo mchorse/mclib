@@ -6,7 +6,6 @@ import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.client.config.GuiUtils;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -105,7 +104,7 @@ public class GuiColorPalette extends GuiElement
 				int x = this.area.x + j % elements * this.cellSize;
 				int y = this.area.y + j / elements * this.cellSize;
 
-				GuiColorPickerElement.drawAlphaPreviewQuad(x, y, x + this.cellSize, y + this.cellSize, c);
+				GuiColorPicker.drawAlphaPreviewQuad(x, y, x + this.cellSize, y + this.cellSize, c);
 			}
 		}
 

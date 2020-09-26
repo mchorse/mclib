@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ import java.util.function.Consumer;
  *
  * This is the one that is responsible for picking colors
  */
-public class GuiColorPickerElement extends GuiElement
+public class GuiColorPicker extends GuiElement
 {
 	public static final int COLOR_SLIDER_HEIGHT = 50;
 	public static final IKey FAVORITE = IKey.lang("mclib.gui.color.favorite");
@@ -82,7 +81,7 @@ public class GuiColorPickerElement extends GuiElement
 		GlStateManager.enableTexture2D();
 	}
 
-	public GuiColorPickerElement(Minecraft mc, Consumer<Integer> callback)
+	public GuiColorPicker(Minecraft mc, Consumer<Integer> callback)
 	{
 		super(mc);
 
@@ -111,7 +110,7 @@ public class GuiColorPickerElement extends GuiElement
 			}
 
 			return new GuiSimpleContextMenu(Minecraft.getMinecraft())
-				.action(Icons.ADD, IKey.lang("mclib.gui.color.context.favorites.add"), () -> this.addToFavorites(this.recent.colors.get(index)));
+				.action(Icons.FAVORITE, IKey.lang("mclib.gui.color.context.favorites.add"), () -> this.addToFavorites(this.recent.colors.get(index)));
 		});
 
 		this.favorite = new GuiColorPalette(mc, (color) ->
@@ -141,7 +140,7 @@ public class GuiColorPickerElement extends GuiElement
 		this.hideTooltip().add(this.input, this.favorite, this.recent);
 	}
 
-	public GuiColorPickerElement editAlpha()
+	public GuiColorPicker editAlpha()
 	{
 		this.editAlpha = true;
 		this.input.field.setMaxStringLength(9);
@@ -194,7 +193,7 @@ public class GuiColorPickerElement extends GuiElement
 		}
 
 		return new GuiSimpleContextMenu(this.mc)
-			.action(Icons.ADD, IKey.lang("mclib.gui.color.context.favorites.add"), () -> this.addToFavorites(this.color));
+			.action(Icons.FAVORITE, IKey.lang("mclib.gui.color.context.favorites.add"), () -> this.addToFavorites(this.color));
 	}
 
 	public void setup(int x, int y)

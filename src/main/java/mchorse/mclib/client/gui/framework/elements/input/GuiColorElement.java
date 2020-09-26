@@ -3,7 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.input;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.input.color.GuiColorPickerElement;
+import mchorse.mclib.client.gui.framework.elements.input.color.GuiColorPicker;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.keys.IKey;
@@ -21,7 +21,7 @@ import java.util.function.Consumer;
  */
 public class GuiColorElement extends GuiElement
 {
-	public GuiColorPickerElement picker;
+	public GuiColorPicker picker;
 	public boolean label = true;
 	public Direction direction;
 	public GuiElement target;
@@ -52,7 +52,7 @@ public class GuiColorElement extends GuiElement
 	{
 		super(mc);
 
-		this.picker = new GuiColorPickerElement(mc, (color) ->
+		this.picker = new GuiColorPicker(mc, (color) ->
 		{
 			if (callback != null)
 			{
