@@ -368,8 +368,7 @@ public class GuiColorPickerElement extends GuiElement
 
 		if (this.editAlpha)
 		{
-			this.mc.renderEngine.bindTexture(Icons.ICONS);
-			GuiUtils.drawContinuousTexturedBox(this.alpha.x, this.red.y, 0, 240, this.alpha.w, this.alpha.ey() - this.red.y, 16, 16, 0, 0);
+			Icons.CHECKBOARD.renderArea(this.alpha.x, this.red.y, this.alpha.w, this.alpha.ey() - this.red.y);
 		}
 
 		Color color = new Color();
@@ -437,8 +436,7 @@ public class GuiColorPickerElement extends GuiElement
 	{
 		if (this.editAlpha)
 		{
-			this.mc.renderEngine.bindTexture(Icons.ICONS);
-			GuiUtils.drawContinuousTexturedBox(x1, y1, 0, 240, x2 - x1, y2 - y1, 16, 16, 0, 0);
+			Icons.CHECKBOARD.renderArea(x1, y1,x2 - x1, y2 - y1);
 			drawAlphaPreviewQuad(x1, y1, x2, y2, this.color);
 		}
 		else

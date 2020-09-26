@@ -92,14 +92,12 @@ public class GuiColorPalette extends GuiElement
 		{
 			int elements = this.area.w / this.cellSize;
 
-			this.mc.renderEngine.bindTexture(Icons.ICONS);
-
 			if (this.area.h > this.cellSize)
 			{
-				GuiUtils.drawContinuousTexturedBox(this.area.x, this.area.y, 0, 240, this.area.w, this.area.h - this.cellSize, 16, 16, 0, 0);
+				Icons.CHECKBOARD.renderArea(this.area.x, this.area.y, this.area.w, this.area.h - this.cellSize);
 			}
 
-			GuiUtils.drawContinuousTexturedBox(this.area.x, this.area.y, 0, 240, count % elements * this.cellSize, this.area.h, 16, 16, 0, 0);
+			Icons.CHECKBOARD.renderArea(this.area.x, this.area.ey() - this.cellSize, count % elements * this.cellSize, this.cellSize);
 
 			for (int i = count - 1, j = 0; i >= 0; i--, j++)
 			{
