@@ -307,7 +307,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
             }
         }
 
-        return this.area.isInside(context);
+        return context.mouseButton == 0 && this.area.isInside(context);
     }
 
     /**
