@@ -7,7 +7,6 @@ import mchorse.mclib.client.gui.framework.elements.keyframes.GuiGraphView;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiKeyframesEditor;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiSheet;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
-import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.keyframes.Keyframe;
@@ -18,15 +17,7 @@ import mchorse.mclib.utils.wav.WavePlayer;
 import mchorse.mclib.utils.wav.WaveReader;
 import mchorse.mclib.utils.wav.Waveform;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import org.lwjgl.openal.AL10;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
 
 public class GuiDebugPanel extends GuiDashboardPanel
 {
@@ -103,8 +94,18 @@ public class GuiDebugPanel extends GuiDashboardPanel
 	{
 		try
 		{
+			if (this.player != null)
+			{
+				this.player.delete();
+			}
+
+			if (this.wave != null)
+			{
+				this.wave.delete();
+			}
+
 			WaveReader reader = new WaveReader();
-			Wave data = reader.read(this.getClass().getResourceAsStream("/assets/mclib/hammer.wav"));
+			Wave data = reader.read(this.getClass().getResourceAsStream("/assets/mclib/8.wav"));
 
 			if (data.getBytesPerSample() > 2)
 			{
@@ -115,7 +116,7 @@ public class GuiDebugPanel extends GuiDashboardPanel
 			this.player.play();
 
 			this.wave = new Waveform();
-			this.wave.generate(data, 800, 300);
+			this.wave.generate(data, 20, 150);
 		}
 		catch (Exception e)
 		{
@@ -148,10 +149,17 @@ public class GuiDebugPanel extends GuiDashboardPanel
 			int w = this.wave.getWidth();
 			int h = this.wave.getHeight();
 
-			GlStateManager.color(1, 1, 1, 1);
 			GlStateManager.enableTexture2D();
-			GlStateManager.bindTexture(this.wave.getTexture());
-			GuiDraw.drawBillboard(this.area.x + 10, this.area.my() - h / 2, 0, 0, w, h, w, h);
+
+			GlStateManager.color(0, 0, 0, 1);
+			this.wave.draw(this.area.x + 10, this.area.my() - h / 2 - 2, 0, 0, w, h);
+
+			GlStateManager.color(0.25F, 0.25F, 0.25F, 1);
+			this.wave.draw(this.area.x + 10, this.area.my() - h / 2, 0, 0, 200, h);
+			GlStateManager.color(0.5F, 0.5F, 0.5F, 1);
+			this.wave.draw(this.area.x + 10 + 200, this.area.my() - h / 2, 200, 0, 200, h);
+			GlStateManager.color(1, 1, 1, 1);
+			this.wave.draw(this.area.x + 10 + 400, this.area.my() - h / 2, 400, 0, w, h);
 		}
 	}
 }

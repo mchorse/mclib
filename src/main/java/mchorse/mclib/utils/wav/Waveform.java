@@ -1,12 +1,16 @@
 package mchorse.mclib.utils.wav;
 
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Waveform class
@@ -19,7 +23,7 @@ public class Waveform
 	public float[] average;
 	public float[] maximum;
 
-	private int texture = -1;
+	private List<WaveformSprite> sprites = new ArrayList<WaveformSprite>();
 	private int w;
 	private int h;
 	private int pixelsPerSecond;
@@ -38,31 +42,43 @@ public class Waveform
 	public void render()
 	{
 		this.delete();
-		this.texture = GlStateManager.generateTexture();
 
-		BufferedImage image = new BufferedImage(this.w, this.h, BufferedImage.TYPE_INT_ARGB);
-		Graphics g = image.getGraphics();
+		int maxTextureSize = GL11.glGetInteger(GL11.GL_MAX_TEXTURE_SIZE) / 2;
+		int count = (int) Math.ceil(this.w / (double) maxTextureSize);
+		int offset = 0;
 
-		for (int i = 0; i < this.average.length; i++)
+		for (int t = 0; t < count; t++)
 		{
-			float average = this.average[i];
-			float maximum = this.maximum[i];
+			int texture = GlStateManager.generateTexture();
+			int width = Math.min(this.w - offset, maxTextureSize);
 
-			int maxHeight = (int) (maximum * this.h);
-			int avgHeight = (int) (average * (this.h - 1)) + 1;
+			BufferedImage image = new BufferedImage(width, this.h, BufferedImage.TYPE_INT_ARGB);
+			Graphics g = image.getGraphics();
 
-			if (avgHeight > 0)
+			for (int i = offset, j = 0, c = Math.min(offset + width, this.average.length); i < c; i++, j++)
 			{
-				g.setColor(java.awt.Color.WHITE);
-				g.drawRect(i, this.h / 2 - maxHeight / 2, 1, maxHeight);
-				g.setColor(java.awt.Color.LIGHT_GRAY);
-				g.drawRect(i, this.h / 2 - avgHeight / 2, 1, avgHeight);
+				float average = this.average[i];
+				float maximum = this.maximum[i];
+
+				int maxHeight = (int) (maximum * this.h);
+				int avgHeight = (int) (average * (this.h - 1)) + 1;
+
+				if (avgHeight > 0)
+				{
+					g.setColor(java.awt.Color.WHITE);
+					g.drawRect(j, this.h / 2 - maxHeight / 2, 1, maxHeight);
+					g.setColor(java.awt.Color.LIGHT_GRAY);
+					g.drawRect(j, this.h / 2 - avgHeight / 2, 1, avgHeight);
+				}
 			}
+
+			g.dispose();
+
+			TextureUtil.uploadTextureImage(texture, image);
+			this.sprites.add(new WaveformSprite(texture, width));
+
+			offset += maxTextureSize;
 		}
-
-		g.dispose();
-
-		TextureUtil.uploadTextureImage(this.texture, image);
 	}
 
 	public void populate(Wave data, int pixelsPerSecond, int height)
@@ -109,19 +125,17 @@ public class Waveform
 
 	public void delete()
 	{
-		GlStateManager.deleteTexture(this.texture);
+		for (WaveformSprite sprite : this.sprites)
+		{
+			GlStateManager.deleteTexture(sprite.texture);
+		}
 
-		this.texture = -1;
+		this.sprites.clear();
 	}
 
 	public boolean isCreated()
 	{
-		return this.texture != -1;
-	}
-
-	public int getTexture()
-	{
-		return this.texture;
+		return !this.sprites.isEmpty();
 	}
 
 	public int getPixelsPerSecond()
@@ -137,5 +151,56 @@ public class Waveform
 	public int getHeight()
 	{
 		return this.h;
+	}
+
+	public void draw(int x, int y, int u, int v, int w, int h)
+	{
+		draw(x, y, u, v, w, h, this.h);
+	}
+
+	/**
+	 * Draw the waveform out of multiple sprites of desired cropped region
+	 */
+	public void draw(int x, int y, int u, int v, int w, int h, int height)
+	{
+		int offset = 0;
+
+		for (WaveformSprite sprite : this.sprites)
+		{
+			int sw = sprite.width;
+			offset += sw;
+
+			if (w <= 0)
+			{
+				break;
+			}
+
+			if (u >= offset)
+			{
+				continue;
+			}
+
+			int so = offset - u;
+
+			GlStateManager.bindTexture(sprite.texture);
+			GuiDraw.drawBillboard(x, y, u, v, Math.min(w, so), h, sw, height);
+
+			x += so;
+			u += so;
+			w -= so;
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static class WaveformSprite
+	{
+		public final int texture;
+		public final int width;
+
+		public WaveformSprite(int texture, int width)
+		{
+			this.texture = texture;
+			this.width = width;
+		}
 	}
 }
