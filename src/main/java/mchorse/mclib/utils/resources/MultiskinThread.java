@@ -29,13 +29,13 @@ public class MultiskinThread implements Runnable
 		if (instance == null)
 		{
 			instance = new MultiskinThread();
-			instance.locations.add(location);
+			instance.addLocation(location);
 			thread = new Thread(instance);
 			thread.start();
 		}
 		else
 		{
-			instance.locations.add(location);
+			instance.addLocation(location);
 		}
 	}
 
@@ -75,18 +75,30 @@ public class MultiskinThread implements Runnable
 		return buffer;
 	}
 
+	public synchronized void addLocation(MultiResourceLocation location)
+	{
+		if (this.locations.contains(location))
+		{
+			return;
+		}
+
+		this.locations.add(location);
+	}
+
 	@Override
 	public void run()
 	{
 		while (!this.locations.isEmpty() && instance != null)
 		{
-			MultiResourceLocation location = this.locations.pop();
+			MultiResourceLocation location = this.locations.peek();
 			ITextureObject texture = ReflectionUtils.getTextures(Minecraft.getMinecraft().renderEngine).get(location);
 
-			if (texture != null)
+			try
 			{
-				try
+				if (texture != null)
 				{
+					this.locations.pop();
+
 					BufferedImage image = TextureProcessor.postProcess(location);
 					int w = image.getWidth();
 					int h = image.getHeight();
@@ -102,14 +114,12 @@ public class MultiskinThread implements Runnable
 						GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, w, h, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 					});
 				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
+
+				Thread.sleep(100);
 			}
-			else
+			catch (Exception e)
 			{
-				this.locations.add(location);
+				e.printStackTrace();
 			}
 		}
 

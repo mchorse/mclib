@@ -115,17 +115,7 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
         {
             MultiResourceLocation multi = (MultiResourceLocation) obj;
 
-            boolean same = this.children.size() == multi.children.size();
-
-            if (same)
-            {
-                for (int i = 0, c = this.children.size(); i < c; i++)
-                {
-                    same = same && Objects.equal(this.children.get(i), multi.children.get(i));
-                }
-            }
-
-            return same;
+            return Objects.equal(this.children, multi.children);
         }
 
         return super.equals(obj);
