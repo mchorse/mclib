@@ -72,6 +72,8 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement
             {
                 this.elements.add(index + 1, element);
             }
+
+            return true;
         }
 
         return false;
@@ -84,6 +86,8 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement
         if (index != -1 && element != null)
         {
             this.elements.add(index, element);
+
+            return true;
         }
 
         return false;
