@@ -326,7 +326,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     @Override
     public void mouseReleased(GuiContext context)
     {
-        if (this.dragging && !this.isDraggingTime() && context.mouseButton == 0)
+        if (this.dragging && !this.isDraggingTime() && context.mouseButton == 0 && McLib.enableTrackpadIncrements.get())
         {
             if (this.plusOne.isInside(context))
             {
@@ -442,20 +442,21 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
             Gui.drawRect(Math.min(fx, this.initialX), this.area.y + padding, Math.max(fx, this.initialX), this.area.ey() - padding, 0xff000000 + color);
         }
-        else
+
+        if (McLib.enableTrackpadIncrements.get())
         {
             GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
             this.plusOne.draw(plus ? 0x22ffffff : 0x0affffff, padding);
             this.minusOne.draw(minus ? 0x22ffffff : 0x0affffff, padding);
             GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-        }
 
-        GlStateManager.enableBlend();
-        ColorUtils.bindColor(minus ? 0xffffffff : 0x80ffffff);
-        Icons.MOVE_LEFT.render(x + 5, y + (h - 16) / 2);
-        ColorUtils.bindColor(plus ? 0xffffffff : 0x80ffffff);
-        Icons.MOVE_RIGHT.render(x + w - 13, y + (h - 16) / 2);
-        GlStateManager.disableBlend();
+            GlStateManager.enableBlend();
+            ColorUtils.bindColor(minus ? 0xffffffff : 0x80ffffff);
+            Icons.MOVE_LEFT.render(x + 5, y + (h - 16) / 2);
+            ColorUtils.bindColor(plus ? 0xffffffff : 0x80ffffff);
+            Icons.MOVE_RIGHT.render(x + w - 13, y + (h - 16) / 2);
+            GlStateManager.disableBlend();
+        }
 
         int width = MathUtils.clamp(this.font.getStringWidth(this.field.getText()), 0, w - 16);
 

@@ -49,6 +49,7 @@ public class McLib
     public static ValueInt primaryColor;
     public static ValueBoolean enableBorders;
     public static ValueBoolean enableCheckboxRendering;
+    public static ValueBoolean enableTrackpadIncrements;
     public static ValueBoolean enableGridRendering;
     public static ValueInt userIntefaceScale;
 
@@ -78,6 +79,7 @@ public class McLib
         debugPanel.invisible();
         enableBorders = builder.getBoolean("enable_borders", false);
         enableCheckboxRendering = builder.getBoolean("enable_checkbox_rendering", false);
+        enableTrackpadIncrements = builder.getBoolean("enable_trackpad_increments", true);
         enableGridRendering = builder.getBoolean("enable_grid_rendering", true);
         userIntefaceScale = builder.getInt("user_interface_scale", 2, 0, 4);
 
