@@ -353,7 +353,19 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
         if (this.isFocused())
         {
-            if (context.keyCode == Keyboard.KEY_TAB)
+            if (context.keyCode == Keyboard.KEY_UP)
+            {
+                this.setValueAndNotify(this.value + this.getValueModifier());
+
+                return true;
+            }
+            else if (context.keyCode == Keyboard.KEY_DOWN)
+            {
+                this.setValueAndNotify(this.value - this.getValueModifier());
+
+                return true;
+            }
+            else if (context.keyCode == Keyboard.KEY_TAB)
             {
                 context.focus(this, -1, GuiScreen.isShiftKeyDown() ? -1 : 1);
 
@@ -494,16 +506,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
                     if (dx != 0)
                     {
-                        double value = this.normal;
-
-                        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-                        {
-                            value = this.strong;
-                        }
-                        else if (Keyboard.isKeyDown(Keyboard.KEY_LMENU))
-                        {
-                            value = this.weak;
-                        }
+                        double value = this.getValueModifier();
 
                         double diff = (Math.abs(dx) - 3) * value;
                         double newValue = this.lastValue + (dx < 0 ? -diff : diff);
@@ -525,5 +528,25 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         GuiDraw.drawLockedArea(this);
 
         super.draw(context);
+    }
+
+    protected double getValueModifier()
+    {
+        double value = this.normal;
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+        {
+            value = this.strong;
+        }
+        else if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
+        {
+            value = this.increment;
+        }
+        else if (Keyboard.isKeyDown(Keyboard.KEY_LMENU))
+        {
+            value = this.weak;
+        }
+
+        return value;
     }
 }
