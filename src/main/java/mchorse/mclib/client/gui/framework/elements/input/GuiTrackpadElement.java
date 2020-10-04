@@ -247,6 +247,15 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         }
     }
 
+    @Override
+    public void unfocus(GuiContext context)
+    {
+        super.unfocus(context);
+
+        /* Reset the value in case it's out of range */
+        this.setValue(this.value);
+    }
+
     /**
      * Update the bounding box of this GUI field
      */
