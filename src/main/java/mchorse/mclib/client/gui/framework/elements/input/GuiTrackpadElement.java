@@ -19,6 +19,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -441,13 +442,12 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
             Gui.drawRect(Math.min(fx, this.initialX), this.area.y + padding, Math.max(fx, this.initialX), this.area.ey() - padding, 0xff000000 + color);
         }
-        else if (plus)
+        else
         {
-            this.plusOne.draw(0x22ffffff, padding);
-        }
-        else if (minus)
-        {
-            this.minusOne.draw(0x22ffffff, padding);
+            GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
+            this.plusOne.draw(plus ? 0x22ffffff : 0x0affffff, padding);
+            this.minusOne.draw(minus ? 0x22ffffff : 0x0affffff, padding);
+            GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
         }
 
         GlStateManager.enableBlend();
