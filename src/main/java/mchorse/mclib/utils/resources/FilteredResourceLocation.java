@@ -139,7 +139,7 @@ public class FilteredResourceLocation implements IWritableLocation
 
 		if (tag.hasKey("Scale"))
 		{
-			this.scale = tag.getInteger("Scale");
+			this.scale = tag.getFloat("Scale");
 		}
 
 		if (tag.hasKey("ScaleToLargest"))
