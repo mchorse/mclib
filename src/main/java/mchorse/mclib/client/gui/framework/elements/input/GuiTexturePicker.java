@@ -288,11 +288,6 @@ public class GuiTexturePicker extends GuiElement
         if (this.multiRL != null)
         {
             this.setMultiSkin(this.multiRL.children.get(0).path, true);
-
-            if (this.editor.isVisible())
-            {
-                this.toggleEditor();
-            }
         }
         else if (this.current != null)
         {
@@ -311,6 +306,11 @@ public class GuiTexturePicker extends GuiElement
 
     protected void setMultiSkin(ResourceLocation skin, boolean notify)
     {
+        if (this.editor.isVisible())
+        {
+            this.toggleEditor();
+        }
+
         boolean show = skin instanceof MultiResourceLocation;
 
         if (show)

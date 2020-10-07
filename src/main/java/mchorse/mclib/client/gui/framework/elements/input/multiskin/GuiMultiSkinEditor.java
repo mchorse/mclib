@@ -47,6 +47,9 @@ public class GuiMultiSkinEditor extends GuiCanvas
 	public GuiTrackpadElement pixelate;
 	public GuiToggleElement erase;
 
+	private int w;
+	private int h;
+
 	public GuiMultiSkinEditor(Minecraft mc, GuiTexturePicker picker)
 	{
 		super(mc);
@@ -103,20 +106,20 @@ public class GuiMultiSkinEditor extends GuiCanvas
 
 	public void resetView()
 	{
-		int w = 0;
-		int h = 0;
+		this.w = 0;
+		this.h = 0;
 
 		for (FilteredResourceLocation child : this.picker.multiRL.children)
 		{
 			this.mc.renderEngine.bindTexture(child.path);
-			w = Math.max(w, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH));
-			h = Math.max(h, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT));
+			this.w = Math.max(this.w, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH));
+			this.h = Math.max(this.h, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT));
 		}
 
 		this.scaleX.set(0, 2);
 		this.scaleY.set(0, 2);
-		this.scaleX.view(-w / 2, w / 2, this.area.w, 20);
-		this.scaleY.view(-h / 2, h / 2, this.area.h, 20);
+		this.scaleX.view(-this.w / 2, this.w / 2, this.area.w, 20);
+		this.scaleY.view(-this.h / 2, this.h / 2, this.area.h, 20);
 
 		double min = Math.min(this.scaleX.zoom, this.scaleY.zoom);
 
@@ -176,20 +179,15 @@ public class GuiMultiSkinEditor extends GuiCanvas
 	{
 		this.area.draw(0xff2f2f2f);
 
-		int w = 0;
-		int h = 0;
-
-		for (FilteredResourceLocation child : this.picker.multiRL.children)
-		{
-			this.mc.renderEngine.bindTexture(child.path);
-			w = Math.max(w, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH));
-			h = Math.max(h, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT));
-		}
-
-		Area area = this.calculate(-w / 2, -h / 2, w / 2, h / 2);
+		Area area = this.calculate(-this.w / 2, -this.h / 2, this.w / 2, this.h / 2);
 
 		Gui.drawRect(area.x - 1, area.y - 1, area.ex() + 1, area.ey() + 1, 0xff181818);
 		GlStateManager.color(1, 1, 1, 1);
+
+		if (this.picker.multiRL == null)
+		{
+			return;
+		}
 
 		GuiDraw.scissor(area.x, area.y, area.w, area.h, context);
 
@@ -218,8 +216,8 @@ public class GuiMultiSkinEditor extends GuiCanvas
 
 			if (child.scaleToLargest)
 			{
-				ww = w;
-				hh = h;
+				ww = this.w;
+				hh = this.h;
 			}
 			else if (child.scale != 1)
 			{
@@ -229,7 +227,7 @@ public class GuiMultiSkinEditor extends GuiCanvas
 
 			if (ww > 0 && hh > 0)
 			{
-				area = this.calculate(-w / 2 + child.shiftX, -h / 2 + child.shiftY, -w / 2 + child.shiftX + ww, -h / 2 + child.shiftY + hh);
+				area = this.calculate(-this.w / 2 + child.shiftX, -this.h / 2 + child.shiftY, -this.w / 2 + child.shiftX + ww, -this.h / 2 + child.shiftY + hh);
 
 				if (child == this.picker.currentFRL)
 				{
