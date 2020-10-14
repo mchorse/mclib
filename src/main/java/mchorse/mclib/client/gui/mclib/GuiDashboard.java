@@ -61,12 +61,23 @@ public class GuiDashboard extends GuiBase
 	}
 
 	@Override
+	public void onGuiClosed()
+	{
+		this.close();
+		super.onGuiClosed();
+	}
+
+	@Override
 	protected void closeScreen()
+	{
+		this.close();
+		super.closeScreen();
+	}
+
+	private void close()
 	{
 		this.panels.close();
 		this.wasClosed = true;
-
-		super.closeScreen();
 	}
 
 	@Override
