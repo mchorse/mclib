@@ -5,8 +5,8 @@ key.mclib.dashboard=仪表盘
 
 mclib.gui.ok=确定
 mclib.gui.cancel=取消
-mclib.gui.none=(无)
-mclib.gui.multi_skin=多皮肤
+mclib.gui.none=（无）
+mclib.gui.multi_skin=多重皮肤
 mclib.gui.no_data=无可用的数据...
 mclib.gui.open_folder=打开文件夹
 mclib.gui.pick_texture=选择材质
@@ -34,6 +34,20 @@ mclib.gui.keyframes.context.to_left=选中左侧手柄
 mclib.gui.keyframes.context.to_main=选中主手柄
 mclib.gui.keyframes.context.to_right=选中右侧手柄
 
+mclib.gui.multiskin.color=通过该颜色控件，你可以调整颜色（RGB）通道。最适用于白色/灰度图像。
+mclib.gui.multiskin.scale=缩放
+mclib.gui.multiskin.scale_to_largest=缩放至最大
+mclib.gui.multiskin.shift=偏移
+mclib.gui.multiskin.pixelate=像素化
+mclib.gui.multiskin.erase=擦除
+mclib.gui.multiskin.erase_tooltip=该功可以使用当前皮肤作为差值蒙板，也就是说，任何不透明的像素都会擦去其下层所有皮肤的像素。
+
+mclib.gui.color.favorite=收藏的颜色
+mclib.gui.color.recent=最近的颜色
+
+mclib.gui.color.context.favorites.add=添加至收藏
+mclib.gui.color.context.favorites.remove=移出收藏
+
 # Config
 mclib.config.title=McLib
 
@@ -43,13 +57,15 @@ mclib.config.appearance.tooltip=有关 GUI 和框架外观的常规选项
 mclib.config.appearance.primary_color=主色调
 mclib.config.comments.appearance.primary_color=GUI 系统中最常见的颜色
 mclib.config.appearance.enable_borders=按钮边框
-mclib.config.comments.appearance.enable_borders=按钮与其他控件是否显示边框?
+mclib.config.comments.appearance.enable_borders=按钮与其他控件是否显示边框？
 mclib.config.appearance.enable_checkbox_rendering=复选框
-mclib.config.comments.appearance.enable_checkbox_rendering=启用复选框呈现而不是开关元件 (凭个人喜好)
+mclib.config.comments.appearance.enable_checkbox_rendering=启用复选框呈现而不是开关元件（凭个人喜好）
+mclib.config.appearance.enable_trackpad_increments=触控板增量
+mclib.config.comments.appearance.enable_trackpad_increments=启用触控板控件上的 < 和 > 按钮（用于触控板值的递增）
 mclib.config.appearance.enable_grid_rendering=模型网络
 mclib.config.comments.appearance.enable_grid_rendering=启用网络地面呈现而非草方块地面
 mclib.config.appearance.user_interface_scale=GUI 尺寸
-mclib.config.comments.appearance.user_interface_scale=McHorse 的模组的 GUI 尺寸, 代替视频设置中的界面尺寸。若设为 0, 则会使用 Minecraft 的界面尺寸设置
+mclib.config.comments.appearance.user_interface_scale=McHorse 的模组的 GUI 尺寸，代替视频设置中的界面尺寸。若设为 0，则会使用 Minecraft 的界面尺寸设置
 
 mclib.config.tutorials.title=教学选项
 mclib.config.tutorials.tooltip=该分类提供了利于制作教程视频的选项
@@ -64,28 +80,34 @@ mclib.config.tutorials.keystroke_position=按键显示位置
 mclib.config.comments.tutorials.keystroke_position=允许更改按键显示行处于哪个角落 
 
 mclib.config.background.title=背景
-mclib.config.background.tooltip=背景选项, 例如使用的颜色和材质
+mclib.config.background.tooltip=背景选项，例如使用的颜色和材质
 
 mclib.config.background.image=图片
 mclib.config.comments.background.image=应用于所有菜单的背景图片
 mclib.config.background.color=颜色
-mclib.config.comments.background.color=应用于所有菜单的背景颜色。若指定了图片, 则会作为背景图片的色调
+mclib.config.comments.background.color=应用于所有菜单的背景颜色。若指定了图片，则会作为背景图片的色调
 
 mclib.config.scrollbars.title=滚动条
-mclib.config.scrollbars.tooltip=背景选项, 例如使用的颜色和材质
+mclib.config.scrollbars.tooltip=背景选项，例如使用的颜色和材质
 
 mclib.config.scrollbars.flat=扁平滚动条
 mclib.config.comments.scrollbars.flat=回退至扁平颜色外观的滚动条
 mclib.config.scrollbars.shadow=阴影颜色
 mclib.config.comments.scrollbars.shadow=用于设置滚动条阴影的颜色
 mclib.config.scrollbars.width=厚度
-mclib.config.comments.scrollbars.width=用于设置厚度 (滚动条宽度)
+mclib.config.comments.scrollbars.width=用于设置厚度（滚动条宽度）
+
+mclib.config.multiskin.title=多重皮肤
+mclib.config.multiskin.tooltip=多重皮肤功能相关选项
+
+mclib.config.multiskin.multithreaded=多线程处理
+mclib.config.comments.multiskin.multithreaded=允许您启用多重皮肤的多线程处理，可以适当解决卡顿问题，但需要更长的处理时间
 
 mclib.config.vanilla.title=原版属性微调
 mclib.config.vanilla.tooltip=关于对 Minecraft 的代码进行微调的选项
 
 mclib.config.vanilla.max_packet_size=最大数据包大小
-mclib.config.comments.vanilla.max_packet_size=用于配置模型数据包的最大大小 (以字节为单位)。警告: 请勿在公开服务器中修改该属性, 因为这会让服务器更容易遭到 DDoS。该选项是为单人模式设计的!
+mclib.config.comments.vanilla.max_packet_size=用于配置模型数据包的最大大小（以字节为单位）。警告：请勿在公开服务器中修改该属性，因为这会让服务器更容易遭到 DDoS。该选项是为单人模式设计的！
 
 # Interpolations
 mclib.interpolations.linear=线性
