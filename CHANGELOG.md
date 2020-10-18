@@ -1,3 +1,26 @@
+## Version 2.1
+
+This big update adds a lot of useful code (including WAV file parsing, loading and rendering), a handful of GUI element tweaks and new multi-skin features!
+
+* Added multi-skin editor, which includes new options:
+    * Scale - scales up and down a skin
+    * Shift - moves around a skin on the canvas
+    * Scale to largest - allows easily to scale to the largest multi-skin in the list
+    * Color - allows to multiply every pixel by this color, allowing hue shifting grayscale textures
+    * Pixelate - filter that allows to pixelate a texture
+    * Erase - option that allows to erase everything below using the current skin's opaque pixels as erase mask
+* Added list sorting to multi-skin
+* Added an option to asynchronously load multi-skin skins (enabled by default)
+* Added WAV parsing and waveform rendering
+* Added favorite and recent color palette GUI elements to color picker
+* Added arrow up and down keystrokes to increment and decrement, respectively, a value in trackpad fields (shift, ctrl and alt affect the value that is getting added or subtracted, suggested by Joziah2)
+* Added an option to disable increment button on trackpad fields
+* Fixed relative value editing of keyframes having horrible results
+* Fixed crash when emptying the text field in texture picker (reported by Tossler)
+* Fixed trackpad fields not indicating that value wasn't accepted after manually inputting out of range (reported by Tossler)
+* Fixed alpha colors not showing transparency when borders are enabled
+* Fixed dashboard not closing properly panels after switching to another GUI (instead of closing through Escape key) causing some panels to bug (reported by Chunk7)
+
 ## Version 2.0.3
 
 This minor patch features enormous improvements to keyframe editing GUIs.
