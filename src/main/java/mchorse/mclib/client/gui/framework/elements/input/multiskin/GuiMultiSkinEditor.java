@@ -6,6 +6,7 @@ import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTexturePicker;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiCanvas;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiCanvasEditor;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Area;
@@ -25,7 +26,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
-public class GuiMultiSkinEditor extends GuiCanvas
+public class GuiMultiSkinEditor extends GuiCanvasEditor
 {
 	public static Shader shader;
 	public static int uTexture;
@@ -37,7 +38,6 @@ public class GuiMultiSkinEditor extends GuiCanvas
 	public GuiTexturePicker picker;
 	public FilteredResourceLocation location;
 
-	public GuiElement editor;
 	public GuiColorElement color;
 	public GuiTrackpadElement scale;
 	public GuiToggleElement scaleToLargest;
@@ -47,17 +47,11 @@ public class GuiMultiSkinEditor extends GuiCanvas
 	public GuiTrackpadElement pixelate;
 	public GuiToggleElement erase;
 
-	private int w;
-	private int h;
-
 	public GuiMultiSkinEditor(Minecraft mc, GuiTexturePicker picker)
 	{
 		super(mc);
 
 		this.picker = picker;
-
-		this.editor = new GuiElement(mc);
-		this.editor.flex().relative(this).xy(1F, 1F).w(130).anchor(1F, 1F).column(5).stretch().vertical().padding(10);
 
 		this.color = new GuiColorElement(mc, (value) -> this.location.color = value);
 		this.color.picker.editAlpha();
@@ -79,7 +73,6 @@ public class GuiMultiSkinEditor extends GuiCanvas
 		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.scale")).background(0x88000000), this.scale, this.scaleToLargest);
 		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.shift")).background(0x88000000), this.shiftX, this.shiftY);
 		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.pixelate")).background(0x88000000), this.pixelate, this.erase);
-		this.add(this.editor);
 
 		if (shader == null)
 		{
@@ -106,25 +99,17 @@ public class GuiMultiSkinEditor extends GuiCanvas
 
 	public void resetView()
 	{
-		this.w = 0;
-		this.h = 0;
+		int w = 0;
+		int h = 0;
 
 		for (FilteredResourceLocation child : this.picker.multiRL.children)
 		{
 			this.mc.renderEngine.bindTexture(child.path);
-			this.w = Math.max(this.w, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH));
-			this.h = Math.max(this.h, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT));
+			w = Math.max(w, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH));
+			h = Math.max(h, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT));
 		}
 
-		this.scaleX.set(0, 2);
-		this.scaleY.set(0, 2);
-		this.scaleX.view(-this.w / 2, this.w / 2, this.area.w, 20);
-		this.scaleY.view(-this.h / 2, this.h / 2, this.area.h, 20);
-
-		double min = Math.min(this.scaleX.zoom, this.scaleY.zoom);
-
-		this.scaleX.zoom = min;
-		this.scaleY.zoom = min;
+		this.setSize(w, h);
 	}
 
 	public void setLocation(FilteredResourceLocation location)
@@ -175,36 +160,14 @@ public class GuiMultiSkinEditor extends GuiCanvas
 	}
 
 	@Override
-	protected void drawCanvas(GuiContext context)
+	protected boolean shouldDrawCanvas(GuiContext context)
 	{
-		this.area.draw(0xff2f2f2f);
+		return this.picker.multiRL != null;
+	}
 
-		Area area = this.calculate(-this.w / 2, -this.h / 2, this.w / 2, this.h / 2);
-
-		Gui.drawRect(area.x - 1, area.y - 1, area.ex() + 1, area.ey() + 1, 0xff181818);
-		GlStateManager.color(1, 1, 1, 1);
-
-		if (this.picker.multiRL == null)
-		{
-			return;
-		}
-
-		GuiDraw.scissor(area.x, area.y, area.w, area.h, context);
-
-		int ox = (this.area.x - area.x) % 16;
-		int oy = (this.area.y - area.y) % 16;
-
-		Area processed = new Area();
-		processed.copy(this.area);
-		processed.offsetX(ox < 0 ? 16 + ox : ox);
-		processed.offsetY(oy < 0 ? 16 + oy : oy);
-		processed.clamp(area);
-		Icons.CHECKBOARD.renderArea(area.x, area.y, area.w, area.h);
-
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
-		GlStateManager.enableBlend();
-		GlStateManager.enableAlpha();
-
+	@Override
+	protected void drawCanvasFrame(GuiContext context)
+	{
 		for (FilteredResourceLocation child : this.picker.multiRL.children)
 		{
 			this.mc.renderEngine.bindTexture(child.path);
@@ -227,7 +190,7 @@ public class GuiMultiSkinEditor extends GuiCanvas
 
 			if (ww > 0 && hh > 0)
 			{
-				area = this.calculate(-this.w / 2 + child.shiftX, -this.h / 2 + child.shiftY, -this.w / 2 + child.shiftX + ww, -this.h / 2 + child.shiftY + hh);
+				Area area = this.calculate(-this.w / 2 + child.shiftX, -this.h / 2 + child.shiftY, -this.w / 2 + child.shiftX + ww, -this.h / 2 + child.shiftY + hh);
 
 				if (child == this.picker.currentFRL)
 				{
@@ -260,26 +223,5 @@ public class GuiMultiSkinEditor extends GuiCanvas
 				}
 			}
 		}
-
-		GlStateManager.color(1F, 1F, 1F);
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-		GuiDraw.unscissor(context);
-	}
-
-	private Area calculate(int a, int b, int c, int d)
-	{
-		int x1 = this.toX(a);
-		int y1 = this.toY(b);
-		int x2 = this.toX(c);
-		int y2 = this.toY(d);
-
-		int x = x1;
-		int y = y1;
-		int fw = x2 - x;
-		int fh = y2 - y;
-
-		Area.SHARED.set(x, y, fw, fh);
-
-		return Area.SHARED;
 	}
 }
