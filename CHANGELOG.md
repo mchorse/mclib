@@ -1,3 +1,9 @@
+## Version 2.1.1
+
+This tiny update that provides some changes for Blockbuster.
+
+* Added GuiCanvasEditor class, which provides basic layout for image-like editors
+
 ## Version 2.1
 
 This big update adds a lot of useful code (including WAV file parsing, loading and rendering), a handful of GUI element tweaks and new multi-skin features!
