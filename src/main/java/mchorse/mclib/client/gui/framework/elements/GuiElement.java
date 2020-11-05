@@ -203,6 +203,32 @@ public class GuiElement extends Gui implements IGuiElement
         }
     }
 
+    public void addAfter(IGuiElement target, IGuiElement element)
+    {
+        if (this.children == null)
+        {
+            return;
+        }
+
+        if (this.children.addAfter(target, element))
+        {
+            this.markChild(element);
+        }
+    }
+
+    public void addBefore(IGuiElement target, IGuiElement element)
+    {
+        if (this.children == null)
+        {
+            return;
+        }
+
+        if (this.children.addBefore(target, element))
+        {
+            this.markChild(element);
+        }
+    }
+
     private void markChild(IGuiElement element)
     {
         if (element instanceof GuiElement)

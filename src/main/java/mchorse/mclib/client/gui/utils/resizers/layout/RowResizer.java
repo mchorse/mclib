@@ -6,6 +6,8 @@ import mchorse.mclib.client.gui.utils.resizers.AutomaticResizer;
 import mchorse.mclib.client.gui.utils.resizers.ChildResizer;
 import mchorse.mclib.client.gui.utils.resizers.IResizer;
 
+import java.util.List;
+
 public class RowResizer extends AutomaticResizer
 {
 	private int i;
@@ -79,10 +81,12 @@ public class RowResizer extends AutomaticResizer
 	@Override
 	public void apply(Area area)
 	{
-		this.i = this.x = this.w = 0;
-		this.count = this.resizers.size();
+		List<ChildResizer> resizers = this.getResizers();
 
-		for (ChildResizer resizer : this.resizers)
+		this.i = this.x = this.w = 0;
+		this.count = resizers.size();
+
+		for (ChildResizer resizer : resizers)
 		{
 			int w = Math.max(resizer.resizer == null ? 0 : resizer.resizer.getW(), 0);
 
@@ -97,7 +101,8 @@ public class RowResizer extends AutomaticResizer
 	@Override
 	public void apply(Area area, IResizer resizer, ChildResizer child)
 	{
-		int c = this.resizers.size();
+		List<ChildResizer> resizers = this.getResizers();
+		int c = resizers.size();
 		int original = this.parent.area.w - this.padding * 2 - this.margin * (c - 1);
 		int w = this.count > 0 ? (original - this.w) / this.count : 0;
 		int x = this.parent.area.x + this.padding + this.x;
@@ -149,9 +154,10 @@ public class RowResizer extends AutomaticResizer
 	{
 		if (this.resize)
 		{
-			int w = this.resizers.isEmpty() ? 0 : -this.margin;
+			List<ChildResizer> resizers = this.getResizers();
+			int w = resizers.isEmpty() ? 0 : -this.margin;
 
-			for (ChildResizer resizer : this.resizers)
+			for (ChildResizer resizer : resizers)
 			{
 				int cw = resizer.resizer == null ? 0 : resizer.resizer.getW();
 
@@ -172,9 +178,10 @@ public class RowResizer extends AutomaticResizer
 	@Override
 	public int getH()
 	{
+		List<ChildResizer> resizers = this.getResizers();
 		int h = 0;
 
-		for (ChildResizer child : this.resizers)
+		for (ChildResizer child : resizers)
 		{
 			h = child.resizer == null ? 0 : child.resizer.getH();
 		}

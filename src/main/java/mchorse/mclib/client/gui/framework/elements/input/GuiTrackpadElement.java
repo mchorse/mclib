@@ -19,6 +19,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -247,6 +248,15 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         }
     }
 
+    @Override
+    public void unfocus(GuiContext context)
+    {
+        super.unfocus(context);
+
+        /* Reset the value in case it's out of range */
+        this.setValue(this.value);
+    }
+
     /**
      * Update the bounding box of this GUI field
      */
@@ -307,7 +317,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
             }
         }
 
-        return this.area.isInside(context);
+        return context.mouseButton == 0 && this.area.isInside(context);
     }
 
     /**
@@ -316,7 +326,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     @Override
     public void mouseReleased(GuiContext context)
     {
-        if (this.dragging && !this.isDraggingTime() && context.mouseButton == 0)
+        if (this.dragging && !this.isDraggingTime() && context.mouseButton == 0 && McLib.enableTrackpadIncrements.get())
         {
             if (this.plusOne.isInside(context))
             {
@@ -344,7 +354,19 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
         if (this.isFocused())
         {
-            if (context.keyCode == Keyboard.KEY_TAB)
+            if (context.keyCode == Keyboard.KEY_UP)
+            {
+                this.setValueAndNotify(this.value + this.getValueModifier());
+
+                return true;
+            }
+            else if (context.keyCode == Keyboard.KEY_DOWN)
+            {
+                this.setValueAndNotify(this.value - this.getValueModifier());
+
+                return true;
+            }
+            else if (context.keyCode == Keyboard.KEY_TAB)
             {
                 context.focus(this, -1, GuiScreen.isShiftKeyDown() ? -1 : 1);
 
@@ -420,21 +442,21 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
             Gui.drawRect(Math.min(fx, this.initialX), this.area.y + padding, Math.max(fx, this.initialX), this.area.ey() - padding, 0xff000000 + color);
         }
-        else if (plus)
-        {
-            this.plusOne.draw(0x22ffffff, padding);
-        }
-        else if (minus)
-        {
-            this.minusOne.draw(0x22ffffff, padding);
-        }
 
-        GlStateManager.enableBlend();
-        ColorUtils.bindColor(minus ? 0xffffffff : 0x80ffffff);
-        Icons.MOVE_LEFT.render(x + 5, y + (h - 16) / 2);
-        ColorUtils.bindColor(plus ? 0xffffffff : 0x80ffffff);
-        Icons.MOVE_RIGHT.render(x + w - 13, y + (h - 16) / 2);
-        GlStateManager.disableBlend();
+        if (McLib.enableTrackpadIncrements.get())
+        {
+            GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
+            this.plusOne.draw(plus ? 0x22ffffff : 0x0affffff, padding);
+            this.minusOne.draw(minus ? 0x22ffffff : 0x0affffff, padding);
+            GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+
+            GlStateManager.enableBlend();
+            ColorUtils.bindColor(minus ? 0xffffffff : 0x80ffffff);
+            Icons.MOVE_LEFT.render(x + 5, y + (h - 16) / 2);
+            ColorUtils.bindColor(plus ? 0xffffffff : 0x80ffffff);
+            Icons.MOVE_RIGHT.render(x + w - 13, y + (h - 16) / 2);
+            GlStateManager.disableBlend();
+        }
 
         int width = MathUtils.clamp(this.font.getStringWidth(this.field.getText()), 0, w - 16);
 
@@ -485,16 +507,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
                     if (dx != 0)
                     {
-                        double value = this.normal;
-
-                        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
-                        {
-                            value = this.strong;
-                        }
-                        else if (Keyboard.isKeyDown(Keyboard.KEY_LMENU))
-                        {
-                            value = this.weak;
-                        }
+                        double value = this.getValueModifier();
 
                         double diff = (Math.abs(dx) - 3) * value;
                         double newValue = this.lastValue + (dx < 0 ? -diff : diff);
@@ -516,5 +529,25 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         GuiDraw.drawLockedArea(this);
 
         super.draw(context);
+    }
+
+    protected double getValueModifier()
+    {
+        double value = this.normal;
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+        {
+            value = this.strong;
+        }
+        else if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
+        {
+            value = this.increment;
+        }
+        else if (Keyboard.isKeyDown(Keyboard.KEY_LMENU))
+        {
+            value = this.weak;
+        }
+
+        return value;
     }
 }

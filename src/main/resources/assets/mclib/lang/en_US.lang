@@ -39,6 +39,14 @@ mclib.gui.multiskin.scale=Scale
 mclib.gui.multiskin.scale_to_largest=Scale to largest
 mclib.gui.multiskin.shift=Shift
 mclib.gui.multiskin.pixelate=Pixelate
+mclib.gui.multiskin.erase=Erase
+mclib.gui.multiskin.erase_tooltip=This feature allows to using current skin as difference mask, meaning, any opaque pixels will erase pixels of all skins underneath it.
+
+mclib.gui.color.favorite=Favorite colors
+mclib.gui.color.recent=Recent colors
+
+mclib.gui.color.context.favorites.add=Add to favorites
+mclib.gui.color.context.favorites.remove=Remove from favorites
 
 # Config
 mclib.config.title=McLib
@@ -52,6 +60,8 @@ mclib.config.appearance.enable_borders=Button borders
 mclib.config.comments.appearance.enable_borders=Should buttons and other elements have borders?
 mclib.config.appearance.enable_checkbox_rendering=Check boxes
 mclib.config.comments.appearance.enable_checkbox_rendering=Enable check box rendering instead of toggle element (matter of the taste)
+mclib.config.appearance.enable_trackpad_increments=Trackpad increments
+mclib.config.comments.appearance.enable_trackpad_increments=Enable < and > buttons on the trackpad field (which increment the trackpad value)
 mclib.config.appearance.enable_grid_rendering=Model grid
 mclib.config.comments.appearance.enable_grid_rendering=Enable grid rendering instead of the ground grass block
 mclib.config.appearance.user_interface_scale=GUI scale

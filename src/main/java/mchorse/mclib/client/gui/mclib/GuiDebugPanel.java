@@ -1,6 +1,7 @@
 package mchorse.mclib.client.gui.mclib;
 
 import mchorse.mclib.client.gui.framework.elements.GuiModelRenderer;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiDopeSheet;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiGraphView;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiKeyframesEditor;
@@ -11,13 +12,22 @@ import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.keyframes.Keyframe;
 import mchorse.mclib.utils.keyframes.KeyframeChannel;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
+import mchorse.mclib.utils.wav.Wave;
+import mchorse.mclib.utils.wav.WavePlayer;
+import mchorse.mclib.utils.wav.WaveReader;
+import mchorse.mclib.utils.wav.Waveform;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 
 public class GuiDebugPanel extends GuiDashboardPanel
 {
 	public GuiKeyframesEditor<GuiDopeSheet> dopesheet;
 	public GuiKeyframesEditor<GuiGraphView> graph;
 	public GuiModelRenderer renderer;
+	public GuiButtonElement play;
+
+	private WavePlayer player;
+	private Waveform wave;
 
 	public GuiDebugPanel(Minecraft mc, GuiDashboard dashboard)
 	{
@@ -73,9 +83,45 @@ public class GuiDebugPanel extends GuiDashboardPanel
 			protected void drawUserModel(GuiContext context)
 			{}
 		};
+		this.play = new GuiButtonElement(mc, IKey.str("Play me!"), this::play);
 
 		this.renderer.flex().relative(this).wh(1F, 1F);
-		this.add(this.renderer);
+		this.play.flex().relative(this).xy(10, 10).w(80);
+		this.add(this.renderer, this.play);
+	}
+
+	private void play(GuiButtonElement button)
+	{
+		try
+		{
+			if (this.player != null)
+			{
+				this.player.delete();
+			}
+
+			if (this.wave != null)
+			{
+				this.wave.delete();
+			}
+
+			WaveReader reader = new WaveReader();
+			Wave data = reader.read(this.getClass().getResourceAsStream("/assets/mclib/8.wav"));
+
+			if (data.getBytesPerSample() > 2)
+			{
+				data = data.convertTo16();
+			}
+
+			this.player = new WavePlayer().initialize(data);
+			this.player.play();
+
+			this.wave = new Waveform();
+			this.wave.generate(data, 20, 150);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -88,8 +134,32 @@ public class GuiDebugPanel extends GuiDashboardPanel
 	}
 
 	@Override
-	public boolean needsBackground()
+	public void draw(GuiContext context)
 	{
-		return true;
+		if (this.player != null && !this.player.isPlaying())
+		{
+			this.player.delete();
+			this.player = null;
+		}
+
+		super.draw(context);
+
+		if (this.wave != null)
+		{
+			int w = this.wave.getWidth();
+			int h = this.wave.getHeight();
+
+			GlStateManager.enableTexture2D();
+
+			GlStateManager.color(0, 0, 0, 1);
+			this.wave.draw(this.area.x + 10, this.area.my() - h / 2 - 2, 0, 0, w, h);
+
+			GlStateManager.color(0.25F, 0.25F, 0.25F, 1);
+			this.wave.draw(this.area.x + 10, this.area.my() - h / 2, 0, 0, 200, h);
+			GlStateManager.color(0.5F, 0.5F, 0.5F, 1);
+			this.wave.draw(this.area.x + 10 + 200, this.area.my() - h / 2, 200, 0, 200, h);
+			GlStateManager.color(1, 1, 1, 1);
+			this.wave.draw(this.area.x + 10 + 400, this.area.my() - h / 2, 400, 0, w, h);
+		}
 	}
 }

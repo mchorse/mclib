@@ -141,6 +141,49 @@ public class GuiDraw
 	    GlStateManager.enableTexture2D();
 	}
 
+	public static void drawVerticalGradientRect(int left, int top, int right, int bottom, int startColor, int endColor)
+	{
+		drawVerticalGradientRect(left, top, right, bottom, startColor, endColor, 0);
+	}
+
+	/**
+	 * Draws a rectangle with a vertical gradient between with specified
+	 * colors
+	 */
+	public static void drawVerticalGradientRect(int left, int top, int right, int bottom, int startColor, int endColor, float zLevel)
+	{
+		float a1 = (startColor >> 24 & 255) / 255.0F;
+		float r1 = (startColor >> 16 & 255) / 255.0F;
+		float g1 = (startColor >> 8 & 255) / 255.0F;
+		float b1 = (startColor & 255) / 255.0F;
+		float a2 = (endColor >> 24 & 255) / 255.0F;
+		float r2 = (endColor >> 16 & 255) / 255.0F;
+		float g2 = (endColor >> 8 & 255) / 255.0F;
+		float b2 = (endColor & 255) / 255.0F;
+
+		GlStateManager.disableTexture2D();
+		GlStateManager.enableBlend();
+		GlStateManager.disableAlpha();
+		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+
+		Tessellator tessellator = Tessellator.getInstance();
+		WorldRenderer buffer = tessellator.getWorldRenderer();
+
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+		buffer.pos(right, top, zLevel).color(r1, g1, b1, a1).endVertex();
+		buffer.pos(left, top, zLevel).color(r1, g1, b1, a1).endVertex();
+		buffer.pos(left, bottom, zLevel).color(r2, g2, b2, a2).endVertex();
+		buffer.pos(right, bottom, zLevel).color(r2, g2, b2, a2).endVertex();
+
+		tessellator.draw();
+
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+		GlStateManager.disableBlend();
+		GlStateManager.enableAlpha();
+		GlStateManager.enableTexture2D();
+	}
+
 	public static void drawBillboard(int x, int y, int u, int v, int w, int h, int textureW, int textureH)
 	{
 	    drawBillboard(x, y, u, v, w, h, textureW, textureH, 0);

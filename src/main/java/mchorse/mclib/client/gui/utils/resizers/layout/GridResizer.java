@@ -97,7 +97,7 @@ public class GridResizer extends AutomaticResizer
 			int y = 0;
 			int max = 0;
 
-			for (ChildResizer child : this.resizers)
+			for (ChildResizer child : this.getResizers())
 			{
 				if (i != 0 && i % this.items == 0)
 				{

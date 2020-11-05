@@ -14,8 +14,6 @@ public abstract class AutomaticResizer extends BaseResizer
 	public int padding;
 	public int height;
 
-	protected List<ChildResizer> resizers = new ArrayList<ChildResizer>();
-
 	public AutomaticResizer(GuiElement parent, int margin)
 	{
 		this.parent = parent;
@@ -42,7 +40,7 @@ public abstract class AutomaticResizer extends BaseResizer
 
 	public void reset()
 	{
-		this.resizers.clear();
+		/* ¯\_(ツ)_/¯ */
 	}
 
 	/* Child management */
@@ -64,17 +62,27 @@ public abstract class AutomaticResizer extends BaseResizer
 	{
 		ChildResizer child = new ChildResizer(this, element);
 
-		if (this.isCollecting())
-		{
-			this.resizers.add(child);
-		}
-
 		return child;
 	}
 
-	protected boolean isCollecting()
+	public List<ChildResizer> getResizers()
 	{
-		return true;
+		List<ChildResizer> resizers = new ArrayList<ChildResizer>();
+
+		for (IGuiElement element : this.parent.getChildren())
+		{
+			if (element instanceof GuiElement)
+			{
+				GuiElement elem = (GuiElement) element;
+
+				if (elem.resizer() instanceof ChildResizer)
+				{
+					resizers.add((ChildResizer) elem.resizer());
+				}
+			}
+		}
+
+		return resizers;
 	}
 
 	/* Miscellaneous */
@@ -98,19 +106,11 @@ public abstract class AutomaticResizer extends BaseResizer
 			return;
 		}
 
-		Iterator<ChildResizer> it = this.resizers.iterator();
+		IResizer resizer = child.resizer();
 
-		while (it.hasNext())
+		if (resizer instanceof ChildResizer)
 		{
-			ChildResizer resizer = it.next();
-
-			if (resizer.element == child)
-			{
-				it.remove();
-				resizer.element.resizer(resizer.resizer);
-
-				break;
-			}
+			child.resizer(((ChildResizer) resizer).resizer);
 		}
 	}
 

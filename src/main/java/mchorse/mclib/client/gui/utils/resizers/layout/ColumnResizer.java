@@ -147,7 +147,7 @@ public class ColumnResizer extends AutomaticResizer
 		{
 			int y = this.padding * 2;
 
-			for (ChildResizer child : this.resizers)
+			for (ChildResizer child : this.getResizers())
 			{
 				int h = child.resizer == null ? 0 : child.resizer.getH();
 

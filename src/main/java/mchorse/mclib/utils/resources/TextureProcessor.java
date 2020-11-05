@@ -1,19 +1,38 @@
 package mchorse.mclib.utils.resources;
 
+import mchorse.mclib.McLib;
+import mchorse.mclib.events.MultiskinProcessedEvent;
 import mchorse.mclib.utils.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.util.ArrayList;
 import java.util.List;
 
+@SideOnly(Side.CLIENT)
 public class TextureProcessor
 {
+	public static Pixels pixels = new Pixels();
+	public static Pixels target = new Pixels();
+
+	public static BufferedImage postProcess(MultiResourceLocation multi)
+	{
+		BufferedImage image = process(multi);
+
+		Minecraft.getMinecraft().addScheduledTask(() ->
+		{
+			McLib.EVENT_BUS.post(new MultiskinProcessedEvent(multi, image));
+		});
+
+		return image;
+	}
+
 	public static BufferedImage process(MultiResourceLocation multi)
 	{
 		IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
@@ -65,12 +84,19 @@ public class TextureProcessor
 
 			if (iw > 0 && ih > 0)
 			{
-				if (filter.color != 0xffffff || filter.pixelate > 1)
+				if (filter.erase)
 				{
-					processImage(child, filter);
+					processErase(image, child, filter, iw, ih);
 				}
+				else
+				{
+					if (filter.color != 0xffffff || filter.pixelate > 1)
+					{
+						processImage(child, filter);
+					}
 
-				g.drawImage(child, filter.shiftX, filter.shiftY, iw, ih, null);
+					g.drawImage(child, filter.shiftX, filter.shiftY, iw, ih, null);
+				}
 			}
 		}
 
@@ -80,49 +106,65 @@ public class TextureProcessor
 	}
 
 	/**
+	 * Apply erasing
+	 */
+	private static void processErase(BufferedImage image, BufferedImage child, FilteredResourceLocation filter, int iw, int ih)
+	{
+		BufferedImage mask = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+		Graphics g2 = mask.getGraphics();
+
+		g2.drawImage(child, filter.shiftX, filter.shiftY, iw, ih, null);
+		g2.dispose();
+
+		target.set(mask);
+		pixels.set(image);
+
+		for (int p = 0, c = target.getCount(); p < c; p++)
+		{
+			Color pixel = target.getColor(p);
+
+			if (pixel.a > 0.999F)
+			{
+				pixel = pixels.getColor(p);
+				pixel.a = 0;
+				pixels.setColor(p, pixel);
+			}
+		}
+	}
+
+	/**
 	 * Apply filters
 	 */
 	private static void processImage(BufferedImage child, FilteredResourceLocation frl)
 	{
-		byte[] pixels = ((DataBufferByte) child.getRaster().getDataBuffer()).getData();
-		int pixelLength = child.getAlphaRaster() != null ? 4 : 3;
-		int width = child.getWidth();
-		Color filter = new Color().set(frl.color, false);
-		float r, g, b;
+		pixels.set(child);
 
-		for (int i = 0, c = pixels.length / pixelLength; i < c; i++)
+		Color filter = new Color().set(frl.color);
+		Color pixel = new Color();
+
+		for (int i = 0, c = pixels.getCount(); i < c; i++)
 		{
-			int offset = 0;
-			int index = i * pixelLength;
+			pixel.copy(pixels.getColor(i));
 
-			if (pixelLength == 4)
+			if (pixels.hasAlpha())
 			{
-				if (((int) pixels[index + offset] & 0xff) == 0)
+				if (pixel.a <= 0)
 				{
 					continue;
 				}
-
-				offset += 1;
 			}
 
 			if (frl.pixelate > 1)
 			{
-				int x = i % width;
-				int y = i / width;
+				int x = pixels.toX(i);
+				int y = pixels.toY(i);
 				boolean origin = x % frl.pixelate == 0 && y % frl.pixelate == 0;
 
-				x = x - x % frl.pixelate;
-				y = y - y % frl.pixelate;
-				int target = (y * width + x) * pixelLength;
+				x -= x % frl.pixelate;
+				y -= y % frl.pixelate;
 
-				pixels[index] = pixels[target];
-				pixels[index + 1] = pixels[target + 1];
-				pixels[index + 2] = pixels[target + 2];
-
-				if (pixelLength == 4)
-				{
-					pixels[index + 3] = pixels[target + 3];
-				}
+				pixel.copy(pixels.getColor(x, y));
+				pixels.setColor(i, pixel);
 
 				if (!origin)
 				{
@@ -130,19 +172,11 @@ public class TextureProcessor
 				}
 			}
 
-			b = ((int) pixels[index + offset++] & 0xff) / 255F * filter.b;
-			g = ((int) pixels[index + offset++] & 0xff) / 255F * filter.g;
-			r = ((int) pixels[index + offset] & 0xff) / 255F * filter.r;
-			offset = 0;
-
-			if (pixelLength == 4)
-			{
-				offset += 1;
-			}
-
-			pixels[index + offset++] = (byte) (b * 0xff);
-			pixels[index + offset++] = (byte) (g * 0xff);
-			pixels[index + offset] = (byte) (r * 0xff);
+			pixel.r *= filter.r;
+			pixel.g *= filter.g;
+			pixel.b *= filter.b;
+			pixel.a *= filter.a;
+			pixels.setColor(i, pixel);
 		}
 	}
 }

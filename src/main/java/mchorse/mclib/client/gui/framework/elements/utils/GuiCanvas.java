@@ -24,7 +24,7 @@ public class GuiCanvas extends GuiElement
 
 	public int toX(double x)
 	{
-		return (int) (this.scaleX.to(x)) + this.area.mx();
+		return (int) Math.round(this.scaleX.to(x) + this.area.mx());
 	}
 
 	public double fromX(int mouseX)
@@ -34,7 +34,7 @@ public class GuiCanvas extends GuiElement
 
 	public int toY(double y)
 	{
-		return (int) (this.scaleY.to(y)) + this.area.my();
+		return (int) Math.round(this.scaleY.to(y) + this.area.my());
 	}
 
 	public double fromY(int mouseY)

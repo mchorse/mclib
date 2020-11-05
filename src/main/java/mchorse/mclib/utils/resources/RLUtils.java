@@ -54,7 +54,7 @@ public class RLUtils
             {
                 MultiskinThread.clear();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                ImageIO.write(TextureProcessor.process(multi), "png", stream);
+                ImageIO.write(TextureProcessor.postProcess(multi), "png", stream);
 
                 return new SimpleResource("McLib multiskin handler", multi, new ByteArrayInputStream(stream.toByteArray()), null, null);
             }

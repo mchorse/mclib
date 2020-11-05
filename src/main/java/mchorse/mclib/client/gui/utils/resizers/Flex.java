@@ -8,6 +8,8 @@ import mchorse.mclib.client.gui.utils.resizers.layout.ColumnResizer;
 import mchorse.mclib.client.gui.utils.resizers.layout.GridResizer;
 import mchorse.mclib.client.gui.utils.resizers.layout.RowResizer;
 
+import java.util.function.Supplier;
+
 /**
  * Flex class
  * 
@@ -92,6 +94,20 @@ public class Flex implements IResizer
         return this;
     }
 
+	public Flex x(Supplier<Float> value)
+	{
+		this.x.set(value, Measure.PIXELS, 0);
+
+		return this;
+	}
+
+	public Flex x(Supplier<Float> value, int offset)
+	{
+		this.x.set(value, Measure.PIXELS, offset);
+
+		return this;
+	}
+
     /* Y */
 
     public Flex y(int value)
@@ -115,6 +131,20 @@ public class Flex implements IResizer
         return this;
     }
 
+	public Flex y(Supplier<Float> value)
+	{
+		this.y.set(value, Measure.PIXELS, 0);
+
+		return this;
+	}
+
+	public Flex y(Supplier<Float> value, int offset)
+	{
+		this.y.set(value, Measure.PIXELS, offset);
+
+		return this;
+	}
+
     /* Width */
 
     public Flex w(int value)
@@ -137,6 +167,20 @@ public class Flex implements IResizer
 
         return this;
     }
+
+	public Flex w(Supplier<Float> value)
+	{
+		this.w.set(value, Measure.PIXELS, 0);
+
+		return this;
+	}
+
+	public Flex w(Supplier<Float> value, int offset)
+	{
+		this.w.set(value, Measure.PIXELS, offset);
+
+		return this;
+	}
 
     public Flex wTo(IResizer flex)
     {
@@ -192,6 +236,20 @@ public class Flex implements IResizer
 
         return this;
     }
+
+	public Flex h(Supplier<Float> value)
+	{
+		this.h.set(value, Measure.PIXELS, 0);
+
+		return this;
+	}
+
+	public Flex h(Supplier<Float> value, int offset)
+	{
+		this.h.set(value, Measure.PIXELS, offset);
+
+		return this;
+	}
 
     public Flex hTo(IResizer target)
     {
@@ -429,7 +487,7 @@ public class Flex implements IResizer
 
     public int getX()
     {
-        int value = (int) this.x.value;
+        int value = (int) this.x.getValue();
 
         if (this.relative != null)
         {
@@ -437,7 +495,7 @@ public class Flex implements IResizer
 
             if (this.x.unit == Measure.RELATIVE)
             {
-                value = this.relative.getX() + (int) (this.relative.getW() * this.x.value);
+                value = this.relative.getX() + (int) (this.relative.getW() * this.x.getValue());
             }
         }
 
@@ -453,7 +511,7 @@ public class Flex implements IResizer
 
     public int getY()
     {
-        int value = (int) this.y.value;
+        int value = (int) this.y.getValue();
 
         if (this.relative != null)
         {
@@ -461,7 +519,7 @@ public class Flex implements IResizer
 
             if (this.y.unit == Measure.RELATIVE)
             {
-                value = this.relative.getY() + (int) (this.relative.getH() * this.y.value);
+                value = this.relative.getY() + (int) (this.relative.getH() * this.y.getValue());
             }
         }
 
@@ -491,11 +549,11 @@ public class Flex implements IResizer
             return value;
         }
 
-        value = (int) this.w.value;
+        value = (int) this.w.getValue();
 
         if (this.relative != null && this.w.unit == Measure.RELATIVE)
         {
-            value = (int) (this.relative.getW() * this.w.value);
+            value = (int) (this.relative.getW() * this.w.getValue());
         }
 
         value = value + this.w.offset;
@@ -524,11 +582,11 @@ public class Flex implements IResizer
             return value;
         }
 
-        value = (int) this.h.value;
+        value = (int) this.h.getValue();
 
         if (this.relative != null && this.h.unit == Measure.RELATIVE)
         {
-            value = (int) (this.relative.getH() * this.h.value);
+            value = (int) (this.relative.getH() * this.h.getValue());
         }
 
         value = value + this.h.offset;
@@ -546,13 +604,31 @@ public class Flex implements IResizer
      */
     public static class Unit
     {
-        public float value;
+        private float value;
+        private Supplier<Float> valueConsumer;
         public int offset;
         public int max;
         public float anchor;
         public Measure unit = Measure.PIXELS;
         public IResizer target;
         public float targetAnchor;
+
+        public void set(Supplier<Float> value, Measure unit)
+        {
+            this.set(value, unit, 0);
+        }
+
+        public void set(Supplier<Float> value, Measure unit, int offset)
+        {
+            this.valueConsumer = value;
+            this.unit = unit;
+            this.offset = offset;
+
+            /* Reset the value and target */
+            this.value = 0;
+            this.target = null;
+            this.targetAnchor = 0;
+        }
 
         public void set(float value, Measure unit)
         {
@@ -570,6 +646,11 @@ public class Flex implements IResizer
             this.targetAnchor = 0;
         }
 
+        public float getValue()
+        {
+            return this.valueConsumer == null ? this.value : this.valueConsumer.get();
+        }
+
         public int normalize(int value)
         {
             return this.max > 0 ? Math.min(value, this.max) : value;
@@ -584,8 +665,8 @@ public class Flex implements IResizer
      * {@link Measure#RELATIVE} are percentage (or rather a scalar 
      * between 0 and 1 equaling to 0% to 100%). 
      */
-    public static enum Measure
+    public enum Measure
     {
-        PIXELS, RELATIVE;
+        PIXELS, RELATIVE
     }
 }
