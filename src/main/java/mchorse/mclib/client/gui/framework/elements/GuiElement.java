@@ -453,10 +453,9 @@ public class GuiElement extends Gui implements IGuiElement
             return false;
         }
 
-        GuiElement last = this;
-        GuiElement element = this.getParent();
+        GuiElement element = this;
 
-        while (element != null)
+        while (true)
         {
             if (!element.isVisible())
             {
@@ -470,11 +469,15 @@ public class GuiElement extends Gui implements IGuiElement
                 return false;
             }
 
-            last = element;
+            if (parent == null)
+            {
+                break;
+            }
+
             element = parent;
         }
 
-        return last instanceof GuiBase.GuiRootElement;
+        return element instanceof GuiBase.GuiRootElement;
     }
 
     /* Overriding those methods so it would be much easier to 
