@@ -39,6 +39,7 @@ public class GuiConfig extends GuiDashboardPanel
 		this.reload.tooltip(IKey.lang("mclib.gui.config.reload_tooltip"), Direction.BOTTOM);
 		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.get(0).value));
 		this.options = new GuiScrollElement(mc, ScrollArea.ScrollDirection.HORIZONTAL);
+		this.options.scroll.scrollSpeed = 51;
 
 		this.reload.flex().relative(this).set(110 - 14, 12, 16, 16);
 		this.mods.flex().relative(this).set(10, 35, 100, 0).h(1, -45);
