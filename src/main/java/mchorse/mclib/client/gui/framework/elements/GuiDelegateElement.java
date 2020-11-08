@@ -95,6 +95,13 @@ public class GuiDelegateElement<T extends GuiElement> extends GuiElement
     @Override
     public void resize()
     {
+        /* In case in another GUI */
+        if (this.delegate != null && this.delegate.parent != this)
+        {
+            this.delegate.removeFromParent();
+            this.delegate.parent = this;
+        }
+
         if (this.resizer != null)
         {
             this.resizer.apply(this.area);
