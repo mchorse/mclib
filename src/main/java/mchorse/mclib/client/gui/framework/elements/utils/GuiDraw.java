@@ -213,6 +213,35 @@ public class GuiDraw
 		buffer.pos(x, y, z).tex(u * tw, v * th).endVertex();
 	}
 
+	public static void drawBillboard(int x, int y, int u, int v, int w, int h, int textureW, int textureH, int tu, int tv)
+	{
+		drawBillboard(x, y, u, v, w, h, textureW, textureH, tu, tv, 0);
+	}
+
+	/**
+	 * Draw a textured quad with given UV, dimensions and custom texture size
+	 */
+	public static void drawBillboard(int x, int y, int u, int v, int w, int h, int textureW, int textureH, int tu, int tv, float z)
+	{
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		drawBillboard(buffer, x, y, u, v, w, h, textureW, textureH, tu, tv, z);
+		tessellator.draw();
+	}
+
+	public static void drawBillboard(BufferBuilder buffer, int x, int y, int u, int v, int w, int h, int textureW, int textureH, int tu, int tv, float z)
+	{
+		float tw = 1F / textureW;
+		float th = 1F / textureH;
+
+		buffer.pos(x, y + h, z).tex(u * tw, tv * th).endVertex();
+		buffer.pos(x + w, y + h, z).tex(tu * tw, tv * th).endVertex();
+		buffer.pos(x + w, y, z).tex(tu * tw, v * th).endVertex();
+		buffer.pos(x, y, z).tex(u * tw, v * th).endVertex();
+	}
+
 	public static int drawBorder(Area area, int color)
 	{
 		if (!McLib.enableBorders.get())

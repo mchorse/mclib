@@ -6,8 +6,9 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,8 @@ public class Waveform
 			g.dispose();
 
 			TextureUtil.uploadTextureImage(texture, image);
+			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+
 			this.sprites.add(new WaveformSprite(texture, width));
 
 			offset += maxTextureSize;
@@ -151,6 +154,11 @@ public class Waveform
 	public int getHeight()
 	{
 		return this.h;
+	}
+
+	public List<WaveformSprite> getSprites()
+	{
+		return this.sprites;
 	}
 
 	public void draw(int x, int y, int u, int v, int w, int h)

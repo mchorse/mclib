@@ -1,12 +1,22 @@
 package mchorse.mclib.utils;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.List;
 import java.util.Map;
 
+import mchorse.mclib.utils.files.GlobalTree;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourcePack;
+import net.minecraft.client.resources.SimpleReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ReflectionUtils
 {
@@ -70,5 +80,32 @@ public class ReflectionUtils
                 e.printStackTrace();
             }
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static boolean registerResourcePack(IResourcePack pack)
+    {
+        try
+        {
+            Field field = FMLClientHandler.class.getDeclaredField("resourcePackList");
+            field.setAccessible(true);
+
+            List<IResourcePack> packs = (List<IResourcePack>) field.get(FMLClientHandler.instance());
+            packs.add(pack);
+            IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
+
+            if (manager instanceof SimpleReloadableResourceManager)
+            {
+                ((SimpleReloadableResourceManager) manager).reloadResourcePack(pack);
+            }
+
+            return false;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
