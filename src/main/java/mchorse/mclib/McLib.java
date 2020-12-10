@@ -9,7 +9,8 @@ import mchorse.mclib.config.values.ValueRL;
 import mchorse.mclib.events.RegisterConfigEvent;
 import mchorse.mclib.math.IValue;
 import mchorse.mclib.math.MathBuilder;
-import mchorse.mclib.math.Variable;
+import mchorse.mclib.math.Operation;
+import mchorse.mclib.math.Operator;
 import mchorse.mclib.utils.PayloadASM;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -134,9 +135,25 @@ public class McLib
 
     public static void main(String[] args) throws Exception
     {
-        MathBuilder test = new MathBuilder();
-        IValue value = test.parse("2 + 2");
+        Operator.DEBUG = true;
+        MathBuilder builder = new MathBuilder();
 
-        System.out.println(value.get());
+        test(builder, "1 - 2 * 3 + 4 ", 1 - 2 * 3 + 4  );
+        test(builder, "2 * 3 - 8 + 7 ", 2 * 3 - 8 + 7  );
+        test(builder, "3 - 7 + 2 * 4 ", 3 - 7 + 2 * 4  );
+        test(builder, "8 / 4 - 3 * 10", 8 / 4 - 3 * 10 );
+        test(builder, "2 - 4 * 5 / 8 ", 2 - 4 * 5 / 8D );
+        test(builder, "3 / 4 * 8 - 10", 3 / 4D * 8 - 10);
+        test(builder, "2 * 3 / 4 * 5 ", 2D * 3 / 4 * 5 );
+        test(builder, "2 + 3 - 4 + 5 ", 2 + 3 - 4 + 5  );
+        test(builder, "7 - 2 ^ 4 - 4 * 5 + 15 ^ 2", 7 - Math.pow(2, 4) - 4 * 5 + Math.pow(15, 2));
+    }
+
+    public static void test(MathBuilder builder, String expression, double result) throws Exception
+    {
+        IValue value = builder.parse(expression);
+
+        System.out.println(expression + " = " + value.get() + " (" + result + ") is " + Operation.equals(value.get(), result));
+        System.out.println(value.toString() + "\n");
     }
 }

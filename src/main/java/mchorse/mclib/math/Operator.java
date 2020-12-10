@@ -8,6 +8,8 @@ package mchorse.mclib.math;
  */
 public class Operator implements IValue
 {
+    public static boolean DEBUG = false;
+
     public Operation operation;
     public IValue a;
     public IValue b;
@@ -28,6 +30,11 @@ public class Operator implements IValue
     @Override
     public String toString()
     {
+        if (DEBUG)
+        {
+            return "(" + a.toString() + " " + this.operation.sign + " " + b.toString() + ")";
+        }
+
         return a.toString() + " " + this.operation.sign + " " + b.toString();
     }
 }

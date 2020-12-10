@@ -19,7 +19,6 @@ import mchorse.mclib.math.functions.rounding.Trunc;
 import mchorse.mclib.math.functions.utility.Lerp;
 import mchorse.mclib.math.functions.utility.LerpRotate;
 import mchorse.mclib.math.functions.utility.Random;
-import mchorse.mclib.utils.MathUtils;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -288,56 +287,96 @@ public class MathBuilder
         }
 
         /* Any other math expression */
-        int firstOp = -1;
-        int secondOp = -1;
+        int lastOp = this.seekLastOperator(symbols);
+        int op = lastOp;
 
-        /* Find next two operators' indices */
-        for (int i = 0; i < size; i++)
+        while (op != -1)
+        {
+            int leftOp = this.seekLastOperator(symbols, op - 1);
+
+            if (leftOp != -1)
+            {
+                Operation left = this.operationForOperator((String) symbols.get(leftOp));
+                Operation right = this.operationForOperator((String) symbols.get(op));
+
+                if (right.value > left.value)
+                {
+                    IValue leftValue = this.parseSymbols(symbols.subList(0, leftOp));
+                    IValue rightValue = this.parseSymbols(symbols.subList(leftOp + 1, size));
+
+                    return new Operator(left, leftValue, rightValue);
+                }
+                else if (left.value > right.value)
+                {
+                    Operation initial = this.operationForOperator((String) symbols.get(lastOp));
+
+                    if (initial.value < left.value)
+                    {
+                        IValue leftValue = this.parseSymbols(symbols.subList(0, lastOp));
+                        IValue rightValue = this.parseSymbols(symbols.subList(lastOp + 1, size));
+
+                        return new Operator(initial, leftValue, rightValue);
+                    }
+
+                    IValue leftValue = this.parseSymbols(symbols.subList(0, op));
+                    IValue rightValue = this.parseSymbols(symbols.subList(op + 1, size));
+
+                    return new Operator(right, leftValue, rightValue);
+                }
+            }
+
+            op = leftOp;
+        }
+
+        Operation operation = this.operationForOperator((String) symbols.get(lastOp));
+
+        return new Operator(operation, this.parseSymbols(symbols.subList(0, lastOp)), this.parseSymbols(symbols.subList(lastOp + 1, size)));
+    }
+
+    protected int seekLastOperator(List<Object> symbols)
+    {
+        return this.seekLastOperator(symbols, symbols.size() - 1);
+    }
+
+    /**
+     * Find the index of the first operator
+     */
+    protected int seekLastOperator(List<Object> symbols, int offset)
+    {
+        for (int i = offset; i >= 0; i--)
         {
             Object o = symbols.get(i);
 
             if (this.isOperator(o))
             {
-                if (firstOp == -1)
-                {
-                    firstOp = i;
-                }
-                else
-                {
-                    secondOp = i;
-                    break;
-                }
+                return i;
             }
         }
 
-        /* And finally construct the math operation */
-        Operation op = this.operationForOperator((String) symbols.get(firstOp));
+        return -1;
+    }
 
-        if (secondOp == -1)
+    protected int seekFirstOperator(List<Object> symbols)
+    {
+        return this.seekFirstOperator(symbols, 0);
+    }
+
+    /**
+     * Find the index of the first operator
+     */
+    protected int seekFirstOperator(List<Object> symbols, int offset)
+    {
+        for (int i = offset, size = symbols.size(); i < size; i++)
         {
-            IValue left = this.parseSymbols(symbols.subList(0, firstOp));
-            IValue right = this.parseSymbols(symbols.subList(firstOp + 1, MathUtils.clamp(firstOp + 3, 0, size)));
+            Object o = symbols.get(i);
 
-            return new Operator(op, left, right);
-        }
-        else if (secondOp > firstOp)
-        {
-            Operation compareTo = this.operationForOperator((String) symbols.get(secondOp));
-            IValue left = this.parseSymbols(symbols.subList(0, firstOp));
-
-            if (compareTo.value > op.value)
+            if (this.isOperator(o))
             {
-                return new Operator(op, left, this.parseSymbols(symbols.subList(firstOp + 1, size)));
-            }
-            else
-            {
-                IValue right = this.parseSymbols(symbols.subList(firstOp + 1, secondOp));
-
-                return new Operator(compareTo, new Operator(op, left, right), this.parseSymbols(symbols.subList(secondOp + 1, size)));
+                return i;
             }
         }
 
-        throw new Exception("Given symbols couldn't be parsed! " + symbols);
+         return -1;
     }
 
     /**
