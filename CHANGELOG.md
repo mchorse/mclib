@@ -5,7 +5,7 @@ This patch fix features some bug fixes that are required for the release of my n
 * Added `RenderLightmap` utility class that allows setting hurt colors
 * Added `ReflectionUtils.registerResourcePack(IResourcePack)` to register resource custom packs
 * Changed scrolling speed in mod options GUI to `51` pixels per mouse wheel scroll 
-* Fixed `GuiElement.canBeSeen()` skipping first parent when checking for visibilit
+* Fixed `GuiElement.canBeSeen()` skipping first parent when checking for visibility
 * Fixed wrong order of math expression parsing resulting into wrong calculations
 
 ## Version 2.1.1
