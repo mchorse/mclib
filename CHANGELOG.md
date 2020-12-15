@@ -1,3 +1,13 @@
+## Version 2.1.2
+
+This patch fix features some bug fixes that are required for the release of my new Chameleon mod.
+
+* Added `RenderLightmap` utility class that allows setting hurt colors
+* Added `ReflectionUtils.registerResourcePack(IResourcePack)` to register resource custom packs
+* Changed scrolling speed in mod options GUI to `51` pixels per mouse wheel scroll
+* Fixed `GuiElement.canBeSeen()` skipping first parent when checking for visibilit
+* Fixed wrong order of math expression parsing resulting into wrong calcuations
+
 ## Version 2.1.1
 
 This tiny update that provides some changes for Blockbuster.

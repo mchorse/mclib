@@ -1,6 +1,7 @@
 {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/mchorses-mclib/",
     "1.12.2": {
+        "2.1.2": "This patch fix features some bug fixes that are required for the release of my new Chameleon mod.",
         "2.1.1": "This tiny update that provides some changes for Blockbuster.",
         "2.1": "This big update adds a lot of useful code (including WAV file parsing, loading and rendering), a handful of GUI element tweaks and new multi-skin features!",
         "2.0.3": "This minor patch features enormous improvements to keyframe editing GUIs.",
@@ -29,8 +30,8 @@
     },
     
     "promos": {
-        "1.12.2-latest": "2.1.1",
-        "1.12.2-recommended": "2.1.1",
+        "1.12.2-latest": "2.1.2",
+        "1.12.2-recommended": "2.1.2",
         "1.10.2-latest": "1.0.4",
         "1.10.2-recommended": "1.0.4",
         "1.11.2-latest": "1.0.4",

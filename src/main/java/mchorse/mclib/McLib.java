@@ -147,6 +147,7 @@ public class McLib
         test(builder, "2 * 3 / 4 * 5 ", 2D * 3 / 4 * 5 );
         test(builder, "2 + 3 - 4 + 5 ", 2 + 3 - 4 + 5  );
         test(builder, "7 - 2 ^ 4 - 4 * 5 + 15 ^ 2", 7 - Math.pow(2, 4) - 4 * 5 + Math.pow(15, 2));
+        test(builder, "5 -(10 + 20)", 5 -(10 + 20));
     }
 
     public static void test(MathBuilder builder, String expression, double result) throws Exception
