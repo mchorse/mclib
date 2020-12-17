@@ -372,13 +372,13 @@ public class GuiGraphView extends GuiKeyframeElement
         /* Scaling X */
         if (x && !y || none)
         {
-            this.scaleX.zoom(Math.copySign(this.getZoomFactor(this.scaleX.zoom), scroll), 0.01F, 50F);
+            this.scaleX.zoom(Math.copySign(this.getZoomFactor(this.scaleX.zoom), scroll), this.minZoom, this.maxZoom);
         }
 
         /* Scaling Y */
         if (y && !x || none)
         {
-            this.scaleY.zoom(Math.copySign(this.getZoomFactor(this.scaleY.zoom), scroll), 0.01F, 50F);
+            this.scaleY.zoom(Math.copySign(this.getZoomFactor(this.scaleY.zoom), scroll), this.minZoom, this.maxZoom);
         }
     }
 

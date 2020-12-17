@@ -24,6 +24,9 @@ public abstract class GuiKeyframeElement extends GuiElement
     public Selection which = Selection.NOT_SELECTED;
     public int duration;
 
+    public double minZoom = 0.01D;
+    public double maxZoom = 1000D;
+
     public boolean sliding;
     public boolean dragging;
     protected boolean moving;
@@ -255,18 +258,19 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     protected void zoom(int scroll)
     {
-        this.scaleX.zoom(Math.copySign(this.getZoomFactor(this.scaleX.zoom), scroll), 0.01F, 50F);
+        this.scaleX.zoom(Math.copySign(this.getZoomFactor(this.scaleX.zoom), scroll), this.minZoom, this.maxZoom);
     }
 
     protected double getZoomFactor(double zoom)
     {
-        double factor = 0;
+        double factor = 5D;
 
-        if (zoom < 0.2F) factor = 0.005F;
-        else if (zoom < 1.0F) factor = 0.025F;
-        else if (zoom < 2.0F) factor = 0.1F;
-        else if (zoom < 15.0F) factor = 0.5F;
-        else if (zoom <= 50.0F) factor = 1F;
+        if (zoom < 0.2F) factor = 0.005D;
+        else if (zoom < 1) factor = 0.025D;
+        else if (zoom < 2) factor = 0.1D;
+        else if (zoom < 15) factor = 0.5D;
+        else if (zoom <= 50) factor = 1D;
+        else if (zoom <= 250) factor = 2.5D;
 
         return factor;
     }
