@@ -89,7 +89,7 @@ public class Keybind
 		{
 			for (int key : this.heldKeys)
 			{
-				if (!Keyboard.isKeyDown(key))
+				if (!this.isKeyDown(key))
 				{
 					return false;
 				}
@@ -102,6 +102,24 @@ public class Keybind
 		}
 
 		return true;
+	}
+
+	protected boolean isKeyDown(int key)
+	{
+		if (key == Keyboard.KEY_LSHIFT || key == Keyboard.KEY_RSHIFT)
+		{
+			return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+		}
+		else if (key == Keyboard.KEY_LCONTROL || key == Keyboard.KEY_RCONTROL)
+		{
+			return Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
+		}
+		else if (key == Keyboard.KEY_LMENU || key == Keyboard.KEY_RMENU)
+		{
+			return Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU);
+		}
+
+		return Keyboard.isKeyDown(key);
 	}
 
 	public boolean isActive()
