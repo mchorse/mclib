@@ -22,7 +22,7 @@ public class RowResizer extends AutomaticResizer
 	private int preferred = -1;
 
 	/**
-	 * Default height for row elements if not specified by resizer
+	 * Default width for row elements if not specified by resizer
 	 */
 	private int width;
 

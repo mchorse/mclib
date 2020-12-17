@@ -21,6 +21,8 @@ public abstract class GuiModal extends GuiElement
     public IKey label;
     public int y;
 
+    public GuiElement bar;
+
     public static boolean hasModal(GuiElement parent)
     {
         for (IGuiElement element : parent.getChildren())
@@ -68,6 +70,10 @@ public abstract class GuiModal extends GuiElement
     public GuiModal(Minecraft mc, IKey label)
     {
         super(mc);
+
+        this.bar = new GuiElement(mc);
+        this.bar.flex().relative(this).y(1F).w(1F).h(40).anchorY(1F).row(10).padding(10);
+        this.add(this.bar);
 
         this.label = label;
         this.markContainer();
