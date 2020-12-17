@@ -54,4 +54,5 @@ public class Icons
 	public static final Icon INVISIBLE = new Icon(ICONS, 32, 32);
 
 	public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240, 16, 16);
+	public static final Icon CURSOR = new Icon(ICONS, 16, 240, 16, 16);
 }

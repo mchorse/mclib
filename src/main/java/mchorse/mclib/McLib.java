@@ -54,7 +54,8 @@ public class McLib
     public static ValueBoolean enableGridRendering;
     public static ValueInt userIntefaceScale;
 
-    public static ValueBoolean enableMouseRendering;
+    public static ValueBoolean enableCursorRendering;
+    public static ValueBoolean enableMouseButtonRendering;
     public static ValueBoolean enableKeystrokeRendering;
     public static ValueInt keystrokeOffset;
     public static ValueInt keystrokeMode;
@@ -88,7 +89,8 @@ public class McLib
         favoriteColors.invisible();
         builder.register(favoriteColors);
 
-        enableMouseRendering = builder.category("tutorials").getBoolean("enable_mouse_rendering", false);
+        enableCursorRendering = builder.category("tutorials").getBoolean("enable_mouse_rendering", false);
+        enableMouseButtonRendering = builder.getBoolean("enable_mouse_buttons_rendering", false);
         enableKeystrokeRendering = builder.getBoolean("enable_keystrokes_rendering", false);
         keystrokeOffset = builder.getInt("keystroke_offset", 10, 0, 20);
         keystrokeMode = builder.getInt("keystroke_position", 1).modes(
