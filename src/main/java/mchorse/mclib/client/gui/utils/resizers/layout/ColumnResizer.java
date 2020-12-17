@@ -34,6 +34,11 @@ public class ColumnResizer extends AutomaticResizer
 	 */
 	private boolean scroll;
 
+	/**
+	 * Place elements after it reached the bottom on the left, instead of the right
+	 */
+	private boolean flip;
+
 	public static ColumnResizer apply(GuiElement element, int margin)
 	{
 		ColumnResizer resizer = new ColumnResizer(element, margin);
@@ -76,6 +81,13 @@ public class ColumnResizer extends AutomaticResizer
 		return this;
 	}
 
+	public ColumnResizer flip()
+	{
+		this.flip = true;
+
+		return this;
+	}
+
 	@Override
 	public void apply(Area area)
 	{
@@ -107,7 +119,7 @@ public class ColumnResizer extends AutomaticResizer
 
 		if (!this.vertical && this.y + h > this.parent.area.h - this.padding * 2)
 		{
-			this.x += this.w + this.padding;
+			this.x += (this.w + this.padding) * (this.flip ? -1 : 1);
 			this.y = this.w = 0;
 		}
 
