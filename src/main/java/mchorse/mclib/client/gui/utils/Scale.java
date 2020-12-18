@@ -103,7 +103,11 @@ public class Scale
             double min = this.getMinValue();
             double max = this.getMaxValue();
 
-            if (min < this.lockMin)
+            if (min < this.lockMin && max > this.lockMax)
+            {
+                this.view(this.lockMin, this.lockMax);
+            }
+            else if (min < this.lockMin)
             {
                 this.shift(this.lockMin, this.lockMin + distance);
             }
@@ -218,6 +222,11 @@ public class Scale
 
     public void viewOffset(double min, double max, double length, double offset)
     {
+        if (length <= 0)
+        {
+            return;
+        }
+
         this.zoom = 1 / ((max - min) / length);
 
         if (offset != 0)
