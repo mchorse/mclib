@@ -154,9 +154,9 @@ public class InputRenderer
 
                 int color = McLib.primaryColor.get();
 
-                GuiDraw.drawDropShadow(x, y, x + 4, y + 16, 2, 0x66000000 + color, color);
-                Gui.drawRect(x, y, x + 4, y + 16, 0xff000000);
-                Gui.drawRect(x + 1, y, x + 3, y + 15, 0xff111111);
+                GuiDraw.drawDropShadow(x, y, x + 4, y + 16, 2, 0x88000000 + color, color);
+                Gui.drawRect(x, y, x + 4, y + 16, 0xff111111);
+                Gui.drawRect(x + 1, y, x + 3, y + 15, 0xff2a2a2a);
 
                 int offset = (int) ((current % 1000 / 50) % 4);
 
@@ -167,7 +167,7 @@ public class InputRenderer
 
                 for (int i = 0; i < 4; i++)
                 {
-                    Gui.drawRect(x, y + offset, x + 4, y + offset + 1, 0xaa333333);
+                    Gui.drawRect(x, y + offset, x + 4, y + offset + 1, 0x88555555);
 
                     y += 4;
                 }
