@@ -51,6 +51,9 @@ public class GuiDebugPanel extends GuiDashboardPanel
 			}
 		};
 
+		this.graph.graph.getScaleX().lock(0, 100);
+		this.graph.graph.getScaleY().lock(-25, 25);
+
 		KeyframeChannel channel = new KeyframeChannel();
 
 		channel.insert(0, 10);
@@ -75,7 +78,6 @@ public class GuiDebugPanel extends GuiDashboardPanel
 
 		this.dopesheet.flex().relative(this).y(0).wh(1F, 0.5F);
 		this.graph.flex().relative(this).y(0.5F).wh(1F, 0.5F);
-		// this.add(this.dopesheet, this.graph);
 
 		this.renderer = new GuiModelRenderer(mc)
 		{
@@ -88,6 +90,7 @@ public class GuiDebugPanel extends GuiDashboardPanel
 		this.renderer.flex().relative(this).wh(1F, 1F);
 		this.play.flex().relative(this).xy(10, 10).w(80);
 		this.add(this.renderer, this.play);
+		this.add(this.graph);
 	}
 
 	private void play(GuiButtonElement button)

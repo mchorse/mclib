@@ -11,7 +11,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.ScrollArea;
-import mchorse.mclib.utils.MathUtils;
+import mchorse.mclib.client.gui.utils.ScrollDirection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
@@ -113,7 +113,7 @@ public abstract class GuiListElement<T> extends GuiElement
 
     public GuiListElement<T> horizontal()
     {
-        this.scroll.direction = ScrollArea.ScrollDirection.HORIZONTAL;
+        this.scroll.direction = ScrollDirection.HORIZONTAL;
 
         return this;
     }
@@ -127,7 +127,7 @@ public abstract class GuiListElement<T> extends GuiElement
 
     public boolean isHorizontal()
     {
-        return this.scroll.direction == ScrollArea.ScrollDirection.HORIZONTAL;
+        return this.scroll.direction == ScrollDirection.HORIZONTAL;
     }
 
     /* Filtering elements */

@@ -138,10 +138,12 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
     @Override
     public GuiContextMenu createContextMenu(GuiContext context)
     {
+        GuiSimpleContextMenu menu = new GuiSimpleContextMenu(this.mc);
+
+        menu.action(Icons.MAXIMIZE, IKey.lang("mclib.gui.keyframes.context.maximize"), this::resetView);
+
         if (this.graph.which != Selection.NOT_SELECTED)
         {
-            GuiSimpleContextMenu menu = new GuiSimpleContextMenu(this.mc);
-
             menu.action(Icons.REMOVE, IKey.lang("mclib.gui.keyframes.context.remove"), this::removeSelectedKeyframes);
 
             if (this.graph.which != Selection.NOT_SELECTED && this.graph.isMultipleSelected())
@@ -150,11 +152,9 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
                 menu.action(Icons.MAIN_HANDLE, IKey.lang("mclib.gui.keyframes.context.to_main"), () -> this.graph.which = Selection.KEYFRAME);
                 menu.action(Icons.RIGHT_HANDLE, IKey.lang("mclib.gui.keyframes.context.to_right"), () -> this.graph.which = Selection.RIGHT_HANDLE);
             }
-
-            return menu;
         }
 
-        return super.createContextMenu(context);
+        return menu;
     }
 
     protected void doubleClick(int mouseX, int mouseY)
@@ -167,6 +167,11 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
     public boolean mouseScrolled(GuiContext context)
     {
         return super.mouseScrolled(context) || this.area.isInside(context.mouseX, context.mouseY);
+    }
+
+    public void resetView()
+    {
+        this.graph.resetView();
     }
 
     public void removeSelectedKeyframes()

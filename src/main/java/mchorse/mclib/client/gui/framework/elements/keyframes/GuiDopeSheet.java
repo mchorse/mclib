@@ -133,7 +133,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
 
         if (Math.abs(max - min) > 0.01F)
         {
-            this.scaleX.view(min, max, this.area.w, 30);
+            this.scaleX.viewOffset(min, max, this.area.w, 30);
         }
 
         this.recalcMultipliers();

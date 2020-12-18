@@ -2,12 +2,13 @@ package mchorse.mclib.client.gui.framework.elements.utils;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.Scale;
+import mchorse.mclib.client.gui.utils.ScrollDirection;
 import net.minecraft.client.Minecraft;
 
 public class GuiCanvas extends GuiElement
 {
-	public Scale scaleX = new Scale(false);
-	public Scale scaleY = new Scale(false);
+	public Scale scaleX;
+	public Scale scaleY;
 
 	public boolean dragging;
 	public int mouse;
@@ -20,26 +21,31 @@ public class GuiCanvas extends GuiElement
 	public GuiCanvas(Minecraft mc)
 	{
 		super(mc);
+
+		this.scaleX = new Scale(this.area, false);
+		this.scaleX.anchor(0.5F);
+		this.scaleY = new Scale(this.area, ScrollDirection.VERTICAL, false);
+		this.scaleY.anchor(0.5F);
 	}
 
 	public int toX(double x)
 	{
-		return (int) Math.round(this.scaleX.to(x) + this.area.mx());
+		return (int) Math.round(this.scaleX.to(x));
 	}
 
 	public double fromX(int mouseX)
 	{
-		return this.scaleX.from(mouseX - this.area.mx());
+		return this.scaleX.from(mouseX);
 	}
 
 	public int toY(double y)
 	{
-		return (int) Math.round(this.scaleY.to(y) + this.area.my());
+		return (int) Math.round(this.scaleY.to(y));
 	}
 
 	public double fromY(int mouseY)
 	{
-		return this.scaleY.from(mouseY - this.area.my());
+		return this.scaleY.from(mouseY);
 	}
 
 	@Override
@@ -68,8 +74,8 @@ public class GuiCanvas extends GuiElement
 
 	protected void startDragging(GuiContext context)
 	{
-		this.lastT = this.scaleX.shift;
-		this.lastV = this.scaleY.shift;
+		this.lastT = this.scaleX.getShift();
+		this.lastV = this.scaleY.getShift();
 	}
 
 	@Override
@@ -99,21 +105,8 @@ public class GuiCanvas extends GuiElement
 
 	protected void zoom(int scroll)
 	{
-		this.scaleX.zoom(Math.copySign(this.getZoomFactor(this.scaleX.zoom), scroll), 0.01F, 50F);
-		this.scaleY.zoom(Math.copySign(this.getZoomFactor(this.scaleY.zoom), scroll), 0.01F, 50F);
-	}
-
-	protected double getZoomFactor(double zoom)
-	{
-		double factor = 0;
-
-		if (zoom < 0.2F) factor = 0.005F;
-		else if (zoom < 1.0F) factor = 0.025F;
-		else if (zoom < 2.0F) factor = 0.1F;
-		else if (zoom < 15.0F) factor = 0.5F;
-		else if (zoom <= 50.0F) factor = 1F;
-
-		return factor;
+		this.scaleX.zoom(Math.copySign(this.scaleX.getZoomFactor(), scroll), 0.001, 1000);
+		this.scaleY.zoom(Math.copySign(this.scaleY.getZoomFactor(), scroll), 0.001, 1000);
 	}
 
 	@Override
@@ -140,8 +133,8 @@ public class GuiCanvas extends GuiElement
 	{
 		if (this.dragging && this.mouse == 2)
 		{
-			this.scaleX.shift = -(context.mouseX - this.lastX) / this.scaleX.zoom + this.lastT;
-			this.scaleY.shift = -(context.mouseY - this.lastY) / this.scaleY.zoom + this.lastV;
+			this.scaleX.setShift(-(context.mouseX - this.lastX) / this.scaleX.getZoom() + this.lastT);
+			this.scaleY.setShift(-(context.mouseY - this.lastY) / this.scaleY.getZoom() + this.lastV);
 		}
 	}
 

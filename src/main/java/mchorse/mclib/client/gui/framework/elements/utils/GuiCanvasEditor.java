@@ -10,6 +10,8 @@ import org.lwjgl.opengl.GL11;
 
 public abstract class GuiCanvasEditor extends GuiCanvas
 {
+	private static Area processed = new Area();
+
 	public GuiElement editor;
 
 	/* Width and height of the frame that being currently edited */
@@ -42,13 +44,13 @@ public abstract class GuiCanvasEditor extends GuiCanvas
 
 		this.scaleX.set(0, 2);
 		this.scaleY.set(0, 2);
-		this.scaleX.view(-this.w / 2, this.w / 2, this.area.w, 20);
-		this.scaleY.view(-this.h / 2, this.h / 2, this.area.h, 20);
+		this.scaleX.viewOffset(-this.w / 2, this.w / 2, 20);
+		this.scaleY.viewOffset(-this.h / 2, this.h / 2, 20);
 
-		double min = Math.min(this.scaleX.zoom, this.scaleY.zoom);
+		double min = Math.min(this.scaleX.getZoom(), this.scaleY.getZoom());
 
-		this.scaleX.zoom = min;
-		this.scaleY.zoom = min;
+		this.scaleX.setZoom(min);
+		this.scaleY.setZoom(min);
 	}
 
 	@Override
@@ -71,7 +73,6 @@ public abstract class GuiCanvasEditor extends GuiCanvas
 		int ox = (this.area.x - area.x) % 16;
 		int oy = (this.area.y - area.y) % 16;
 
-		Area processed = new Area();
 		processed.copy(this.area);
 		processed.offsetX(ox < 0 ? 16 + ox : ox);
 		processed.offsetY(oy < 0 ? 16 + oy : oy);

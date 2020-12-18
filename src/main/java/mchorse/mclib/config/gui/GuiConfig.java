@@ -11,7 +11,7 @@ import mchorse.mclib.client.gui.mclib.GuiDashboard;
 import mchorse.mclib.client.gui.mclib.GuiDashboardPanel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.Icons;
-import mchorse.mclib.client.gui.utils.ScrollArea;
+import mchorse.mclib.client.gui.utils.ScrollDirection;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
@@ -38,7 +38,7 @@ public class GuiConfig extends GuiDashboardPanel
 		this.reload = new GuiIconElement(mc, Icons.REFRESH, (button) -> this.reload());
 		this.reload.tooltip(IKey.lang("mclib.gui.config.reload_tooltip"), Direction.BOTTOM);
 		this.mods = new GuiLabelListElement<String>(mc, (mod) -> this.selectConfig(mod.get(0).value));
-		this.options = new GuiScrollElement(mc, ScrollArea.ScrollDirection.HORIZONTAL);
+		this.options = new GuiScrollElement(mc, ScrollDirection.HORIZONTAL);
 		this.options.scroll.scrollSpeed = 51;
 
 		this.reload.flex().relative(this).set(110 - 14, 12, 16, 16);

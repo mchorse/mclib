@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.keyframes;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Scale;
+import mchorse.mclib.client.gui.utils.ScrollDirection;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.keyframes.Keyframe;
 import mchorse.mclib.utils.keyframes.KeyframeChannel;
@@ -29,11 +30,19 @@ public class GuiGraphView extends GuiKeyframeElement
 {
     public GuiSheet sheet = new GuiSheet(IKey.str(""), 0, null);
     
-    private Scale scaleY = new Scale(true);
+    private Scale scaleY;
 
     public GuiGraphView(Minecraft mc, Consumer<Keyframe> callback)
     {
         super(mc, callback);
+
+        this.scaleY = new Scale(this.area, ScrollDirection.VERTICAL, true);
+        this.scaleY.anchor(0.5F);
+    }
+
+    public Scale getScaleY()
+    {
+        return this.scaleY;
     }
 
     public void setChannel(KeyframeChannel channel, int color)
@@ -99,12 +108,12 @@ public class GuiGraphView extends GuiKeyframeElement
 
     public int toGraphY(double value)
     {
-        return (int) (this.scaleY.to(value)) + this.area.my();
+        return (int) this.scaleY.to(value);
     }
 
     public double fromGraphY(int mouseY)
     {
-        return this.scaleY.from(mouseY - this.area.my());
+        return this.scaleY.from(mouseY);
     }
 
     @Override
@@ -151,16 +160,16 @@ public class GuiGraphView extends GuiKeyframeElement
         if (Math.abs(maxY - minY) < 0.01F)
         {
             /* Centerize */
-            this.scaleY.shift = minY;
+            this.scaleY.setShift(minY);
         }
         else
         {
             /* Spread apart vertically */
-            this.scaleY.view(minY, maxY, this.area.h, 20);
+            this.scaleY.viewOffset(minY, maxY, this.area.h, 20);
         }
 
         /* Spread apart horizontally */
-        this.scaleX.view(minX, maxX, this.area.w, 20);
+        this.scaleX.viewOffset(minX, maxX, this.area.w, 20);
         this.recalcMultipliers();
     }
 
@@ -243,7 +252,7 @@ public class GuiGraphView extends GuiKeyframeElement
     {
         super.recalcMultipliers();
 
-        this.scaleY.mult = this.recalcMultiplier(this.scaleY.zoom);
+        this.scaleY.calculateMultiplier();
     }
 
     /**
@@ -351,7 +360,7 @@ public class GuiGraphView extends GuiKeyframeElement
         int y = this.toGraphY(value);
         double d = Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2);
 
-        return Math.sqrt(d) < 4;
+        return d < 16;
     }
 
     @Override
@@ -359,7 +368,7 @@ public class GuiGraphView extends GuiKeyframeElement
     {
         super.setupScrolling(context, mouseX, mouseY);
 
-        this.lastV = this.scaleY.shift;
+        this.lastV = this.scaleY.getShift();
     }
 
     @Override
@@ -372,13 +381,13 @@ public class GuiGraphView extends GuiKeyframeElement
         /* Scaling X */
         if (x && !y || none)
         {
-            this.scaleX.zoom(Math.copySign(this.getZoomFactor(this.scaleX.zoom), scroll), this.minZoom, this.maxZoom);
+            this.scaleX.zoom(Math.copySign(this.scaleX.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
         }
 
         /* Scaling Y */
         if (y && !x || none)
         {
-            this.scaleY.zoom(Math.copySign(this.getZoomFactor(this.scaleY.zoom), scroll), this.minZoom, this.maxZoom);
+            this.scaleY.zoom(Math.copySign(this.scaleY.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
         }
     }
 
@@ -434,7 +443,7 @@ public class GuiGraphView extends GuiKeyframeElement
 
         int min = Math.min(ty, by) - 1;
         int max = Math.max(ty, by) + 1;
-        int mult = this.scaleY.mult;
+        int mult = this.scaleY.getMult();
 
         min -= min % mult + mult;
         max -= max % mult - mult;
@@ -595,7 +604,7 @@ public class GuiGraphView extends GuiKeyframeElement
     {
         super.scrolling(mouseX, mouseY);
 
-        this.scaleY.shift = (mouseY - this.lastY) / this.scaleY.zoom + this.lastV;
+        this.scaleY.setShift((mouseY - this.lastY) / this.scaleY.getZoom() + this.lastV);
     }
 
     @Override

@@ -54,6 +54,8 @@ public class Icons
 	public static final Icon INVISIBLE = new Icon(ICONS, 32, 32);
 	public static final Icon PLAY = new Icon(ICONS, 48, 32);
 	public static final Icon PAUSE = new Icon(ICONS, 64, 32);
+	public static final Icon MAXIMIZE = new Icon(ICONS, 80, 32);
+	public static final Icon MINIMIZE = new Icon(ICONS, 96, 32);
 
 	public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240, 16, 16);
 	public static final Icon DISABLED = new Icon(ICONS, 16, 240, 16, 16);

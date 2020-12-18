@@ -1,11 +1,9 @@
 package mchorse.mclib.client.gui.framework.elements.input.multiskin;
 
-import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTexturePicker;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
-import mchorse.mclib.client.gui.framework.elements.utils.GuiCanvas;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiCanvasEditor;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
@@ -145,8 +143,8 @@ public class GuiMultiSkinEditor extends GuiCanvasEditor
 
 		if (this.dragging && this.mouse == 0)
 		{
-			double dx = (context.mouseX - this.lastX) / this.scaleX.zoom;
-			double dy = (context.mouseY - this.lastY) / this.scaleY.zoom;
+			double dx = (context.mouseX - this.lastX) / this.scaleX.getZoom();
+			double dy = (context.mouseY - this.lastY) / this.scaleY.getZoom();
 
 			if (GuiScreen.isShiftKeyDown()) dx = 0;
 			if (GuiScreen.isCtrlKeyDown()) dy = 0;

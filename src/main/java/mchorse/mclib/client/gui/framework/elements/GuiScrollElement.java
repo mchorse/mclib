@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.ScrollArea;
+import mchorse.mclib.client.gui.utils.ScrollDirection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 
@@ -17,10 +18,10 @@ public class GuiScrollElement extends GuiElement
 
     public GuiScrollElement(Minecraft mc)
     {
-        this(mc, ScrollArea.ScrollDirection.VERTICAL);
+        this(mc, ScrollDirection.VERTICAL);
     }
 
-    public GuiScrollElement(Minecraft mc, ScrollArea.ScrollDirection direction)
+    public GuiScrollElement(Minecraft mc, ScrollDirection direction)
     {
         super(mc);
 
@@ -38,7 +39,7 @@ public class GuiScrollElement extends GuiElement
 
     private void apply(GuiContext context)
     {
-        if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
+        if (this.scroll.direction == ScrollDirection.VERTICAL)
         {
             context.mouseY += this.scroll.scroll;
             context.shiftY += this.scroll.scroll;
@@ -52,7 +53,7 @@ public class GuiScrollElement extends GuiElement
 
     private void unapply(GuiContext context)
     {
-        if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
+        if (this.scroll.direction == ScrollDirection.VERTICAL)
         {
             context.mouseY -= this.scroll.scroll;
             context.shiftY -= this.scroll.scroll;
@@ -142,7 +143,7 @@ public class GuiScrollElement extends GuiElement
         GuiDraw.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
         GlStateManager.pushMatrix();
 
-        if (this.scroll.direction == ScrollArea.ScrollDirection.VERTICAL)
+        if (this.scroll.direction == ScrollDirection.VERTICAL)
         {
             GlStateManager.translate(0, -this.scroll.scroll, 0);
         }
