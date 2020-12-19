@@ -9,6 +9,8 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.network.mclib.Dispatcher;
+import mchorse.mclib.network.mclib.common.PacketDropItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -64,10 +66,19 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 		if (this.contextMenu == null)
 		{
 			return new GuiSimpleContextMenu(this.mc)
-				/* TODO: do something about it */
-				.action(Icons.DOWNLOAD, IKey.str("Drop item down"), () -> {})
-				.action(Icons.CLOSE, IKey.str("Clear item"), () -> {
+				.action(Icons.DOWNLOAD, IKey.lang("mclib.gui.item_slot.context.drop"), () -> {
+					if (!stack.isEmpty())
+					{
+						Dispatcher.sendToServer(new PacketDropItem(this.stack));
+					}
+				})
+				.action(Icons.CLOSE, IKey.lang("mclib.gui.item_slot.context.clear"), () -> {
 					this.stack = ItemStack.EMPTY;
+
+					if (this.inventory != null && this.inventory.callback != null)
+					{
+						this.inventory.callback.accept(this.stack);
+					}
 				});
 		}
 

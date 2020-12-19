@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.mclib;
 
 import mchorse.mclib.client.gui.framework.elements.GuiModelRenderer;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiDopeSheet;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiGraphView;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiKeyframesEditor;
@@ -18,6 +19,8 @@ import mchorse.mclib.utils.wav.WaveReader;
 import mchorse.mclib.utils.wav.Waveform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 public class GuiDebugPanel extends GuiDashboardPanel
 {
@@ -25,6 +28,7 @@ public class GuiDebugPanel extends GuiDashboardPanel
 	public GuiKeyframesEditor<GuiGraphView> graph;
 	public GuiModelRenderer renderer;
 	public GuiButtonElement play;
+	public GuiSlotElement slot;
 
 	private WavePlayer player;
 	private Waveform wave;
@@ -50,6 +54,10 @@ public class GuiDebugPanel extends GuiDashboardPanel
 				return new GuiGraphView(mc, this::fillData);
 			}
 		};
+
+		this.slot = new GuiSlotElement(mc, 0, (t) -> {});
+		this.slot.flex().relative(this).y(10).x(1F, -10).anchorX(1F);
+		this.slot.stack = new ItemStack(Items.BAKED_POTATO, 42);
 
 		this.graph.graph.getScaleX().lock(0, 100);
 		this.graph.graph.getScaleY().lock(-25, 25);
@@ -90,7 +98,7 @@ public class GuiDebugPanel extends GuiDashboardPanel
 		this.renderer.flex().relative(this).wh(1F, 1F);
 		this.play.flex().relative(this).xy(10, 10).w(80);
 		this.add(this.renderer, this.play);
-		this.add(this.graph);
+		this.add(this.graph, this.slot);
 	}
 
 	private void play(GuiButtonElement button)

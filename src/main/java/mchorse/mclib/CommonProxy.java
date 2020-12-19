@@ -1,6 +1,7 @@
 package mchorse.mclib;
 
 import mchorse.mclib.config.ConfigManager;
+import mchorse.mclib.network.mclib.Dispatcher;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -14,6 +15,8 @@ public class CommonProxy
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		this.configFolder = event.getModConfigurationDirectory();
+
+		Dispatcher.register();
 	}
 
 	public void init(FMLInitializationEvent event)
