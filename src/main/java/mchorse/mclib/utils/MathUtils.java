@@ -17,6 +17,11 @@ public class MathUtils
 		return x < min ? min : (x > max ? max : x);
 	}
 
+	public static long clamp(long x, long min, long max)
+	{
+		return x < min ? min : (x > max ? max : x);
+	}
+
 	public static int cycler(int x, int min, int max)
 	{
 		return x < min ? max : (x > max ? min : x);
