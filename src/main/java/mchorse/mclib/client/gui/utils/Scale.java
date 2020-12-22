@@ -103,17 +103,24 @@ public class Scale
             double min = this.getMinValue();
             double max = this.getMaxValue();
 
-            if (min < this.lockMin && max > this.lockMax)
-            {
-                this.view(this.lockMin, this.lockMax);
-            }
-            else if (min < this.lockMin)
+            if (min < this.lockMin)
             {
                 this.shift(this.lockMin, this.lockMin + distance);
             }
             else if (max > this.lockMax)
             {
                 this.shift(this.lockMax - distance, this.lockMax);
+            }
+
+            min = this.getMinValue();
+            max = this.getMaxValue();
+
+            if (min < this.lockMin || max > this.lockMax)
+            {
+                double lockMin = Math.max(this.lockMin, min);
+                double lockMax = Math.min(this.lockMax, max);
+
+                this.view(lockMin, lockMax);
             }
         }
         else
