@@ -108,6 +108,12 @@ public class GuiMultiSkinEditor extends GuiCanvasEditor
 		}
 
 		this.setSize(w, h);
+		this.color.picker.removeFromParent();
+	}
+
+	public void close()
+	{
+		this.color.picker.removeFromParent();
 	}
 
 	public void setLocation(FilteredResourceLocation location)

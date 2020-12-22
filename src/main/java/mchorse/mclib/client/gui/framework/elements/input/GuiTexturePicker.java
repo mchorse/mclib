@@ -132,6 +132,7 @@ public class GuiTexturePicker extends GuiElement
 
     public void close()
     {
+        this.editor.close();
         this.removeFromParent();
 
         if (this.callback != null)
