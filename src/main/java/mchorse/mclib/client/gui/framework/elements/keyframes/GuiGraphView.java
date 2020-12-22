@@ -179,6 +179,14 @@ public class GuiGraphView extends GuiKeyframeElement
     }
 
     @Override
+    public void selectAll()
+    {
+        this.sheet.selectAll();
+        this.which = Selection.KEYFRAME;
+        this.setKeyframe(this.getCurrent());
+    }
+
+    @Override
     public int getSelectedCount()
     {
         return this.sheet.getSelectedCount();
@@ -188,7 +196,7 @@ public class GuiGraphView extends GuiKeyframeElement
     public void clearSelection()
     {
         this.which = Selection.NOT_SELECTED;
-        this.sheet.selected.clear();
+        this.sheet.clearSelection();
     }
 
     @Override

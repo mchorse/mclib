@@ -18,6 +18,7 @@ import mchorse.mclib.utils.keyframes.KeyframeEasing;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import org.lwjgl.input.Keyboard;
 
 public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends GuiElement
 {
@@ -68,6 +69,9 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         /* Add all elements */
         this.add(this.graph, this.frameButtons);
         this.frameButtons.add(this.tick, this.value, this.interp, this.easing, this.interpolations);
+
+        this.keys().register(IKey.lang("mclib.gui.keyframes.context.maximize"), Keyboard.KEY_HOME, this::resetView).inside();
+        this.keys().register(IKey.lang("mclib.gui.keyframes.context.select_all"), Keyboard.KEY_A, this::selectAll).held(Keyboard.KEY_LCONTROL).inside();
     }
 
     protected abstract T createElement(Minecraft mc);
@@ -141,6 +145,7 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         GuiSimpleContextMenu menu = new GuiSimpleContextMenu(this.mc);
 
         menu.action(Icons.MAXIMIZE, IKey.lang("mclib.gui.keyframes.context.maximize"), this::resetView);
+        menu.action(Icons.FULLSCREEN, IKey.lang("mclib.gui.keyframes.context.select_all"), this::selectAll);
 
         if (this.graph.which != Selection.NOT_SELECTED)
         {
@@ -172,6 +177,11 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
     public void resetView()
     {
         this.graph.resetView();
+    }
+
+    public void selectAll()
+    {
+        this.graph.selectAll();
     }
 
     public void removeSelectedKeyframes()

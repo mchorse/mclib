@@ -190,4 +190,14 @@ public class GuiSheet
 			this.selected.add(this.channel.getKeyframes().indexOf(keyframe));
 		}
 	}
+
+	public void selectAll()
+	{
+		this.clearSelection();
+
+		for (int i = 0, c = this.channel.getKeyframes().size(); i < c; i++)
+		{
+			this.selected.add(i);
+		}
+	}
 }

@@ -102,6 +102,8 @@ public abstract class GuiKeyframeElement extends GuiElement
     public void selectByDuration(long duration)
     {}
 
+    public abstract void selectAll();
+
     public abstract int getSelectedCount();
 
     public boolean isMultipleSelected()

@@ -133,7 +133,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
 
         if (Math.abs(max - min) > 0.01F)
         {
-            this.scaleX.viewOffset(min, max, this.area.w, 30);
+            this.scaleX.viewOffset(min, max, this.area.w, 20);
         }
     }
 
@@ -144,6 +144,18 @@ public class GuiDopeSheet extends GuiKeyframeElement
 
     	return current == null ? null : current.getKeyframe();
     }
+
+	@Override
+	public void selectAll()
+	{
+		for (GuiSheet sheet : this.sheets)
+		{
+			sheet.selectAll();
+		}
+
+		this.which = Selection.KEYFRAME;
+		this.setKeyframe(this.getCurrent());
+	}
 
 	public GuiSheet getCurrentSheet()
 	{

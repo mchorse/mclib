@@ -59,9 +59,6 @@ public class GuiDebugPanel extends GuiDashboardPanel
 		this.slot.flex().relative(this).y(10).x(1F, -10).anchorX(1F);
 		this.slot.stack = new ItemStack(Items.BAKED_POTATO, 42);
 
-		this.graph.graph.getScaleX().lock(0, 100);
-		this.graph.graph.getScaleY().lock(-25, 25);
-
 		KeyframeChannel channel = new KeyframeChannel();
 
 		channel.insert(0, 10);
@@ -97,8 +94,8 @@ public class GuiDebugPanel extends GuiDashboardPanel
 
 		this.renderer.flex().relative(this).wh(1F, 1F);
 		this.play.flex().relative(this).xy(10, 10).w(80);
-		this.add(this.renderer, this.play);
-		this.add(this.graph, this.slot);
+		// this.add(this.renderer, this.play);
+		this.add(this.graph, this.dopesheet);
 	}
 
 	private void play(GuiButtonElement button)

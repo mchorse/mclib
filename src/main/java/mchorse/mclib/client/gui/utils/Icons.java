@@ -57,6 +57,7 @@ public class Icons
 	public static final Icon MAXIMIZE = new Icon(ICONS, 80, 32);
 	public static final Icon MINIMIZE = new Icon(ICONS, 96, 32);
 	public static final Icon STOP = new Icon(ICONS, 112, 32);
+	public static final Icon FULLSCREEN = new Icon(ICONS, 128, 32);
 
 	public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240, 16, 16);
 	public static final Icon DISABLED = new Icon(ICONS, 16, 240, 16, 16);
