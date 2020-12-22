@@ -80,14 +80,6 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     public abstract void resetView();
 
-    /**
-     * Recalculate grid's multipliers
-     */
-    protected void recalcMultipliers()
-    {
-        this.scaleX.calculateMultiplier();
-    }
-
     public int toGraphX(double tick)
     {
         return (int) (this.scaleX.to(tick));
@@ -235,7 +227,6 @@ public abstract class GuiKeyframeElement extends GuiElement
             }
 
             this.zoom(scroll);
-            this.recalcMultipliers();
 
             return true;
         }

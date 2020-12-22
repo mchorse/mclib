@@ -135,8 +135,6 @@ public class GuiDopeSheet extends GuiKeyframeElement
         {
             this.scaleX.viewOffset(min, max, this.area.w, 30);
         }
-
-        this.recalcMultipliers();
     }
 
     @Override

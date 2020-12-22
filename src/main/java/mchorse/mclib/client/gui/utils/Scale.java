@@ -145,6 +145,8 @@ public class Scale
         {
             this.zoom = zoom;
         }
+
+        this.calculateMultiplier();
     }
 
     public double getZoom()
@@ -243,6 +245,8 @@ public class Scale
 
         this.zoom = 1 / ((max - min) / length);
         this.shift(min, max);
+
+        this.calculateMultiplier();
     }
 
     public void shift(double min, double max)

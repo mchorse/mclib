@@ -170,7 +170,6 @@ public class GuiGraphView extends GuiKeyframeElement
 
         /* Spread apart horizontally */
         this.scaleX.viewOffset(minX, maxX, this.area.w, 20);
-        this.recalcMultipliers();
     }
 
     @Override
@@ -242,17 +241,6 @@ public class GuiGraphView extends GuiKeyframeElement
         this.sheet.removeSelectedKeyframes();
         this.setKeyframe(null);
         this.which = Selection.NOT_SELECTED;
-    }
-
-    /**
-     * Recalculate grid's multipliers
-     */
-    @Override
-    protected void recalcMultipliers()
-    {
-        super.recalcMultipliers();
-
-        this.scaleY.calculateMultiplier();
     }
 
     /**
