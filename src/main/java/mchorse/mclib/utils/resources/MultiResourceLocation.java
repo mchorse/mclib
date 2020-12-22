@@ -21,6 +21,8 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
 {
     public List<FilteredResourceLocation> children = new ArrayList<FilteredResourceLocation>();
 
+    private int id = -1;
+
     public static MultiResourceLocation from(NBTBase nbt)
     {
         NBTTagList list = nbt instanceof NBTTagList ? (NBTTagList) nbt : null;
@@ -86,6 +88,11 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
         super("it_would_be_very_ironic", "if_this_would_match_with_regular_rls");
     }
 
+    public void recalculateId()
+    {
+        this.id = MultiResourceLocationManager.getId(this);
+    }
+
     @Override
     public String getResourceDomain()
     {
@@ -124,14 +131,12 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
     @Override
     public int hashCode()
     {
-        int hash = super.hashCode();
-
-        for (int i = 0, c = this.children.size(); i < c; i++)
+        if (this.id < 0)
         {
-            hash = 31 * hash + this.children.get(i).hashCode();
+            this.recalculateId();
         }
 
-        return hash;
+        return this.id;
     }
 
     @Override

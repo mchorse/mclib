@@ -136,6 +136,11 @@ public class GuiTexturePicker extends GuiElement
 
         if (this.callback != null)
         {
+            if (this.multiRL != null)
+            {
+                this.multiRL.recalculateId();
+            }
+
             this.callback.accept(this.multiRL != null ? this.multiRL : this.current);
         }
     }
@@ -340,6 +345,7 @@ public class GuiTexturePicker extends GuiElement
         {
             if (show && this.callback != null)
             {
+                this.multiRL.recalculateId();
                 this.callback.accept(skin);
             }
             else
