@@ -1,6 +1,8 @@
 package mchorse.mclib.client.gui.framework.elements;
 
+import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.utils.Area;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -195,11 +197,17 @@ public class GuiElements<T extends IGuiElement> implements IGuiElement
     }
 
     @Override
+    public boolean canBeDrawn(Area viewport)
+    {
+        return true;
+    }
+
+    @Override
     public void draw(GuiContext context)
     {
         for (T element : this.elements)
         {
-            if (element.isVisible())
+            if (element.isVisible() && element.canBeDrawn(context.getViewport()))
             {
                 element.draw(context);
             }

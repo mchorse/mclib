@@ -39,6 +39,7 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         super(mc);
 
         this.frameButtons = new GuiElement(mc);
+        this.frameButtons.flex().relative(this).x(1F, -10).y(10).w(170).h(50).anchorX(1F);
         this.frameButtons.setVisible(false);
         this.tick = new GuiTrackpadElement(mc, this::setTick);
         this.tick.limit(Integer.MIN_VALUE, Integer.MAX_VALUE, true).tooltip(IKey.lang("mclib.gui.keyframes.tick"));

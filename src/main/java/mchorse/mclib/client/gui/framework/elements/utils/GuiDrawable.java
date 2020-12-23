@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.utils;
 import java.util.function.Consumer;
 
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
+import mchorse.mclib.client.gui.utils.Area;
 
 public class GuiDrawable implements IGuiElement
 {
@@ -49,6 +50,12 @@ public class GuiDrawable implements IGuiElement
     public boolean keyTyped(GuiContext context)
     {
         return false;
+    }
+
+    @Override
+    public boolean canBeDrawn(Area viewport)
+    {
+        return true;
     }
 
     @Override

@@ -7,10 +7,12 @@ import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.input.GuiKeybinds;
+import mchorse.mclib.client.gui.utils.Area;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
 import java.util.List;
+import java.util.Stack;
 
 public class GuiContext
 {
@@ -35,9 +37,11 @@ public class GuiContext
 	public int keyCode;
 
 	/* Render states */
+	private Stack<Area> viewportStack = new Stack<Area>();
+	private int shiftX;
+	private int shiftY;
+
 	public float partialTicks;
-	public int shiftX;
-	public int shiftY;
 	public long tick;
 
 	public GuiContext(GuiBase screen)
@@ -303,5 +307,56 @@ public class GuiContext
 
 		this.contextMenu = menu;
 		this.screen.root.add(menu);
+	}
+
+	/* Viewport */
+
+	public Area getViewport()
+	{
+		return this.viewportStack.peek();
+	}
+
+	public void pushViewport(Area area)
+	{
+		if (this.viewportStack.isEmpty())
+		{
+			this.viewportStack.push(area);
+		}
+		else
+		{
+			Area current = this.viewportStack.peek();
+			Area child = new Area();
+
+			child.copy(area);
+			current.clamp(child);
+			this.viewportStack.push(child);
+		}
+	}
+
+	public void popViewport()
+	{
+		this.viewportStack.pop();
+	}
+
+	public void shiftX(int x)
+	{
+		this.mouseX += x;
+		this.shiftX += x;
+
+		if (!this.viewportStack.isEmpty())
+		{
+			this.viewportStack.peek().x += x;
+		}
+	}
+
+	public void shiftY(int y)
+	{
+		this.mouseY += y;
+		this.shiftY += y;
+
+		if (!this.viewportStack.isEmpty())
+		{
+			this.viewportStack.peek().y += y;
+		}
 	}
 }

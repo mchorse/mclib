@@ -598,6 +598,12 @@ public class GuiElement extends Gui implements IGuiElement
     }
 
     @Override
+    public boolean canBeDrawn(Area viewport)
+    {
+        return viewport.intersects(this.area);
+    }
+
+    @Override
     public void draw(GuiContext context)
     {
         if (this.keybinds != null && this.isEnabled())

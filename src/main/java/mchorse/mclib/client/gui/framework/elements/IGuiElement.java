@@ -1,6 +1,7 @@
 package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.utils.Area;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -41,6 +42,11 @@ public interface IGuiElement
      * Key was typed
      */
     public boolean keyTyped(GuiContext context);
+
+    /**
+     * Determines whether this element can be drawn on the screen
+     */
+    public boolean canBeDrawn(Area viewport);
 
     /**
      * Draw its components on the screen

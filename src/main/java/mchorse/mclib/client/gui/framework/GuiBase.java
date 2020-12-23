@@ -175,7 +175,11 @@ public class GuiBase extends GuiScreen
         if (this.root.isVisible())
         {
             this.context.reset();
+            this.context.pushViewport(this.viewport);
+
             this.root.draw(this.context);
+
+            this.context.popViewport();
             this.context.drawTooltip();
         }
     }

@@ -26,7 +26,7 @@ public class GuiDraw
 
 	public static void scissor(int x, int y, int w, int h, GuiContext context)
 	{
-	    scissor(x - context.shiftX, y - context.shiftY, w, h, context.screen.width, context.screen.height);
+	    scissor(context.globalX(x), context.globalY(y), w, h, context.screen.width, context.screen.height);
 	}
 
 	/**

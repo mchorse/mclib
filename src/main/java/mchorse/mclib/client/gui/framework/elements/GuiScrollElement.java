@@ -41,13 +41,11 @@ public class GuiScrollElement extends GuiElement
     {
         if (this.scroll.direction == ScrollDirection.VERTICAL)
         {
-            context.mouseY += this.scroll.scroll;
-            context.shiftY += this.scroll.scroll;
+            context.shiftY(this.scroll.scroll);
         }
         else
         {
-            context.mouseX += this.scroll.scroll;
-            context.shiftX += this.scroll.scroll;
+            context.shiftX(this.scroll.scroll);
         }
     }
 
@@ -55,13 +53,11 @@ public class GuiScrollElement extends GuiElement
     {
         if (this.scroll.direction == ScrollDirection.VERTICAL)
         {
-            context.mouseY -= this.scroll.scroll;
-            context.shiftY -= this.scroll.scroll;
+            context.shiftY(-this.scroll.scroll);
         }
         else
         {
-            context.mouseX -= this.scroll.scroll;
-            context.shiftX -= this.scroll.scroll;
+            context.shiftX(-this.scroll.scroll);
         }
     }
 
@@ -140,7 +136,9 @@ public class GuiScrollElement extends GuiElement
 
         this.scroll.drag(context.mouseX, context.mouseY);
 
+        context.pushViewport(this.area);
         GuiDraw.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
+
         GlStateManager.pushMatrix();
 
         if (this.scroll.direction == ScrollDirection.VERTICAL)
@@ -158,11 +156,14 @@ public class GuiScrollElement extends GuiElement
         super.draw(context);
         this.postDraw(context);
 
+        this.unapply(context);
+
         GlStateManager.popMatrix();
 
         this.scroll.drawScrollbar();
+
         GuiDraw.unscissor(context);
-        this.unapply(context);
+        context.popViewport();
 
         /* Clear tooltip in case if it was set outside of scroll area within the scroll */
         if (!this.area.isInside(context) && context.tooltip.element != lastTooltip)
