@@ -132,10 +132,12 @@ public class GuiTexturePicker extends GuiElement
 
     public void close()
     {
+        boolean wasVisible = this.getParent() != null;
+
         this.editor.close();
         this.removeFromParent();
 
-        if (this.callback != null)
+        if (this.callback != null && wasVisible)
         {
             if (this.multiRL != null)
             {
