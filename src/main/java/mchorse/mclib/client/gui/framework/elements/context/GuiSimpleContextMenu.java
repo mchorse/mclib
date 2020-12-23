@@ -64,7 +64,7 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 			w = Math.max(action.getWidth(this.font), w);
 		}
 
-		this.flex().set(context.mouseX(), context.mouseY(), w, this.actions.scroll.scrollSize).bounds(this, 5);
+		this.flex().set(context.mouseX(), context.mouseY(), w, this.actions.scroll.scrollSize).bounds(context.screen.root, 5);
 	}
 
 	public static class GuiActionListElement extends GuiListElement<Action>
