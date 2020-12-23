@@ -65,6 +65,11 @@ public class GuiElement extends Gui implements IGuiElement
     public boolean ignored;
 
     /**
+     * Whether this element can be culled if it's out of viewport
+     */
+    public boolean culled = true;
+
+    /**
      * Whether this element is a container
      */
     protected boolean container;
@@ -321,6 +326,13 @@ public class GuiElement extends Gui implements IGuiElement
     public GuiElement hideTooltip()
     {
         this.hideTooltip = true;
+
+        return this;
+    }
+
+    public GuiElement noCulling()
+    {
+        this.culled = false;
 
         return this;
     }
@@ -600,7 +612,7 @@ public class GuiElement extends Gui implements IGuiElement
     @Override
     public boolean canBeDrawn(Area viewport)
     {
-        return viewport.intersects(this.area);
+        return !this.culled || viewport.intersects(this.area);
     }
 
     @Override
