@@ -1,7 +1,10 @@
 package mchorse.mclib.client.gui.framework.elements;
 
+import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiViewportStack;
+import mchorse.mclib.client.gui.framework.elements.utils.IViewportStack;
 import mchorse.mclib.client.gui.utils.ScrollArea;
 import mchorse.mclib.client.gui.utils.ScrollDirection;
 import net.minecraft.client.Minecraft;
@@ -12,7 +15,7 @@ import net.minecraft.client.renderer.GlStateManager;
  * 
  * This bad boy allows to scroll stuff
  */
-public class GuiScrollElement extends GuiElement
+public class GuiScrollElement extends GuiElement implements IViewport
 {
     public ScrollArea scroll;
 
@@ -37,28 +40,34 @@ public class GuiScrollElement extends GuiElement
         return this;
     }
 
-    private void apply(GuiContext context)
+    @Override
+    public void apply(IViewportStack stack)
     {
+        stack.pushViewport(this.area);
+
         if (this.scroll.direction == ScrollDirection.VERTICAL)
         {
-            context.shiftY(this.scroll.scroll);
+            stack.shiftY(this.scroll.scroll);
         }
         else
         {
-            context.shiftX(this.scroll.scroll);
+            stack.shiftX(this.scroll.scroll);
         }
     }
 
-    private void unapply(GuiContext context)
+    @Override
+    public void unapply(IViewportStack stack)
     {
         if (this.scroll.direction == ScrollDirection.VERTICAL)
         {
-            context.shiftY(-this.scroll.scroll);
+            stack.shiftY(-this.scroll.scroll);
         }
         else
         {
-            context.shiftX(-this.scroll.scroll);
+            stack.shiftX(-this.scroll.scroll);
         }
+
+        stack.popViewport();
     }
 
     @Override
@@ -136,11 +145,11 @@ public class GuiScrollElement extends GuiElement
 
         this.scroll.drag(context.mouseX, context.mouseY);
 
-        context.pushViewport(this.area);
         GuiDraw.scissor(this.scroll.x, this.scroll.y, this.scroll.w, this.scroll.h, context);
 
         GlStateManager.pushMatrix();
 
+        /* Translate the contents using OpenGL (scroll) */
         if (this.scroll.direction == ScrollDirection.VERTICAL)
         {
             GlStateManager.translate(0, -this.scroll.scroll, 0);
@@ -151,11 +160,11 @@ public class GuiScrollElement extends GuiElement
         }
 
         this.apply(context);
-
         this.preDraw(context);
-        super.draw(context);
-        this.postDraw(context);
 
+        super.draw(context);
+
+        this.postDraw(context);
         this.unapply(context);
 
         GlStateManager.popMatrix();
@@ -163,7 +172,6 @@ public class GuiScrollElement extends GuiElement
         this.scroll.drawScrollbar();
 
         GuiDraw.unscissor(context);
-        context.popViewport();
 
         /* Clear tooltip in case if it was set outside of scroll area within the scroll */
         if (!this.area.isInside(context) && context.tooltip.element != lastTooltip)

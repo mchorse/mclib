@@ -1,7 +1,9 @@
 package mchorse.mclib.client.gui.framework;
 
+import mchorse.mclib.client.gui.framework.elements.IViewport;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.utils.IViewportStack;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
@@ -64,7 +66,10 @@ public class GuiBase extends GuiScreen
 
         this.viewport.set(0, 0, this.width, this.height);
         this.viewportSet();
+
+        this.context.pushViewport(this.viewport);
         this.root.resize();
+        this.context.popViewport();
     }
 
     protected void viewportSet()
@@ -101,7 +106,9 @@ public class GuiBase extends GuiScreen
 
         if (this.root.isEnabled())
         {
+            this.context.pushViewport(this.viewport);
             this.root.mouseClicked(this.context);
+            this.context.popViewport();
         }
     }
 
@@ -111,7 +118,9 @@ public class GuiBase extends GuiScreen
 
         if (this.root.isEnabled())
         {
+            this.context.pushViewport(this.viewport);
             this.root.mouseScrolled(this.context);
+            this.context.popViewport();
         }
     }
 
@@ -122,7 +131,9 @@ public class GuiBase extends GuiScreen
 
         if (this.root.isEnabled())
         {
+            this.context.pushViewport(this.viewport);
             this.root.mouseReleased(this.context);
+            this.context.popViewport();
         }
     }
 
@@ -136,7 +147,10 @@ public class GuiBase extends GuiScreen
             return;
         }
 
+        this.context.pushViewport(this.viewport);
         this.keyPressed(typedChar, keyCode);
+        this.context.popViewport();
+
 
         if (keyCode == 1)
         {
@@ -184,11 +198,23 @@ public class GuiBase extends GuiScreen
         }
     }
 
-    public static class GuiRootElement extends GuiElement
+    public static class GuiRootElement extends GuiElement implements IViewport
     {
         public GuiRootElement(Minecraft mc)
         {
             super(mc);
+        }
+
+        @Override
+        public void apply(IViewportStack stack)
+        {
+            stack.pushViewport(this.area);
+        }
+
+        @Override
+        public void unapply(IViewportStack stack)
+        {
+            stack.popViewport();
         }
     }
 }

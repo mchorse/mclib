@@ -24,6 +24,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
+import java.nio.charset.Charset;
+
 public class GuiMultiSkinEditor extends GuiCanvasEditor
 {
 	public static Shader shader;
@@ -76,8 +78,8 @@ public class GuiMultiSkinEditor extends GuiCanvasEditor
 		{
 			try
 			{
-				String vert = IOUtils.toString(this.getClass().getResourceAsStream("/assets/mclib/shaders/preview.vert"));
-				String frag = IOUtils.toString(this.getClass().getResourceAsStream("/assets/mclib/shaders/preview.frag"));
+				String vert = IOUtils.toString(this.getClass().getResourceAsStream("/assets/mclib/shaders/preview.vert"), Charset.defaultCharset());
+				String frag = IOUtils.toString(this.getClass().getResourceAsStream("/assets/mclib/shaders/preview.frag"), Charset.defaultCharset());
 
 				shader = new Shader();
 				shader.compile(vert, frag, true);

@@ -12,9 +12,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
 import java.util.List;
-import java.util.Stack;
 
-public class GuiContext
+public class GuiContext implements IViewportStack
 {
 	public Minecraft mc;
 	public FontRenderer font;
@@ -37,12 +36,10 @@ public class GuiContext
 	public int keyCode;
 
 	/* Render states */
-	private Stack<Area> viewportStack = new Stack<Area>();
-	private int shiftX;
-	private int shiftY;
-
 	public float partialTicks;
 	public long tick;
+
+	public GuiViewportStack viewportStack = new GuiViewportStack();
 
 	public GuiContext(GuiBase screen)
 	{
@@ -52,62 +49,11 @@ public class GuiContext
 		this.keybinds.setVisible(false);
 	}
 
-	/**
-	 * Get absolute X coordinate of the mouse without the
-	 * scrolling areas applied
-	 */
-	public int mouseX()
-	{
-		return this.globalX(this.mouseX);
-	}
-
-	/**
-	 * Get absolute Y coordinate of the mouse without the
-	 * scrolling areas applied
-	 */
-	public int mouseY()
-	{
-		return this.globalY(this.mouseY);
-	}
-
-	/**
-	 * Get global X (relative to screen)
-	 */
-	public int globalX(int x)
-	{
-		return x - this.shiftX;
-	}
-
-	/**
-	 * Get global Y (relative to screen)
-	 */
-	public int globalY(int y)
-	{
-		return y - this.shiftY;
-	}
-
-	/**
-	 * Get local X (relative to current scrolling area)
-	 */
-	public int localX(int x)
-	{
-		return x + this.shiftX;
-	}
-
-	/**
-	 * Get local Y (relative to current scrolling area)
-	 */
-	public int localY(int y)
-	{
-		return y + this.shiftY;
-	}
-
 	public void setMouse(int mouseX, int mouseY)
 	{
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
-		this.shiftX = 0;
-		this.shiftY = 0;
+		this.viewportStack.reset();
 	}
 
 	public void setMouse(int mouseX, int mouseY, int mouseButton)
@@ -129,6 +75,13 @@ public class GuiContext
 	}
 
 	public void reset()
+	{
+		this.viewportStack.reset();
+
+		this.resetTooltip();
+	}
+
+	public void resetTooltip()
 	{
 		this.tooltip.set(null, null);
 
@@ -311,52 +264,89 @@ public class GuiContext
 
 	/* Viewport */
 
-	public Area getViewport()
+	/**
+	 * Get absolute X coordinate of the mouse without the
+	 * scrolling areas applied
+	 */
+	public int mouseX()
 	{
-		return this.viewportStack.peek();
+		return this.globalX(this.mouseX);
 	}
 
-	public void pushViewport(Area area)
+	/**
+	 * Get absolute Y coordinate of the mouse without the
+	 * scrolling areas applied
+	 */
+	public int mouseY()
 	{
-		if (this.viewportStack.isEmpty())
-		{
-			this.viewportStack.push(area);
-		}
-		else
-		{
-			Area current = this.viewportStack.peek();
-			Area child = new Area();
-
-			child.copy(area);
-			current.clamp(child);
-			this.viewportStack.push(child);
-		}
+		return this.globalY(this.mouseY);
 	}
 
-	public void popViewport()
+	@Override
+	public int getShiftX()
 	{
-		this.viewportStack.pop();
+		return this.mouseX;
 	}
 
+	@Override
+	public int getShiftY()
+	{
+		return this.mouseY;
+	}
+
+	@Override
+	public int globalX(int x)
+	{
+		return this.viewportStack.globalX(x);
+	}
+
+	@Override
+	public int globalY(int y)
+	{
+		return this.viewportStack.globalY(y);
+	}
+
+	@Override
+	public int localX(int x)
+	{
+		return this.viewportStack.localX(x);
+	}
+
+	@Override
+	public int localY(int y)
+	{
+		return this.viewportStack.localY(y);
+	}
+
+	@Override
 	public void shiftX(int x)
 	{
 		this.mouseX += x;
-		this.shiftX += x;
-
-		if (!this.viewportStack.isEmpty())
-		{
-			this.viewportStack.peek().x += x;
-		}
+		this.viewportStack.shiftX(x);
 	}
 
+	@Override
 	public void shiftY(int y)
 	{
 		this.mouseY += y;
-		this.shiftY += y;
+		this.viewportStack.shiftY(y);
+	}
 
-		if (!this.viewportStack.isEmpty())
-		{
-			this.viewportStack.peek().y += y;
-		}
+	@Override
+	public void pushViewport(Area viewport)
+	{
+		this.viewportStack.pushViewport(viewport);
+	}
+
+	@Override
+	public void popViewport()
+	{
+		this.viewportStack.popViewport();
+	}
+
+	@Override
+	public Area getViewport()
+	{
+		return this.viewportStack.getViewport();
 	}
 }

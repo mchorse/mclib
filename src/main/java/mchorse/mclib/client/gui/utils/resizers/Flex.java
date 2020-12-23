@@ -400,14 +400,14 @@ public class Flex implements IResizer
         return GridResizer.apply(this.parent, margin);
     }
 
-    public BoundsResizer bounds(GuiContext context, int margin)
+    public BoundsResizer bounds(GuiElement target, int margin)
     {
         if (this.post instanceof BoundsResizer)
         {
             return (BoundsResizer) this.post;
         }
 
-        return BoundsResizer.apply(this.parent, context, margin);
+        return BoundsResizer.apply(this.parent, target, margin);
     }
 
     /* Hierarchy */

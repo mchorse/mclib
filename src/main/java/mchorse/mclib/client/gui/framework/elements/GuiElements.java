@@ -1,6 +1,5 @@
 package mchorse.mclib.client.gui.framework.elements;
 
-import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Area;
 
