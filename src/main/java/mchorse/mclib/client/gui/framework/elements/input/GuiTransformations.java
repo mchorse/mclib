@@ -151,7 +151,7 @@ public class GuiTransformations extends GuiElement
 
         try
         {
-            NBTTagCompound tag = JsonToNBT.getTagFromJson(GuiScreen.getClipboardString());
+            NBTTagCompound tag = JsonToNBT.getTagFromJson("{Transforms:"+ GuiScreen.getClipboardString()+"}");
             NBTTagList list = tag.getTagList("Transforms", Constants.NBT.TAG_DOUBLE);
 
             if (list.tagCount() >= 9)
@@ -179,7 +179,6 @@ public class GuiTransformations extends GuiElement
 
     private void copyTransformations()
     {
-        NBTTagCompound tag = new NBTTagCompound();
         NBTTagList list = new NBTTagList();
 
         list.appendTag(new NBTTagDouble(this.tx.value));
@@ -191,9 +190,8 @@ public class GuiTransformations extends GuiElement
         list.appendTag(new NBTTagDouble(this.rx.value));
         list.appendTag(new NBTTagDouble(this.ry.value));
         list.appendTag(new NBTTagDouble(this.rz.value));
-        tag.setTag("Transforms", list);
 
-        GuiScreen.setClipboardString(tag.toString());
+        GuiScreen.setClipboardString(list.toString());
     }
 
     public void pasteAll(NBTTagList list)
