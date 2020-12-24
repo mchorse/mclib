@@ -1,11 +1,25 @@
 package mchorse.mclib.client.gui.framework.elements.input;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.GuiScrollElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
+import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
+import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
+
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
 
 /**
  * Transformation editor GUI
@@ -128,6 +142,104 @@ public class GuiTransformations extends GuiElement
 
     public void setR(double x, double y, double z)
     {}
+
+    @Override
+    public GuiContextMenu createContextMenu(GuiContext context)
+    {
+        GuiSimpleContextMenu menu = new GuiSimpleContextMenu(context.mc);
+        NBTTagList transforms = null;
+
+        try
+        {
+            NBTTagCompound tag = JsonToNBT.getTagFromJson(GuiScreen.getClipboardString());
+            NBTTagList list = tag.getTagList("Transforms", Constants.NBT.TAG_DOUBLE);
+
+            if (list.tagCount() >= 9)
+            {
+                transforms = list;
+            }
+        }
+        catch (Exception e)
+        {}
+
+        menu.action(Icons.COPY, IKey.lang("mclib.gui.transforms.context.copy"), () -> this.copyTransformations());
+
+        if (transforms != null)
+        {
+            final NBTTagList innerList = transforms;
+
+            menu.action(Icons.PASTE, IKey.lang("mclib.gui.transforms.context.paste"), () -> this.pasteAll(innerList));
+            menu.action(Icons.ALL_DIRECTIONS, IKey.lang("mclib.gui.transforms.context.paste_translation"), () -> this.pasteTranslation(innerList));
+            menu.action(Icons.MAXIMIZE, IKey.lang("mclib.gui.transforms.context.paste_scale"), () -> this.pasteScale(innerList));
+            menu.action(Icons.REFRESH, IKey.lang("mclib.gui.transforms.context.paste_rotation"), () -> this.pasteRotation(innerList));
+        }
+
+        return menu;
+    }
+
+    private void copyTransformations()
+    {
+        NBTTagCompound tag = new NBTTagCompound();
+        NBTTagList list = new NBTTagList();
+
+        list.appendTag(new NBTTagDouble(this.tx.value));
+        list.appendTag(new NBTTagDouble(this.ty.value));
+        list.appendTag(new NBTTagDouble(this.tz.value));
+        list.appendTag(new NBTTagDouble(this.sx.value));
+        list.appendTag(new NBTTagDouble(this.sy.value));
+        list.appendTag(new NBTTagDouble(this.sz.value));
+        list.appendTag(new NBTTagDouble(this.rx.value));
+        list.appendTag(new NBTTagDouble(this.ry.value));
+        list.appendTag(new NBTTagDouble(this.rz.value));
+        tag.setTag("Transforms", list);
+
+        GuiScreen.setClipboardString(tag.toString());
+    }
+
+    public void pasteAll(NBTTagList list)
+    {
+        this.pasteTranslation(list);
+        this.pasteScale(list);
+        this.pasteRotation(list);
+    }
+
+    public void pasteTranslation(NBTTagList list)
+    {
+        Vector3d translation = this.getVector(list, 0);
+
+        this.tx.setValue(translation.x);
+        this.ty.setValue(translation.y);
+        this.tz.setValueAndNotify(translation.z);
+    }
+
+    public void pasteScale(NBTTagList list)
+    {
+        Vector3d scale = this.getVector(list, 3);
+
+        this.sz.setValue(scale.z);
+        this.sy.setValue(scale.y);
+        this.sx.setValueAndNotify(scale.x);
+    }
+
+    public void pasteRotation(NBTTagList list)
+    {
+        Vector3d rotation = this.getVector(list, 6);
+
+        this.rx.setValue(rotation.x);
+        this.ry.setValue(rotation.y);
+        this.rz.setValueAndNotify(rotation.z);
+    }
+
+    private Vector3d getVector(NBTTagList list, int offset)
+    {
+        Vector3d result = new Vector3d();
+
+        result.x = list.getDoubleAt(offset);
+        result.y = list.getDoubleAt(offset + 1);
+        result.z = list.getDoubleAt(offset + 2);
+
+        return result;
+    }
 
     @Override
     public void draw(GuiContext context)

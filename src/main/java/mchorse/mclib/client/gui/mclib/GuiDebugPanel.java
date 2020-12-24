@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.mclib;
 import mchorse.mclib.client.gui.framework.elements.GuiModelRenderer;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTransformations;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiDopeSheet;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiGraphView;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiKeyframesEditor;
@@ -29,6 +30,9 @@ public class GuiDebugPanel extends GuiDashboardPanel
 	public GuiModelRenderer renderer;
 	public GuiButtonElement play;
 	public GuiSlotElement slot;
+
+	public GuiTransformations top;
+	public GuiTransformations bottom;
 
 	private WavePlayer player;
 	private Waveform wave;
@@ -92,10 +96,22 @@ public class GuiDebugPanel extends GuiDashboardPanel
 		};
 		this.play = new GuiButtonElement(mc, IKey.str("Play me!"), this::play);
 
+		this.top = new GuiTransformations(mc);
+		this.top.fillR(90, 0, -90);
+		this.top.fillT(1, 5, -2);
+		this.bottom = new GuiTransformations(mc);
+		this.bottom.fillT(0, -2, 1.5);
+		this.bottom.fillS(2, 2, 2);
+		this.bottom.fillR(0, 180, 0);
+
+		this.top.flex().relative(this).x(0.5F).y(10).wh(190, 70).anchor(0.5F, 0);
+		this.bottom.flex().relative(this).x(0.5F).y(1F, -10).wh(190, 70).anchor(0.5F, 1F);
+
 		this.renderer.flex().relative(this).wh(1F, 1F);
 		this.play.flex().relative(this).xy(10, 10).w(80);
 		// this.add(this.renderer, this.play);
-		this.add(this.graph, this.dopesheet);
+		// this.add(this.graph, this.dopesheet);
+		this.add(this.top, this.bottom);
 	}
 
 	private void play(GuiButtonElement button)

@@ -26,6 +26,11 @@ mclib.gui.transforms.z=Z
 mclib.gui.transforms.translate=Translate
 mclib.gui.transforms.scale=Scale
 mclib.gui.transforms.rotate=Rotate
+mclib.gui.transforms.context.copy=Copy transfromations
+mclib.gui.transforms.context.paste=Paste transformations
+mclib.gui.transforms.context.paste_translation=Paste translation
+mclib.gui.transforms.context.paste_scale=Paste scale
+mclib.gui.transforms.context.paste_rotation=Paste rotation
 
 mclib.gui.keyframes.tick=Tick
 mclib.gui.keyframes.value=Value
