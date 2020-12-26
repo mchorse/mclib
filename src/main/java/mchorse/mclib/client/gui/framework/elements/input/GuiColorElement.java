@@ -89,6 +89,7 @@ public class GuiColorElement extends GuiElement
 	public GuiColorElement target(GuiElement target)
 	{
 		this.target = target;
+		this.picker.flex().bounds(null, 0).target = target;
 
 		return this;
 	}
