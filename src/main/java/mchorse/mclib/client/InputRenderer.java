@@ -4,6 +4,7 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.events.PreRenderOverlayEvent;
 import mchorse.mclib.utils.Interpolation;
 import mchorse.mclib.utils.Keys;
 import mchorse.mclib.utils.MatrixUtils;
@@ -11,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
@@ -46,6 +48,21 @@ public class InputRenderer
     public static void disable()
     {
         disabledForFrame = true;
+    }
+
+    /**
+     * Called by ASM
+     */
+    public static void preRenderOverlay()
+    {
+        Minecraft mc = Minecraft.getMinecraft();
+        ScaledResolution resolution = new ScaledResolution(mc);
+
+        GlStateManager.pushMatrix();
+        mc.entityRenderer.setupOverlayRendering();
+
+        McLib.EVENT_BUS.post(new PreRenderOverlayEvent(mc, resolution));
+        GlStateManager.popMatrix();
     }
 
     @SubscribeEvent

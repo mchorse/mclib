@@ -6,6 +6,7 @@ import mchorse.mclib.config.ConfigBuilder;
 import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.config.values.ValueRL;
+import mchorse.mclib.events.PreRenderOverlayEvent;
 import mchorse.mclib.events.RegisterConfigEvent;
 import mchorse.mclib.math.IValue;
 import mchorse.mclib.math.MathBuilder;
