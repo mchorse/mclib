@@ -4,7 +4,7 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
-import mchorse.mclib.events.PreRenderOverlayEvent;
+import mchorse.mclib.events.RenderOverlayEvent;
 import mchorse.mclib.utils.Interpolation;
 import mchorse.mclib.utils.Keys;
 import mchorse.mclib.utils.MatrixUtils;
@@ -61,7 +61,22 @@ public class InputRenderer
         GlStateManager.pushMatrix();
         mc.entityRenderer.setupOverlayRendering();
 
-        McLib.EVENT_BUS.post(new PreRenderOverlayEvent(mc, resolution));
+        McLib.EVENT_BUS.post(new RenderOverlayEvent.Pre(mc, resolution));
+        GlStateManager.popMatrix();
+    }
+
+    /**
+     * Called by ASM
+     */
+    public static void postRenderOverlay()
+    {
+        Minecraft mc = Minecraft.getMinecraft();
+        ScaledResolution resolution = new ScaledResolution(mc);
+
+        GlStateManager.pushMatrix();
+        mc.entityRenderer.setupOverlayRendering();
+
+        McLib.EVENT_BUS.post(new RenderOverlayEvent.Post(mc, resolution));
         GlStateManager.popMatrix();
     }
 
