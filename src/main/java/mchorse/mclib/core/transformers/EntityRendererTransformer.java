@@ -39,7 +39,7 @@ public class EntityRendererTransformer extends ClassMethodTransformer
 				MethodInsnNode methodNode = (MethodInsnNode) node;
 				String desc = methodNode.owner + "/" + methodNode.name + methodNode.desc;
 				String targetPost = CoreClassTransformer.obfuscated ? "rl/b()V" : "net/minecraft/profiler/Profiler/endSection()V";
-				String targetPre = CoreClassTransformer.obfuscated ? "rl/b(Ljava/lang/String;)V" : "net/minecraft/profiler/Profiler/endStartSection(Ljava/lang/String;)V";
+				String targetPre = CoreClassTransformer.obfuscated ? "rl/c(Ljava/lang/String;)V" : "net/minecraft/profiler/Profiler/endStartSection(Ljava/lang/String;)V";
 
 				if (desc.equals(targetPost))
 				{
