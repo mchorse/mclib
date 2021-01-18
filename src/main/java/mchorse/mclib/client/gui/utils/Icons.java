@@ -59,6 +59,11 @@ public class Icons
 	public static final Icon STOP = new Icon(ICONS, 112, 32);
 	public static final Icon FULLSCREEN = new Icon(ICONS, 128, 32);
 	public static final Icon ALL_DIRECTIONS = new Icon(ICONS, 144, 32);
+	public static final Icon SPHERE = new Icon(ICONS, 160, 32);
+	public static final Icon SHIFT_TO = new Icon(ICONS, 176, 32);
+	public static final Icon SHIFT_FORWARD = new Icon(ICONS, 192, 32);
+	public static final Icon SHIFT_BACKWARD = new Icon(ICONS, 208, 32);
+	public static final Icon MOVE_TO = new Icon(ICONS, 224, 32);
 
 	public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240, 16, 16);
 	public static final Icon DISABLED = new Icon(ICONS, 16, 240, 16, 16);
