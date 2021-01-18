@@ -180,6 +180,11 @@ public class GuiBase extends GuiScreen
         Keyboard.enableRepeatEvents(false);
     }
 
+    public void closeThisScreen()
+    {
+        this.closeScreen();
+    }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
