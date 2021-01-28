@@ -26,9 +26,16 @@ mclib.gui.transforms.z=Z
 mclib.gui.transforms.translate=平移
 mclib.gui.transforms.scale=缩放
 mclib.gui.transforms.rotate=旋转
+mclib.gui.transforms.context.copy=拷贝变换信息
+mclib.gui.transforms.context.paste=粘贴变换信息
+mclib.gui.transforms.context.paste_translation=仅粘贴平移
+mclib.gui.transforms.context.paste_scale=仅粘贴缩放
+mclib.gui.transforms.context.paste_rotation=仅粘贴旋转
 
 mclib.gui.keyframes.tick=Tick
 mclib.gui.keyframes.value=值
+mclib.gui.keyframes.context.maximize=框显所有关键帧
+mclib.gui.keyframes.context.select_all=全选
 mclib.gui.keyframes.context.remove=移除关键帧
 mclib.gui.keyframes.context.to_left=选中左侧手柄
 mclib.gui.keyframes.context.to_main=选中主手柄
@@ -47,6 +54,9 @@ mclib.gui.color.recent=最近的颜色
 
 mclib.gui.color.context.favorites.add=添加至收藏
 mclib.gui.color.context.favorites.remove=移出收藏
+
+mclib.gui.item_slot.context.drop=获取该物品到背包
+mclib.gui.item_slot.context.clear=清除物品
 
 # Config
 mclib.config.title=McLib
@@ -72,6 +82,8 @@ mclib.config.tutorials.tooltip=该分类提供了利于制作教程视频的选�
 
 mclib.config.tutorials.enable_mouse_rendering=鼠标光标
 mclib.config.comments.tutorials.enable_mouse_rendering=启用鼠标光标的显示。在使用 Minema mod 录制教程并且没有光标显示时十分有用
+mclib.config.tutorials.enable_mouse_buttons_rendering=鼠标按键
+mclib.config.comments.tutorials.enable_mouse_buttons_rendering=启用鼠标按键和鼠标滚轮滚动的显示。在使用 Minema mod 录制教程，并且鼠标按键或滚轮滚动不可见时非常有用
 mclib.config.tutorials.enable_keystrokes_rendering=按键显示
 mclib.config.comments.tutorials.enable_keystrokes_rendering=启用按键显示。在需要展示按了哪些按键的教程中十分有用
 mclib.config.tutorials.keystroke_offset=按键显示偏移
