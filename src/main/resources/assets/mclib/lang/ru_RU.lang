@@ -26,13 +26,37 @@ mclib.gui.transforms.z=Z
 mclib.gui.transforms.translate=Перемещение
 mclib.gui.transforms.scale=Масштаб
 mclib.gui.transforms.rotate=Вращение
+mclib.gui.transforms.context.copy=Копировать трансформации
+mclib.gui.transforms.context.paste=Вставить трансформации
+mclib.gui.transforms.context.paste_translation=Вставить перемещение
+mclib.gui.transforms.context.paste_scale=Вставить масштаб
+mclib.gui.transforms.context.paste_rotation=Вставить вращение
 
 mclib.gui.keyframes.tick=Тик
 mclib.gui.keyframes.value=Значение
+mclib.gui.keyframes.context.maximize=Просмотреть все ключёвые кадры
+mclib.gui.keyframes.context.select_all=Выбрать все
 mclib.gui.keyframes.context.remove=Удалить ключевые кадры
 mclib.gui.keyframes.context.to_left=Выбрать только левые стрелки
 mclib.gui.keyframes.context.to_main=Выбрать только кадры без стрелок
 mclib.gui.keyframes.context.to_right=Выбрать только правые стрелки
+
+mclib.gui.multiskin.color=With this color element, you can adjust color (RGB) channels. It works best with white/grayscale images.
+mclib.gui.multiskin.scale=Масштаб
+mclib.gui.multiskin.scale_to_largest=Отмасштабировать по найбольшему
+mclib.gui.multiskin.shift=Перемещение
+mclib.gui.multiskin.pixelate=Пикселизировать
+mclib.gui.multiskin.erase=Стереть
+mclib.gui.multiskin.erase_tooltip=Этот параметр позволяет использовать текущий скин в качестве маски отличий (difference mask), означая, что любые непрозрачные пиксели изображения сотрут пиксели всех скинов под ним.
+
+mclib.gui.color.favorite=Избранные цвета
+mclib.gui.color.recent=Недавние цвета
+
+mclib.gui.color.context.favorites.add=Добавить к избранным
+mclib.gui.color.context.favorites.remove=Удалить из избранных
+
+mclib.gui.item_slot.context.drop=Уронить предмет
+mclib.gui.item_slot.context.clear=Очистить предмет
 
 # Config
 mclib.config.title=МакЛиб
@@ -48,6 +72,8 @@ mclib.config.appearance.enable_checkbox_rendering=Клетки
 mclib.config.comments.appearance.enable_checkbox_rendering=Включить клетки заместо переключателя (дело вкуса)
 mclib.config.appearance.enable_grid_rendering=Сетка редактора моделей
 mclib.config.comments.appearance.enable_grid_rendering=Включить отрисовку сетки вместо блока травы
+mclib.config.appearance.enable_trackpad_increments=Изменения трекпадами
+mclib.config.comments.appearance.enable_trackpad_increments=Включить кнопки < и > в поле трекпадов, которые позваоляют изменять значения, заданные в полях с трекпадами
 mclib.config.appearance.user_interface_scale=Размер интерфейса
 mclib.config.comments.appearance.user_interface_scale=Размера интерфейса для модов МакХорса, используемый отдельно от такового прамаетра в "Натройках видео". Если значение параметра равняется нулю, то будет использовано значение из "Настроек видео"
 
@@ -62,6 +88,8 @@ mclib.config.tutorials.keystroke_offset=Смещение подсветки кл
 mclib.config.comments.tutorials.keystroke_offset=Позволяет настроить на сколько пикселей от угла будет смещаться подсветка клавиш
 mclib.config.tutorials.keystroke_position=Расположение подсветки клавиш
 mclib.config.comments.tutorials.keystroke_position=Позволяет менять угол, в котором отображается подсветка клваиш 
+mclib.config.tutorials.keystroke_position=Позиция подсветки клавиш
+mclib.config.comments.tutorials.keystroke_position=Позволяет менять местонахождения угла с подсветкой клавиш 
 
 mclib.config.background.title=Задний фон
 mclib.config.background.tooltip=Настройки заднего фона, такие как цвет и фоновое изображение
@@ -80,6 +108,12 @@ mclib.config.scrollbars.shadow=Цвет затенения
 mclib.config.comments.scrollbars.shadow=Позволяетвам устанавливать цвет затенения полей прокрутки
 mclib.config.scrollbars.width=Толщина
 mclib.config.comments.scrollbars.width=Позволяет вам настроить толщину (ширину полей прокрутки)
+
+mclib.config.multiskin.title=Мультискин
+mclib.config.multiskin.tooltip=Опции, которые относятся к Мультискину
+
+mclib.config.multiskin.multithreaded=Многопоточная обработка
+mclib.config.comments.multiskin.multithreaded=Позволяет вам использовать многопоточную обработку мультискинов, что должно убрать лаги, но обойдётся более длинным временем обработки
 
 mclib.config.vanilla.title=Ванильные ухищрения
 mclib.config.vanilla.tooltip=Опции, затрагивающие махинации-ухищрения, проводимые с кодом Майнкрафта
