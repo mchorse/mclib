@@ -41,7 +41,7 @@ mclib.gui.keyframes.context.to_left=Выбрать только левые ст�
 mclib.gui.keyframes.context.to_main=Выбрать только кадры без стрелок
 mclib.gui.keyframes.context.to_right=Выбрать только правые стрелки
 
-mclib.gui.multiskin.color=With this color element, you can adjust color (RGB) channels. It works best with white/grayscale images.
+mclib.gui.multiskin.color=Используя эту панель настройки цвета, вы можете настроить каналы цвета в формате RGB. Лучше всего работает с белыми/серыми изображениями.
 mclib.gui.multiskin.scale=Масштаб
 mclib.gui.multiskin.scale_to_largest=Отмасштабировать по найбольшему
 mclib.gui.multiskin.shift=Перемещение
@@ -69,7 +69,7 @@ mclib.config.comments.appearance.primary_color=Цвет, который повс
 mclib.config.appearance.enable_borders=Рамки кнопок
 mclib.config.comments.appearance.enable_borders=Необходимо ли наличие рамок у кнопок и других элементов?
 mclib.config.appearance.enable_checkbox_rendering=Клетки
-mclib.config.comments.appearance.enable_checkbox_rendering=Включить клетки заместо переключателя (дело вкуса)
+mclib.config.comments.appearance.enable_checkbox_rendering=Включить клетки вместо переключателя (дело вкуса)
 mclib.config.appearance.enable_grid_rendering=Сетка редактора моделей
 mclib.config.comments.appearance.enable_grid_rendering=Включить отрисовку сетки вместо блока травы
 mclib.config.appearance.enable_trackpad_increments=Изменения трекпадами
@@ -82,14 +82,14 @@ mclib.config.tutorials.tooltip=Опции этой категории могут
 
 mclib.config.tutorials.enable_mouse_rendering=Курсор мыши
 mclib.config.comments.tutorials.enable_mouse_rendering=Включает отображение курсора мыши. Рекомендуется включить при записи туториалов минемой (т.к. при записи минемой курсор не отображается)
+mclib.config.tutorials.enable_mouse_buttons_rendering=Кнопки мыши
+mclib.config.comments.tutorials.enable_mouse_buttons_rendering=Включает отображение нажатий кнопок мыши и прокрутки колёсика. Очень полезная функция для записи туториалов с минемой, где не видно системные манипуляции с мышью
 mclib.config.tutorials.enable_keystrokes_rendering=Подсветка клавиш
 mclib.config.comments.tutorials.enable_keystrokes_rendering=Включает отображение подсветки клавиш. Очень полезная функция для туториалов, т.к. так можно продемонстрировать нажимаемые клавиши без танцев с бубном
 mclib.config.tutorials.keystroke_offset=Смещение подсветки клавиш
-mclib.config.comments.tutorials.keystroke_offset=Позволяет настроить на сколько пикселей от угла будет смещаться подсветка клавиш
-mclib.config.tutorials.keystroke_position=Расположение подсветки клавиш
-mclib.config.comments.tutorials.keystroke_position=Позволяет менять угол, в котором отображается подсветка клваиш 
+mclib.config.comments.tutorials.keystroke_offset=Позволяет настроить на сколько пикселей от угла будет смещаться подсветка клавиш 
 mclib.config.tutorials.keystroke_position=Позиция подсветки клавиш
-mclib.config.comments.tutorials.keystroke_position=Позволяет менять местонахождения угла с подсветкой клавиш 
+mclib.config.comments.tutorials.keystroke_position=Позволяет менять местонахождение угла с подсветкой клавиш 
 
 mclib.config.background.title=Задний фон
 mclib.config.background.tooltip=Настройки заднего фона, такие как цвет и фоновое изображение
