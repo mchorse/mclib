@@ -1,3 +1,20 @@
+## Version 2.2
+
+This update features a couple of cool quality of life tweaks to different GUI elements, as well as GUI rendering optimization.
+
+* Added an ability to use right counterpart keys for Shift, Ctrl and Alt (suggested by Silverx)
+* Added separate mod option for mouse button presses
+* Added mouse wheel display option to mouse button presses display option
+* Added **View all keyframes** and **Select all keyframes** context menu options to keyframe elements
+* Added **View all keyframes** (`Home` key) and **Select all keyframes** (`Ctrl + A` key combo, suggested by Chunk7) to keyframe elements
+* Added **Drop the item down** and **Clear the item** context menu options to item slot element
+* Added viewport culling to GUI system which prevents rendering of elements which are not seen on the screen
+* Added **Copy transformations** and multiple paste contet menu options to GUI transformation editor element (3x3 grid with Translate, Scale, Rotate labels)
+* Changed min and max zoom levels for keyframe elements
+* Fixed (or rather reduced) multi-skin collision with other skins
+* Fixed keyboard input in texture picker always selecting the last element
+* Fixed texture picker resetting skin upon closing
+
 ## Version 2.1.2
 
 This patch fix features some bug fixes that are required for the release of my new Chameleon mod.
