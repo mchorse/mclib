@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -59,7 +60,7 @@ public class InputRenderer
         ScaledResolution resolution = new ScaledResolution(mc);
 
         GlStateManager.pushMatrix();
-        mc.entityRenderer.setupOverlayRendering();
+        setupOrthoProjection(resolution);
 
         McLib.EVENT_BUS.post(new RenderOverlayEvent.Pre(mc, resolution));
         GlStateManager.popMatrix();
@@ -74,10 +75,21 @@ public class InputRenderer
         ScaledResolution resolution = new ScaledResolution(mc);
 
         GlStateManager.pushMatrix();
-        mc.entityRenderer.setupOverlayRendering();
+        setupOrthoProjection(resolution);
 
         McLib.EVENT_BUS.post(new RenderOverlayEvent.Post(mc, resolution));
         GlStateManager.popMatrix();
+    }
+
+    private static void setupOrthoProjection(ScaledResolution resolution)
+    {
+        GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT);
+        GlStateManager.matrixMode(GL11.GL_PROJECTION);
+        GlStateManager.loadIdentity();
+        GlStateManager.ortho(0, resolution.getScaledWidth_double(), resolution.getScaledHeight_double(), 0, 1000D, 3000D);
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+        GlStateManager.loadIdentity();
+        GlStateManager.translate(0, 0, -2000F);
     }
 
     @SubscribeEvent
