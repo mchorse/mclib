@@ -1,6 +1,7 @@
 {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/mchorses-mclib/",
     "1.12.2": {
+        "2.2.1": "This hot patch update fixes an annoying issue with Optifine Shader's Anti-Aliasing.",
         "2.2": "This update features a couple of cool quality of life tweaks to different GUI elements, as well as GUI rendering optimization.",
         "2.1.2": "This patch fix features some bug fixes that are required for the release of my new Chameleon mod.",
         "2.1.1": "This tiny update that provides some changes for Blockbuster.",
@@ -31,8 +32,8 @@
     },
     
     "promos": {
-        "1.12.2-latest": "2.2",
-        "1.12.2-recommended": "2.2",
+        "1.12.2-latest": "2.2.1",
+        "1.12.2-recommended": "2.2.1",
         "1.10.2-latest": "1.0.4",
         "1.10.2-recommended": "1.0.4",
         "1.11.2-latest": "1.0.4",

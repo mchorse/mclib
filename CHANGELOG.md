@@ -1,3 +1,9 @@
+## Version 2.2.1
+
+This hot patch update fixes an annoying issue with Optifine Shader's Anti-Aliasing.
+
+* Fix OpenGL 1283 error spam (reported by Nichi, 0n3Appl3, Akhbalaev85 and Chunk7)
+
 ## Version 2.2
 
 This update features a couple of cool quality of life tweaks to different GUI elements, as well as GUI rendering optimization.
