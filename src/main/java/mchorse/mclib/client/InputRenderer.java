@@ -59,11 +59,9 @@ public class InputRenderer
         Minecraft mc = Minecraft.getMinecraft();
         ScaledResolution resolution = new ScaledResolution(mc);
 
-        GlStateManager.pushMatrix();
         setupOrthoProjection(resolution);
 
         McLib.EVENT_BUS.post(new RenderOverlayEvent.Pre(mc, resolution));
-        GlStateManager.popMatrix();
     }
 
     /**
@@ -74,11 +72,9 @@ public class InputRenderer
         Minecraft mc = Minecraft.getMinecraft();
         ScaledResolution resolution = new ScaledResolution(mc);
 
-        GlStateManager.pushMatrix();
         setupOrthoProjection(resolution);
 
         McLib.EVENT_BUS.post(new RenderOverlayEvent.Post(mc, resolution));
-        GlStateManager.popMatrix();
     }
 
     private static void setupOrthoProjection(ScaledResolution resolution)
