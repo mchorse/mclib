@@ -17,7 +17,7 @@ public class Random extends Function
     @Override
     public double get()
     {
-        double random = 0;
+        double random;
 
         if (this.args.length >= 3)
         {

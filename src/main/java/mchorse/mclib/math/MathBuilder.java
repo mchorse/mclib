@@ -2,12 +2,16 @@ package mchorse.mclib.math;
 
 import mchorse.mclib.math.functions.Function;
 import mchorse.mclib.math.functions.classic.Abs;
-import mchorse.mclib.math.functions.classic.Cos;
+import mchorse.mclib.math.functions.trig.Acos;
+import mchorse.mclib.math.functions.trig.Asin;
+import mchorse.mclib.math.functions.trig.Atan;
+import mchorse.mclib.math.functions.trig.Atan2;
+import mchorse.mclib.math.functions.trig.Cos;
 import mchorse.mclib.math.functions.classic.Exp;
 import mchorse.mclib.math.functions.classic.Ln;
 import mchorse.mclib.math.functions.classic.Mod;
 import mchorse.mclib.math.functions.classic.Pow;
-import mchorse.mclib.math.functions.classic.Sin;
+import mchorse.mclib.math.functions.trig.Sin;
 import mchorse.mclib.math.functions.classic.Sqrt;
 import mchorse.mclib.math.functions.limit.Clamp;
 import mchorse.mclib.math.functions.limit.Max;
@@ -16,9 +20,13 @@ import mchorse.mclib.math.functions.rounding.Ceil;
 import mchorse.mclib.math.functions.rounding.Floor;
 import mchorse.mclib.math.functions.rounding.Round;
 import mchorse.mclib.math.functions.rounding.Trunc;
+import mchorse.mclib.math.functions.utility.DieRoll;
+import mchorse.mclib.math.functions.utility.DieRollInteger;
+import mchorse.mclib.math.functions.utility.HermiteBlend;
 import mchorse.mclib.math.functions.utility.Lerp;
 import mchorse.mclib.math.functions.utility.LerpRotate;
 import mchorse.mclib.math.functions.utility.Random;
+import mchorse.mclib.math.functions.utility.RandomInteger;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -72,18 +80,28 @@ public class MathBuilder
 
         /* Classical functions */
         this.functions.put("abs", Abs.class);
-        this.functions.put("cos", Cos.class);
-        this.functions.put("sin", Sin.class);
         this.functions.put("exp", Exp.class);
         this.functions.put("ln", Ln.class);
         this.functions.put("sqrt", Sqrt.class);
         this.functions.put("mod", Mod.class);
         this.functions.put("pow", Pow.class);
 
+        /* Trig functions */
+        this.functions.put("cos", Cos.class);
+        this.functions.put("sin", Sin.class);
+        this.functions.put("acos", Acos.class);
+        this.functions.put("asin", Asin.class);
+        this.functions.put("atan", Atan.class);
+        this.functions.put("atan2", Atan2.class);
+
         /* Utility functions */
         this.functions.put("lerp", Lerp.class);
         this.functions.put("lerprotate", LerpRotate.class);
         this.functions.put("random", Random.class);
+        this.functions.put("randomi", RandomInteger.class);
+        this.functions.put("roll", DieRoll.class);
+        this.functions.put("rolli", DieRollInteger.class);
+        this.functions.put("hermite", HermiteBlend.class);
     }
 
     /**

@@ -1,11 +1,11 @@
-package mchorse.mclib.math.functions.classic;
+package mchorse.mclib.math.functions.trig;
 
 import mchorse.mclib.math.IValue;
 import mchorse.mclib.math.functions.Function;
 
-public class Sin extends Function
+public class Acos extends Function
 {
-    public Sin(IValue[] values, String name) throws Exception
+    public Acos(IValue[] values, String name) throws Exception
     {
         super(values, name);
     }
@@ -19,6 +19,6 @@ public class Sin extends Function
     @Override
     public double get()
     {
-        return Math.sin(this.getArg(0));
+        return Math.acos(this.getArg(0));
     }
 }

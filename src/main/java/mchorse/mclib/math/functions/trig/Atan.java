@@ -1,11 +1,11 @@
-package mchorse.mclib.math.functions.classic;
+package mchorse.mclib.math.functions.trig;
 
 import mchorse.mclib.math.IValue;
 import mchorse.mclib.math.functions.Function;
 
-public class Cos extends Function
+public class Atan extends Function
 {
-    public Cos(IValue[] values, String name) throws Exception
+    public Atan(IValue[] values, String name) throws Exception
     {
         super(values, name);
     }
@@ -19,6 +19,6 @@ public class Cos extends Function
     @Override
     public double get()
     {
-        return Math.cos(this.getArg(0));
+        return Math.atan(this.getArg(0));
     }
 }
