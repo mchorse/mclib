@@ -265,7 +265,6 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     {
         super.resize();
 
-        this.field.setCursorPositionZero();
         this.plusOne.copy(this.area);
         this.minusOne.copy(this.area);
         this.plusOne.w = this.minusOne.w = 20;
