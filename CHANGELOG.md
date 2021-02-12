@@ -1,3 +1,10 @@
+## Version 2.2.2
+
+This patch updated needed for Blockbuster 2.2.2.
+
+* Added new math functions to the parser: `acos(value)`, `asin(value)`, `atan(value)`, `atan2(y, x)`, `randomi(min, max, seed)`, `roll(num, low, high)`, `rolli(num, low, high)` and `hermite(x)`
+* Fix text field's cursor gets reset to start after resizing
+
 ## Version 2.2.1
 
 This hot patch update fixes an annoying issue with Optifine Shader's Anti-Aliasing.
