@@ -5,10 +5,10 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class RegisterDashboardPanels extends Event
 {
-	public final GuiDashboard dashboard;
+    public final GuiDashboard dashboard;
 
-	public RegisterDashboardPanels(GuiDashboard dashboard)
-	{
-		this.dashboard = dashboard;
-	}
+    public RegisterDashboardPanels(GuiDashboard dashboard)
+    {
+        this.dashboard = dashboard;
+    }
 }

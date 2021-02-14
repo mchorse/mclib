@@ -15,123 +15,123 @@ import java.util.List;
 
 public class ConfigBuilder
 {
-	public final String id;
-	public final File file;
+    public final String id;
+    public final File file;
 
-	private List<ConfigCategory> categories = new ArrayList<ConfigCategory>();
-	private ConfigCategory category;
+    private List<ConfigCategory> categories = new ArrayList<ConfigCategory>();
+    private ConfigCategory category;
 
-	public ConfigBuilder(String id, File file)
-	{
-		this.id = id;
-		this.file = file;
-	}
+    public ConfigBuilder(String id, File file)
+    {
+        this.id = id;
+        this.file = file;
+    }
 
-	public Config build()
-	{
-		Config config = new Config(this.id, this.file);
+    public Config build()
+    {
+        Config config = new Config(this.id, this.file);
 
-		for (ConfigCategory category : this.categories)
-		{
-			category.config = config;
-			config.categories.put(category.id, category);
-		}
+        for (ConfigCategory category : this.categories)
+        {
+            category.config = config;
+            config.categories.put(category.id, category);
+        }
 
-		return config;
-	}
+        return config;
+    }
 
-	public ConfigBuilder category(String id)
-	{
-		this.categories.add(this.category = new ConfigCategory(id));
+    public ConfigBuilder category(String id)
+    {
+        this.categories.add(this.category = new ConfigCategory(id));
 
-		return this;
-	}
+        return this;
+    }
 
-	public ConfigBuilder register(Value value)
-	{
-		this.category.register(value.getId(), value);
+    public ConfigBuilder register(Value value)
+    {
+        this.category.register(value.getId(), value);
 
-		return this;
-	}
+        return this;
+    }
 
-	public ValueInt getInt(String id, int defaultValue)
-	{
-		ValueInt value = new ValueInt(id, defaultValue);
+    public ValueInt getInt(String id, int defaultValue)
+    {
+        ValueInt value = new ValueInt(id, defaultValue);
 
-		this.register(value);
+        this.register(value);
 
-		return value;
-	}
+        return value;
+    }
 
-	public ValueInt getInt(String id, int defaultValue, int min, int max)
-	{
-		ValueInt value = new ValueInt(id, defaultValue, min, max);
+    public ValueInt getInt(String id, int defaultValue, int min, int max)
+    {
+        ValueInt value = new ValueInt(id, defaultValue, min, max);
 
-		this.register(value);
+        this.register(value);
 
-		return value;
-	}
+        return value;
+    }
 
-	public ValueFloat getFloat(String id, float defaultValue)
-	{
-		ValueFloat value = new ValueFloat(id, defaultValue);
+    public ValueFloat getFloat(String id, float defaultValue)
+    {
+        ValueFloat value = new ValueFloat(id, defaultValue);
 
-		this.register(value);
+        this.register(value);
 
-		return value;
-	}
+        return value;
+    }
 
-	public ValueFloat getFloat(String id, float defaultValue, float min, float max)
-	{
-		ValueFloat value = new ValueFloat(id, defaultValue, min, max);
+    public ValueFloat getFloat(String id, float defaultValue, float min, float max)
+    {
+        ValueFloat value = new ValueFloat(id, defaultValue, min, max);
 
-		this.register(value);
+        this.register(value);
 
-		return value;
-	}
+        return value;
+    }
 
-	public ValueDouble getDouble(String id, double defaultValue)
-	{
-		ValueDouble value = new ValueDouble(id, defaultValue);
+    public ValueDouble getDouble(String id, double defaultValue)
+    {
+        ValueDouble value = new ValueDouble(id, defaultValue);
 
-		this.register(value);
+        this.register(value);
 
-		return value;
-	}
+        return value;
+    }
 
-	public ValueDouble getDouble(String id, double defaultValue, double min, double max)
-	{
-		ValueDouble value = new ValueDouble(id, defaultValue, min, max);
+    public ValueDouble getDouble(String id, double defaultValue, double min, double max)
+    {
+        ValueDouble value = new ValueDouble(id, defaultValue, min, max);
 
-		this.register(value);
+        this.register(value);
 
-		return value;
-	}
+        return value;
+    }
 
-	public ValueBoolean getBoolean(String id, boolean defaultValue)
-	{
-		ValueBoolean value = new ValueBoolean(id, defaultValue);
+    public ValueBoolean getBoolean(String id, boolean defaultValue)
+    {
+        ValueBoolean value = new ValueBoolean(id, defaultValue);
 
-		this.register(value);
+        this.register(value);
 
-		return value;
-	}
+        return value;
+    }
 
-	public ValueString getString(String id, String defaultValue)
-	{
-		ValueString value = new ValueString(id, defaultValue);
+    public ValueString getString(String id, String defaultValue)
+    {
+        ValueString value = new ValueString(id, defaultValue);
 
-		this.register(value);
+        this.register(value);
 
-		return value;
-	}
+        return value;
+    }
 
-	public ValueRL getRL(String id, ResourceLocation defaultValue)
-	{
-		ValueRL value = new ValueRL(id, defaultValue);
+    public ValueRL getRL(String id, ResourceLocation defaultValue)
+    {
+        ValueRL value = new ValueRL(id, defaultValue);
 
-		this.register(value);
+        this.register(value);
 
-		return value;
-	}
+        return value;
+    }
 }

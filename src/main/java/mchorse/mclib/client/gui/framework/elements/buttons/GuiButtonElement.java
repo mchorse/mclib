@@ -11,45 +11,45 @@ import java.util.function.Consumer;
 
 public class GuiButtonElement extends GuiClickElement<GuiButtonElement>
 {
-	public IKey label;
+    public IKey label;
 
-	public boolean custom;
-	public int customColor;
+    public boolean custom;
+    public int customColor;
 
-	public GuiButtonElement(Minecraft mc, IKey label, Consumer<GuiButtonElement> callback)
-	{
-		super(mc, callback);
+    public GuiButtonElement(Minecraft mc, IKey label, Consumer<GuiButtonElement> callback)
+    {
+        super(mc, callback);
 
-		this.label = label;
-		this.flex().h(20);
-	}
+        this.label = label;
+        this.flex().h(20);
+    }
 
-	public GuiButtonElement color(int color)
-	{
-		this.custom = true;
-		this.customColor = color & 0xffffff;
+    public GuiButtonElement color(int color)
+    {
+        this.custom = true;
+        this.customColor = color & 0xffffff;
 
-		return this;
-	}
+        return this;
+    }
 
-	@Override
-	protected void drawSkin(GuiContext context)
-	{
-		int color = 0xff000000 + (this.custom ? this.customColor : McLib.primaryColor.get());
+    @Override
+    protected void drawSkin(GuiContext context)
+    {
+        int color = 0xff000000 + (this.custom ? this.customColor : McLib.primaryColor.get());
 
-		if (this.hover)
-		{
-			color = ColorUtils.multiplyColor(color, 0.85F);
-		}
+        if (this.hover)
+        {
+            color = ColorUtils.multiplyColor(color, 0.85F);
+        }
 
-		GuiDraw.drawBorder(this.area, color);
+        GuiDraw.drawBorder(this.area, color);
 
-		String label = this.label.get();
-		int x = this.area.mx(this.font.getStringWidth(label));
-		int y = this.area.my(this.font.FONT_HEIGHT - 1);
+        String label = this.label.get();
+        int x = this.area.mx(this.font.getStringWidth(label));
+        int y = this.area.my(this.font.FONT_HEIGHT - 1);
 
-		this.font.drawStringWithShadow(label, x, y, this.hover ? 16777120 : 0xffffff);
+        this.font.drawStringWithShadow(label, x, y, this.hover ? 16777120 : 0xffffff);
 
-		GuiDraw.drawLockedArea(this);
-	}
+        GuiDraw.drawLockedArea(this);
+    }
 }

@@ -28,7 +28,7 @@ public abstract class CoreClassTransformer implements IClassTransformer
         return obfuscated ? notch : mcp;
     }
 
-	public static String stringify(AbstractInsnNode node)
+    public static String stringify(AbstractInsnNode node)
     {
         String output = node.toString();
 
@@ -56,5 +56,5 @@ public abstract class CoreClassTransformer implements IClassTransformer
         }
 
         return output;
-	}
+    }
 }

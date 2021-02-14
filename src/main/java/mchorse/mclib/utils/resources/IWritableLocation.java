@@ -6,13 +6,13 @@ import net.minecraft.util.ResourceLocation;
 
 public interface IWritableLocation
 {
-	public void fromNbt(NBTBase nbt) throws Exception;
+    public void fromNbt(NBTBase nbt) throws Exception;
 
-	public void fromJson(JsonElement element) throws Exception;
+    public void fromJson(JsonElement element) throws Exception;
 
-	public NBTBase writeNbt();
+    public NBTBase writeNbt();
 
-	public JsonElement writeJson();
+    public JsonElement writeJson();
 
-	public ResourceLocation clone();
+    public ResourceLocation clone();
 }

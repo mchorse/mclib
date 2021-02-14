@@ -5,30 +5,30 @@ import net.minecraft.client.Minecraft;
 
 public class GuiDashboardPanel extends GuiElement
 {
-	public final GuiDashboard dashboard;
+    public final GuiDashboard dashboard;
 
-	public GuiDashboardPanel(Minecraft mc, GuiDashboard dashboard)
-	{
-		super(mc);
+    public GuiDashboardPanel(Minecraft mc, GuiDashboard dashboard)
+    {
+        super(mc);
 
-		this.dashboard = dashboard;
-		this.markContainer();
-	}
+        this.dashboard = dashboard;
+        this.markContainer();
+    }
 
-	public boolean needsBackground()
-	{
-		return true;
-	}
+    public boolean needsBackground()
+    {
+        return true;
+    }
 
-	public void appear()
-	{}
+    public void appear()
+    {}
 
-	public void disappear()
-	{}
+    public void disappear()
+    {}
 
-	public void open()
-	{}
+    public void open()
+    {}
 
-	public void close()
-	{}
+    public void close()
+    {}
 }

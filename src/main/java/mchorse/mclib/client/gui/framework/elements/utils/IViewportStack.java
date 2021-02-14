@@ -7,39 +7,39 @@ import mchorse.mclib.client.gui.utils.Area;
  */
 public interface IViewportStack
 {
-	public void reset();
+    public void reset();
 
-	public Area getViewport();
+    public Area getViewport();
 
-	public void pushViewport(Area area);
+    public void pushViewport(Area area);
 
-	public void popViewport();
+    public void popViewport();
 
-	public int getShiftX();
+    public int getShiftX();
 
-	public int getShiftY();
+    public int getShiftY();
 
-	/**
-	 * Get global X (relative to root element/screen)
-	 */
-	public int globalX(int x);
+    /**
+     * Get global X (relative to root element/screen)
+     */
+    public int globalX(int x);
 
-	/**
-	 * Get global Y (relative to root element/screen)
-	 */
-	public int globalY(int y);
+    /**
+     * Get global Y (relative to root element/screen)
+     */
+    public int globalY(int y);
 
-	/**
-	 * Get current local X (relative to current viewport)
-	 */
-	public int localX(int x);
+    /**
+     * Get current local X (relative to current viewport)
+     */
+    public int localX(int x);
 
-	/**
-	 * Get current local Y (relative to current viewport)
-	 */
-	public int localY(int y);
+    /**
+     * Get current local Y (relative to current viewport)
+     */
+    public int localY(int y);
 
-	public void shiftX(int x);
+    public void shiftX(int x);
 
-	public void shiftY(int y);
+    public void shiftY(int y);
 }

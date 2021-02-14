@@ -28,206 +28,206 @@ import java.nio.charset.Charset;
 
 public class GuiMultiSkinEditor extends GuiCanvasEditor
 {
-	public static Shader shader;
-	public static int uTexture;
-	public static int uTextureBackground;
-	public static int uSize;
-	public static int uFilters;
-	public static int uColor;
+    public static Shader shader;
+    public static int uTexture;
+    public static int uTextureBackground;
+    public static int uSize;
+    public static int uFilters;
+    public static int uColor;
 
-	public GuiTexturePicker picker;
-	public FilteredResourceLocation location;
+    public GuiTexturePicker picker;
+    public FilteredResourceLocation location;
 
-	public GuiColorElement color;
-	public GuiTrackpadElement scale;
-	public GuiToggleElement scaleToLargest;
-	public GuiTrackpadElement shiftX;
-	public GuiTrackpadElement shiftY;
+    public GuiColorElement color;
+    public GuiTrackpadElement scale;
+    public GuiToggleElement scaleToLargest;
+    public GuiTrackpadElement shiftX;
+    public GuiTrackpadElement shiftY;
 
-	public GuiTrackpadElement pixelate;
-	public GuiToggleElement erase;
+    public GuiTrackpadElement pixelate;
+    public GuiToggleElement erase;
 
-	public GuiMultiSkinEditor(Minecraft mc, GuiTexturePicker picker)
-	{
-		super(mc);
+    public GuiMultiSkinEditor(Minecraft mc, GuiTexturePicker picker)
+    {
+        super(mc);
 
-		this.picker = picker;
+        this.picker = picker;
 
-		this.color = new GuiColorElement(mc, (value) -> this.location.color = value);
-		this.color.picker.editAlpha();
-		this.color.direction(Direction.TOP).tooltip(IKey.lang("mclib.gui.multiskin.color"));
-		this.scale = new GuiTrackpadElement(mc, (value) -> this.location.scale = value.floatValue());
-		this.scale.limit(0).metric();
-		this.scaleToLargest = new GuiToggleElement(mc, IKey.lang("mclib.gui.multiskin.scale_to_largest"), (toggle) -> this.location.scaleToLargest = toggle.isToggled());
-		this.shiftX = new GuiTrackpadElement(mc, (value) -> this.location.shiftX = value.intValue());
-		this.shiftX.integer();
-		this.shiftY = new GuiTrackpadElement(mc, (value) -> this.location.shiftY = value.intValue());
-		this.shiftY.integer();
+        this.color = new GuiColorElement(mc, (value) -> this.location.color = value);
+        this.color.picker.editAlpha();
+        this.color.direction(Direction.TOP).tooltip(IKey.lang("mclib.gui.multiskin.color"));
+        this.scale = new GuiTrackpadElement(mc, (value) -> this.location.scale = value.floatValue());
+        this.scale.limit(0).metric();
+        this.scaleToLargest = new GuiToggleElement(mc, IKey.lang("mclib.gui.multiskin.scale_to_largest"), (toggle) -> this.location.scaleToLargest = toggle.isToggled());
+        this.shiftX = new GuiTrackpadElement(mc, (value) -> this.location.shiftX = value.intValue());
+        this.shiftX.integer();
+        this.shiftY = new GuiTrackpadElement(mc, (value) -> this.location.shiftY = value.intValue());
+        this.shiftY.integer();
 
-		this.pixelate = new GuiTrackpadElement(mc, (value) -> this.location.pixelate = value.intValue());
-		this.pixelate.integer().limit(1);
-		this.erase = new GuiToggleElement(mc, IKey.lang("mclib.gui.multiskin.erase"), (toggle) -> this.location.erase = toggle.isToggled());
-		this.erase.tooltip(IKey.lang("mclib.gui.multiskin.erase_tooltip"), Direction.TOP);
+        this.pixelate = new GuiTrackpadElement(mc, (value) -> this.location.pixelate = value.intValue());
+        this.pixelate.integer().limit(1);
+        this.erase = new GuiToggleElement(mc, IKey.lang("mclib.gui.multiskin.erase"), (toggle) -> this.location.erase = toggle.isToggled());
+        this.erase.tooltip(IKey.lang("mclib.gui.multiskin.erase_tooltip"), Direction.TOP);
 
-		this.editor.add(this.color);
-		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.scale")).background(0x88000000), this.scale, this.scaleToLargest);
-		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.shift")).background(0x88000000), this.shiftX, this.shiftY);
-		this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.pixelate")).background(0x88000000), this.pixelate, this.erase);
+        this.editor.add(this.color);
+        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.scale")).background(0x88000000), this.scale, this.scaleToLargest);
+        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.shift")).background(0x88000000), this.shiftX, this.shiftY);
+        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.pixelate")).background(0x88000000), this.pixelate, this.erase);
 
-		if (shader == null)
-		{
-			try
-			{
-				String vert = IOUtils.toString(this.getClass().getResourceAsStream("/assets/mclib/shaders/preview.vert"), Charset.defaultCharset());
-				String frag = IOUtils.toString(this.getClass().getResourceAsStream("/assets/mclib/shaders/preview.frag"), Charset.defaultCharset());
+        if (shader == null)
+        {
+            try
+            {
+                String vert = IOUtils.toString(this.getClass().getResourceAsStream("/assets/mclib/shaders/preview.vert"), Charset.defaultCharset());
+                String frag = IOUtils.toString(this.getClass().getResourceAsStream("/assets/mclib/shaders/preview.frag"), Charset.defaultCharset());
 
-				shader = new Shader();
-				shader.compile(vert, frag, true);
+                shader = new Shader();
+                shader.compile(vert, frag, true);
 
-				uTexture = GL20.glGetUniformLocation(shader.programId, "texture");
-				uTextureBackground = GL20.glGetUniformLocation(shader.programId, "texture_background");
-				uSize = GL20.glGetUniformLocation(shader.programId, "size");
-				uFilters = GL20.glGetUniformLocation(shader.programId, "filters");
-				uColor = GL20.glGetUniformLocation(shader.programId, "color");
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-	}
+                uTexture = GL20.glGetUniformLocation(shader.programId, "texture");
+                uTextureBackground = GL20.glGetUniformLocation(shader.programId, "texture_background");
+                uSize = GL20.glGetUniformLocation(shader.programId, "size");
+                uFilters = GL20.glGetUniformLocation(shader.programId, "filters");
+                uColor = GL20.glGetUniformLocation(shader.programId, "color");
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	public void resetView()
-	{
-		int w = 0;
-		int h = 0;
+    public void resetView()
+    {
+        int w = 0;
+        int h = 0;
 
-		for (FilteredResourceLocation child : this.picker.multiRL.children)
-		{
-			this.mc.renderEngine.bindTexture(child.path);
-			w = Math.max(w, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH));
-			h = Math.max(h, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT));
-		}
+        for (FilteredResourceLocation child : this.picker.multiRL.children)
+        {
+            this.mc.renderEngine.bindTexture(child.path);
+            w = Math.max(w, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH));
+            h = Math.max(h, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT));
+        }
 
-		this.setSize(w, h);
-		this.color.picker.removeFromParent();
-	}
+        this.setSize(w, h);
+        this.color.picker.removeFromParent();
+    }
 
-	public void close()
-	{
-		this.color.picker.removeFromParent();
-	}
+    public void close()
+    {
+        this.color.picker.removeFromParent();
+    }
 
-	public void setLocation(FilteredResourceLocation location)
-	{
-		this.location = location;
+    public void setLocation(FilteredResourceLocation location)
+    {
+        this.location = location;
 
-		this.color.picker.setColor(location.color);
-		this.scale.setValue(location.scale);
-		this.scaleToLargest.toggled(location.scaleToLargest);
-		this.shiftX.setValue(location.shiftX);
-		this.shiftY.setValue(location.shiftY);
+        this.color.picker.setColor(location.color);
+        this.scale.setValue(location.scale);
+        this.scaleToLargest.toggled(location.scaleToLargest);
+        this.shiftX.setValue(location.shiftX);
+        this.shiftY.setValue(location.shiftY);
 
-		this.pixelate.setValue(location.pixelate);
-		this.erase.toggled(location.erase);
-	}
+        this.pixelate.setValue(location.pixelate);
+        this.erase.toggled(location.erase);
+    }
 
-	@Override
-	protected void startDragging(GuiContext context)
-	{
-		super.startDragging(context);
+    @Override
+    protected void startDragging(GuiContext context)
+    {
+        super.startDragging(context);
 
-		if (this.mouse == 0)
-		{
-			this.lastT = this.location.shiftX;
-			this.lastV = this.location.shiftY;
-		}
-	}
+        if (this.mouse == 0)
+        {
+            this.lastT = this.location.shiftX;
+            this.lastV = this.location.shiftY;
+        }
+    }
 
-	@Override
-	protected void dragging(GuiContext context)
-	{
-		super.dragging(context);
+    @Override
+    protected void dragging(GuiContext context)
+    {
+        super.dragging(context);
 
-		if (this.dragging && this.mouse == 0)
-		{
-			double dx = (context.mouseX - this.lastX) / this.scaleX.getZoom();
-			double dy = (context.mouseY - this.lastY) / this.scaleY.getZoom();
+        if (this.dragging && this.mouse == 0)
+        {
+            double dx = (context.mouseX - this.lastX) / this.scaleX.getZoom();
+            double dy = (context.mouseY - this.lastY) / this.scaleY.getZoom();
 
-			if (GuiScreen.isShiftKeyDown()) dx = 0;
-			if (GuiScreen.isCtrlKeyDown()) dy = 0;
+            if (GuiScreen.isShiftKeyDown()) dx = 0;
+            if (GuiScreen.isCtrlKeyDown()) dy = 0;
 
-			this.location.shiftX = (int) (dx) + (int) this.lastT;
-			this.location.shiftY = (int) (dy) + (int) this.lastV;
+            this.location.shiftX = (int) (dx) + (int) this.lastT;
+            this.location.shiftY = (int) (dy) + (int) this.lastV;
 
-			this.shiftX.setValue(this.location.shiftX);
-			this.shiftY.setValue(this.location.shiftY);
-		}
-	}
+            this.shiftX.setValue(this.location.shiftX);
+            this.shiftY.setValue(this.location.shiftY);
+        }
+    }
 
-	@Override
-	protected boolean shouldDrawCanvas(GuiContext context)
-	{
-		return this.picker.multiRL != null;
-	}
+    @Override
+    protected boolean shouldDrawCanvas(GuiContext context)
+    {
+        return this.picker.multiRL != null;
+    }
 
-	@Override
-	protected void drawCanvasFrame(GuiContext context)
-	{
-		for (FilteredResourceLocation child : this.picker.multiRL.children)
-		{
-			this.mc.renderEngine.bindTexture(child.path);
+    @Override
+    protected void drawCanvasFrame(GuiContext context)
+    {
+        for (FilteredResourceLocation child : this.picker.multiRL.children)
+        {
+            this.mc.renderEngine.bindTexture(child.path);
 
-			int ow = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
-			int oh = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
-			int ww = ow;
-			int hh = oh;
+            int ow = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
+            int oh = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+            int ww = ow;
+            int hh = oh;
 
-			if (child.scaleToLargest)
-			{
-				ww = this.w;
-				hh = this.h;
-			}
-			else if (child.scale != 1)
-			{
-				ww = (int) (ww * child.scale);
-				hh = (int) (hh * child.scale);
-			}
+            if (child.scaleToLargest)
+            {
+                ww = this.w;
+                hh = this.h;
+            }
+            else if (child.scale != 1)
+            {
+                ww = (int) (ww * child.scale);
+                hh = (int) (hh * child.scale);
+            }
 
-			if (ww > 0 && hh > 0)
-			{
-				Area area = this.calculate(-this.w / 2 + child.shiftX, -this.h / 2 + child.shiftY, -this.w / 2 + child.shiftX + ww, -this.h / 2 + child.shiftY + hh);
+            if (ww > 0 && hh > 0)
+            {
+                Area area = this.calculate(-this.w / 2 + child.shiftX, -this.h / 2 + child.shiftY, -this.w / 2 + child.shiftX + ww, -this.h / 2 + child.shiftY + hh);
 
-				if (child == this.picker.currentFRL)
-				{
-					Gui.drawRect(area.x, area.y, area.ex(), area.ey(), 0x44ff0000);
-					GlStateManager.enableBlend();
-					GlStateManager.enableAlpha();
-				}
+                if (child == this.picker.currentFRL)
+                {
+                    Gui.drawRect(area.x, area.y, area.ex(), area.ey(), 0x44ff0000);
+                    GlStateManager.enableBlend();
+                    GlStateManager.enableAlpha();
+                }
 
-				ColorUtils.bindColor(child.color);
+                ColorUtils.bindColor(child.color);
 
-				if (child.pixelate > 1 || child.erase)
-				{
-					shader.bind();
-					GL20.glUniform1i(uTexture, 0);
-					GL20.glUniform1i(uTextureBackground, 5);
-					GL20.glUniform2f(uSize, ow, oh);
-					GL20.glUniform4f(uFilters, (float) child.pixelate, child.erase ? 1F : 0F, 0, 0);
-					GL20.glUniform4f(uColor, ColorUtils.COLOR.r, ColorUtils.COLOR.g, ColorUtils.COLOR.b, ColorUtils.COLOR.a);
-				}
+                if (child.pixelate > 1 || child.erase)
+                {
+                    shader.bind();
+                    GL20.glUniform1i(uTexture, 0);
+                    GL20.glUniform1i(uTextureBackground, 5);
+                    GL20.glUniform2f(uSize, ow, oh);
+                    GL20.glUniform4f(uFilters, (float) child.pixelate, child.erase ? 1F : 0F, 0, 0);
+                    GL20.glUniform4f(uColor, ColorUtils.COLOR.r, ColorUtils.COLOR.g, ColorUtils.COLOR.b, ColorUtils.COLOR.a);
+                }
 
-				GlStateManager.setActiveTexture(GL13.GL_TEXTURE5);
-				this.mc.renderEngine.bindTexture(Icons.ICONS);
-				GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+                GlStateManager.setActiveTexture(GL13.GL_TEXTURE5);
+                this.mc.renderEngine.bindTexture(Icons.ICONS);
+                GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
 
-				GuiDraw.drawBillboard(area.x, area.y, 0, 0, area.w, area.h, area.w, area.h);
+                GuiDraw.drawBillboard(area.x, area.y, 0, 0, area.w, area.h, area.w, area.h);
 
-				if (child.pixelate > 1 || child.erase)
-				{
-					shader.unbind();
-				}
-			}
-		}
-	}
+                if (child.pixelate > 1 || child.erase)
+                {
+                    shader.unbind();
+                }
+            }
+        }
+    }
 }

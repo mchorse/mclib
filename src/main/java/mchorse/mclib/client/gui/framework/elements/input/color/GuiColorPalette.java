@@ -18,96 +18,96 @@ import java.util.function.Consumer;
  */
 public class GuiColorPalette extends GuiElement
 {
-	public List<Color> colors;
-	public Consumer<Color> callback;
-	public int cellSize = 10;
+    public List<Color> colors;
+    public Consumer<Color> callback;
+    public int cellSize = 10;
 
-	public GuiColorPalette(Minecraft mc, Consumer<Color> callback)
-	{
-		super(mc);
+    public GuiColorPalette(Minecraft mc, Consumer<Color> callback)
+    {
+        super(mc);
 
-		this.callback = callback;
-	}
+        this.callback = callback;
+    }
 
-	public GuiColorPalette colors(List<Color> colors)
-	{
-		this.colors = colors;
+    public GuiColorPalette colors(List<Color> colors)
+    {
+        this.colors = colors;
 
-		return this;
-	}
+        return this;
+    }
 
-	public GuiColorPalette cellSize(int cellSize)
-	{
-		this.cellSize = cellSize;
+    public GuiColorPalette cellSize(int cellSize)
+    {
+        this.cellSize = cellSize;
 
-		return this;
-	}
+        return this;
+    }
 
-	public int getHeight(int width)
-	{
-		return MathUtils.gridRows(this.colors.size(), this.cellSize, width) * this.cellSize;
-	}
+    public int getHeight(int width)
+    {
+        return MathUtils.gridRows(this.colors.size(), this.cellSize, width) * this.cellSize;
+    }
 
-	public boolean hasColor(int index)
-	{
-		return index >= 0 && index < this.colors.size();
-	}
+    public boolean hasColor(int index)
+    {
+        return index >= 0 && index < this.colors.size();
+    }
 
-	public int getIndex(GuiContext context)
-	{
-		return this.colors.size() - 1 - this.area.getIndex(context.mouseX, context.mouseY, this.cellSize);
-	}
+    public int getIndex(GuiContext context)
+    {
+        return this.colors.size() - 1 - this.area.getIndex(context.mouseX, context.mouseY, this.cellSize);
+    }
 
-	@Override
-	public boolean mouseClicked(GuiContext context)
-	{
-		if (super.mouseClicked(context))
-		{
-			return true;
-		}
+    @Override
+    public boolean mouseClicked(GuiContext context)
+    {
+        if (super.mouseClicked(context))
+        {
+            return true;
+        }
 
-		if (this.area.isInside(context) && context.mouseButton == 0)
-		{
-			int index = this.getIndex(context);
+        if (this.area.isInside(context) && context.mouseButton == 0)
+        {
+            int index = this.getIndex(context);
 
-			if (this.hasColor(index) && this.callback != null)
-			{
-				this.callback.accept(this.colors.get(index));
-			}
+            if (this.hasColor(index) && this.callback != null)
+            {
+                this.callback.accept(this.colors.get(index));
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public void draw(GuiContext context)
-	{
-		/* Draw recent colors panel */
-		int count = this.colors.size();
+    @Override
+    public void draw(GuiContext context)
+    {
+        /* Draw recent colors panel */
+        int count = this.colors.size();
 
-		if (count > 0)
-		{
-			int elements = this.area.w / this.cellSize;
+        if (count > 0)
+        {
+            int elements = this.area.w / this.cellSize;
 
-			if (this.area.h > this.cellSize)
-			{
-				Icons.CHECKBOARD.renderArea(this.area.x, this.area.y, this.area.w, this.area.h - this.cellSize);
-			}
+            if (this.area.h > this.cellSize)
+            {
+                Icons.CHECKBOARD.renderArea(this.area.x, this.area.y, this.area.w, this.area.h - this.cellSize);
+            }
 
-			Icons.CHECKBOARD.renderArea(this.area.x, this.area.ey() - this.cellSize, count % elements * this.cellSize, this.cellSize);
+            Icons.CHECKBOARD.renderArea(this.area.x, this.area.ey() - this.cellSize, count % elements * this.cellSize, this.cellSize);
 
-			for (int i = count - 1, j = 0; i >= 0; i--, j++)
-			{
-				Color c = this.colors.get(i);
-				int x = this.area.x + j % elements * this.cellSize;
-				int y = this.area.y + j / elements * this.cellSize;
+            for (int i = count - 1, j = 0; i >= 0; i--, j++)
+            {
+                Color c = this.colors.get(i);
+                int x = this.area.x + j % elements * this.cellSize;
+                int y = this.area.y + j / elements * this.cellSize;
 
-				GuiColorPicker.drawAlphaPreviewQuad(x, y, x + this.cellSize, y + this.cellSize, c);
-			}
-		}
+                GuiColorPicker.drawAlphaPreviewQuad(x, y, x + this.cellSize, y + this.cellSize, c);
+            }
+        }
 
-		super.draw(context);
-	}
+        super.draw(context);
+    }
 }

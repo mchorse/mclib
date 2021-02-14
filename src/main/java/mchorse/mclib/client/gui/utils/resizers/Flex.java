@@ -94,19 +94,19 @@ public class Flex implements IResizer
         return this;
     }
 
-	public Flex x(Supplier<Float> value)
-	{
-		this.x.set(value, Measure.PIXELS, 0);
+    public Flex x(Supplier<Float> value)
+    {
+        this.x.set(value, Measure.PIXELS, 0);
 
-		return this;
-	}
+        return this;
+    }
 
-	public Flex x(Supplier<Float> value, int offset)
-	{
-		this.x.set(value, Measure.PIXELS, offset);
+    public Flex x(Supplier<Float> value, int offset)
+    {
+        this.x.set(value, Measure.PIXELS, offset);
 
-		return this;
-	}
+        return this;
+    }
 
     /* Y */
 
@@ -131,19 +131,19 @@ public class Flex implements IResizer
         return this;
     }
 
-	public Flex y(Supplier<Float> value)
-	{
-		this.y.set(value, Measure.PIXELS, 0);
+    public Flex y(Supplier<Float> value)
+    {
+        this.y.set(value, Measure.PIXELS, 0);
 
-		return this;
-	}
+        return this;
+    }
 
-	public Flex y(Supplier<Float> value, int offset)
-	{
-		this.y.set(value, Measure.PIXELS, offset);
+    public Flex y(Supplier<Float> value, int offset)
+    {
+        this.y.set(value, Measure.PIXELS, offset);
 
-		return this;
-	}
+        return this;
+    }
 
     /* Width */
 
@@ -168,19 +168,19 @@ public class Flex implements IResizer
         return this;
     }
 
-	public Flex w(Supplier<Float> value)
-	{
-		this.w.set(value, Measure.PIXELS, 0);
+    public Flex w(Supplier<Float> value)
+    {
+        this.w.set(value, Measure.PIXELS, 0);
 
-		return this;
-	}
+        return this;
+    }
 
-	public Flex w(Supplier<Float> value, int offset)
-	{
-		this.w.set(value, Measure.PIXELS, offset);
+    public Flex w(Supplier<Float> value, int offset)
+    {
+        this.w.set(value, Measure.PIXELS, offset);
 
-		return this;
-	}
+        return this;
+    }
 
     public Flex wTo(IResizer flex)
     {
@@ -237,19 +237,19 @@ public class Flex implements IResizer
         return this;
     }
 
-	public Flex h(Supplier<Float> value)
-	{
-		this.h.set(value, Measure.PIXELS, 0);
+    public Flex h(Supplier<Float> value)
+    {
+        this.h.set(value, Measure.PIXELS, 0);
 
-		return this;
-	}
+        return this;
+    }
 
-	public Flex h(Supplier<Float> value, int offset)
-	{
-		this.h.set(value, Measure.PIXELS, offset);
+    public Flex h(Supplier<Float> value, int offset)
+    {
+        this.h.set(value, Measure.PIXELS, offset);
 
-		return this;
-	}
+        return this;
+    }
 
     public Flex hTo(IResizer target)
     {

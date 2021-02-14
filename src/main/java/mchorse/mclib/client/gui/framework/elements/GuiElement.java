@@ -638,7 +638,7 @@ public class GuiElement extends Gui implements IGuiElement
         }
     }
 
-	public void drawTooltip(GuiContext context, Area area)
+    public void drawTooltip(GuiContext context, Area area)
     {
         context.tooltip.draw(this.tooltip, context);
     }

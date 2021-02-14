@@ -16,159 +16,159 @@ import java.util.Stack;
  */
 public class GuiViewportStack implements IViewportStack
 {
-	private Stack<Area> viewportStack = new Stack<Area>();
-	private List<Area> viewportAreas = new ArrayList<Area>();
-	private int shiftX;
-	private int shiftY;
+    private Stack<Area> viewportStack = new Stack<Area>();
+    private List<Area> viewportAreas = new ArrayList<Area>();
+    private int shiftX;
+    private int shiftY;
 
-	public static GuiViewportStack fromElement(GuiElement element)
-	{
-		GuiViewportStack stack = new GuiViewportStack();
+    public static GuiViewportStack fromElement(GuiElement element)
+    {
+        GuiViewportStack stack = new GuiViewportStack();
 
-		stack.applyFromElement(element);
+        stack.applyFromElement(element);
 
-		return stack;
-	}
+        return stack;
+    }
 
-	public void applyFromElement(GuiElement element)
-	{
-		List<IViewport> elements = new ArrayList<IViewport>();
+    public void applyFromElement(GuiElement element)
+    {
+        List<IViewport> elements = new ArrayList<IViewport>();
 
-		while (element != null)
-		{
-			if (element instanceof IViewport)
-			{
-				elements.add((IViewport) element);
-			}
+        while (element != null)
+        {
+            if (element instanceof IViewport)
+            {
+                elements.add((IViewport) element);
+            }
 
-			element = element.getParent();
-		}
+            element = element.getParent();
+        }
 
-		for (int i = elements.size() - 1; i >= 0; i--)
-		{
-			elements.get(i).apply(this);
-		}
-	}
+        for (int i = elements.size() - 1; i >= 0; i--)
+        {
+            elements.get(i).apply(this);
+        }
+    }
 
-	@Override
-	public void reset()
-	{
-		this.shiftX = 0;
-		this.shiftY = 0;
+    @Override
+    public void reset()
+    {
+        this.shiftX = 0;
+        this.shiftY = 0;
 
-		this.viewportStack.clear();
-	}
+        this.viewportStack.clear();
+    }
 
-	@Override
-	public Area getViewport()
-	{
-		return this.viewportStack.peek();
-	}
+    @Override
+    public Area getViewport()
+    {
+        return this.viewportStack.peek();
+    }
 
-	@Override
-	public void pushViewport(Area area)
-	{
-		if (this.viewportStack.isEmpty())
-		{
-			Area child = this.getCurrentViewportArea();
+    @Override
+    public void pushViewport(Area area)
+    {
+        if (this.viewportStack.isEmpty())
+        {
+            Area child = this.getCurrentViewportArea();
 
-			child.copy(area);
-			this.viewportStack.push(child);
-		}
-		else
-		{
-			Area current = this.viewportStack.peek();
-			Area child = this.getCurrentViewportArea();
+            child.copy(area);
+            this.viewportStack.push(child);
+        }
+        else
+        {
+            Area current = this.viewportStack.peek();
+            Area child = this.getCurrentViewportArea();
 
-			child.copy(area);
-			current.clamp(child);
-			this.viewportStack.push(child);
-		}
-	}
+            child.copy(area);
+            current.clamp(child);
+            this.viewportStack.push(child);
+        }
+    }
 
-	private Area getCurrentViewportArea()
-	{
-		while (this.viewportAreas.size() < this.viewportStack.size() + 1)
-		{
-			this.viewportAreas.add(new Area());
-		}
+    private Area getCurrentViewportArea()
+    {
+        while (this.viewportAreas.size() < this.viewportStack.size() + 1)
+        {
+            this.viewportAreas.add(new Area());
+        }
 
-		return this.viewportAreas.get(this.viewportStack.size());
-	}
+        return this.viewportAreas.get(this.viewportStack.size());
+    }
 
-	@Override
-	public void popViewport()
-	{
-		this.viewportStack.pop();
-	}
+    @Override
+    public void popViewport()
+    {
+        this.viewportStack.pop();
+    }
 
-	@Override
-	public int getShiftX()
-	{
-		return this.shiftX;
-	}
+    @Override
+    public int getShiftX()
+    {
+        return this.shiftX;
+    }
 
-	@Override
-	public int getShiftY()
-	{
-		return this.shiftY;
-	}
+    @Override
+    public int getShiftY()
+    {
+        return this.shiftY;
+    }
 
-	/**
-	 * Get global X (relative to root element/screen)
-	 */
-	@Override
-	public int globalX(int x)
-	{
-		return x - this.shiftX;
-	}
+    /**
+     * Get global X (relative to root element/screen)
+     */
+    @Override
+    public int globalX(int x)
+    {
+        return x - this.shiftX;
+    }
 
-	/**
-	 * Get global Y (relative to root element/screen)
-	 */
-	@Override
-	public int globalY(int y)
-	{
-		return y - this.shiftY;
-	}
+    /**
+     * Get global Y (relative to root element/screen)
+     */
+    @Override
+    public int globalY(int y)
+    {
+        return y - this.shiftY;
+    }
 
-	/**
-	 * Get current local X (relative to current viewport)
-	 */
-	@Override
-	public int localX(int x)
-	{
-		return x + this.shiftX;
-	}
+    /**
+     * Get current local X (relative to current viewport)
+     */
+    @Override
+    public int localX(int x)
+    {
+        return x + this.shiftX;
+    }
 
-	/**
-	 * Get current local Y (relative to current viewport)
-	 */
-	@Override
-	public int localY(int y)
-	{
-		return y + this.shiftY;
-	}
+    /**
+     * Get current local Y (relative to current viewport)
+     */
+    @Override
+    public int localY(int y)
+    {
+        return y + this.shiftY;
+    }
 
-	@Override
-	public void shiftX(int x)
-	{
-		this.shiftX += x;
+    @Override
+    public void shiftX(int x)
+    {
+        this.shiftX += x;
 
-		if (!this.viewportStack.isEmpty())
-		{
-			this.viewportStack.peek().x += x;
-		}
-	}
+        if (!this.viewportStack.isEmpty())
+        {
+            this.viewportStack.peek().x += x;
+        }
+    }
 
-	@Override
-	public void shiftY(int y)
-	{
-		this.shiftY += y;
+    @Override
+    public void shiftY(int y)
+    {
+        this.shiftY += y;
 
-		if (!this.viewportStack.isEmpty())
-		{
-			this.viewportStack.peek().y += y;
-		}
-	}
+        if (!this.viewportStack.isEmpty())
+        {
+            this.viewportStack.peek().y += y;
+        }
+    }
 }

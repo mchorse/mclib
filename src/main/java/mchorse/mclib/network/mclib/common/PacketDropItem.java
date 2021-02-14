@@ -8,33 +8,33 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class PacketDropItem implements IMessage
 {
-	public ItemStack stack = ItemStack.EMPTY;
+    public ItemStack stack = ItemStack.EMPTY;
 
-	public PacketDropItem()
-	{}
+    public PacketDropItem()
+    {}
 
-	public PacketDropItem(ItemStack stack)
-	{
-		this.stack = stack;
-	}
+    public PacketDropItem(ItemStack stack)
+    {
+        this.stack = stack;
+    }
 
-	@Override
-	public void fromBytes(ByteBuf buf)
-	{
-		NBTTagCompound tagCompound = ByteBufUtils.readTag(buf);
+    @Override
+    public void fromBytes(ByteBuf buf)
+    {
+        NBTTagCompound tagCompound = ByteBufUtils.readTag(buf);
 
-		if (tagCompound != null)
-		{
-			this.stack = new ItemStack(tagCompound);
-		}
-	}
+        if (tagCompound != null)
+        {
+            this.stack = new ItemStack(tagCompound);
+        }
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf)
-	{
-		if (!this.stack.isEmpty())
-		{
-			ByteBufUtils.writeTag(buf, this.stack.writeToNBT(new NBTTagCompound()));
-		}
-	}
+    @Override
+    public void toBytes(ByteBuf buf)
+    {
+        if (!this.stack.isEmpty())
+        {
+            ByteBufUtils.writeTag(buf, this.stack.writeToNBT(new NBTTagCompound()));
+        }
+    }
 }

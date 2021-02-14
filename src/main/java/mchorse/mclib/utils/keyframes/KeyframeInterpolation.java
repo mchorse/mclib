@@ -139,7 +139,7 @@ public enum KeyframeInterpolation
 
     public abstract double interpolate(Keyframe a, Keyframe b, float x);
 
-	public String getKey()
+    public String getKey()
     {
         return "mclib.interpolations." + this.key;
     }

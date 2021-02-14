@@ -11,50 +11,50 @@ import java.util.List;
  */
 public class KeybindManager
 {
-	public List<Keybind> keybinds = new ArrayList<Keybind>();
+    public List<Keybind> keybinds = new ArrayList<Keybind>();
 
-	public Keybind register(IKey label, int key, Runnable callback)
-	{
-		Keybind keybind = new Keybind(label, key, callback);
+    public Keybind register(IKey label, int key, Runnable callback)
+    {
+        Keybind keybind = new Keybind(label, key, callback);
 
-		this.keybinds.add(keybind);
+        this.keybinds.add(keybind);
 
-		return keybind;
-	}
+        return keybind;
+    }
 
-	public Keybind registerInside(IKey label, int key, Runnable callback)
-	{
-		return this.register(label, key, callback).inside();
-	}
+    public Keybind registerInside(IKey label, int key, Runnable callback)
+    {
+        return this.register(label, key, callback).inside();
+    }
 
-	public void add(GuiKeybinds keybinds, boolean inside)
-	{
-		if (!keybinds.isVisible())
-		{
-			return;
-		}
+    public void add(GuiKeybinds keybinds, boolean inside)
+    {
+        if (!keybinds.isVisible())
+        {
+            return;
+        }
 
-		for (Keybind keybind : this.keybinds)
-		{
-			if (keybind.isActive() && (!keybind.inside || inside))
-			{
-				keybinds.addKeybind(keybind);
-			}
-		}
-	}
+        for (Keybind keybind : this.keybinds)
+        {
+            if (keybind.isActive() && (!keybind.inside || inside))
+            {
+                keybinds.addKeybind(keybind);
+            }
+        }
+    }
 
-	public boolean check(int keyCode, boolean inside)
-	{
-		for (Keybind keybind : this.keybinds)
-		{
-			if (keybind.isActive() && keybind.check(keyCode, inside) && keybind.callback != null)
-			{
-				keybind.callback.run();
+    public boolean check(int keyCode, boolean inside)
+    {
+        for (Keybind keybind : this.keybinds)
+        {
+            if (keybind.isActive() && keybind.check(keyCode, inside) && keybind.callback != null)
+            {
+                keybind.callback.run();
 
-				return true;
-			}
-		}
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

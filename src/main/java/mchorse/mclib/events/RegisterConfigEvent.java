@@ -10,16 +10,16 @@ import java.util.List;
 
 public class RegisterConfigEvent extends Event
 {
-	public final File configs;
-	public List<Config> modules = new ArrayList<Config>();
+    public final File configs;
+    public List<Config> modules = new ArrayList<Config>();
 
-	public RegisterConfigEvent(File configs)
-	{
-		this.configs = configs;
-	}
+    public RegisterConfigEvent(File configs)
+    {
+        this.configs = configs;
+    }
 
-	public ConfigBuilder createBuilder(String id)
-	{
-		return new ConfigBuilder(id, new File(this.configs, id + "/config.json"));
-	}
+    public ConfigBuilder createBuilder(String id)
+    {
+        return new ConfigBuilder(id, new File(this.configs, id + "/config.json"));
+    }
 }

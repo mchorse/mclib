@@ -17,64 +17,64 @@ import org.lwjgl.input.Keyboard;
 
 public class KeyboardHandler
 {
-	public KeyBinding dashboard;
+    public KeyBinding dashboard;
 
-	private int lastGuiScale = -1;
+    private int lastGuiScale = -1;
 
-	public KeyboardHandler()
-	{
-		this.dashboard = new KeyBinding("key.mclib.dashboard", Keyboard.KEY_0, "key.mclib.category");
+    public KeyboardHandler()
+    {
+        this.dashboard = new KeyBinding("key.mclib.dashboard", Keyboard.KEY_0, "key.mclib.category");
 
-		ClientRegistry.registerKeyBinding(this.dashboard);
-	}
+        ClientRegistry.registerKeyBinding(this.dashboard);
+    }
 
-	@SubscribeEvent
-	public void onKeyboardInput(InputEvent.KeyInputEvent event)
-	{
-		if (this.dashboard.isPressed())
-		{
-			GuiDashboard dashboard = GuiDashboard.get();
+    @SubscribeEvent
+    public void onKeyboardInput(InputEvent.KeyInputEvent event)
+    {
+        if (this.dashboard.isPressed())
+        {
+            GuiDashboard dashboard = GuiDashboard.get();
 
-			Minecraft.getMinecraft().displayGuiScreen(dashboard);
+            Minecraft.getMinecraft().displayGuiScreen(dashboard);
 
-			if (GuiScreen.isCtrlKeyDown())
-			{
-				dashboard.panels.setPanel(dashboard.config);
-			}
-		}
-	}
+            if (GuiScreen.isCtrlKeyDown())
+            {
+                dashboard.panels.setPanel(dashboard.config);
+            }
+        }
+    }
 
-	@SubscribeEvent
-	public void onGuiOpen(GuiOpenEvent event)
-	{
-		if (event.getGui() instanceof GuiBase)
-		{
-			if (this.lastGuiScale == -1)
-			{
-				this.lastGuiScale = Minecraft.getMinecraft().gameSettings.guiScale;
+    @SubscribeEvent
+    public void onGuiOpen(GuiOpenEvent event)
+    {
+        if (event.getGui() instanceof GuiBase)
+        {
+            if (this.lastGuiScale == -1)
+            {
+                this.lastGuiScale = Minecraft.getMinecraft().gameSettings.guiScale;
 
-				int scale = McLib.userIntefaceScale.get();
+                int scale = McLib.userIntefaceScale.get();
 
-				if (scale > 0)
-				{
-					Minecraft.getMinecraft().gameSettings.guiScale = scale;
-				}
-			}
-		}
-		else
-		{
-			if (this.lastGuiScale != -1)
-			{
-				Minecraft.getMinecraft().gameSettings.guiScale = this.lastGuiScale;
-				this.lastGuiScale = -1;
-			}
+                if (scale > 0)
+                {
+                    Minecraft.getMinecraft().gameSettings.guiScale = scale;
+                }
+            }
+        }
+        else
+        {
+            if (this.lastGuiScale != -1)
+            {
+                Minecraft.getMinecraft().gameSettings.guiScale = this.lastGuiScale;
+                this.lastGuiScale = -1;
+            }
 
-			if (event.getGui() instanceof GuiMainMenu)
-			{
-				GuiDashboard.dashboard = null;
-				ValueRL.picker = null;
-				McLib.EVENT_BUS.post(new RemoveDashboardPanels());
-			}
-		}
-	}
+            if (event.getGui() instanceof GuiMainMenu)
+            {
+                GuiDashboard.dashboard = null;
+                ValueRL.picker = null;
+                McLib.EVENT_BUS.post(new RemoveDashboardPanels());
+            }
+        }
+    }
 }

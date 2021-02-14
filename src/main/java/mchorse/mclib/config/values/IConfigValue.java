@@ -14,16 +14,16 @@ import java.util.function.Consumer;
 
 public interface IConfigValue
 {
-	public String getId();
+    public String getId();
 
-	public void reset();
+    public void reset();
 
-	public boolean isVisible();
+    public boolean isVisible();
 
-	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui);
+    @SideOnly(Side.CLIENT)
+    public List<GuiElement> getFields(Minecraft mc, GuiConfig gui);
 
-	public void fromJSON(JsonElement element);
+    public void fromJSON(JsonElement element);
 
-	public JsonElement toJSON();
+    public JsonElement toJSON();
 }

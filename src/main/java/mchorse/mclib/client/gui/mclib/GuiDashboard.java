@@ -18,94 +18,94 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiDashboard extends GuiBase
 {
-	public static GuiDashboard dashboard;
+    public static GuiDashboard dashboard;
 
-	public GuiDashboardPanels panels;
-	public GuiConfig config;
+    public GuiDashboardPanels panels;
+    public GuiConfig config;
 
-	private boolean wasClosed = true;
+    private boolean wasClosed = true;
 
-	public static GuiDashboard get()
-	{
-		if (dashboard == null)
-		{
-			dashboard = new GuiDashboard(Minecraft.getMinecraft());
-		}
+    public static GuiDashboard get()
+    {
+        if (dashboard == null)
+        {
+            dashboard = new GuiDashboard(Minecraft.getMinecraft());
+        }
 
-		return dashboard;
-	}
+        return dashboard;
+    }
 
-	public GuiDashboard(Minecraft mc)
-	{
-		this.panels = new GuiDashboardPanels(mc);
+    public GuiDashboard(Minecraft mc)
+    {
+        this.panels = new GuiDashboardPanels(mc);
 
-		this.panels.flex().relative(this.viewport).wh(1F, 1F);
-		this.panels.registerPanel(this.config = new GuiConfig(mc, this), IKey.lang("mclib.gui.config.tooltip"), Icons.GEAR);
+        this.panels.flex().relative(this.viewport).wh(1F, 1F);
+        this.panels.registerPanel(this.config = new GuiConfig(mc, this), IKey.lang("mclib.gui.config.tooltip"), Icons.GEAR);
 
-		if (McLib.debugPanel.get())
-		{
-			this.panels.registerPanel(new GuiDebugPanel(mc, this), IKey.str("Debug"), Icons.POSE);
-		}
+        if (McLib.debugPanel.get())
+        {
+            this.panels.registerPanel(new GuiDebugPanel(mc, this), IKey.str("Debug"), Icons.POSE);
+        }
 
-		McLib.EVENT_BUS.post(new RegisterDashboardPanels(this));
+        McLib.EVENT_BUS.post(new RegisterDashboardPanels(this));
 
-		this.panels.setPanel(this.config);
+        this.panels.setPanel(this.config);
 
-		this.root.add(this.panels);
-	}
+        this.root.add(this.panels);
+    }
 
-	@Override
-	public boolean doesGuiPauseGame()
-	{
-		return false;
-	}
+    @Override
+    public boolean doesGuiPauseGame()
+    {
+        return false;
+    }
 
-	@Override
-	public void onGuiClosed()
-	{
-		this.close();
-		super.onGuiClosed();
-	}
+    @Override
+    public void onGuiClosed()
+    {
+        this.close();
+        super.onGuiClosed();
+    }
 
-	@Override
-	protected void closeScreen()
-	{
-		this.close();
-		super.closeScreen();
-	}
+    @Override
+    protected void closeScreen()
+    {
+        this.close();
+        super.closeScreen();
+    }
 
-	private void close()
-	{
-		this.panels.close();
-		this.wasClosed = true;
-	}
+    private void close()
+    {
+        this.panels.close();
+        this.wasClosed = true;
+    }
 
-	@Override
-	public void setWorldAndResolution(Minecraft mc, int width, int height)
-	{
-		if (this.wasClosed)
-		{
-			this.wasClosed = false;
-			this.panels.open();
-			this.panels.setPanel(this.panels.view.delegate);
-		}
+    @Override
+    public void setWorldAndResolution(Minecraft mc, int width, int height)
+    {
+        if (this.wasClosed)
+        {
+            this.wasClosed = false;
+            this.panels.open();
+            this.panels.setPanel(this.panels.view.delegate);
+        }
 
-		super.setWorldAndResolution(mc, width, height);
-	}
+        super.setWorldAndResolution(mc, width, height);
+    }
 
-	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks)
-	{
-		if (this.panels.view.delegate != null && this.panels.view.delegate.needsBackground())
-		{
-			GuiDraw.drawCustomBackground(0, 0, this.width, this.height);
-		}
-		else
-		{
-			this.drawGradientRect(0, 0, this.width, this.height / 8, 0x44000000, 0x00000000);
-			this.drawGradientRect(0, this.height - this.height / 8, this.width, this.height, 0x00000000, 0x44000000);
-		}
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
+    {
+        if (this.panels.view.delegate != null && this.panels.view.delegate.needsBackground())
+        {
+            GuiDraw.drawCustomBackground(0, 0, this.width, this.height);
+        }
+        else
+        {
+            this.drawGradientRect(0, 0, this.width, this.height / 8, 0x44000000, 0x00000000);
+            this.drawGradientRect(0, this.height - this.height / 8, this.width, this.height, 0x00000000, 0x44000000);
+        }
 
-		super.drawScreen(mouseX, mouseY, partialTicks);
-	}
+        super.drawScreen(mouseX, mouseY, partialTicks);
+    }
 }

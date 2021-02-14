@@ -12,85 +12,85 @@ import java.util.Map;
 
 public class ConfigCategory
 {
-	public final String id;
-	public Config config;
-	public final Map<String, IConfigValue> values = new LinkedHashMap<String, IConfigValue>();
+    public final String id;
+    public Config config;
+    public final Map<String, IConfigValue> values = new LinkedHashMap<String, IConfigValue>();
 
-	public ConfigCategory(String id)
-	{
-		this.id = id;
-	}
+    public ConfigCategory(String id)
+    {
+        this.id = id;
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getTitle()
-	{
-		return this.config.getCategoryTitle(this.id);
-	}
+    @SideOnly(Side.CLIENT)
+    public String getTitle()
+    {
+        return this.config.getCategoryTitle(this.id);
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getTitleKey()
-	{
-		return this.config.getCategoryTitleKey(this.id);
-	}
+    @SideOnly(Side.CLIENT)
+    public String getTitleKey()
+    {
+        return this.config.getCategoryTitleKey(this.id);
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getTooltip()
-	{
-		return this.config.getCategoryTooltip(this.id);
-	}
+    @SideOnly(Side.CLIENT)
+    public String getTooltip()
+    {
+        return this.config.getCategoryTooltip(this.id);
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getTooltipKey()
-	{
-		return this.config.getCategoryTooltipKey(this.id);
-	}
+    @SideOnly(Side.CLIENT)
+    public String getTooltipKey()
+    {
+        return this.config.getCategoryTooltipKey(this.id);
+    }
 
-	public void register(String id, IConfigValue value)
-	{
-		if (value instanceof Value)
-		{
-			((Value) value).category = this;
-		}
+    public void register(String id, IConfigValue value)
+    {
+        if (value instanceof Value)
+        {
+            ((Value) value).category = this;
+        }
 
-		this.values.put(id, value);
-	}
+        this.values.put(id, value);
+    }
 
-	public boolean isVisible()
-	{
-		for (IConfigValue value : this.values.values())
-		{
-			if (value.isVisible())
-			{
-				return true;
-			}
-		}
+    public boolean isVisible()
+    {
+        for (IConfigValue value : this.values.values())
+        {
+            if (value.isVisible())
+            {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public JsonObject toJSON()
-	{
-		JsonObject object = new JsonObject();
+    public JsonObject toJSON()
+    {
+        JsonObject object = new JsonObject();
 
-		for (IConfigValue value : this.values.values())
-		{
-			object.add(value.getId(), value.toJSON());
-		}
+        for (IConfigValue value : this.values.values())
+        {
+            object.add(value.getId(), value.toJSON());
+        }
 
-		return object;
-	}
+        return object;
+    }
 
-	public void fromJSON(JsonObject object)
-	{
-		for (Map.Entry<String, JsonElement> entry : object.entrySet())
-		{
-			IConfigValue value = this.values.get(entry.getKey());
+    public void fromJSON(JsonObject object)
+    {
+        for (Map.Entry<String, JsonElement> entry : object.entrySet())
+        {
+            IConfigValue value = this.values.get(entry.getKey());
 
-			if (value != null)
-			{
-				value.reset();
-				value.fromJSON(entry.getValue());
-			}
-		}
-	}
+            if (value != null)
+            {
+                value.reset();
+                value.fromJSON(entry.getValue());
+            }
+        }
+    }
 }

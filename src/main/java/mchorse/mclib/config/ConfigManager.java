@@ -10,27 +10,27 @@ import java.util.Map;
 
 public class ConfigManager
 {
-	public final Map<String, Config> modules = new HashMap<String, Config>();
+    public final Map<String, Config> modules = new HashMap<String, Config>();
 
-	public void register(File configs)
-	{
-		RegisterConfigEvent event = new RegisterConfigEvent(configs);
+    public void register(File configs)
+    {
+        RegisterConfigEvent event = new RegisterConfigEvent(configs);
 
-		McLib.EVENT_BUS.post(event);
+        McLib.EVENT_BUS.post(event);
 
-		for (Config config : event.modules)
-		{
-			this.modules.put(config.id, config);
-		}
+        for (Config config : event.modules)
+        {
+            this.modules.put(config.id, config);
+        }
 
-		this.reload();
-	}
+        this.reload();
+    }
 
-	public void reload()
-	{
-		for (Config config : this.modules.values())
-		{
-			ConfigParser.fromJson(config, config.file);
-		}
-	}
+    public void reload()
+    {
+        for (Config config : this.modules.values())
+        {
+            ConfigParser.fromJson(config, config.file);
+        }
+    }
 }

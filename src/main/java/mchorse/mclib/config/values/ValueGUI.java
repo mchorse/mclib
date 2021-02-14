@@ -12,26 +12,26 @@ import java.util.List;
 
 public abstract class ValueGUI extends Value
 {
-	public ValueGUI(String id)
-	{
-		super(id);
-	}
+    public ValueGUI(String id)
+    {
+        super(id);
+    }
 
-	@Override
-	public void reset()
-	{}
+    @Override
+    public void reset()
+    {}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public abstract List<GuiElement> getFields(Minecraft mc, GuiConfig gui);
+    @Override
+    @SideOnly(Side.CLIENT)
+    public abstract List<GuiElement> getFields(Minecraft mc, GuiConfig gui);
 
-	@Override
-	public void fromJSON(JsonElement element)
-	{}
+    @Override
+    public void fromJSON(JsonElement element)
+    {}
 
-	@Override
-	public JsonElement toJSON()
-	{
-		return JsonNull.INSTANCE;
-	}
+    @Override
+    public JsonElement toJSON()
+    {
+        return JsonNull.INSTANCE;
+    }
 }

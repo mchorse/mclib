@@ -13,84 +13,84 @@ import org.lwjgl.input.Keyboard;
 
 public class GuiDashboardPanels extends GuiPanelBase<GuiDashboardPanel>
 {
-	public GuiDashboardPanels(Minecraft mc)
-	{
-		super(mc, Direction.LEFT);
-	}
+    public GuiDashboardPanels(Minecraft mc)
+    {
+        super(mc, Direction.LEFT);
+    }
 
-	public void open()
-	{
-		for (GuiDashboardPanel panel : this.panels)
-		{
-			panel.open();
-		}
-	}
+    public void open()
+    {
+        for (GuiDashboardPanel panel : this.panels)
+        {
+            panel.open();
+        }
+    }
 
-	public void close()
-	{
-		for (GuiDashboardPanel panel : this.panels)
-		{
-			panel.close();
-		}
-	}
+    public void close()
+    {
+        for (GuiDashboardPanel panel : this.panels)
+        {
+            panel.close();
+        }
+    }
 
-	@Override
-	public void setPanel(GuiDashboardPanel panel)
-	{
-		if (this.view.delegate != null)
-		{
-			this.view.delegate.disappear();
-		}
+    @Override
+    public void setPanel(GuiDashboardPanel panel)
+    {
+        if (this.view.delegate != null)
+        {
+            this.view.delegate.disappear();
+        }
 
-		super.setPanel(panel);
+        super.setPanel(panel);
 
-		if (this.view.delegate != null)
-		{
-			this.view.delegate.appear();
-		}
-	}
+        if (this.view.delegate != null)
+        {
+            this.view.delegate.appear();
+        }
+    }
 
-	@Override
-	public GuiIconElement registerPanel(GuiDashboardPanel panel, IKey tooltip, Icon icon)
-	{
-		GuiIconElement element = super.registerPanel(panel, tooltip, icon);
+    @Override
+    public GuiIconElement registerPanel(GuiDashboardPanel panel, IKey tooltip, Icon icon)
+    {
+        GuiIconElement element = super.registerPanel(panel, tooltip, icon);
 
-		int key = this.getKeybind();
+        int key = this.getKeybind();
 
-		if (key != -1)
-		{
-			element.keys()
-				.register(IKey.comp(IKey.lang("mclib.gui.dashboard.open_panel"), tooltip), key, () -> element.clickItself(GuiBase.getCurrent()))
-				.category(IKey.lang("mclib.gui.dashboard.category"));
-		}
+        if (key != -1)
+        {
+            element.keys()
+                .register(IKey.comp(IKey.lang("mclib.gui.dashboard.open_panel"), tooltip), key, () -> element.clickItself(GuiBase.getCurrent()))
+                .category(IKey.lang("mclib.gui.dashboard.category"));
+        }
 
-		return element;
-	}
+        return element;
+    }
 
-	protected int getKeybind()
-	{
-		int size = this.panels.size();
+    protected int getKeybind()
+    {
+        int size = this.panels.size();
 
-		switch (size)
-		{
-			case 1: return Keyboard.KEY_NUMPAD0;
-			case 2: return Keyboard.KEY_NUMPAD1;
-			case 3: return Keyboard.KEY_NUMPAD2;
-			case 4: return Keyboard.KEY_NUMPAD3;
-			case 5: return Keyboard.KEY_NUMPAD4;
-			case 6: return Keyboard.KEY_NUMPAD5;
-			case 7: return Keyboard.KEY_NUMPAD6;
-			case 8: return Keyboard.KEY_NUMPAD7;
-			case 9: return Keyboard.KEY_NUMPAD8;
-			case 10: return Keyboard.KEY_NUMPAD9;
-		}
+        switch (size)
+        {
+            case 1: return Keyboard.KEY_NUMPAD0;
+            case 2: return Keyboard.KEY_NUMPAD1;
+            case 3: return Keyboard.KEY_NUMPAD2;
+            case 4: return Keyboard.KEY_NUMPAD3;
+            case 5: return Keyboard.KEY_NUMPAD4;
+            case 6: return Keyboard.KEY_NUMPAD5;
+            case 7: return Keyboard.KEY_NUMPAD6;
+            case 8: return Keyboard.KEY_NUMPAD7;
+            case 9: return Keyboard.KEY_NUMPAD8;
+            case 10: return Keyboard.KEY_NUMPAD9;
+        }
 
-		return -1;
-	}
+        return -1;
+    }
 
-	@Override
-	protected void drawBackground(GuiContext context, int x, int y, int w, int h)
-	{
-		Gui.drawRect(x, y, x + w, y + h, 0xff111111);
-	}
+    @Override
+    protected void drawBackground(GuiContext context, int x, int y, int w, int h)
+    {
+        Gui.drawRect(x, y, x + w, y + h, 0xff111111);
+    }
 }

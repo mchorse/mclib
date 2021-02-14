@@ -18,75 +18,75 @@ import java.util.List;
 
 public class ValueDouble extends Value
 {
-	private double value;
-	private double defaultValue;
-	public final double min;
-	public final double max;
+    private double value;
+    private double defaultValue;
+    public final double min;
+    public final double max;
 
-	public ValueDouble(String id, double defaultValue)
-	{
-		super(id);
+    public ValueDouble(String id, double defaultValue)
+    {
+        super(id);
 
-		this.defaultValue = defaultValue;
-		this.min = Double.NEGATIVE_INFINITY;
-		this.max = Double.POSITIVE_INFINITY;
+        this.defaultValue = defaultValue;
+        this.min = Double.NEGATIVE_INFINITY;
+        this.max = Double.POSITIVE_INFINITY;
 
-		this.reset();
-	}
+        this.reset();
+    }
 
-	public ValueDouble(String id, double defaultValue, double min, double max)
-	{
-		super(id);
+    public ValueDouble(String id, double defaultValue, double min, double max)
+    {
+        super(id);
 
-		this.defaultValue = defaultValue;
-		this.min = min;
-		this.max = max;
+        this.defaultValue = defaultValue;
+        this.min = min;
+        this.max = max;
 
-		this.reset();
-	}
+        this.reset();
+    }
 
-	public double get()
-	{
-		return this.value;
-	}
+    public double get()
+    {
+        return this.value;
+    }
 
-	public void set(double value)
-	{
-		this.value = MathUtils.clamp(value, this.min, this.max);
-		this.saveLater();
-	}
+    public void set(double value)
+    {
+        this.value = MathUtils.clamp(value, this.min, this.max);
+        this.saveLater();
+    }
 
-	@Override
-	public void reset()
-	{
-		this.set(this.defaultValue);
-	}
+    @Override
+    public void reset()
+    {
+        this.set(this.defaultValue);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
-	{
-		GuiElement element = new GuiElement(mc);
-		GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
-		GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this);
+    @Override
+    @SideOnly(Side.CLIENT)
+    public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
+    {
+        GuiElement element = new GuiElement(mc);
+        GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
+        GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this);
 
-		trackpad.flex().w(90);
+        trackpad.flex().w(90);
 
-		element.flex().row(0).preferred(0).height(20);
-		element.add(label, trackpad.removeTooltip());
+        element.flex().row(0).preferred(0).height(20);
+        element.add(label, trackpad.removeTooltip());
 
-		return Arrays.asList(element.tooltip(IKey.lang(this.getTooltipKey())));
-	}
+        return Arrays.asList(element.tooltip(IKey.lang(this.getTooltipKey())));
+    }
 
-	@Override
-	public void fromJSON(JsonElement element)
-	{
-		this.set(element.getAsDouble());
-	}
+    @Override
+    public void fromJSON(JsonElement element)
+    {
+        this.set(element.getAsDouble());
+    }
 
-	@Override
-	public JsonElement toJSON()
-	{
-		return new JsonPrimitive(this.value);
-	}
+    @Override
+    public JsonElement toJSON()
+    {
+        return new JsonPrimitive(this.value);
+    }
 }

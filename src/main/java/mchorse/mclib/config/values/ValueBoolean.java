@@ -14,55 +14,55 @@ import java.util.List;
 
 public class ValueBoolean extends Value
 {
-	private boolean value;
-	private boolean defaultValue;
+    private boolean value;
+    private boolean defaultValue;
 
-	public ValueBoolean(String id, boolean defaultValue)
-	{
-		super(id);
+    public ValueBoolean(String id, boolean defaultValue)
+    {
+        super(id);
 
-		this.defaultValue = defaultValue;
+        this.defaultValue = defaultValue;
 
-		this.reset();
-	}
+        this.reset();
+    }
 
-	public boolean get()
-	{
-		return this.value;
-	}
+    public boolean get()
+    {
+        return this.value;
+    }
 
-	public void set(boolean value)
-	{
-		this.value = value;
-		this.saveLater();
-	}
+    public void set(boolean value)
+    {
+        this.value = value;
+        this.saveLater();
+    }
 
-	@Override
-	public void reset()
-	{
-		this.set(this.defaultValue);
-	}
+    @Override
+    public void reset()
+    {
+        this.set(this.defaultValue);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
-	{
-		GuiToggleElement toggle = new GuiToggleElement(mc, this);
+    @Override
+    @SideOnly(Side.CLIENT)
+    public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
+    {
+        GuiToggleElement toggle = new GuiToggleElement(mc, this);
 
-		toggle.flex().reset();
+        toggle.flex().reset();
 
-		return Arrays.asList(toggle);
-	}
+        return Arrays.asList(toggle);
+    }
 
-	@Override
-	public void fromJSON(JsonElement element)
-	{
-		this.set(element.getAsBoolean());
-	}
+    @Override
+    public void fromJSON(JsonElement element)
+    {
+        this.set(element.getAsBoolean());
+    }
 
-	@Override
-	public JsonElement toJSON()
-	{
-		return new JsonPrimitive(this.value);
-	}
+    @Override
+    public JsonElement toJSON()
+    {
+        return new JsonPrimitive(this.value);
+    }
 }

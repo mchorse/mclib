@@ -14,28 +14,28 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy
 {
-	@Override
-	public void preInit(FMLPreInitializationEvent event)
-	{
-		super.preInit(event);
+    @Override
+    public void preInit(FMLPreInitializationEvent event)
+    {
+        super.preInit(event);
 
-		MinecraftForge.EVENT_BUS.register(new KeyboardHandler());
-		MinecraftForge.EVENT_BUS.register(new InputRenderer());
-	}
+        MinecraftForge.EVENT_BUS.register(new KeyboardHandler());
+        MinecraftForge.EVENT_BUS.register(new InputRenderer());
+    }
 
-	@Override
-	public void init(FMLInitializationEvent event)
-	{
-		super.init(event);
+    @Override
+    public void init(FMLInitializationEvent event)
+    {
+        super.init(event);
 
-		Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = Minecraft.getMinecraft();
 
-		/* OMG, thank you very much Forge! */
-		if (!mc.getFramebuffer().isStencilEnabled())
-		{
-			mc.getFramebuffer().enableStencil();
-		}
+        /* OMG, thank you very much Forge! */
+        if (!mc.getFramebuffer().isStencilEnabled())
+        {
+            mc.getFramebuffer().enableStencil();
+        }
 
-		((IReloadableResourceManager) mc.getResourceManager()).registerReloadListener((manager) -> LangKey.lastTime = System.currentTimeMillis());
-	}
+        ((IReloadableResourceManager) mc.getResourceManager()).registerReloadListener((manager) -> LangKey.lastTime = System.currentTimeMillis());
+    }
 }

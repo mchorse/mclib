@@ -22,158 +22,158 @@ import java.util.List;
 
 public class ValueInt extends Value
 {
-	private int value;
-	private int defaultValue;
-	public final int min;
-	public final int max;
-	private Subtype subtype = Subtype.INTEGER;
-	private IKey[] labels;
+    private int value;
+    private int defaultValue;
+    public final int min;
+    public final int max;
+    private Subtype subtype = Subtype.INTEGER;
+    private IKey[] labels;
 
-	public ValueInt(String id, int defaultValue)
-	{
-		super(id);
+    public ValueInt(String id, int defaultValue)
+    {
+        super(id);
 
-		this.defaultValue = defaultValue;
-		this.min = Integer.MIN_VALUE;
-		this.max = Integer.MAX_VALUE;
+        this.defaultValue = defaultValue;
+        this.min = Integer.MIN_VALUE;
+        this.max = Integer.MAX_VALUE;
 
-		this.reset();
-	}
+        this.reset();
+    }
 
-	public ValueInt(String id, int defaultValue, int min, int max)
-	{
-		super(id);
+    public ValueInt(String id, int defaultValue, int min, int max)
+    {
+        super(id);
 
-		this.defaultValue = defaultValue;
-		this.min = min;
-		this.max = max;
+        this.defaultValue = defaultValue;
+        this.min = min;
+        this.max = max;
 
-		this.reset();
-	}
+        this.reset();
+    }
 
-	public int get()
-	{
-		return this.value;
-	}
+    public int get()
+    {
+        return this.value;
+    }
 
-	public void set(int value)
-	{
-		this.value = MathUtils.clamp(value, this.min, this.max);
-		this.saveLater();
-	}
+    public void set(int value)
+    {
+        this.value = MathUtils.clamp(value, this.min, this.max);
+        this.saveLater();
+    }
 
-	public void setColorValue(String value)
-	{
-		this.set(ColorUtils.parseColor(value));
-	}
+    public void setColorValue(String value)
+    {
+        this.set(ColorUtils.parseColor(value));
+    }
 
-	public Subtype getSubtype()
-	{
-		return this.subtype;
-	}
+    public Subtype getSubtype()
+    {
+        return this.subtype;
+    }
 
-	public ValueInt subtype(Subtype subtype)
-	{
-		this.subtype = subtype;
+    public ValueInt subtype(Subtype subtype)
+    {
+        this.subtype = subtype;
 
-		return this;
-	}
+        return this;
+    }
 
-	public ValueInt color()
-	{
-		return this.subtype(Subtype.COLOR);
-	}
+    public ValueInt color()
+    {
+        return this.subtype(Subtype.COLOR);
+    }
 
-	public ValueInt colorAlpha()
-	{
-		return this.subtype(Subtype.COLOR_ALPHA);
-	}
+    public ValueInt colorAlpha()
+    {
+        return this.subtype(Subtype.COLOR_ALPHA);
+    }
 
-	public ValueInt keybind()
-	{
-		return this.subtype(Subtype.KEYBIND);
-	}
+    public ValueInt keybind()
+    {
+        return this.subtype(Subtype.KEYBIND);
+    }
 
-	public ValueInt modes(IKey... labels)
-	{
-		this.labels = labels;
+    public ValueInt modes(IKey... labels)
+    {
+        this.labels = labels;
 
-		return this.subtype(Subtype.MODES);
-	}
+        return this.subtype(Subtype.MODES);
+    }
 
-	@Override
-	public void reset()
-	{
-		this.set(this.defaultValue);
-	}
+    @Override
+    public void reset()
+    {
+        this.set(this.defaultValue);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
-	{
-		GuiElement element = new GuiElement(mc);
-		GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
+    @Override
+    @SideOnly(Side.CLIENT)
+    public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
+    {
+        GuiElement element = new GuiElement(mc);
+        GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
 
-		element.flex().row(0).preferred(0).height(20);
-		element.add(label);
+        element.flex().row(0).preferred(0).height(20);
+        element.add(label);
 
-		if (this.subtype == Subtype.COLOR || this.subtype == Subtype.COLOR_ALPHA)
-		{
-			GuiColorElement color = new GuiColorElement(mc, this);
+        if (this.subtype == Subtype.COLOR || this.subtype == Subtype.COLOR_ALPHA)
+        {
+            GuiColorElement color = new GuiColorElement(mc, this);
 
-			color.flex().w(90);
-			element.add(color.removeTooltip());
-		}
-		else if (this.subtype == Subtype.KEYBIND)
-		{
-			GuiKeybindElement keybind = new GuiKeybindElement(mc, this);
+            color.flex().w(90);
+            element.add(color.removeTooltip());
+        }
+        else if (this.subtype == Subtype.KEYBIND)
+        {
+            GuiKeybindElement keybind = new GuiKeybindElement(mc, this);
 
-			keybind.flex().w(90);
-			element.add(keybind.removeTooltip());
-		}
-		else if (this.subtype == Subtype.MODES)
-		{
-			GuiCirculateElement button = new GuiCirculateElement(mc, null);
+            keybind.flex().w(90);
+            element.add(keybind.removeTooltip());
+        }
+        else if (this.subtype == Subtype.MODES)
+        {
+            GuiCirculateElement button = new GuiCirculateElement(mc, null);
 
-			for (IKey key : this.labels)
-			{
-				button.addLabel(key);
-			}
+            for (IKey key : this.labels)
+            {
+                button.addLabel(key);
+            }
 
-			button.callback = (b) -> this.set(button.getValue());
-			button.setValue(this.get());
-			button.flex().w(90);
-			element.add(button);
-		}
-		else
-		{
-			GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this);
+            button.callback = (b) -> this.set(button.getValue());
+            button.setValue(this.get());
+            button.flex().w(90);
+            element.add(button);
+        }
+        else
+        {
+            GuiTrackpadElement trackpad = new GuiTrackpadElement(mc, this);
 
-			trackpad.flex().w(90);
-			element.add(trackpad.removeTooltip());
-		}
+            trackpad.flex().w(90);
+            element.add(trackpad.removeTooltip());
+        }
 
-		return Arrays.asList(element.tooltip(IKey.lang(this.getTooltipKey())));
-	}
+        return Arrays.asList(element.tooltip(IKey.lang(this.getTooltipKey())));
+    }
 
-	@Override
-	public void fromJSON(JsonElement element)
-	{
-		this.set(element.getAsInt());
-	}
+    @Override
+    public void fromJSON(JsonElement element)
+    {
+        this.set(element.getAsInt());
+    }
 
-	@Override
-	public JsonElement toJSON()
-	{
-		return new JsonPrimitive(this.value);
-	}
+    @Override
+    public JsonElement toJSON()
+    {
+        return new JsonPrimitive(this.value);
+    }
 
-	public static enum Subtype
-	{
-		INTEGER,
-		COLOR,
-		COLOR_ALPHA,
-		KEYBIND,
-		MODES
-	}
+    public static enum Subtype
+    {
+        INTEGER,
+        COLOR,
+        COLOR_ALPHA,
+        KEYBIND,
+        MODES
+    }
 }

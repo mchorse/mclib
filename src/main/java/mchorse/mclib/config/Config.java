@@ -25,132 +25,132 @@ import java.util.TreeMap;
 
 public class Config
 {
-	public final String id;
-	public final File file;
+    public final String id;
+    public final File file;
 
-	public final Map<String, ConfigCategory> categories = new LinkedHashMap<String, ConfigCategory>();
+    public final Map<String, ConfigCategory> categories = new LinkedHashMap<String, ConfigCategory>();
 
-	public Config(String id, File file)
-	{
-		this.id = id;
-		this.file = file;
-	}
+    public Config(String id, File file)
+    {
+        this.id = id;
+        this.file = file;
+    }
 
-	/* Translation string related methods */
+    /* Translation string related methods */
 
-	@SideOnly(Side.CLIENT)
-	public String getTitle()
-	{
-		return I18n.format(this.getTitleKey());
-	}
+    @SideOnly(Side.CLIENT)
+    public String getTitle()
+    {
+        return I18n.format(this.getTitleKey());
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getTitleKey()
-	{
-		return this.id + ".config.title";
-	}
+    @SideOnly(Side.CLIENT)
+    public String getTitleKey()
+    {
+        return this.id + ".config.title";
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getCategoryTitle(String category)
-	{
-		return I18n.format(this.getCategoryTitleKey(category));
-	}
+    @SideOnly(Side.CLIENT)
+    public String getCategoryTitle(String category)
+    {
+        return I18n.format(this.getCategoryTitleKey(category));
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getCategoryTitleKey(String category)
-	{
-		return this.id + ".config." + category + ".title";
-	}
+    @SideOnly(Side.CLIENT)
+    public String getCategoryTitleKey(String category)
+    {
+        return this.id + ".config." + category + ".title";
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getCategoryTooltip(String category)
-	{
-		return I18n.format(this.getCategoryTooltipKey(category));
-	}
+    @SideOnly(Side.CLIENT)
+    public String getCategoryTooltip(String category)
+    {
+        return I18n.format(this.getCategoryTooltipKey(category));
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getCategoryTooltipKey(String category)
-	{
-		return this.id + ".config." + category + ".tooltip";
-	}
+    @SideOnly(Side.CLIENT)
+    public String getCategoryTooltipKey(String category)
+    {
+        return this.id + ".config." + category + ".tooltip";
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getValueTitle(String category, String value)
-	{
-		return I18n.format(this.getValueTitleKey(category, value));
-	}
+    @SideOnly(Side.CLIENT)
+    public String getValueTitle(String category, String value)
+    {
+        return I18n.format(this.getValueTitleKey(category, value));
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getValueTitleKey(String category, String value)
-	{
-		return this.id + ".config." + category + "." + value;
-	}
+    @SideOnly(Side.CLIENT)
+    public String getValueTitleKey(String category, String value)
+    {
+        return this.id + ".config." + category + "." + value;
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getValueTooltip(String category, String value)
-	{
-		return I18n.format(this.getValueTooltipKey(category, value));
-	}
+    @SideOnly(Side.CLIENT)
+    public String getValueTooltip(String category, String value)
+    {
+        return I18n.format(this.getValueTooltipKey(category, value));
+    }
 
-	@SideOnly(Side.CLIENT)
-	public String getValueTooltipKey(String category, String value)
-	{
-		return this.id + ".config.comments." + category + "." + value;
-	}
+    @SideOnly(Side.CLIENT)
+    public String getValueTooltipKey(String category, String value)
+    {
+        return this.id + ".config.comments." + category + "." + value;
+    }
 
-	/**
-	 * Get a value from category by their ids
-	 */
-	public IConfigValue get(String category, String value)
-	{
-		ConfigCategory cat = this.categories.get(category);
+    /**
+     * Get a value from category by their ids
+     */
+    public IConfigValue get(String category, String value)
+    {
+        ConfigCategory cat = this.categories.get(category);
 
-		if (cat != null)
-		{
-			return cat.values.get(value);
-		}
+        if (cat != null)
+        {
+            return cat.values.get(value);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Save later in a separate thread
-	 */
-	public void saveLater()
-	{
-		ConfigThread.add(this);
-	}
+    /**
+     * Save later in a separate thread
+     */
+    public void saveLater()
+    {
+        ConfigThread.add(this);
+    }
 
-	/**
-	 * Save config to default location
-	 */
-	public void save()
-	{
-		this.save(this.file);
-	}
+    /**
+     * Save config to default location
+     */
+    public void save()
+    {
+        this.save(this.file);
+    }
 
-	/**
-	 * Save config to given file
-	 */
-	public boolean save(File file)
-	{
-		try
-		{
-			FileUtils.writeStringToFile(this.file, this.toJSON(), Charset.defaultCharset());
+    /**
+     * Save config to given file
+     */
+    public boolean save(File file)
+    {
+        try
+        {
+            FileUtils.writeStringToFile(this.file, this.toJSON(), Charset.defaultCharset());
 
-			return true;
-		}
-		catch (IOException e)
-		{}
+            return true;
+        }
+        catch (IOException e)
+        {}
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Convert this config into JSON string
-	 */
-	public String toJSON()
-	{
-		return JsonUtils.jsonToPretty(ConfigParser.toJson(this));
-	}
+    /**
+     * Convert this config into JSON string
+     */
+    public String toJSON()
+    {
+        return JsonUtils.jsonToPretty(ConfigParser.toJson(this));
+    }
 }

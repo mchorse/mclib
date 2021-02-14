@@ -10,86 +10,86 @@ import java.io.InputStream;
  */
 public class WaveReader extends BinaryReader
 {
-	public Wave read(InputStream stream) throws Exception
-	{
-		try
-		{
-			BinaryChunk main = this.readChunk(stream);
+    public Wave read(InputStream stream) throws Exception
+    {
+        try
+        {
+            BinaryChunk main = this.readChunk(stream);
 
-			if (!main.id.equals("RIFF"))
-			{
-				throw new Exception("Given file is not 'RIFF'! It's '" + main.id + "' instead...");
-			}
+            if (!main.id.equals("RIFF"))
+            {
+                throw new Exception("Given file is not 'RIFF'! It's '" + main.id + "' instead...");
+            }
 
-			String format = this.readFourString(stream);
+            String format = this.readFourString(stream);
 
-			if (!format.equals("WAVE"))
-			{
-				throw new Exception("Given RIFF file is not a 'WAVE' file! It's '" + format + "' instead...");
-			}
+            if (!format.equals("WAVE"))
+            {
+                throw new Exception("Given RIFF file is not a 'WAVE' file! It's '" + format + "' instead...");
+            }
 
-			int audioFormat = -1;
-			int numChannels = -1;
-			int sampleRate = -1;
-			int byteRate = -1;
-			int blockAlign = -1;
-			int bitsPerSample = -1;
-			byte[] data = null;
+            int audioFormat = -1;
+            int numChannels = -1;
+            int sampleRate = -1;
+            int byteRate = -1;
+            int blockAlign = -1;
+            int bitsPerSample = -1;
+            byte[] data = null;
 
-			int read = 0;
+            int read = 0;
 
-			while (read < 2)
-			{
-				BinaryChunk chunk = this.readChunk(stream);
+            while (read < 2)
+            {
+                BinaryChunk chunk = this.readChunk(stream);
 
-				if (chunk.id.equals("fmt "))
-				{
-					audioFormat = this.readShort(stream);
-					numChannels = this.readShort(stream);
+                if (chunk.id.equals("fmt "))
+                {
+                    audioFormat = this.readShort(stream);
+                    numChannels = this.readShort(stream);
 
-					sampleRate = this.readInt(stream);
-					byteRate = this.readInt(stream);
+                    sampleRate = this.readInt(stream);
+                    byteRate = this.readInt(stream);
 
-					blockAlign = this.readShort(stream);
-					bitsPerSample = this.readShort(stream);
+                    blockAlign = this.readShort(stream);
+                    bitsPerSample = this.readShort(stream);
 
-					/* Discarding extra data */
-					if (chunk.size > 16)
-					{
-						stream.skip(chunk.size - 16);
-					}
+                    /* Discarding extra data */
+                    if (chunk.size > 16)
+                    {
+                        stream.skip(chunk.size - 16);
+                    }
 
-					read++;
-				}
-				else if (chunk.id.equals("data"))
-				{
-					data = new byte[chunk.size];
-					stream.read(data);
-					read++;
-				}
-				else
-				{
-					this.skip(stream, chunk.size);
-				}
-			}
+                    read++;
+                }
+                else if (chunk.id.equals("data"))
+                {
+                    data = new byte[chunk.size];
+                    stream.read(data);
+                    read++;
+                }
+                else
+                {
+                    this.skip(stream, chunk.size);
+                }
+            }
 
-			stream.close();
+            stream.close();
 
-			return new Wave(audioFormat, numChannels, sampleRate, byteRate, blockAlign, bitsPerSample, data);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+            return new Wave(audioFormat, numChannels, sampleRate, byteRate, blockAlign, bitsPerSample, data);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public BinaryChunk readChunk(InputStream stream) throws Exception
-	{
-		String id = this.readFourString(stream);
-		int size = this.readInt(stream);
+    public BinaryChunk readChunk(InputStream stream) throws Exception
+    {
+        String id = this.readFourString(stream);
+        int size = this.readInt(stream);
 
-		return new BinaryChunk(id, size);
-	}
+        return new BinaryChunk(id, size);
+    }
 }

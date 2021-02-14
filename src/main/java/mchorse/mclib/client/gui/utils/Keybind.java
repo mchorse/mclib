@@ -12,136 +12,136 @@ import java.util.function.Supplier;
  */
 public class Keybind
 {
-	public IKey label;
-	public IKey category = IKey.EMPTY;
-	public int mainKey;
-	public int[] heldKeys;
-	public Runnable callback;
-	public boolean inside;
-	public boolean active = true;
-	public Supplier<Boolean> activeSupplier;
+    public IKey label;
+    public IKey category = IKey.EMPTY;
+    public int mainKey;
+    public int[] heldKeys;
+    public Runnable callback;
+    public boolean inside;
+    public boolean active = true;
+    public Supplier<Boolean> activeSupplier;
 
-	public Keybind(IKey label, int mainKey, Runnable callback)
-	{
-		this.label = label;
-		this.mainKey = mainKey;
-		this.callback = callback;
-	}
+    public Keybind(IKey label, int mainKey, Runnable callback)
+    {
+        this.label = label;
+        this.mainKey = mainKey;
+        this.callback = callback;
+    }
 
-	public Keybind held(int... keys)
-	{
-		this.heldKeys = Arrays.copyOf(keys, keys.length);
+    public Keybind held(int... keys)
+    {
+        this.heldKeys = Arrays.copyOf(keys, keys.length);
 
-		return this;
-	}
+        return this;
+    }
 
-	public Keybind inside()
-	{
-		this.inside = true;
+    public Keybind inside()
+    {
+        this.inside = true;
 
-		return this;
-	}
+        return this;
+    }
 
-	public Keybind active(Supplier<Boolean> active)
-	{
-		this.activeSupplier = active;
+    public Keybind active(Supplier<Boolean> active)
+    {
+        this.activeSupplier = active;
 
-		return this;
-	}
+        return this;
+    }
 
-	public Keybind active(boolean active)
-	{
-		this.active = active;
+    public Keybind active(boolean active)
+    {
+        this.active = active;
 
-		return this;
-	}
+        return this;
+    }
 
-	public Keybind category(IKey category)
-	{
-		this.category = category;
+    public Keybind category(IKey category)
+    {
+        this.category = category;
 
-		return this;
-	}
+        return this;
+    }
 
-	public String getKeyCombo()
-	{
-		String label = Keys.getKeyName(this.mainKey);
+    public String getKeyCombo()
+    {
+        String label = Keys.getKeyName(this.mainKey);
 
-		if (this.heldKeys != null)
-		{
-			for (int held : this.heldKeys)
-			{
-				label = Keys.getKeyName(held) + " + " + label;
-			}
-		}
+        if (this.heldKeys != null)
+        {
+            for (int held : this.heldKeys)
+            {
+                label = Keys.getKeyName(held) + " + " + label;
+            }
+        }
 
-		return label;
-	}
+        return label;
+    }
 
-	public boolean check(int keyCode, boolean inside)
-	{
-		if (keyCode != this.mainKey)
-		{
-			return false;
-		}
+    public boolean check(int keyCode, boolean inside)
+    {
+        if (keyCode != this.mainKey)
+        {
+            return false;
+        }
 
-		if (this.heldKeys != null)
-		{
-			for (int key : this.heldKeys)
-			{
-				if (!this.isKeyDown(key))
-				{
-					return false;
-				}
-			}
-		}
+        if (this.heldKeys != null)
+        {
+            for (int key : this.heldKeys)
+            {
+                if (!this.isKeyDown(key))
+                {
+                    return false;
+                }
+            }
+        }
 
-		if (this.inside)
-		{
-			return inside;
-		}
+        if (this.inside)
+        {
+            return inside;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	protected boolean isKeyDown(int key)
-	{
-		if (key == Keyboard.KEY_LSHIFT || key == Keyboard.KEY_RSHIFT)
-		{
-			return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
-		}
-		else if (key == Keyboard.KEY_LCONTROL || key == Keyboard.KEY_RCONTROL)
-		{
-			return Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
-		}
-		else if (key == Keyboard.KEY_LMENU || key == Keyboard.KEY_RMENU)
-		{
-			return Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU);
-		}
+    protected boolean isKeyDown(int key)
+    {
+        if (key == Keyboard.KEY_LSHIFT || key == Keyboard.KEY_RSHIFT)
+        {
+            return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+        }
+        else if (key == Keyboard.KEY_LCONTROL || key == Keyboard.KEY_RCONTROL)
+        {
+            return Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
+        }
+        else if (key == Keyboard.KEY_LMENU || key == Keyboard.KEY_RMENU)
+        {
+            return Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU);
+        }
 
-		return Keyboard.isKeyDown(key);
-	}
+        return Keyboard.isKeyDown(key);
+    }
 
-	public boolean isActive()
-	{
-		if (this.activeSupplier != null)
-		{
-			return this.activeSupplier.get();
-		}
+    public boolean isActive()
+    {
+        if (this.activeSupplier != null)
+        {
+            return this.activeSupplier.get();
+        }
 
-		return this.active;
-	}
+        return this.active;
+    }
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (obj instanceof Keybind)
-		{
-			Keybind keybind = (Keybind) obj;
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof Keybind)
+        {
+            Keybind keybind = (Keybind) obj;
 
-			return this.mainKey == keybind.mainKey && Arrays.equals(this.heldKeys, keybind.heldKeys) && this.inside == keybind.inside;
-		}
+            return this.mainKey == keybind.mainKey && Arrays.equals(this.heldKeys, keybind.heldKeys) && this.inside == keybind.inside;
+        }
 
-		return super.equals(obj);
-	}
+        return super.equals(obj);
+    }
 }

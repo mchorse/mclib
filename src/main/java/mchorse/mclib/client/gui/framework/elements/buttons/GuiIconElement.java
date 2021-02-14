@@ -11,72 +11,72 @@ import java.util.function.Consumer;
 
 public class GuiIconElement extends GuiClickElement<GuiIconElement>
 {
-	public Icon icon;
-	public int iconColor = 0xffffffff;
-	public Icon hoverIcon;
-	public int hoverColor = 0xffaaaaaa;
+    public Icon icon;
+    public int iconColor = 0xffffffff;
+    public Icon hoverIcon;
+    public int hoverColor = 0xffaaaaaa;
 
-	public GuiIconElement(Minecraft mc, Icon icon, Consumer<GuiIconElement> callback)
-	{
-		super(mc, callback);
+    public GuiIconElement(Minecraft mc, Icon icon, Consumer<GuiIconElement> callback)
+    {
+        super(mc, callback);
 
-		this.icon = icon;
-		this.hoverIcon = icon;
-		this.flex().wh(20, 20);
-	}
+        this.icon = icon;
+        this.hoverIcon = icon;
+        this.flex().wh(20, 20);
+    }
 
-	public GuiIconElement both(Icon icon)
-	{
-		this.icon = this.hoverIcon = icon;
+    public GuiIconElement both(Icon icon)
+    {
+        this.icon = this.hoverIcon = icon;
 
-		return this;
-	}
+        return this;
+    }
 
-	public GuiIconElement icon(Icon icon)
-	{
-		this.icon = icon;
+    public GuiIconElement icon(Icon icon)
+    {
+        this.icon = icon;
 
-		return this;
-	}
+        return this;
+    }
 
-	public GuiIconElement hovered(Icon icon)
-	{
-		this.hoverIcon = icon;
+    public GuiIconElement hovered(Icon icon)
+    {
+        this.hoverIcon = icon;
 
-		return this;
-	}
+        return this;
+    }
 
-	public GuiIconElement iconColor(int color)
-	{
-		this.iconColor = color;
+    public GuiIconElement iconColor(int color)
+    {
+        this.iconColor = color;
 
-		return this;
-	}
+        return this;
+    }
 
-	public GuiIconElement hoverColor(int color)
-	{
-		this.hoverColor = color;
+    public GuiIconElement hoverColor(int color)
+    {
+        this.hoverColor = color;
 
-		return this;
-	}
+        return this;
+    }
 
-	@Override
-	protected void drawSkin(GuiContext context)
-	{
-		Icon icon = this.hover ? this.hoverIcon : this.icon;
-		int color = this.hover ? this.hoverColor : this.iconColor;
+    @Override
+    protected void drawSkin(GuiContext context)
+    {
+        Icon icon = this.hover ? this.hoverIcon : this.icon;
+        int color = this.hover ? this.hoverColor : this.iconColor;
 
-		if (this.isEnabled())
-		{
-			ColorUtils.bindColor(color);
-			icon.render(this.area.mx(), this.area.my(), 0.5F, 0.5F);
-		}
-		else
-		{
-			GuiDraw.drawOutlinedIcon(icon, color, this.area.mx(), this.area.my(), 0.5F, 0.5F);
+        if (this.isEnabled())
+        {
+            ColorUtils.bindColor(color);
+            icon.render(this.area.mx(), this.area.my(), 0.5F, 0.5F);
+        }
+        else
+        {
+            GuiDraw.drawOutlinedIcon(icon, color, this.area.mx(), this.area.my(), 0.5F, 0.5F);
 
-			GlStateManager.color(0, 0, 0, 0.5F);
-			icon.render(this.area.mx(), this.area.my(), 0.5F, 0.5F);
-		}
-	}
+            GlStateManager.color(0, 0, 0, 0.5F);
+            icon.render(this.area.mx(), this.area.my(), 0.5F, 0.5F);
+        }
+    }
 }
