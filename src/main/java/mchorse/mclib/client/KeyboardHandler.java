@@ -2,6 +2,7 @@ package mchorse.mclib.client;
 
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
+import mchorse.mclib.client.gui.mclib.GuiAbstractDashboard;
 import mchorse.mclib.client.gui.mclib.GuiDashboard;
 import mchorse.mclib.config.values.ValueRL;
 import mchorse.mclib.events.RemoveDashboardPanels;

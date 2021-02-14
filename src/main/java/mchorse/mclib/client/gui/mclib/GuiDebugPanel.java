@@ -37,7 +37,7 @@ public class GuiDebugPanel extends GuiDashboardPanel
     private WavePlayer player;
     private Waveform wave;
 
-    public GuiDebugPanel(Minecraft mc, GuiDashboard dashboard)
+    public GuiDebugPanel(Minecraft mc, GuiAbstractDashboard dashboard)
     {
         super(mc, dashboard);
 

@@ -6,9 +6,9 @@ import net.minecraft.client.Minecraft;
 
 public class GuiDashboardPanel extends GuiElement
 {
-    public final GuiDashboard dashboard;
+    public final GuiAbstractDashboard dashboard;
 
-    public GuiDashboardPanel(Minecraft mc, GuiDashboard dashboard)
+    public GuiDashboardPanel(Minecraft mc, GuiAbstractDashboard dashboard)
     {
         super(mc);
 

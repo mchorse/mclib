@@ -7,7 +7,7 @@ import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiLabelListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
-import mchorse.mclib.client.gui.mclib.GuiDashboard;
+import mchorse.mclib.client.gui.mclib.GuiAbstractDashboard;
 import mchorse.mclib.client.gui.mclib.GuiDashboardPanel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.Icons;
@@ -31,7 +31,7 @@ public class GuiConfig extends GuiDashboardPanel
     private Config config;
     private IKey title = IKey.lang("mclib.gui.config.title");
 
-    public GuiConfig(Minecraft mc, GuiDashboard dashboard)
+    public GuiConfig(Minecraft mc, GuiAbstractDashboard dashboard)
     {
         super(mc, dashboard);
 
