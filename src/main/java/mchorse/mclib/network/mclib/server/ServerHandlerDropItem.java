@@ -2,6 +2,7 @@ package mchorse.mclib.network.mclib.server;
 
 import mchorse.mclib.network.ServerMessageHandler;
 import mchorse.mclib.network.mclib.common.PacketDropItem;
+import mchorse.mclib.utils.OpHelper;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -12,7 +13,7 @@ public class ServerHandlerDropItem extends ServerMessageHandler<PacketDropItem>
     @Override
     public void run(EntityPlayerMP player, PacketDropItem message)
     {
-        if (player.isCreative())
+        if (player.isCreative() && OpHelper.isPlayerOp(player))
         {
             ItemStack stack = message.stack;
 

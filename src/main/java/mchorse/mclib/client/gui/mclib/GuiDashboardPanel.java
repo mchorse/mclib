@@ -18,9 +18,6 @@ public class GuiDashboardPanel extends GuiElement
 
     public boolean canBeOpened(int opLevel)
     {
-        /* 2 is the OP level that Minecraft uses to check whether player
-         * can toggle between spectator and creative (F3 + N), so I would
-         * say it's safe to use */
         return this.isClientSideOnly() || OpHelper.isOp(opLevel);
     }
 

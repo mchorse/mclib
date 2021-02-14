@@ -9,6 +9,7 @@ import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.Keybind;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.events.RegisterDashboardPanels;
@@ -112,15 +113,23 @@ public class GuiDashboard extends GuiBase
                     continue;
                 }
 
-                this.panels.getButton(panel).setEnabled(panel.canBeOpened(newOpLevel));
-            }
+                GuiIconElement button = this.panels.getButton(panel);
+                boolean enabled = panel.canBeOpened(newOpLevel);
 
-            GuiDashboardPanel current = this.panels.view.delegate;
+                button.setEnabled(enabled);
 
-            if (!current.canBeOpened(newOpLevel))
-            {
-                this.panels.setPanel(this.config);
+                for (Keybind keybind : this.panels.keys().keybinds)
+                {
+                    keybind.active(enabled);
+                }
             }
+        }
+
+        GuiDashboardPanel current = this.panels.view.delegate;
+
+        if (!current.canBeOpened(newOpLevel))
+        {
+            this.panels.setPanel(this.config);
         }
 
         this.opLevel = newOpLevel;
