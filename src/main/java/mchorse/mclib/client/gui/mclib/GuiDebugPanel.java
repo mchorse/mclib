@@ -114,6 +114,12 @@ public class GuiDebugPanel extends GuiDashboardPanel
         this.add(this.top, this.bottom);
     }
 
+    @Override
+    public boolean isClientSideOnly()
+    {
+        return true;
+    }
+
     private void play(GuiButtonElement button)
     {
         try

@@ -60,6 +60,13 @@ public class GuiPanelBase<T extends GuiElement> extends GuiElement
         this.add(this.view, new GuiDrawable(this::drawOverlay), this.buttons);
     }
 
+    public GuiIconElement getButton(T panel)
+    {
+        int index = this.panels.indexOf(panel);
+
+        return index < 0 ? null : this.buttons.elements.get(index);
+    }
+
     /**
      * Register a panel with given texture and tooltip 
      */

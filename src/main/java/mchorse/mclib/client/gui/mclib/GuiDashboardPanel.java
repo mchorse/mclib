@@ -1,6 +1,7 @@
 package mchorse.mclib.client.gui.mclib;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.utils.OpHelper;
 import net.minecraft.client.Minecraft;
 
 public class GuiDashboardPanel extends GuiElement
@@ -13,6 +14,19 @@ public class GuiDashboardPanel extends GuiElement
 
         this.dashboard = dashboard;
         this.markContainer();
+    }
+
+    public boolean canBeOpened(int opLevel)
+    {
+        /* 2 is the OP level that Minecraft uses to check whether player
+         * can toggle between spectator and creative (F3 + N), so I would
+         * say it's safe to use */
+        return this.isClientSideOnly() || OpHelper.isOp(opLevel);
+    }
+
+    public boolean isClientSideOnly()
+    {
+        return false;
     }
 
     public boolean needsBackground()

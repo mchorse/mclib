@@ -3,6 +3,8 @@ package mchorse.mclib.client.gui.mclib;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiModelRenderer;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
@@ -11,6 +13,7 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfig;
 import mchorse.mclib.events.RegisterDashboardPanels;
 import mchorse.mclib.utils.ColorUtils;
+import mchorse.mclib.utils.OpHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -24,6 +27,7 @@ public class GuiDashboard extends GuiBase
     public GuiConfig config;
 
     private boolean wasClosed = true;
+    private int opLevel = -1;
 
     public static GuiDashboard get()
     {
@@ -83,6 +87,8 @@ public class GuiDashboard extends GuiBase
     @Override
     public void setWorldAndResolution(Minecraft mc, int width, int height)
     {
+        this.updateOPAccess();
+
         if (this.wasClosed)
         {
             this.wasClosed = false;
@@ -91,6 +97,33 @@ public class GuiDashboard extends GuiBase
         }
 
         super.setWorldAndResolution(mc, width, height);
+    }
+
+    private void updateOPAccess()
+    {
+        int newOpLevel = OpHelper.getPlayerOpLevel();
+
+        if (newOpLevel != this.opLevel)
+        {
+            for (GuiDashboardPanel panel : this.panels.panels)
+            {
+                if (panel == this.config)
+                {
+                    continue;
+                }
+
+                this.panels.getButton(panel).setEnabled(panel.canBeOpened(newOpLevel));
+            }
+
+            GuiDashboardPanel current = this.panels.view.delegate;
+
+            if (!current.canBeOpened(newOpLevel))
+            {
+                this.panels.setPanel(this.config);
+            }
+        }
+
+        this.opLevel = newOpLevel;
     }
 
     @Override

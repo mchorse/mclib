@@ -16,6 +16,8 @@ public class GuiIconElement extends GuiClickElement<GuiIconElement>
     public Icon hoverIcon;
     public int hoverColor = 0xffaaaaaa;
 
+    public int disabledColor = 0x80404040;
+
     public GuiIconElement(Minecraft mc, Icon icon, Consumer<GuiIconElement> callback)
     {
         super(mc, callback);
@@ -60,6 +62,13 @@ public class GuiIconElement extends GuiClickElement<GuiIconElement>
         return this;
     }
 
+    public GuiIconElement disabledColor(int color)
+    {
+        this.disabledColor = color;
+
+        return this;
+    }
+
     @Override
     protected void drawSkin(GuiContext context)
     {
@@ -73,9 +82,7 @@ public class GuiIconElement extends GuiClickElement<GuiIconElement>
         }
         else
         {
-            GuiDraw.drawOutlinedIcon(icon, color, this.area.mx(), this.area.my(), 0.5F, 0.5F);
-
-            GlStateManager.color(0, 0, 0, 0.5F);
+            ColorUtils.bindColor(this.disabledColor);
             icon.render(this.area.mx(), this.area.my(), 0.5F, 0.5F);
         }
     }
