@@ -23,7 +23,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-public class GuiDebugPanel extends GuiDashboardPanel
+public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
 {
     public GuiKeyframesEditor<GuiDopeSheet> dopesheet;
     public GuiKeyframesEditor<GuiGraphView> graph;

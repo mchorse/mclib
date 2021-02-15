@@ -4,11 +4,11 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.utils.OpHelper;
 import net.minecraft.client.Minecraft;
 
-public class GuiDashboardPanel extends GuiElement
+public class GuiDashboardPanel <T extends GuiAbstractDashboard> extends GuiElement
 {
-    public final GuiAbstractDashboard dashboard;
+    public final T dashboard;
 
-    public GuiDashboardPanel(Minecraft mc, GuiAbstractDashboard dashboard)
+    public GuiDashboardPanel(Minecraft mc, T dashboard)
     {
         super(mc);
 

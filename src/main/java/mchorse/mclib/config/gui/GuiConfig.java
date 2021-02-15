@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiConfig extends GuiDashboardPanel
+public class GuiConfig extends GuiDashboardPanel<GuiAbstractDashboard>
 {
     public GuiIconElement reload;
     public GuiLabelListElement<String> mods;
