@@ -1,10 +1,12 @@
 package mchorse.mclib.client.gui.mclib;
 
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Keybind;
 import mchorse.mclib.config.gui.GuiConfig;
+import mchorse.mclib.events.RegisterDashboardPanels;
 import mchorse.mclib.utils.OpHelper;
 import net.minecraft.client.Minecraft;
 
@@ -22,6 +24,8 @@ public abstract class GuiAbstractDashboard extends GuiBase
 
         this.panels.flex().relative(this.viewport).wh(1F, 1F);
         this.registerPanels(mc);
+
+        McLib.EVENT_BUS.post(new RegisterDashboardPanels(this));
 
         this.root.add(this.panels);
     }

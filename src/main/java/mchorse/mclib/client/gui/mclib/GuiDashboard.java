@@ -4,7 +4,6 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfig;
-import mchorse.mclib.events.RegisterDashboardPanels;
 import net.minecraft.client.Minecraft;
 
 public class GuiDashboard extends GuiAbstractDashboard
@@ -41,8 +40,6 @@ public class GuiDashboard extends GuiAbstractDashboard
         {
             this.panels.registerPanel(new GuiDebugPanel(mc, this), IKey.str("Debug"), Icons.POSE);
         }
-
-        McLib.EVENT_BUS.post(new RegisterDashboardPanels(this));
 
         this.panels.setPanel(this.config);
     }
