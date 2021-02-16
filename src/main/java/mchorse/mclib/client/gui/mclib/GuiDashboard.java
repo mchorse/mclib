@@ -41,6 +41,8 @@ public class GuiDashboard extends GuiAbstractDashboard
             this.panels.registerPanel(new GuiDebugPanel(mc, this), IKey.str("Debug"), Icons.POSE);
         }
 
+        this.panels.registerPanel(new GuiGraphPanel(mc, this), IKey.lang("mclib.gui.graph.tooltip"), Icons.GRAPH);
+
         this.panels.setPanel(this.config);
     }
 }

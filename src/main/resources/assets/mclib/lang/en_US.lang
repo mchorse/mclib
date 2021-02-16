@@ -15,6 +15,8 @@ mclib.gui.pick_texture=Pick texture
 mclib.gui.dashboard.category=Dashboard
 mclib.gui.dashboard.open_panel=Open 
 
+mclib.gui.graph.tooltip=Graphing calculator
+mclib.gui.graph.help=Click on this button to go to a web page which documents features of following graphing calculator.\n\nExpressions used here, can be also used in Aperture's math modifier and Commander's math expression evaluation within commands.\n\nThis graphing calculator provides only one variable "x" which is horizontal coordinate you can plug in into y=x (aka f(x)) graph functions.
 mclib.gui.config.title=Configuration
 mclib.gui.config.tooltip=Mods configuration
 mclib.gui.config.reload_tooltip=Reload configuration from file...

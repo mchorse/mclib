@@ -64,6 +64,7 @@ public class Icons
     public static final Icon SHIFT_FORWARD = new Icon(ICONS, 192, 32);
     public static final Icon SHIFT_BACKWARD = new Icon(ICONS, 208, 32);
     public static final Icon MOVE_TO = new Icon(ICONS, 224, 32);
+    public static final Icon GRAPH = new Icon(ICONS, 240, 32);
 
     public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240, 16, 16);
     public static final Icon DISABLED = new Icon(ICONS, 16, 240, 16, 16);

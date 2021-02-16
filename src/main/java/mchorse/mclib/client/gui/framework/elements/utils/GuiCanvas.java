@@ -133,8 +133,10 @@ public class GuiCanvas extends GuiElement
     {
         if (this.dragging && this.mouse == 2)
         {
+            float y = this.scaleY.inverse ? 1 : -1;
+
             this.scaleX.setShift(-(context.mouseX - this.lastX) / this.scaleX.getZoom() + this.lastT);
-            this.scaleY.setShift(-(context.mouseY - this.lastY) / this.scaleY.getZoom() + this.lastV);
+            this.scaleY.setShift(y * (context.mouseY - this.lastY) / this.scaleY.getZoom() + this.lastV);
         }
     }
 
