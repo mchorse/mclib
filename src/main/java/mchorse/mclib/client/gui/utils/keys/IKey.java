@@ -9,7 +9,7 @@ public interface IKey
         return new LangKey(key);
     }
 
-    public static IKey format(String key, String... args)
+    public static IKey format(String key, Object... args)
     {
         return new LangKey(key).args(args);
     }

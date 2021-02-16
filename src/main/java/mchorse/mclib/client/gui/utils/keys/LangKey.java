@@ -9,14 +9,14 @@ public class LangKey implements IKey
     public String key;
     public String string;
     public long time = -1;
-    public String[] args = new String[0];
+    public Object[] args = new Object[0];
 
     public LangKey(String key)
     {
         this.key = key;
     }
 
-    public LangKey args(String... args)
+    public LangKey args(Object... args)
     {
         this.args = args;
 
@@ -36,7 +36,7 @@ public class LangKey implements IKey
         if (lastTime > time)
         {
             this.time = lastTime;
-            this.string = I18n.format(this.key, (Object[]) this.args);
+            this.string = I18n.format(this.key, this.args);
         }
 
         return this.string;

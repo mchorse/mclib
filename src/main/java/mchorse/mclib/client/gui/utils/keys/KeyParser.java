@@ -19,14 +19,23 @@ public class KeyParser
         else if (type == 1)
         {
             String key = ByteBufUtils.readUTF8String(buffer);
-            List<String> args = new ArrayList<String>();
+            List<Object> args = new ArrayList<Object>();
 
             for (int i = 0, c = buffer.readInt(); i < c; i++)
             {
-                args.add(ByteBufUtils.readUTF8String(buffer));
+                byte argType = buffer.readByte();
+
+                if (argType == 0)
+                {
+                    args.add(ByteBufUtils.readUTF8String(buffer));
+                }
+                else if (argType == 1)
+                {
+                    args.add(keyFromBytes(buffer));
+                }
             }
 
-            return args.isEmpty() ? IKey.lang(key) : IKey.format(key, args.toArray(new String[args.size()]));
+            return args.isEmpty() ? IKey.lang(key) : IKey.format(key, args.toArray(new Object[args.size()]));
         }
         else if (type == 2)
         {
@@ -63,9 +72,23 @@ public class KeyParser
             ByteBufUtils.writeUTF8String(buffer, lang.key);
             buffer.writeInt(lang.args.length);
 
-            for (String arg : lang.args)
+            for (Object arg : lang.args)
             {
-                ByteBufUtils.writeUTF8String(buffer, arg);
+                if (arg instanceof String)
+                {
+                    buffer.writeByte(0);
+                    ByteBufUtils.writeUTF8String(buffer, (String) arg);
+                }
+                else if (arg instanceof IKey)
+                {
+                    buffer.writeByte(1);
+                    keyToBytes(buffer, (IKey) arg);
+                }
+                else
+                {
+                    buffer.writeByte(0);
+                    ByteBufUtils.writeUTF8String(buffer, arg.toString());
+                }
             }
         }
         else if (key instanceof CompoundKey)
