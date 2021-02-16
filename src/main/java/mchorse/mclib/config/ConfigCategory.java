@@ -72,6 +72,30 @@ public class ConfigCategory implements IByteBufSerializable
         return false;
     }
 
+    public boolean isClientSide()
+    {
+        for (IConfigValue value : this.values.values())
+        {
+            if (!value.isClientSide())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void markClientSide()
+    {
+        for (IConfigValue value : this.values.values())
+        {
+            if (value instanceof Value)
+            {
+                ((Value) value).clientSide();
+            }
+        }
+    }
+
     /**
      * Copy all values from given config to this config
      */

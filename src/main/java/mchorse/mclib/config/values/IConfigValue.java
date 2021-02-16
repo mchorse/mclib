@@ -18,6 +18,8 @@ public interface IConfigValue extends IByteBufSerializable
 
     public boolean isVisible();
 
+    public boolean isClientSide();
+
     @SideOnly(Side.CLIENT)
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui);
 

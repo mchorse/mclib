@@ -7,7 +7,6 @@ import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.config.values.ValueRL;
 import mchorse.mclib.events.RegisterConfigEvent;
-import mchorse.mclib.events.RenderOverlayEvent;
 import mchorse.mclib.math.IValue;
 import mchorse.mclib.math.MathBuilder;
 import mchorse.mclib.math.Operation;
@@ -78,8 +77,8 @@ public class McLib
         ConfigBuilder builder = event.createBuilder(MOD_ID);
 
         debugPanel = builder.category("appearance").getBoolean("debug_panel", false);
-        primaryColor = builder.getInt("primary_color", 0x0088ff).color();
         debugPanel.invisible();
+        primaryColor = builder.getInt("primary_color", 0x0088ff).color();
         enableBorders = builder.getBoolean("enable_borders", false);
         enableCheckboxRendering = builder.getBoolean("enable_checkbox_rendering", false);
         enableTrackpadIncrements = builder.getBoolean("enable_trackpad_increments", true);
@@ -89,6 +88,8 @@ public class McLib
         favoriteColors = new ValueColors("favorite_colors");
         favoriteColors.invisible();
         builder.register(favoriteColors);
+
+        builder.getCategory().markClientSide();
 
         enableCursorRendering = builder.category("tutorials").getBoolean("enable_mouse_rendering", false);
         enableMouseButtonRendering = builder.getBoolean("enable_mouse_buttons_rendering", false);
@@ -102,14 +103,22 @@ public class McLib
             IKey.lang("mclib.keystrokes_position.top_left")
         );
 
+        builder.getCategory().markClientSide();
+
         backgroundImage = builder.category("background").getRL("image",  null);
         backgroundColor = builder.getInt("color",  0xcc000000).colorAlpha();
+
+        builder.getCategory().markClientSide();
 
         scrollbarFlat = builder.category("scrollbars").getBoolean("flat", false);
         scrollbarShadow = builder.getInt("shadow", 0x88000000).colorAlpha();
         scrollbarWidth = builder.getInt("width", 4, 2, 10);
 
+        builder.getCategory().markClientSide();
+
         multiskinMultiThreaded = builder.category("multiskin").getBoolean("multithreaded", true);
+
+        builder.getCategory().markClientSide();
 
         maxPacketSize = builder.category("vanilla").getInt("max_packet_size", PayloadASM.MIN_SIZE, PayloadASM.MIN_SIZE, Integer.MAX_VALUE);
 

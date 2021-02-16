@@ -10,6 +10,7 @@ public abstract class Value implements IConfigValue
     public final String id;
     public ConfigCategory category;
     private boolean visible = true;
+    private boolean clientSide;
 
     public Value(String id)
     {
@@ -22,15 +23,30 @@ public abstract class Value implements IConfigValue
         return this.id;
     }
 
-    public void invisible()
+    public Value invisible()
     {
         this.visible = false;
+
+        return this;
+    }
+
+    public Value clientSide()
+    {
+        this.clientSide = true;
+
+        return this;
     }
 
     @Override
     public boolean isVisible()
     {
         return this.visible;
+    }
+
+    @Override
+    public boolean isClientSide()
+    {
+        return this.clientSide;
     }
 
     public void saveLater()
@@ -73,11 +89,13 @@ public abstract class Value implements IConfigValue
     public void fromBytes(ByteBuf buffer)
     {
         this.visible = buffer.readBoolean();
+        this.clientSide = buffer.readBoolean();
     }
 
     @Override
     public void toBytes(ByteBuf buffer)
     {
         buffer.writeBoolean(this.visible);
+        buffer.writeBoolean(this.clientSide);
     }
 }

@@ -27,6 +27,11 @@ public class ConfigBuilder
         this.file = file;
     }
 
+    public ConfigCategory getCategory()
+    {
+        return this.category;
+    }
+
     public Config build()
     {
         Config config = new Config(this.id, this.file);

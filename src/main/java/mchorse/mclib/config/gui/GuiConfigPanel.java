@@ -153,10 +153,11 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         this.options.removeAll();
 
         boolean first = true;
+        boolean checkForClient = this.serverConfigs != null;
 
         for (ConfigCategory category : this.config.categories.values())
         {
-            if (!category.isVisible() || category.values.isEmpty())
+            if (!category.isVisible() || (checkForClient && category.isClientSide()))
             {
                 continue;
             }
@@ -174,7 +175,7 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
 
             for (IConfigValue value : category.values.values())
             {
-                if (!value.isVisible())
+                if (!value.isVisible() || (checkForClient && value.isClientSide()))
                 {
                     continue;
                 }
