@@ -1,16 +1,19 @@
 package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
+import io.netty.buffer.ByteBuf;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTexturePicker;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.config.gui.GuiConfig;
+import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.utils.resources.RLUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,6 +27,11 @@ public class ValueRL extends Value
 
     private ResourceLocation value;
     private ResourceLocation defaultValue;
+
+    public ValueRL(String id)
+    {
+        super(id);
+    }
 
     public ValueRL(String id, ResourceLocation defaultValue)
     {
@@ -56,7 +64,7 @@ public class ValueRL extends Value
 
     @Override
     @SideOnly(Side.CLIENT)
-    public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
+    public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
         GuiElement element = new GuiElement(mc);
         GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
@@ -98,5 +106,57 @@ public class ValueRL extends Value
     public JsonElement toJSON()
     {
         return RLUtils.writeJson(this.value);
+    }
+
+    @Override
+    public void copy(IConfigValue value)
+    {
+        if (value instanceof ValueRL)
+        {
+            this.value = RLUtils.clone(((ValueRL) value).value);
+        }
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buffer)
+    {
+        super.fromBytes(buffer);
+
+        this.value = this.readRL(buffer);
+        this.defaultValue = this.readRL(buffer);
+    }
+
+    private ResourceLocation readRL(ByteBuf buffer)
+    {
+        if (buffer.readBoolean())
+        {
+            NBTTagCompound tag = ByteBufUtils.readTag(buffer);
+
+            return RLUtils.create(tag.getTag("RL"));
+        }
+
+        return null;
+    }
+
+    @Override
+    public void toBytes(ByteBuf buffer)
+    {
+        super.toBytes(buffer);
+
+        this.writeRL(buffer, this.value);
+        this.writeRL(buffer, this.defaultValue);
+    }
+
+    private void writeRL(ByteBuf buffer, ResourceLocation rl)
+    {
+        buffer.writeBoolean(rl != null);
+
+        if (rl != null)
+        {
+            NBTTagCompound tag = new NBTTagCompound();
+
+            tag.setTag("RL", RLUtils.writeNbt(rl));
+            ByteBufUtils.writeTag(buffer, tag);
+        }
     }
 }

@@ -70,7 +70,7 @@ public class KeyboardHandler
                 this.lastGuiScale = -1;
             }
 
-            if (event.getGui() instanceof GuiMainMenu)
+            if (Minecraft.getMinecraft().world == null)
             {
                 GuiDashboard.dashboard = null;
                 ValueRL.picker = null;

@@ -3,8 +3,10 @@ package mchorse.mclib.client.gui.utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.netty.buffer.ByteBuf;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.config.gui.GuiConfig;
+import mchorse.mclib.config.gui.GuiConfigPanel;
+import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.config.values.Value;
 import mchorse.mclib.utils.Color;
 import net.minecraft.client.Minecraft;
@@ -31,7 +33,7 @@ public class ValueColors extends Value
 
     @Override
     @SideOnly(Side.CLIENT)
-    public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
+    public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
         return null;
     }
@@ -66,5 +68,41 @@ public class ValueColors extends Value
         }
 
         return array;
+    }
+
+    @Override
+    public void copy(IConfigValue value)
+    {
+        if (value instanceof ValueColors)
+        {
+            this.colors.clear();
+            this.colors.addAll(((ValueColors) value).colors);
+        }
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buffer)
+    {
+        super.fromBytes(buffer);
+
+        this.colors.clear();
+
+        for (int i = 0, c = buffer.readInt(); i < c; i++)
+        {
+            this.colors.add(new Color().set(buffer.readInt(), true));
+        }
+    }
+
+    @Override
+    public void toBytes(ByteBuf buffer)
+    {
+        super.toBytes(buffer);
+
+        buffer.writeInt(this.colors.size());
+
+        for (Color color : this.colors)
+        {
+            buffer.writeInt(color.getRGBAColor());
+        }
     }
 }

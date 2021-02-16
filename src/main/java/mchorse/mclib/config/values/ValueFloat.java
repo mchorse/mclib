@@ -2,12 +2,13 @@ package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.netty.buffer.ByteBuf;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.config.gui.GuiConfig;
+import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,8 +21,13 @@ public class ValueFloat extends Value
 {
     private float value;
     private float defaultValue;
-    public final float min;
-    public final float max;
+    private float min;
+    private float max;
+
+    public ValueFloat(String id)
+    {
+        super(id);
+    }
 
     public ValueFloat(String id, float defaultValue)
     {
@@ -45,6 +51,16 @@ public class ValueFloat extends Value
         this.reset();
     }
 
+    public float getMin()
+    {
+        return this.min;
+    }
+
+    public float getMax()
+    {
+        return this.max;
+    }
+
     public float get()
     {
         return this.value;
@@ -64,7 +80,7 @@ public class ValueFloat extends Value
 
     @Override
     @SideOnly(Side.CLIENT)
-    public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
+    public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
         GuiElement element = new GuiElement(mc);
         GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
@@ -88,5 +104,36 @@ public class ValueFloat extends Value
     public JsonElement toJSON()
     {
         return new JsonPrimitive(this.value);
+    }
+
+    @Override
+    public void copy(IConfigValue value)
+    {
+        if (value instanceof ValueFloat)
+        {
+            this.value = ((ValueFloat) value).value;
+        }
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buffer)
+    {
+        super.fromBytes(buffer);
+
+        this.value = buffer.readFloat();
+        this.defaultValue = buffer.readFloat();
+        this.min = buffer.readFloat();
+        this.max = buffer.readFloat();
+    }
+
+    @Override
+    public void toBytes(ByteBuf buffer)
+    {
+        super.toBytes(buffer);
+
+        buffer.writeFloat(this.value);
+        buffer.writeFloat(this.defaultValue);
+        buffer.writeFloat(this.min);
+        buffer.writeFloat(this.max);
     }
 }

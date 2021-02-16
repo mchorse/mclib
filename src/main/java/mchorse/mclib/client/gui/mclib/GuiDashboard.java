@@ -3,7 +3,7 @@ package mchorse.mclib.client.gui.mclib;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.config.gui.GuiConfig;
+import mchorse.mclib.config.gui.GuiConfigPanel;
 import net.minecraft.client.Minecraft;
 
 public class GuiDashboard extends GuiAbstractDashboard
@@ -34,7 +34,7 @@ public class GuiDashboard extends GuiAbstractDashboard
     @Override
     protected void registerPanels(Minecraft mc)
     {
-        this.panels.registerPanel(this.config = new GuiConfig(mc, this), IKey.lang("mclib.gui.config.tooltip"), Icons.GEAR);
+        this.panels.registerPanel(this.config = new GuiConfigPanel(mc, this), IKey.lang("mclib.gui.config.tooltip"), Icons.GEAR);
 
         if (McLib.debugPanel.get())
         {

@@ -2,6 +2,7 @@ package mchorse.mclib.utils.keyframes;
 
 import com.google.gson.annotations.Expose;
 import io.netty.buffer.ByteBuf;
+import mchorse.mclib.network.IByteBufSerializable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +14,7 @@ import java.util.List;
  * This class is responsible for storing individual keyframes and also
  * interpolating between them.
  */
-public class KeyframeChannel
+public class KeyframeChannel implements IByteBufSerializable
 {
     @Expose
     protected final List<Keyframe> keyframes = new ArrayList<Keyframe>();
@@ -184,7 +185,8 @@ public class KeyframeChannel
         this.sort();
     }
 
-    public void fromByteBuf(ByteBuf buffer)
+    @Override
+    public void fromBytes(ByteBuf buffer)
     {
         this.keyframes.clear();
 
@@ -192,20 +194,21 @@ public class KeyframeChannel
         {
             Keyframe frame = new Keyframe();
 
-            frame.fromByteBuf(buffer);
+            frame.fromBytes(buffer);
             this.keyframes.add(frame);
         }
 
         this.sort();
     }
 
-    public void toByteBuf(ByteBuf buffer)
+    @Override
+    public void toBytes(ByteBuf buffer)
     {
         buffer.writeInt(this.keyframes.size());
 
         for (Keyframe frame : this.keyframes)
         {
-            frame.toByteBuf(buffer);
+            frame.toBytes(buffer);
         }
     }
 }

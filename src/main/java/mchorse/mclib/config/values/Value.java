@@ -1,5 +1,6 @@
 package mchorse.mclib.config.values;
 
+import io.netty.buffer.ByteBuf;
 import mchorse.mclib.config.ConfigCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -62,5 +63,21 @@ public abstract class Value implements IConfigValue
     public String getTooltipKey()
     {
         return this.category.config.getValueTooltipKey(this.category.id, this.id);
+    }
+
+    @Override
+    public void copy(IConfigValue value)
+    {}
+
+    @Override
+    public void fromBytes(ByteBuf buffer)
+    {
+        this.visible = buffer.readBoolean();
+    }
+
+    @Override
+    public void toBytes(ByteBuf buffer)
+    {
+        buffer.writeBoolean(this.visible);
     }
 }

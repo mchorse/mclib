@@ -2,12 +2,13 @@ package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.netty.buffer.ByteBuf;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.config.gui.GuiConfig;
+import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,8 +21,13 @@ public class ValueDouble extends Value
 {
     private double value;
     private double defaultValue;
-    public final double min;
-    public final double max;
+    private double min;
+    private double max;
+
+    public ValueDouble(String id)
+    {
+        super(id);
+    }
 
     public ValueDouble(String id, double defaultValue)
     {
@@ -45,6 +51,16 @@ public class ValueDouble extends Value
         this.reset();
     }
 
+    public double getMin()
+    {
+        return this.min;
+    }
+
+    public double getMax()
+    {
+        return this.max;
+    }
+
     public double get()
     {
         return this.value;
@@ -64,7 +80,7 @@ public class ValueDouble extends Value
 
     @Override
     @SideOnly(Side.CLIENT)
-    public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
+    public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
         GuiElement element = new GuiElement(mc);
         GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
@@ -88,5 +104,36 @@ public class ValueDouble extends Value
     public JsonElement toJSON()
     {
         return new JsonPrimitive(this.value);
+    }
+
+    @Override
+    public void copy(IConfigValue value)
+    {
+        if (value instanceof ValueDouble)
+        {
+            this.value = ((ValueDouble) value).value;
+        }
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buffer)
+    {
+        super.fromBytes(buffer);
+
+        this.value = buffer.readDouble();
+        this.defaultValue = buffer.readDouble();
+        this.min = buffer.readDouble();
+        this.max = buffer.readDouble();
+    }
+
+    @Override
+    public void toBytes(ByteBuf buffer)
+    {
+        super.toBytes(buffer);
+
+        buffer.writeDouble(this.value);
+        buffer.writeDouble(this.defaultValue);
+        buffer.writeDouble(this.min);
+        buffer.writeDouble(this.max);
     }
 }

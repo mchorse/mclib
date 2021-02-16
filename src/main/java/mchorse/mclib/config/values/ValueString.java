@@ -2,13 +2,15 @@ package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.netty.buffer.ByteBuf;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.config.gui.GuiConfig;
+import mchorse.mclib.config.gui.GuiConfigPanel;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -18,7 +20,12 @@ import java.util.List;
 public class ValueString extends Value
 {
     private String value = "";
-    private String defaultValue;
+    private String defaultValue = "";
+
+    public ValueString(String id)
+    {
+        super(id);
+    }
 
     public ValueString(String id, String defaultValue)
     {
@@ -48,7 +55,7 @@ public class ValueString extends Value
 
     @Override
     @SideOnly(Side.CLIENT)
-    public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
+    public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
         GuiElement element = new GuiElement(mc);
         GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
@@ -72,5 +79,32 @@ public class ValueString extends Value
     public JsonElement toJSON()
     {
         return new JsonPrimitive(this.value);
+    }
+
+    @Override
+    public void copy(IConfigValue value)
+    {
+        if (value instanceof ValueString)
+        {
+            this.value = ((ValueString) value).value;
+        }
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buffer)
+    {
+        super.fromBytes(buffer);
+
+        this.value = ByteBufUtils.readUTF8String(buffer);
+        this.defaultValue = ByteBufUtils.readUTF8String(buffer);
+    }
+
+    @Override
+    public void toBytes(ByteBuf buffer)
+    {
+        super.toBytes(buffer);
+
+        ByteBufUtils.writeUTF8String(buffer, this.value == null ? "" : this.value);
+        ByteBufUtils.writeUTF8String(buffer, this.defaultValue == null ? "" : this.defaultValue);
     }
 }

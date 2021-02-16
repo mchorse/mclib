@@ -2,6 +2,8 @@ package mchorse.mclib.utils.keyframes;
 
 import com.google.gson.annotations.Expose;
 import io.netty.buffer.ByteBuf;
+import mchorse.mclib.network.IByteBufSerializable;
+import mchorse.mclib.network.INBTSerializable;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
@@ -10,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * This class is responsible for storing individual keyframe properties such
  * as tick at which its located, value, interpolation, easing type, etc.
  */
-public class Keyframe
+public class Keyframe implements IByteBufSerializable, INBTSerializable
 {
     public Keyframe prev;
     public Keyframe next;
@@ -105,7 +107,8 @@ public class Keyframe
         this.ry = keyframe.ry;
     }
 
-    public void fromByteBuf(ByteBuf buffer)
+    @Override
+    public void fromBytes(ByteBuf buffer)
     {
         this.tick = buffer.readLong();
         this.value = buffer.readDouble();
@@ -117,7 +120,8 @@ public class Keyframe
         this.ly = buffer.readFloat();
     }
 
-    public void toByteBuf(ByteBuf buffer)
+    @Override
+    public void toBytes(ByteBuf buffer)
     {
         buffer.writeLong(this.tick);
         buffer.writeDouble(this.value);
@@ -129,6 +133,7 @@ public class Keyframe
         buffer.writeFloat(this.ly);
     }
 
+    @Override
     public void fromNBT(NBTTagCompound tag)
     {
         if (tag.hasKey("Tick")) this.tick = tag.getLong("Tick");
@@ -141,10 +146,9 @@ public class Keyframe
         if (tag.hasKey("LY")) this.ly = tag.getFloat("LY");
     }
 
-    public NBTTagCompound toNBT()
+    @Override
+    public NBTTagCompound toNBT(NBTTagCompound tag)
     {
-        NBTTagCompound tag = new NBTTagCompound();
-
         tag.setLong("Tick", this.tick);
         tag.setDouble("Value", this.value);
 

@@ -2,6 +2,7 @@ package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import io.netty.buffer.ByteBuf;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiCirculateElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
@@ -10,24 +11,32 @@ import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.config.gui.GuiConfig;
+import mchorse.mclib.client.gui.utils.keys.KeyParser;
+import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ValueInt extends Value
 {
     private int value;
     private int defaultValue;
-    public final int min;
-    public final int max;
+    private int min;
+    private int max;
     private Subtype subtype = Subtype.INTEGER;
-    private IKey[] labels;
+    private List<IKey> labels;
+
+    public ValueInt(String id)
+    {
+        super(id);
+    }
 
     public ValueInt(String id, int defaultValue)
     {
@@ -49,6 +58,16 @@ public class ValueInt extends Value
         this.max = max;
 
         this.reset();
+    }
+
+    public int getMin()
+    {
+        return this.min;
+    }
+
+    public int getMax()
+    {
+        return this.max;
     }
 
     public int get()
@@ -96,7 +115,8 @@ public class ValueInt extends Value
 
     public ValueInt modes(IKey... labels)
     {
-        this.labels = labels;
+        this.labels = new ArrayList<IKey>();
+        Collections.addAll(this.labels, labels);
 
         return this.subtype(Subtype.MODES);
     }
@@ -109,7 +129,7 @@ public class ValueInt extends Value
 
     @Override
     @SideOnly(Side.CLIENT)
-    public List<GuiElement> getFields(Minecraft mc, GuiConfig gui)
+    public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
         GuiElement element = new GuiElement(mc);
         GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
@@ -166,6 +186,67 @@ public class ValueInt extends Value
     public JsonElement toJSON()
     {
         return new JsonPrimitive(this.value);
+    }
+
+    @Override
+    public void copy(IConfigValue value)
+    {
+        if (value instanceof ValueInt)
+        {
+            this.value = ((ValueInt) value).value;
+        }
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buffer)
+    {
+        super.fromBytes(buffer);
+
+        this.value = buffer.readInt();
+        this.defaultValue = buffer.readInt();
+        this.min = buffer.readInt();
+        this.max = buffer.readInt();
+
+        this.subtype = Subtype.values()[buffer.readInt()];
+
+        if (buffer.readBoolean())
+        {
+            this.labels = new ArrayList<IKey>();
+
+            for (int i = 0, c = buffer.readInt(); i < c; i++)
+            {
+                IKey key = KeyParser.keyFromBytes(buffer);
+
+                if (key != null)
+                {
+                    this.labels.add(key);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void toBytes(ByteBuf buffer)
+    {
+        super.toBytes(buffer);
+
+        buffer.writeInt(this.value);
+        buffer.writeInt(this.defaultValue);
+        buffer.writeInt(this.min);
+        buffer.writeInt(this.max);
+
+        buffer.writeInt(this.subtype.ordinal());
+        buffer.writeBoolean(this.labels != null);
+
+        if (this.labels != null)
+        {
+            buffer.writeInt(this.labels.size());
+
+            for (IKey key : this.labels)
+            {
+                KeyParser.keyToBytes(buffer, key);
+            }
+        }
     }
 
     public static enum Subtype

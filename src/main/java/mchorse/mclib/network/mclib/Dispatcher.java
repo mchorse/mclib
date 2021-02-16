@@ -2,8 +2,13 @@ package mchorse.mclib.network.mclib;
 
 import mchorse.mclib.McLib;
 import mchorse.mclib.network.AbstractDispatcher;
+import mchorse.mclib.network.mclib.client.ClientHandlerConfig;
+import mchorse.mclib.network.mclib.common.PacketConfig;
 import mchorse.mclib.network.mclib.common.PacketDropItem;
+import mchorse.mclib.network.mclib.common.PacketRequestConfigs;
+import mchorse.mclib.network.mclib.server.ServerHandlerConfig;
 import mchorse.mclib.network.mclib.server.ServerHandlerDropItem;
+import mchorse.mclib.network.mclib.server.ServerHandlerRequestConfigs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -17,6 +22,11 @@ public class Dispatcher
         public void register()
         {
             register(PacketDropItem.class, ServerHandlerDropItem.class, Side.SERVER);
+
+            /* Config related packets */
+            register(PacketRequestConfigs.class, ServerHandlerRequestConfigs.class, Side.SERVER);
+            register(PacketConfig.class, ServerHandlerConfig.class, Side.SERVER);
+            register(PacketConfig.class, ClientHandlerConfig.class, Side.CLIENT);
         }
     };
 

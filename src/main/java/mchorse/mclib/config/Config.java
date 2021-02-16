@@ -1,29 +1,25 @@
 package mchorse.mclib.config;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonWriter;
+import io.netty.buffer.ByteBuf;
 import mchorse.mclib.config.json.ConfigParser;
 import mchorse.mclib.config.values.IConfigValue;
+import mchorse.mclib.network.IByteBufSerializable;
+import mchorse.mclib.network.mclib.Dispatcher;
+import mchorse.mclib.network.mclib.common.PacketConfig;
 import mchorse.mclib.utils.JsonUtils;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
-public class Config
+public class Config implements IByteBufSerializable
 {
     public final String id;
     public final File file;
@@ -34,6 +30,12 @@ public class Config
     {
         this.id = id;
         this.file = file;
+    }
+
+    public Config(String id)
+    {
+        this.id = id;
+        this.file = null;
     }
 
     /* Translation string related methods */
@@ -136,7 +138,15 @@ public class Config
     {
         try
         {
-            FileUtils.writeStringToFile(this.file, this.toJSON(), Charset.defaultCharset());
+            if (this.file != null)
+            {
+                FileUtils.writeStringToFile(this.file, this.toJSON(), Charset.defaultCharset());
+            }
+            else
+            {
+                /* If file is null, that means that it was sent from server side */
+                Dispatcher.sendToServer(new PacketConfig(this));
+            }
 
             return true;
         }
@@ -147,10 +157,50 @@ public class Config
     }
 
     /**
+     * Copy all values from given config to this config
+     */
+    public void copy(Config config)
+    {
+        for (Map.Entry<String, ConfigCategory> entry : config.categories.entrySet())
+        {
+            this.categories.get(entry.getKey()).copy(entry.getValue());
+        }
+    }
+
+    /**
      * Convert this config into JSON string
      */
     public String toJSON()
     {
         return JsonUtils.jsonToPretty(ConfigParser.toJson(this));
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buffer)
+    {
+        this.categories.clear();
+
+        for (int i = 0, c = buffer.readInt(); i < c; i++)
+        {
+            String key = ByteBufUtils.readUTF8String(buffer);
+            ConfigCategory category = new ConfigCategory(key);
+
+            category.config = this;
+            category.fromBytes(buffer);
+            this.categories.put(key, category);
+        }
+    }
+
+    @Override
+    public void toBytes(ByteBuf buffer)
+    {
+        buffer.writeInt(this.categories.size());
+
+        for (Map.Entry<String, ConfigCategory> entry : this.categories.entrySet())
+        {
+            ByteBufUtils.writeUTF8String(buffer, entry.getKey());
+
+            entry.getValue().toBytes(buffer);
+        }
     }
 }

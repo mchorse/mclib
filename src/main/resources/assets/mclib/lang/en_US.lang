@@ -20,6 +20,7 @@ mclib.gui.graph.help=Click on this button to go to a web page which documents fe
 mclib.gui.config.title=Configuration
 mclib.gui.config.tooltip=Mods configuration
 mclib.gui.config.reload_tooltip=Reload configuration from file...
+mclib.gui.config.request_tooltip=Switch between server and client side configuration...
 mclib.gui.keys.list=Keybinds list
 
 mclib.gui.transforms.x=X

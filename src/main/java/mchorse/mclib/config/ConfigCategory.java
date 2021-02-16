@@ -2,15 +2,19 @@ package mchorse.mclib.config;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.netty.buffer.ByteBuf;
+import mchorse.mclib.McLib;
 import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.config.values.Value;
+import mchorse.mclib.network.IByteBufSerializable;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ConfigCategory
+public class ConfigCategory implements IByteBufSerializable
 {
     public final String id;
     public Config config;
@@ -68,6 +72,17 @@ public class ConfigCategory
         return false;
     }
 
+    /**
+     * Copy all values from given config to this config
+     */
+    public void copy(ConfigCategory category)
+    {
+        for (Map.Entry<String, IConfigValue> entry : category.values.entrySet())
+        {
+            this.values.get(entry.getKey()).copy(entry.getValue());
+        }
+    }
+
     public JsonObject toJSON()
     {
         JsonObject object = new JsonObject();
@@ -91,6 +106,33 @@ public class ConfigCategory
                 value.reset();
                 value.fromJSON(entry.getValue());
             }
+        }
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buffer)
+    {
+        this.values.clear();
+
+        for (int i = 0, c = buffer.readInt(); i < c; i++)
+        {
+            IConfigValue value = ConfigManager.fromBytes(buffer);
+
+            if (value != null)
+            {
+                this.register(value.getId(), value);
+            }
+        }
+    }
+
+    @Override
+    public void toBytes(ByteBuf buffer)
+    {
+        buffer.writeInt(this.values.size());
+
+        for (Map.Entry<String, IConfigValue> entry : this.values.entrySet())
+        {
+            ConfigManager.toBytes(buffer, entry.getValue());
         }
     }
 }

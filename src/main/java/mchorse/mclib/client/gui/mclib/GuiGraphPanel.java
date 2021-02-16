@@ -174,18 +174,18 @@ public class GuiGraphPanel extends GuiDashboardPanel<GuiDashboard>
                 double x = this.scaleX.from(mouseX);
 
                 this.x.set(x);
+
                 double y = this.expression.get();
-                boolean isNaN = Double.isNaN(y);
-
-                String coordinate = "(" + GuiTrackpadElement.FORMAT.format(x) + ", " + (isNaN ? "undefined" : GuiTrackpadElement.FORMAT.format(y)) + ")";
-
                 int y1 = context.mouseY;
                 int y2 = (int) this.scaleY.to(y) + 1;
+                boolean isNaN = Double.isNaN(y);
 
                 if (y1 < y2)
                 {
                     y1 -= 12;
                 }
+
+                String coordinate = "(" + GuiTrackpadElement.FORMAT.format(x) + ", " + (isNaN ? "undefined" : GuiTrackpadElement.FORMAT.format(y)) + ")";
 
                 if (!isNaN)
                 {

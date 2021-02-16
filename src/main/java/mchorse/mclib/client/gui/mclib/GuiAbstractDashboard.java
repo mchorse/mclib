@@ -5,7 +5,7 @@ import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Keybind;
-import mchorse.mclib.config.gui.GuiConfig;
+import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.events.RegisterDashboardPanels;
 import mchorse.mclib.utils.OpHelper;
 import net.minecraft.client.Minecraft;
@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 public abstract class GuiAbstractDashboard extends GuiBase
 {
     public GuiDashboardPanels panels;
-    public GuiConfig config;
+    public GuiConfigPanel config;
 
     private boolean wasClosed = true;
     private int opLevel = -1;
