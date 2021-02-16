@@ -2,6 +2,7 @@ package mchorse.mclib.utils.keyframes;
 
 import com.google.gson.annotations.Expose;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Keyframe class
@@ -40,9 +41,14 @@ public class Keyframe
 
     public Keyframe(long tick, double value)
     {
+        this();
+
         this.tick = tick;
         this.value = value;
+    }
 
+    public Keyframe()
+    {
         this.prev = this;
         this.next = this;
     }
@@ -101,6 +107,8 @@ public class Keyframe
 
     public void fromByteBuf(ByteBuf buffer)
     {
+        this.tick = buffer.readLong();
+        this.value = buffer.readDouble();
         this.interp = KeyframeInterpolation.values()[buffer.readInt()];
         this.easing = KeyframeEasing.values()[buffer.readInt()];
         this.rx = buffer.readFloat();
@@ -119,5 +127,34 @@ public class Keyframe
         buffer.writeFloat(this.ry);
         buffer.writeFloat(this.lx);
         buffer.writeFloat(this.ly);
+    }
+
+    public void fromNBT(NBTTagCompound tag)
+    {
+        if (tag.hasKey("Tick")) this.tick = tag.getLong("Tick");
+        if (tag.hasKey("Value")) this.value = tag.getDouble("Value");
+        if (tag.hasKey("Interp")) this.interp = KeyframeInterpolation.values()[tag.getInteger("Interp")];
+        if (tag.hasKey("Easing")) this.easing = KeyframeEasing.values()[tag.getInteger("Easing")];
+        if (tag.hasKey("RX")) this.rx = tag.getFloat("RX");
+        if (tag.hasKey("RY")) this.ry = tag.getFloat("RY");
+        if (tag.hasKey("LX")) this.lx = tag.getFloat("LX");
+        if (tag.hasKey("LY")) this.ly = tag.getFloat("LY");
+    }
+
+    public NBTTagCompound toNBT()
+    {
+        NBTTagCompound tag = new NBTTagCompound();
+
+        tag.setLong("Tick", this.tick);
+        tag.setDouble("Value", this.value);
+
+        if (this.interp != KeyframeInterpolation.LINEAR) tag.setInteger("Interp", this.interp.ordinal());
+        if (this.easing != KeyframeEasing.IN) tag.setInteger("Easing", this.easing.ordinal());
+        if (this.rx != 5) tag.setFloat("RX", this.rx);
+        if (this.ry != 0) tag.setFloat("RY", this.ry);
+        if (this.lx != 5) tag.setFloat("LX", this.lx);
+        if (this.ly != 0) tag.setFloat("LY", this.ly);
+
+        return tag;
     }
 }

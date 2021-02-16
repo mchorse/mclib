@@ -190,7 +190,7 @@ public class KeyframeChannel
 
         for (int i = 0, c = buffer.readInt(); i < c; i++)
         {
-            Keyframe frame = new Keyframe(buffer.readLong(), buffer.readDouble());
+            Keyframe frame = new Keyframe();
 
             frame.fromByteBuf(buffer);
             this.keyframes.add(frame);

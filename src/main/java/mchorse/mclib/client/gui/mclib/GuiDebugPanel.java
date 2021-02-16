@@ -78,7 +78,7 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
 
             c.copy(channel);
 
-            this.dopesheet.graph.sheets.add(new GuiSheet(IKey.str("Test " + i), new Color((float) Math.random(), (float) Math.random(), (float) Math.random()).getRGBColor(), c));
+            this.dopesheet.graph.sheets.add(new GuiSheet("" + i, IKey.str("Test " + i), new Color((float) Math.random(), (float) Math.random(), (float) Math.random()).getRGBColor(), c));
         }
 
         this.dopesheet.graph.duration = 100;
@@ -110,8 +110,8 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         this.renderer.flex().relative(this).wh(1F, 1F);
         this.play.flex().relative(this).xy(10, 10).w(80);
         // this.add(this.renderer, this.play);
-        // this.add(this.graph, this.dopesheet);
-        this.add(this.top, this.bottom);
+        this.add(this.graph, this.dopesheet);
+        // this.add(this.top, this.bottom);
     }
 
     @Override

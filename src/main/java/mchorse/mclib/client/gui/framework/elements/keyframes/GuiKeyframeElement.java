@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class GuiKeyframeElement extends GuiElement
@@ -93,6 +94,10 @@ public abstract class GuiKeyframeElement extends GuiElement
     /* Abstract methods */
 
     public abstract Keyframe getCurrent();
+
+    public abstract List<GuiSheet> getSheets();
+
+    public abstract GuiSheet getSheet(int mouseY);
 
     public boolean isGrabbing()
     {

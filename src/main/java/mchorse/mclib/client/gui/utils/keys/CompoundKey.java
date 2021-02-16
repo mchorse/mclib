@@ -50,6 +50,22 @@ public class CompoundKey implements IKey
     }
 
     @Override
+    public boolean equals(Object obj)
+    {
+        if (super.equals(obj))
+        {
+            return true;
+        }
+
+        if (obj instanceof CompoundKey)
+        {
+            return this.get().equals(((CompoundKey) obj).get());
+        }
+
+        return false;
+    }
+
+    @Override
     public String toString()
     {
         return this.get();

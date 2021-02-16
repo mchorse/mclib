@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements.keyframes;
 
+import com.google.common.collect.ImmutableList;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.Scale;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -28,7 +30,7 @@ import java.util.function.Consumer;
  */
 public class GuiGraphView extends GuiKeyframeElement
 {
-    public GuiSheet sheet = new GuiSheet(IKey.str(""), 0, null);
+    public GuiSheet sheet = new GuiSheet("main", IKey.str(""), 0, null);
     
     private Scale scaleY;
 
@@ -176,6 +178,18 @@ public class GuiGraphView extends GuiKeyframeElement
     public Keyframe getCurrent()
     {
         return this.sheet.getKeyframe();
+    }
+
+    @Override
+    public List<GuiSheet> getSheets()
+    {
+        return ImmutableList.of(this.sheet);
+    }
+
+    @Override
+    public GuiSheet getSheet(int mouseY)
+    {
+        return this.sheet;
     }
 
     @Override

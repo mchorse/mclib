@@ -50,6 +50,22 @@ public class LangKey implements IKey
     }
 
     @Override
+    public boolean equals(Object obj)
+    {
+        if (super.equals(obj))
+        {
+            return true;
+        }
+
+        if (obj instanceof LangKey)
+        {
+            return this.get().equals(((LangKey) obj).get());
+        }
+
+        return false;
+    }
+
+    @Override
     public String toString()
     {
         return this.get();

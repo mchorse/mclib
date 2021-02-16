@@ -18,7 +18,16 @@ import mchorse.mclib.utils.keyframes.KeyframeEasing;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
 import org.lwjgl.input.Keyboard;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends GuiElement
 {
@@ -151,16 +160,170 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         if (this.graph.which != Selection.NOT_SELECTED)
         {
             menu.action(Icons.REMOVE, IKey.lang("mclib.gui.keyframes.context.remove"), this::removeSelectedKeyframes);
+            menu.action(Icons.COPY, IKey.lang("mclib.gui.keyframes.context.copy"), this::copyKeyframes);
+        }
 
-            if (this.graph.which != Selection.NOT_SELECTED && this.graph.isMultipleSelected())
-            {
-                menu.action(Icons.LEFT_HANDLE, IKey.lang("mclib.gui.keyframes.context.to_left"), () -> this.graph.which = Selection.LEFT_HANDLE);
-                menu.action(Icons.MAIN_HANDLE, IKey.lang("mclib.gui.keyframes.context.to_main"), () -> this.graph.which = Selection.KEYFRAME);
-                menu.action(Icons.RIGHT_HANDLE, IKey.lang("mclib.gui.keyframes.context.to_right"), () -> this.graph.which = Selection.RIGHT_HANDLE);
-            }
+        Map<String, List<Keyframe>> pasted = this.parseKeyframes();
+
+        if (pasted != null)
+        {
+            final Map<String, List<Keyframe>> keyframes = pasted;
+            double offset = this.graph.scaleX.from(context.mouseX);
+            int mouseY = context.mouseY;
+
+            menu.action(Icons.PASTE, IKey.lang("mclib.gui.keyframes.context.paste"), () -> this.pasteKeyframes(keyframes, (long) offset, mouseY));
+        }
+
+        if (this.graph.which != Selection.NOT_SELECTED && this.graph.isMultipleSelected())
+        {
+            menu.action(Icons.LEFT_HANDLE, IKey.lang("mclib.gui.keyframes.context.to_left"), () -> this.graph.which = Selection.LEFT_HANDLE);
+            menu.action(Icons.MAIN_HANDLE, IKey.lang("mclib.gui.keyframes.context.to_main"), () -> this.graph.which = Selection.KEYFRAME);
+            menu.action(Icons.RIGHT_HANDLE, IKey.lang("mclib.gui.keyframes.context.to_right"), () -> this.graph.which = Selection.RIGHT_HANDLE);
         }
 
         return menu;
+    }
+
+    /**
+     * Parse keyframes from clipboard
+     */
+    private Map<String, List<Keyframe>> parseKeyframes()
+    {
+        try
+        {
+            NBTTagCompound tag = JsonToNBT.getTagFromJson(GuiScreen.getClipboardString());
+            Map<String, List<Keyframe>> temp = new HashMap<String, List<Keyframe>>();
+
+            for (String key : tag.getKeySet())
+            {
+                NBTTagList list = tag.getTagList(key, Constants.NBT.TAG_COMPOUND);
+
+                for (int i = 0, c = list.tagCount(); i < c; i++)
+                {
+                    List<Keyframe> keyframes = temp.get(key);
+
+                    if (keyframes == null)
+                    {
+                        keyframes = new ArrayList<Keyframe>();
+
+                        temp.put(key, keyframes);
+                    }
+
+                    Keyframe keyframe = new Keyframe();
+
+                    keyframe.fromNBT(list.getCompoundTagAt(i));
+                    keyframes.add(keyframe);
+                }
+            }
+
+            if (!temp.isEmpty())
+            {
+                return temp;
+            }
+        }
+        catch (Exception e)
+        {}
+
+        return null;
+    }
+
+    /**
+     * Copy keyframes to clipboard
+     */
+    private void copyKeyframes()
+    {
+        NBTTagCompound keyframes = new NBTTagCompound();
+
+        for (GuiSheet sheet : this.graph.getSheets())
+        {
+            int c = sheet.getSelectedCount();
+
+            if (c > 0)
+            {
+                NBTTagList list = new NBTTagList();
+
+                for (int i = 0; i < c; i++)
+                {
+                    Keyframe keyframe = sheet.channel.get(sheet.selected.get(i));
+
+                    list.appendTag(keyframe.toNBT());
+                }
+
+                if (list.tagCount() > 0)
+                {
+                    keyframes.setTag(sheet.id, list);
+                }
+            }
+        }
+
+        GuiScreen.setClipboardString(keyframes.toString());
+    }
+
+    /**
+     * Pastec copied keyframes to clipboard
+     */
+    private void pasteKeyframes(Map<String, List<Keyframe>> keyframes, long offset, int mouseY)
+    {
+        List<GuiSheet> sheets = this.graph.getSheets();
+
+        this.graph.clearSelection();
+
+        if (keyframes.size() == 1)
+        {
+            GuiSheet current = this.graph.getSheet(mouseY);
+
+            if (current == null)
+            {
+                current =  sheets.get(0);
+            }
+
+            this.pasteKeyframesTo(current, keyframes.get(keyframes.keySet().iterator().next()), offset);
+
+            return;
+        }
+
+        for (Map.Entry<String, List<Keyframe>> entry : keyframes.entrySet())
+        {
+            for (GuiSheet sheet : sheets)
+            {
+                if (!sheet.id.equals(entry.getKey()))
+                {
+                    continue;
+                }
+
+                this.pasteKeyframesTo(sheet, entry.getValue(), offset);
+            }
+        }
+    }
+
+    private void pasteKeyframesTo(GuiSheet sheet, List<Keyframe> keyframes, long offset)
+    {
+        long firstX = keyframes.get(0).tick;
+        List<Keyframe> toSelect = new ArrayList<Keyframe>();
+
+        if (GuiScreen.isCtrlKeyDown())
+        {
+            offset = firstX;
+        }
+
+        for (Keyframe keyframe : keyframes)
+        {
+            keyframe.tick = keyframe.tick - firstX + offset;
+
+            int index = sheet.channel.insert(keyframe.tick, keyframe.value);
+            Keyframe inserted = sheet.channel.get(index);
+
+            inserted.copy(keyframe);
+            toSelect.add(inserted);
+        }
+
+        for (Keyframe select : toSelect)
+        {
+            sheet.selected.add(sheet.channel.getKeyframes().indexOf(select));
+        }
+
+        this.graph.which = Selection.KEYFRAME;
+        this.graph.setKeyframe(this.graph.getCurrent());
     }
 
     protected void doubleClick(int mouseX, int mouseY)

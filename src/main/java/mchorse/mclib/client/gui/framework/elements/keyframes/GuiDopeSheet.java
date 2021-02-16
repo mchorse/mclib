@@ -27,6 +27,8 @@ import java.util.function.Consumer;
  */
 public class GuiDopeSheet extends GuiKeyframeElement
 {
+    public static final int TOP_MARGIN = 15;
+
     public List<GuiSheet> sheets = new ArrayList<GuiSheet>();
 
     public GuiDopeSheet(Minecraft mc, Consumer<Keyframe> callback)
@@ -146,6 +148,32 @@ public class GuiDopeSheet extends GuiKeyframeElement
     }
 
     @Override
+    public List<GuiSheet> getSheets()
+    {
+        return this.sheets;
+    }
+
+    @Override
+    public GuiSheet getSheet(int mouseY)
+    {
+        int sheetCount = this.sheets.size();
+        int h = (this.area.h - TOP_MARGIN) / sheetCount;
+
+        for (int i = 0; i < sheetCount; i++)
+        {
+            GuiSheet sheet = this.sheets.get(i);
+            int y = this.area.y + h * i + TOP_MARGIN;
+
+            if (mouseY >= y && mouseY < y + h)
+            {
+                return sheet;
+            }
+        }
+
+        return null;
+    }
+
+    @Override
     public void selectAll()
     {
         for (GuiSheet sheet : this.sheets)
@@ -197,11 +225,11 @@ public class GuiDopeSheet extends GuiKeyframeElement
     @Override
     public void addCurrent(int mouseX, int mouseY)
     {
-        int count = this.sheets.size();
-        int h = (this.area.h - 15) / count;
-        int i = (mouseY - (this.area.ey() - h * count)) / h;
+        int sheetCount = this.sheets.size();
+        int h = (this.area.h - TOP_MARGIN) / sheetCount;
+        int i = (mouseY - (this.area.ey() - h * sheetCount)) / h;
 
-        if (i < 0 || i >= count)
+        if (i < 0 || i >= sheetCount)
         {
             return;
         }
@@ -284,7 +312,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
     protected boolean pickKeyframe(GuiContext context, int mouseX, int mouseY, boolean shift)
     {
         int sheetCount = this.sheets.size();
-        int h = (this.area.h - 15) / sheetCount;
+        int h = (this.area.h - TOP_MARGIN) / sheetCount;
         int y = this.area.ey() - h * sheetCount;
 
         for (GuiSheet sheet : this.sheets)
@@ -384,7 +412,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
             area.setPoints(this.lastX, this.lastY, context.mouseX, context.mouseY, 3);
 
             int count = this.sheets.size();
-            int h = (this.area.h - 15) / count;
+            int h = (this.area.h - TOP_MARGIN) / count;
             int y = this.area.ey() - h * count;
             int c = 0;
 
@@ -423,7 +451,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
     {
         /* Draw dope sheet */
         int sheetCount = this.sheets.size();
-        int h = (this.area.h - 15) / sheetCount;
+        int h = (this.area.h - TOP_MARGIN) / sheetCount;
         int y = this.area.ey() - h * sheetCount;
 
         BufferBuilder vb = Tessellator.getInstance().getBuffer();

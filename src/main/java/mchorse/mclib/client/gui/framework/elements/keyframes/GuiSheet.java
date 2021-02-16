@@ -13,21 +13,23 @@ import java.util.List;
 
 public class GuiSheet
 {
+    public final String id;
     public IKey title;
     public int color;
     public KeyframeChannel channel;
     public List<Integer> selected = new ArrayList<Integer>();
     public boolean handles = true;
 
-    public GuiSheet(IKey title, int color, KeyframeChannel channel, boolean handles)
+    public GuiSheet(String id, IKey title, int color, KeyframeChannel channel, boolean handles)
     {
-        this(title, color, channel);
+        this(id, title, color, channel);
 
         this.handles = handles;
     }
 
-    public GuiSheet(IKey title, int color, KeyframeChannel channel)
+    public GuiSheet(String id, IKey title, int color, KeyframeChannel channel)
     {
+        this.id = id;
         this.title = title;
         this.color = color;
         this.channel = channel;

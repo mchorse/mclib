@@ -22,6 +22,22 @@ public class StringKey implements IKey
     }
 
     @Override
+    public boolean equals(Object obj)
+    {
+        if (super.equals(obj))
+        {
+            return true;
+        }
+
+        if (obj instanceof StringKey)
+        {
+            return this.string.equals(((StringKey) obj).string);
+        }
+
+        return false;
+    }
+
+    @Override
     public String toString()
     {
         return this.string;
