@@ -45,6 +45,8 @@ public class McLib
     public static final EventBus EVENT_BUS = new EventBus();
 
     /* Configuration */
+    public static ValueBoolean opDropItems;
+
     public static ValueBoolean debugPanel;
     public static ValueColors favoriteColors;
     public static ValueInt primaryColor;
@@ -74,6 +76,9 @@ public class McLib
     @SubscribeEvent
     public void onConfigRegister(RegisterConfigEvent event)
     {
+        opDropItems = event.opAccess.category("mclib").getBoolean("drop_items", true);
+
+        /* McLib's options */
         ConfigBuilder builder = event.createBuilder(MOD_ID);
 
         debugPanel = builder.category("appearance").getBoolean("debug_panel", false);

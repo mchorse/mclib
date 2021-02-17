@@ -82,6 +82,10 @@ public class ConfigManager
 
         McLib.EVENT_BUS.post(event);
 
+        Config opAccess = event.opAccess.build().serverSide();
+
+        this.modules.put(opAccess.id, opAccess);
+
         for (Config config : event.modules)
         {
             this.modules.put(config.id, config);

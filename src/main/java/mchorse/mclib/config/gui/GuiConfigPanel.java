@@ -60,15 +60,24 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         this.options.flex().relative(this).set(130, 0, 0, 0).w(1, -120).h(1F);
         this.options.flex().column(5).scroll().width(240).height(20).padding(15);
 
-        for (Config config : McLib.proxy.configs.modules.values())
-        {
-            this.mods.add(IKey.lang(config.getTitleKey()), config.id);
-        }
+        this.fillClientMods();
 
-        this.mods.sort();
         this.add(this.reload, this.request, this.mods, this.options);
         this.selectConfig("mclib");
         this.markContainer();
+    }
+
+    private void fillClientMods()
+    {
+        for (Config config : McLib.proxy.configs.modules.values())
+        {
+            if (!config.isServerSide())
+            {
+                this.mods.add(IKey.lang(config.getTitleKey()), config.id);
+            }
+        }
+
+        this.mods.sort();
     }
 
     @Override
@@ -114,12 +123,7 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         {
             this.serverConfigs = null;
 
-            for (Config config : McLib.proxy.configs.modules.values())
-            {
-                this.mods.add(IKey.lang(config.getTitleKey()), config.id);
-            }
-
-            this.mods.sort();
+            this.fillClientMods();
             this.selectConfig("mclib");
         }
 

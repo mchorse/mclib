@@ -126,6 +126,15 @@ mclib.config.vanilla.tooltip=Options regarding to tweaks done to Minecraft's cod
 mclib.config.vanilla.max_packet_size=Max. packet size
 mclib.config.comments.vanilla.max_packet_size=Allows you to configure the maximum size (in bytes) of a modded packet. Warning: don't change this value for public servers, as it will allow to DDoS server much easier. This option is designed for singleplayer!
 
+# OP access
+op_access.config.title=OP Access
+
+op_access.config.mclib.title=McLib
+op_access.config.mclib.tooltip=McLib's OP access options
+
+op_access.config.mclib.drop_items=Drop items
+op_access.config.comments.mclib.drop_items=Can non-OP players use drop items option of item stack slot element?
+
 # Interpolations
 mclib.interpolations.linear=Linear
 mclib.interpolations.quad_in=Quadratic In

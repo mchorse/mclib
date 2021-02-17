@@ -1,5 +1,6 @@
 package mchorse.mclib.network.mclib.server;
 
+import mchorse.mclib.McLib;
 import mchorse.mclib.network.ServerMessageHandler;
 import mchorse.mclib.network.mclib.common.PacketDropItem;
 import mchorse.mclib.utils.OpHelper;
@@ -13,7 +14,7 @@ public class ServerHandlerDropItem extends ServerMessageHandler<PacketDropItem>
     @Override
     public void run(EntityPlayerMP player, PacketDropItem message)
     {
-        if (player.isCreative() && OpHelper.isPlayerOp(player))
+        if (player.isCreative() && McLib.opDropItems.get() || OpHelper.isPlayerOp(player))
         {
             ItemStack stack = message.stack;
 

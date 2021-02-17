@@ -26,6 +26,8 @@ public class Config implements IByteBufSerializable
 
     public final Map<String, ConfigCategory> categories = new LinkedHashMap<String, ConfigCategory>();
 
+    private boolean serverSide;
+
     public Config(String id, File file)
     {
         this.id = id;
@@ -36,6 +38,18 @@ public class Config implements IByteBufSerializable
     {
         this.id = id;
         this.file = null;
+    }
+
+    public Config serverSide()
+    {
+        this.serverSide = true;
+
+        return this;
+    }
+
+    public boolean isServerSide()
+    {
+        return this.serverSide;
     }
 
     /* Translation string related methods */

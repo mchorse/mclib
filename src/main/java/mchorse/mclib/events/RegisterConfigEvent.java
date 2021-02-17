@@ -13,13 +13,22 @@ public class RegisterConfigEvent extends Event
     public final File configs;
     public List<Config> modules = new ArrayList<Config>();
 
+    public final ConfigBuilder opAccess;
+
     public RegisterConfigEvent(File configs)
     {
         this.configs = configs;
+
+        this.opAccess = this.createBuilder("op_access", "mclib/op_access.json");
     }
 
     public ConfigBuilder createBuilder(String id)
     {
-        return new ConfigBuilder(id, new File(this.configs, id + "/config.json"));
+        return this.createBuilder(id, id + "/config.json");
+    }
+
+    public ConfigBuilder createBuilder(String id, String path)
+    {
+        return new ConfigBuilder(id, new File(this.configs, path));
     }
 }
