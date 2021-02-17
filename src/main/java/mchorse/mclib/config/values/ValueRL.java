@@ -68,7 +68,7 @@ public class ValueRL extends Value
     @Override
     public void resetServer()
     {
-        this.useServer = true;
+        this.useServer = false;
         this.serverValue = null;
     }
 

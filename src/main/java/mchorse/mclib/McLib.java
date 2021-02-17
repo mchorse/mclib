@@ -126,6 +126,7 @@ public class McLib
         builder.getCategory().markClientSide();
 
         maxPacketSize = builder.category("vanilla").getInt("max_packet_size", PayloadASM.MIN_SIZE, PayloadASM.MIN_SIZE, Integer.MAX_VALUE);
+        maxPacketSize.syncable();
 
         event.modules.add(builder.build());
     }

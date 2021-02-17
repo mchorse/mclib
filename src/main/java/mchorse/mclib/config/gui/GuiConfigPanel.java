@@ -7,6 +7,7 @@ import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiLabelListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
+import mchorse.mclib.client.gui.framework.elements.utils.ITextColoring;
 import mchorse.mclib.client.gui.mclib.GuiAbstractDashboard;
 import mchorse.mclib.client.gui.mclib.GuiDashboardPanel;
 import mchorse.mclib.client.gui.utils.Elements;
@@ -26,6 +27,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -158,6 +160,7 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
 
         boolean first = true;
         boolean checkForClient = this.serverConfigs != null;
+        boolean isSingleplayer = Minecraft.getMinecraft().isIntegratedServerRunning();
 
         for (ConfigCategory category : this.config.categories.values())
         {
@@ -166,16 +169,10 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
                 continue;
             }
 
-            GuiLabel label = Elements.label(IKey.lang(category.getTitleKey()), 40).anchor(0, 1).background(0x88000000);
+            GuiLabel label = Elements.label(IKey.lang(category.getTitleKey()), !first ? 40 : this.font.FONT_HEIGHT).anchor(0, 1).background(0x88000000);
 
-            label.flex().w(this.font.getStringWidth(label.label.get()));
-
-            if (first)
-            {
-                label.anchor(0, 0).flex().h(0, this.font.FONT_HEIGHT);
-            }
-
-            this.options.add(label.tooltip(IKey.lang(category.getTooltipKey()), Direction.BOTTOM));
+            label.tooltip(IKey.lang(category.getTooltipKey()), Direction.BOTTOM).flex().w(this.font.getStringWidth(label.label.get()));
+            this.options.add(label);
 
             for (IConfigValue value : category.values.values())
             {
@@ -187,6 +184,15 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
                 for (GuiElement element : value.getFields(this.mc, this))
                 {
                     this.options.add(element);
+
+                    /* Distinguish client side options from server side */
+                    if (!isSingleplayer && !checkForClient && !value.isClientSide())
+                    {
+                        for (ITextColoring elem : element.getChildren(ITextColoring.class, new ArrayList<ITextColoring>(), true))
+                        {
+                            elem.setColor(0x999999);
+                        }
+                    }
                 }
             }
 

@@ -3,19 +3,20 @@ package mchorse.mclib.client.gui.framework.elements.buttons;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.client.gui.framework.elements.utils.ITextColoring;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.function.Consumer;
 
-public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
+public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implements ITextColoring
 {
     public IKey label;
+    public int color = 0xffffff;
     private boolean state;
 
     public GuiToggleElement(Minecraft mc, ValueBoolean value)
@@ -47,6 +48,12 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
         this.flex().h(14);
     }
 
+    @Override
+    public void setColor(int color)
+    {
+        this.color(color);
+    }
+
     public GuiToggleElement label(IKey label)
     {
         this.label = label;
@@ -57,6 +64,13 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
     public GuiToggleElement toggled(boolean state)
     {
         this.state = state;
+
+        return this;
+    }
+
+    public GuiToggleElement color(int color)
+    {
+        this.color = color;
 
         return this;
     }
@@ -90,10 +104,10 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
 
             if (this.state)
             {
-                this.font.drawStringWithShadow("x", this.area.x + 3, y - 2, 0xffffffff);
+                this.font.drawStringWithShadow("x", this.area.x + 3, y - 2, 0xffffff);
             }
 
-            this.font.drawStringWithShadow(this.label.get(), this.area.x + 14, y, 0xffffff);
+            this.font.drawStringWithShadow(this.label.get(), this.area.x + 14, y, this.color);
 
             if (!this.isEnabled())
             {
@@ -103,7 +117,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement>
         }
         else
         {
-            this.font.drawStringWithShadow(this.label.get(), this.area.x, this.area.my(this.font.FONT_HEIGHT - 1), 0xffffff);
+            this.font.drawStringWithShadow(this.label.get(), this.area.x, this.area.my(this.font.FONT_HEIGHT - 1), this.color);
 
             /* Draw toggle switch */
             int w = 16;

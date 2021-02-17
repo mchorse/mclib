@@ -149,23 +149,33 @@ public class GuiElement extends Gui implements IGuiElement
         return this.children.elements;
     }
 
-    public <T extends GuiElement> List<T> getChildren(Class<T> clazz)
+    public <T> List<T> getChildren(Class<T> clazz)
     {
         return getChildren(clazz, new ArrayList<T>());
     }
 
-    public <T extends GuiElement> List<T> getChildren(Class<T> clazz, List<T> list)
+    public <T> List<T> getChildren(Class<T> clazz, List<T> list)
     {
+        return getChildren(clazz, list, false);
+    }
+
+    public <T> List<T> getChildren(Class<T> clazz, List<T> list, boolean includeItself)
+    {
+        if (includeItself && clazz.isAssignableFrom(this.getClass()))
+        {
+            list.add(clazz.cast(this));
+        }
+
         for (IGuiElement element : this.getChildren())
         {
-            if (element.getClass() == clazz)
+            if (clazz.isAssignableFrom(element.getClass()))
             {
                 list.add(clazz.cast(element));
             }
 
             if (element instanceof GuiElement)
             {
-                ((GuiElement) element).getChildren(clazz, list);
+                ((GuiElement) element).getChildren(clazz, list, includeItself);
             }
         }
 

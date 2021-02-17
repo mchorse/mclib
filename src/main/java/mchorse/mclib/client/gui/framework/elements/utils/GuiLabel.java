@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 
 import java.util.function.Supplier;
 
-public class GuiLabel extends GuiElement
+public class GuiLabel extends GuiElement implements ITextColoring
 {
     public IKey label;
     public int color;
@@ -26,6 +26,12 @@ public class GuiLabel extends GuiElement
 
         this.label = label;
         this.color = color;
+    }
+
+    @Override
+    public void setColor(int color)
+    {
+        this.color(color);
     }
 
     public GuiLabel color(int color)
