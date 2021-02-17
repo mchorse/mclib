@@ -23,11 +23,19 @@ public abstract class ValueGUI extends Value
     {}
 
     @Override
+    public void resetServer()
+    {}
+
+    @Override
     @SideOnly(Side.CLIENT)
     public abstract List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui);
 
     @Override
     public void fromJSON(JsonElement element)
+    {}
+
+    @Override
+    public void copyServer(IConfigValue value)
     {}
 
     @Override
