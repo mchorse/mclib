@@ -24,6 +24,8 @@ public class ValueDouble extends Value
     private double min;
     private double max;
 
+    private Double serverValue;
+
     public ValueDouble(String id)
     {
         super(id);
@@ -63,7 +65,7 @@ public class ValueDouble extends Value
 
     public double get()
     {
-        return this.value;
+        return this.serverValue == null ? this.value : this.serverValue;
     }
 
     public void set(double value)
@@ -76,6 +78,12 @@ public class ValueDouble extends Value
     public void reset()
     {
         this.set(this.defaultValue);
+    }
+
+    @Override
+    public void resetServer()
+    {
+        this.serverValue = null;
     }
 
     @Override
@@ -112,6 +120,15 @@ public class ValueDouble extends Value
         if (value instanceof ValueDouble)
         {
             this.value = ((ValueDouble) value).value;
+        }
+    }
+
+    @Override
+    public void copyServer(IConfigValue value)
+    {
+        if (value instanceof ValueDouble)
+        {
+            this.serverValue = ((ValueDouble) value).value;
         }
     }
 

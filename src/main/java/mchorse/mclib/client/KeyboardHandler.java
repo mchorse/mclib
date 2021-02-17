@@ -74,6 +74,8 @@ public class KeyboardHandler
             {
                 GuiDashboard.dashboard = null;
                 ValueRL.picker = null;
+
+                McLib.proxy.configs.resetServerValues();
                 McLib.EVENT_BUS.post(new RemoveDashboardPanels());
             }
         }

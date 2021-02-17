@@ -16,14 +16,20 @@ public interface IConfigValue extends IByteBufSerializable
 
     public void reset();
 
+    public void resetServer();
+
     public boolean isVisible();
 
     public boolean isClientSide();
+
+    public boolean isSyncable();
 
     @SideOnly(Side.CLIENT)
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui);
 
     public void copy(IConfigValue value);
+
+    public void copyServer(IConfigValue value);
 
     public void fromJSON(JsonElement element);
 

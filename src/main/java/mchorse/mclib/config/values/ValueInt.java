@@ -33,6 +33,8 @@ public class ValueInt extends Value
     private Subtype subtype = Subtype.INTEGER;
     private List<IKey> labels;
 
+    private Integer serverValue;
+
     public ValueInt(String id)
     {
         super(id);
@@ -72,7 +74,7 @@ public class ValueInt extends Value
 
     public int get()
     {
-        return this.value;
+        return this.serverValue == null ? this.value : this.serverValue;
     }
 
     public void set(int value)
@@ -125,6 +127,12 @@ public class ValueInt extends Value
     public void reset()
     {
         this.set(this.defaultValue);
+    }
+
+    @Override
+    public void resetServer()
+    {
+        this.serverValue = null;
     }
 
     @Override
@@ -194,6 +202,15 @@ public class ValueInt extends Value
         if (value instanceof ValueInt)
         {
             this.value = ((ValueInt) value).value;
+        }
+    }
+
+    @Override
+    public void copyServer(IConfigValue value)
+    {
+        if (value instanceof ValueInt)
+        {
+            this.serverValue = ((ValueInt) value).value;
         }
     }
 

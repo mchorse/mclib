@@ -18,6 +18,8 @@ public class ValueBoolean extends Value
     private boolean value;
     private boolean defaultValue;
 
+    private Boolean serverValue;
+
     public ValueBoolean(String id)
     {
         super(id);
@@ -34,7 +36,7 @@ public class ValueBoolean extends Value
 
     public boolean get()
     {
-        return this.value;
+        return this.serverValue == null ? this.value : this.serverValue;
     }
 
     public void set(boolean value)
@@ -47,6 +49,12 @@ public class ValueBoolean extends Value
     public void reset()
     {
         this.set(this.defaultValue);
+    }
+
+    @Override
+    public void resetServer()
+    {
+        this.serverValue = null;
     }
 
     @Override
@@ -78,6 +86,15 @@ public class ValueBoolean extends Value
         if (value instanceof ValueBoolean)
         {
             this.value = ((ValueBoolean) value).value;
+        }
+    }
+
+    @Override
+    public void copyServer(IConfigValue value)
+    {
+        if (value instanceof ValueBoolean)
+        {
+            this.serverValue = ((ValueBoolean) value).value;
         }
     }
 

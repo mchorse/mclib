@@ -24,6 +24,8 @@ public class ValueFloat extends Value
     private float min;
     private float max;
 
+    private Float serverValue;
+
     public ValueFloat(String id)
     {
         super(id);
@@ -63,7 +65,7 @@ public class ValueFloat extends Value
 
     public float get()
     {
-        return this.value;
+        return this.serverValue == null ? this.value : this.serverValue;
     }
 
     public void set(float value)
@@ -76,6 +78,12 @@ public class ValueFloat extends Value
     public void reset()
     {
         this.set(this.defaultValue);
+    }
+
+    @Override
+    public void resetServer()
+    {
+        this.serverValue = null;
     }
 
     @Override
@@ -112,6 +120,15 @@ public class ValueFloat extends Value
         if (value instanceof ValueFloat)
         {
             this.value = ((ValueFloat) value).value;
+        }
+    }
+
+    @Override
+    public void copyServer(IConfigValue value)
+    {
+        if (value instanceof ValueFloat)
+        {
+            this.serverValue = ((ValueFloat) value).value;
         }
     }
 

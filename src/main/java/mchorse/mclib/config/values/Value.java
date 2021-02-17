@@ -11,6 +11,7 @@ public abstract class Value implements IConfigValue
     public ConfigCategory category;
     private boolean visible = true;
     private boolean clientSide;
+    private boolean syncable;
 
     public Value(String id)
     {
@@ -37,6 +38,13 @@ public abstract class Value implements IConfigValue
         return this;
     }
 
+    public Value syncable()
+    {
+        this.syncable = true;
+
+        return this;
+    }
+
     @Override
     public boolean isVisible()
     {
@@ -47,6 +55,12 @@ public abstract class Value implements IConfigValue
     public boolean isClientSide()
     {
         return this.clientSide;
+    }
+
+    @Override
+    public boolean isSyncable()
+    {
+        return this.syncable;
     }
 
     public void saveLater()

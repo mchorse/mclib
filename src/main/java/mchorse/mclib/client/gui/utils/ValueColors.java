@@ -18,17 +18,34 @@ import java.util.List;
 
 public class ValueColors extends Value
 {
-    public List<Color> colors = new ArrayList<Color>();
+    private List<Color> colors = new ArrayList<Color>();
+    private List<Color> serverColors;
 
     public ValueColors(String id)
     {
         super(id);
     }
 
+    public List<Color> getCurrentColors()
+    {
+        return this.colors;
+    }
+
+    public List<Color> getColors()
+    {
+        return this.serverColors == null ? this.colors : this.serverColors;
+    }
+
     @Override
     public void reset()
     {
         this.colors.clear();
+    }
+
+    @Override
+    public void resetServer()
+    {
+        this.serverColors = null;
     }
 
     @Override
@@ -77,6 +94,15 @@ public class ValueColors extends Value
         {
             this.colors.clear();
             this.colors.addAll(((ValueColors) value).colors);
+        }
+    }
+
+    @Override
+    public void copyServer(IConfigValue value)
+    {
+        if (value instanceof ValueColors)
+        {
+            this.serverColors = ((ValueColors) value).colors;
         }
     }
 

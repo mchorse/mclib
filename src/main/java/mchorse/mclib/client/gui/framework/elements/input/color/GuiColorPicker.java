@@ -117,7 +117,7 @@ public class GuiColorPicker extends GuiElement
         {
             this.setColor(color.getRGBAColor());
             this.updateColor();
-        }).colors(McLib.favoriteColors.colors);
+        }).colors(McLib.favoriteColors.getCurrentColors());
 
         this.favorite.context(() ->
         {
@@ -235,7 +235,7 @@ public class GuiColorPicker extends GuiElement
 
     private void addToFavorites(Color color)
     {
-        this.addColor(McLib.favoriteColors.colors, color);
+        this.addColor(McLib.favoriteColors.getCurrentColors(), color);
         McLib.favoriteColors.saveLater();
 
         this.setupSize();
@@ -244,7 +244,7 @@ public class GuiColorPicker extends GuiElement
 
     private void removeFromFavorites(int index)
     {
-        McLib.favoriteColors.colors.remove(index);
+        McLib.favoriteColors.getCurrentColors().remove(index);
         McLib.favoriteColors.saveLater();
 
         this.setupSize();

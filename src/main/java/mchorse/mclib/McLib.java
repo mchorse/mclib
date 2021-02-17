@@ -76,7 +76,7 @@ public class McLib
     @SubscribeEvent
     public void onConfigRegister(RegisterConfigEvent event)
     {
-        opDropItems = event.opAccess.category("mclib").getBoolean("drop_items", true);
+        opDropItems = event.opAccess.category(MOD_ID).getBoolean("drop_items", true);
 
         /* McLib's options */
         ConfigBuilder builder = event.createBuilder(MOD_ID);

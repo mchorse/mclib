@@ -22,6 +22,8 @@ public class ValueString extends Value
     private String value = "";
     private String defaultValue = "";
 
+    private String serverValue;
+
     public ValueString(String id)
     {
         super(id);
@@ -38,7 +40,7 @@ public class ValueString extends Value
 
     public String get()
     {
-        return this.value;
+        return this.serverValue == null ? this.value : this.serverValue;
     }
 
     public void set(String value)
@@ -51,6 +53,12 @@ public class ValueString extends Value
     public void reset()
     {
         this.set(this.defaultValue);
+    }
+
+    @Override
+    public void resetServer()
+    {
+        this.serverValue = null;
     }
 
     @Override
@@ -87,6 +95,15 @@ public class ValueString extends Value
         if (value instanceof ValueString)
         {
             this.value = ((ValueString) value).value;
+        }
+    }
+
+    @Override
+    public void copyServer(IConfigValue value)
+    {
+        if (value instanceof ValueString)
+        {
+            this.serverValue = ((ValueString) value).value;
         }
     }
 

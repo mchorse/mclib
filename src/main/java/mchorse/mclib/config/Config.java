@@ -52,6 +52,19 @@ public class Config implements IByteBufSerializable
         return this.serverSide;
     }
 
+    public boolean hasSyncable()
+    {
+        for (ConfigCategory category : this.categories.values())
+        {
+            if (category.hasSyncable())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /* Translation string related methods */
 
     @SideOnly(Side.CLIENT)
@@ -181,6 +194,14 @@ public class Config implements IByteBufSerializable
         }
     }
 
+    public void copyServer(Config config)
+    {
+        for (Map.Entry<String, ConfigCategory> entry : config.categories.entrySet())
+        {
+            this.categories.get(entry.getKey()).copyServer(entry.getValue());
+        }
+    }
+
     /**
      * Convert this config into JSON string
      */
@@ -215,6 +236,14 @@ public class Config implements IByteBufSerializable
             ByteBufUtils.writeUTF8String(buffer, entry.getKey());
 
             entry.getValue().toBytes(buffer);
+        }
+    }
+
+    public void resetServerValues()
+    {
+        for (ConfigCategory category : this.categories.values())
+        {
+            category.resetServerValues();
         }
     }
 }

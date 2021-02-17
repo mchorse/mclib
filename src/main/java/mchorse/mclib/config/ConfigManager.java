@@ -101,4 +101,12 @@ public class ConfigManager
             ConfigParser.fromJson(config, config.file);
         }
     }
+
+    public void resetServerValues()
+    {
+        for (Config config : this.modules.values())
+        {
+            config.resetServerValues();
+        }
+    }
 }

@@ -28,6 +28,9 @@ public class ValueRL extends Value
     private ResourceLocation value;
     private ResourceLocation defaultValue;
 
+    private boolean useServer;
+    private ResourceLocation serverValue;
+
     public ValueRL(String id)
     {
         super(id);
@@ -42,7 +45,7 @@ public class ValueRL extends Value
 
     public ResourceLocation get()
     {
-        return this.value;
+        return !this.useServer ? this.value : this.serverValue;
     }
 
     public void set(ResourceLocation value)
@@ -60,6 +63,13 @@ public class ValueRL extends Value
     public void reset()
     {
         this.set(this.defaultValue);
+    }
+
+    @Override
+    public void resetServer()
+    {
+        this.useServer = true;
+        this.serverValue = null;
     }
 
     @Override
@@ -114,6 +124,16 @@ public class ValueRL extends Value
         if (value instanceof ValueRL)
         {
             this.value = RLUtils.clone(((ValueRL) value).value);
+        }
+    }
+
+    @Override
+    public void copyServer(IConfigValue value)
+    {
+        if (value instanceof ValueRL)
+        {
+            this.useServer = true;
+            this.serverValue = RLUtils.clone(((ValueRL) value).value);
         }
     }
 

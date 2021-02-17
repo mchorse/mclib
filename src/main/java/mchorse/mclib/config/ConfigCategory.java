@@ -96,6 +96,19 @@ public class ConfigCategory implements IByteBufSerializable
         }
     }
 
+    public boolean hasSyncable()
+    {
+        for (IConfigValue value : this.values.values())
+        {
+            if (value.isSyncable())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Copy all values from given config to this config
      */
@@ -104,6 +117,19 @@ public class ConfigCategory implements IByteBufSerializable
         for (Map.Entry<String, IConfigValue> entry : category.values.entrySet())
         {
             this.values.get(entry.getKey()).copy(entry.getValue());
+        }
+    }
+
+    public void copyServer(ConfigCategory category)
+    {
+        for (Map.Entry<String, IConfigValue> entry : category.values.entrySet())
+        {
+            IConfigValue value = this.values.get(entry.getKey());
+
+            if (value != null && value.isSyncable())
+            {
+                value.copyServer(entry.getValue());
+            }
         }
     }
 
@@ -157,6 +183,14 @@ public class ConfigCategory implements IByteBufSerializable
         for (Map.Entry<String, IConfigValue> entry : this.values.entrySet())
         {
             ConfigManager.toBytes(buffer, entry.getValue());
+        }
+    }
+
+    public void resetServerValues()
+    {
+        for (IConfigValue value : this.values.values())
+        {
+            value.resetServer();
         }
     }
 }
