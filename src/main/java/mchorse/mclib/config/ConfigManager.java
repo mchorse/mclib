@@ -43,6 +43,11 @@ public class ConfigManager
         String key = ByteBufUtils.readUTF8String(buffer);
         String type = ByteBufUtils.readUTF8String(buffer);
 
+        if (type.isEmpty())
+        {
+            return null;
+        }
+
         try
         {
             Class<? extends IConfigValue> clazz = TYPES.get(type);
@@ -62,11 +67,11 @@ public class ConfigManager
     {
         String type = TYPES.inverse().get(value.getClass());
 
+        ByteBufUtils.writeUTF8String(buffer, value.getId());
+        ByteBufUtils.writeUTF8String(buffer, type == null ? "" : type);
+
         if (type != null)
         {
-            ByteBufUtils.writeUTF8String(buffer, value.getId());
-            ByteBufUtils.writeUTF8String(buffer, type);
-
             value.toBytes(buffer);
         }
     }
