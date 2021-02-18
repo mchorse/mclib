@@ -90,6 +90,14 @@ public class ValueString extends Value
     }
 
     @Override
+    public boolean parseFromCommand(String value)
+    {
+        this.set(value);
+
+        return true;
+    }
+
+    @Override
     public void copy(IConfigValue value)
     {
         if (value instanceof ValueString)
@@ -123,5 +131,11 @@ public class ValueString extends Value
 
         ByteBufUtils.writeUTF8String(buffer, this.value == null ? "" : this.value);
         ByteBufUtils.writeUTF8String(buffer, this.defaultValue == null ? "" : this.defaultValue);
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.value;
     }
 }

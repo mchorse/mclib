@@ -1,12 +1,14 @@
 package mchorse.mclib.commands;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,12 +22,12 @@ import java.util.Map;
  * This abstract command implements sub-commands system. By extending this
  * class, it allows to add sub-commands.
  */
-public abstract class SubCommandBase extends CommandBase
+public abstract class SubCommandBase extends McCommandBase
 {
     /**
      * Sub-commands list, add your sub commands in this list.
      */
-    protected Map<String, CommandBase> subcommands = new HashMap<String, CommandBase>();
+    protected Map<String, McCommandBase> subcommands = new HashMap<String, McCommandBase>();
 
     /**
      * Drop only the first argument
@@ -49,7 +51,7 @@ public abstract class SubCommandBase extends CommandBase
     /**
      * Add a sub-command to the sub-commands map
      */
-    protected void add(CommandBase subcommand)
+    protected void add(McCommandBase subcommand)
     {
         this.subcommands.put(subcommand.getName(), subcommand);
     }
@@ -61,19 +63,30 @@ public abstract class SubCommandBase extends CommandBase
 
     /**
      * Automated way to output command's and sub-commands' usage messages.
-     *
      */
     @Override
     public String getUsage(ICommandSender sender)
     {
-        String message = I18n.format(this.getHelp()) + "\n\n";
+        return this.getHelp();
+    }
 
-        for (CommandBase command : this.subcommands.values())
+    public ITextComponent getUsageMessage(ICommandSender sender)
+    {
+        ITextComponent message = new TextComponentTranslation(this.getHelp());
+
+        message.appendSibling(new TextComponentString("\n\n"));
+
+        int i = 0;
+        int c = this.subcommands.size();
+
+        for (McCommandBase command : this.subcommands.values())
         {
-            message += I18n.format(command.getUsage(sender)).split("\n")[0] + "\n";
+            message.appendSibling(new TextComponentString(command.getSyntax() + (i == c - 1 ? "" : "\n")));
+
+            i += 1;
         }
 
-        return message.trim();
+        return message;
     }
 
     /**
@@ -86,14 +99,18 @@ public abstract class SubCommandBase extends CommandBase
     {
         if (args.length < 1)
         {
-            throw new WrongUsageException(this.getUsage(sender));
+            sender.sendMessage(this.getUsageMessage(sender));
+
+            return;
         }
 
         CommandBase command = this.subcommands.get(args[0]);
 
-        if (args.length == 2 && args[1].equals("-h"))
+        if (args.length >= 2 && args[1].equals("-h"))
         {
-            throw new WrongUsageException(command.getUsage(sender));
+            sender.sendMessage(this.getUsageMessage(sender));
+
+            return;
         }
 
         if (command != null)
@@ -103,8 +120,12 @@ public abstract class SubCommandBase extends CommandBase
             return;
         }
 
-        throw new WrongUsageException(this.getUsage(sender));
+        sender.sendMessage(this.getUsageMessage(sender));
     }
+
+    @Override
+    public void executeCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
+    {}
 
     /**
      * Get completions for this command or its sub-commands.
@@ -120,7 +141,7 @@ public abstract class SubCommandBase extends CommandBase
             return super.getTabCompletions(server, sender, args, pos);
         }
 
-        Collection<CommandBase> commands = this.subcommands.values();
+        Collection<McCommandBase> commands = this.subcommands.values();
 
         if (args.length == 1)
         {

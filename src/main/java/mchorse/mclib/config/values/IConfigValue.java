@@ -27,6 +27,8 @@ public interface IConfigValue extends IByteBufSerializable
     @SideOnly(Side.CLIENT)
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui);
 
+    public boolean parseFromCommand(String value);
+
     public void copy(IConfigValue value);
 
     public void copyServer(IConfigValue value);

@@ -119,6 +119,14 @@ public class ValueRL extends Value
     }
 
     @Override
+    public boolean parseFromCommand(String value)
+    {
+        this.set(RLUtils.create(value));
+
+        return true;
+    }
+
+    @Override
     public void copy(IConfigValue value)
     {
         if (value instanceof ValueRL)
@@ -178,5 +186,11 @@ public class ValueRL extends Value
             tag.setTag("RL", RLUtils.writeNbt(rl));
             ByteBufUtils.writeTag(buffer, tag);
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.value == null ? "" : this.value.toString();
     }
 }

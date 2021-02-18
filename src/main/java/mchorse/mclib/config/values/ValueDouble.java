@@ -115,6 +115,19 @@ public class ValueDouble extends Value
     }
 
     @Override
+    public boolean parseFromCommand(String value)
+    {
+        try
+        {
+            this.set(Double.parseDouble(value));
+        }
+        catch (Exception e)
+        {}
+
+        return false;
+    }
+
+    @Override
     public void copy(IConfigValue value)
     {
         if (value instanceof ValueDouble)
@@ -152,5 +165,11 @@ public class ValueDouble extends Value
         buffer.writeDouble(this.defaultValue);
         buffer.writeDouble(this.min);
         buffer.writeDouble(this.max);
+    }
+
+    @Override
+    public String toString()
+    {
+        return Double.toString(this.value);
     }
 }

@@ -115,6 +115,19 @@ public class ValueFloat extends Value
     }
 
     @Override
+    public boolean parseFromCommand(String value)
+    {
+        try
+        {
+            this.set(Float.parseFloat(value));
+        }
+        catch (Exception e)
+        {}
+
+        return false;
+    }
+
+    @Override
     public void copy(IConfigValue value)
     {
         if (value instanceof ValueFloat)
@@ -152,5 +165,11 @@ public class ValueFloat extends Value
         buffer.writeFloat(this.defaultValue);
         buffer.writeFloat(this.min);
         buffer.writeFloat(this.max);
+    }
+
+    @Override
+    public String toString()
+    {
+        return Float.toString(this.value);
     }
 }

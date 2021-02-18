@@ -10,7 +10,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityUtils
 {
-
     @SideOnly(Side.CLIENT)
     public static GameType getGameMode()
     {

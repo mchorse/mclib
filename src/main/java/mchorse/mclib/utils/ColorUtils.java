@@ -45,6 +45,18 @@ public class ColorUtils
 
     public static int parseColor(String color, int orDefault)
     {
+        try
+        {
+            return parseColorWithException(color);
+        }
+        catch (Exception e)
+        {}
+
+        return orDefault;
+    }
+
+    public static int parseColorWithException(String color) throws Exception
+    {
         if (color.startsWith("#"))
         {
             color = color.substring(1);
@@ -52,25 +64,20 @@ public class ColorUtils
 
         if (color.length() == 6 || color.length() == 8)
         {
-            try
+            if (color.length() == 8)
             {
-                if (color.length() == 8)
-                {
-                    String alpha = color.substring(0, 2);
-                    String rest = color.substring(2);
+                String alpha = color.substring(0, 2);
+                String rest = color.substring(2);
 
-                    int a = Integer.parseInt(alpha, 16) << 24;
-                    int rgb = Integer.parseInt(rest, 16);
+                int a = Integer.parseInt(alpha, 16) << 24;
+                int rgb = Integer.parseInt(rest, 16);
 
-                    return a + rgb;
-                }
-
-                return Integer.parseInt(color, 16);
+                return a + rgb;
             }
-            catch (Exception e)
-            {}
+
+            return Integer.parseInt(color, 16);
         }
 
-        return orDefault;
+        throw new Exception("Given color \"" + color + "\" can't be parsed!");
     }
 }

@@ -18,6 +18,7 @@ import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.Int;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -197,6 +198,28 @@ public class ValueInt extends Value
     }
 
     @Override
+    public boolean parseFromCommand(String value)
+    {
+        try
+        {
+            if (this.subtype == Subtype.COLOR || this.subtype == Subtype.COLOR_ALPHA)
+            {
+                this.set(ColorUtils.parseColorWithException(value));
+            }
+            else
+            {
+                this.set(Integer.parseInt(value));
+            }
+
+            return true;
+        }
+        catch (Exception e)
+        {}
+
+        return false;
+    }
+
+    @Override
     public void copy(IConfigValue value)
     {
         if (value instanceof ValueInt)
@@ -264,6 +287,17 @@ public class ValueInt extends Value
                 KeyParser.keyToBytes(buffer, key);
             }
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        if (this.subtype == Subtype.COLOR || this.subtype == Subtype.COLOR_ALPHA)
+        {
+            return "#" + Integer.toHexString(this.value);
+        }
+
+        return Integer.toString(this.value);
     }
 
     public static enum Subtype

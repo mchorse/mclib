@@ -24,6 +24,8 @@ public abstract class McCommandBase extends CommandBase
 
     public abstract L10n getL10n();
 
+    public abstract String getSyntax();
+
     /**
      * Get the count of arguments which are required
      */

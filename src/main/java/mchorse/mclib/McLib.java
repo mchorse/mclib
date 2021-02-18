@@ -2,6 +2,8 @@ package mchorse.mclib;
 
 import mchorse.mclib.client.gui.utils.ValueColors;
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.commands.CommandMcLib;
+import mchorse.mclib.commands.utils.L10n;
 import mchorse.mclib.config.ConfigBuilder;
 import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueInt;
@@ -16,10 +18,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Map;
 
@@ -43,6 +47,8 @@ public class McLib
     public static CommonProxy proxy;
 
     public static final EventBus EVENT_BUS = new EventBus();
+
+    public static L10n l10n = new L10n(MOD_ID);
 
     /* Configuration */
     public static ValueBoolean opDropItems;
@@ -149,6 +155,13 @@ public class McLib
     public boolean checkModDependencies(Map<String, String> map, Side side)
     {
         return true;
+    }
+
+    @Mod.EventHandler
+    @SideOnly(Side.SERVER)
+    public void serverInit(FMLServerStartingEvent event)
+    {
+        event.registerServerCommand(new CommandMcLib());
     }
 
     public static void main(String[] args) throws Exception

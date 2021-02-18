@@ -81,6 +81,25 @@ public class ValueBoolean extends Value
     }
 
     @Override
+    public boolean parseFromCommand(String value)
+    {
+        if (value.equals("1"))
+        {
+            this.set(true);
+        }
+        else if (value.equals("0"))
+        {
+            this.set(false);
+        }
+        else
+        {
+            this.set(Boolean.parseBoolean(value));
+        }
+
+        return true;
+    }
+
+    @Override
     public void copy(IConfigValue value)
     {
         if (value instanceof ValueBoolean)
@@ -114,5 +133,11 @@ public class ValueBoolean extends Value
 
         buffer.writeBoolean(this.value);
         buffer.writeBoolean(this.defaultValue);
+    }
+
+    @Override
+    public String toString()
+    {
+        return Boolean.toString(this.value);
     }
 }

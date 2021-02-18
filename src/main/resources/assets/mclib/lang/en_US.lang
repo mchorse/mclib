@@ -171,6 +171,18 @@ mclib.easing.in=Ease in
 mclib.easing.out=Ease out
 mclib.easing.inout=Ease in/out
 
+# Commands
+mclib.commands.mclib.help=McLib command which features config editing capabilities on the server side.
+mclib.commands.mclib.config.help=McLib config subcommand allows to manage mod options from McHorse's mods.
+mclib.commands.mclib.config.print=§l§6/§rmclib §8config print§r §7<mod.category.option>§r\n\n§fThis command prints the current value of given mod option by §7<mod.category.option>§f ID.
+mclib.commands.mclib.config.set=§l§6/§rmclib §8config set§r §7<mod.category.option> <value...>§r\n\n§fThis command sets current value of given mod option by §7<mod.category.option>§f ID to §7<value...>§f.
+
+mclib.error.config.invalid_id=§fGiven mod option identifier %s§f is invalid!
+mclib.error.config.invalid_format=§fGiven value %s§f for mod option identifier %s§f can't be parsed!
+mclib.info.config.set=§fThe new value of mod option %s§f is: %s§f
+mclib.info.config.print=§fThe value of mod option %s§f is: %s§f
+mclib.info.config.client_side=§fGiven mod option %s§f is client side only...
+
 # Keystroke modes
 mclib.keystrokes_position.auto=Auto
 mclib.keystrokes_position.bottom_left=Bottom left

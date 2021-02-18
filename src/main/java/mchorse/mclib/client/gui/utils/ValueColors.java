@@ -9,12 +9,14 @@ import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.config.values.Value;
 import mchorse.mclib.utils.Color;
+import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class ValueColors extends Value
 {
@@ -88,6 +90,33 @@ public class ValueColors extends Value
     }
 
     @Override
+    public boolean parseFromCommand(String value)
+    {
+        String[] splits = value.split(",");
+        List<Color> colors = new ArrayList<Color>();
+
+        for (String split : splits)
+        {
+            try
+            {
+                int color = ColorUtils.parseColorWithException(split.trim());
+
+                colors.add(new Color().set(color, true));
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        this.colors.clear();
+        this.colors.addAll(colors);
+        this.saveLater();
+
+        return true;
+    }
+
+    @Override
     public void copy(IConfigValue value)
     {
         if (value instanceof ValueColors)
@@ -130,5 +159,18 @@ public class ValueColors extends Value
         {
             buffer.writeInt(color.getRGBAColor());
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        StringJoiner joiner = new StringJoiner(", ");
+
+        for (Color color : this.colors)
+        {
+            joiner.add("#" + Integer.toHexString(color.getRGBAColor()));
+        }
+
+        return joiner.toString();
     }
 }

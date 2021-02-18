@@ -15,6 +15,11 @@ import mchorse.mclib.config.values.ValueRL;
 import mchorse.mclib.config.values.ValueString;
 import mchorse.mclib.events.RegisterConfigEvent;
 import mchorse.mclib.network.IByteBufSerializable;
+import mchorse.mclib.network.mclib.Dispatcher;
+import mchorse.mclib.network.mclib.common.PacketConfig;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 import java.io.File;
@@ -36,6 +41,27 @@ public class ConfigManager
         TYPES.put("rl", ValueRL.class);
         TYPES.put("string", ValueString.class);
         TYPES.put("colors", ValueColors.class);
+    }
+
+    public static void synchronizeConfig(Config config, MinecraftServer server)
+    {
+        synchronizeConfig(config, server, null);
+    }
+
+    /**
+     * Send given config to all players on the server
+     */
+    public static void synchronizeConfig(Config config, MinecraftServer server, EntityPlayer exception)
+    {
+        for (EntityPlayerMP target : server.getPlayerList().getPlayers())
+        {
+            if (target == exception)
+            {
+                continue;
+            }
+
+            Dispatcher.sendTo(new PacketConfig(config, true), target);
+        }
     }
 
     public static IConfigValue fromBytes(ByteBuf buffer)
