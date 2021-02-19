@@ -64,6 +64,9 @@ public class ConfigManager
         }
     }
 
+    /**
+     * Config value to bytes
+     */
     public static IConfigValue fromBytes(ByteBuf buffer)
     {
         String key = ByteBufUtils.readUTF8String(buffer);
@@ -89,6 +92,9 @@ public class ConfigManager
         return null;
     }
 
+    /**
+     * Config value from bytes
+     */
     public static void toBytes(ByteBuf buffer, IConfigValue value)
     {
         String type = TYPES.inverse().get(value.getClass());

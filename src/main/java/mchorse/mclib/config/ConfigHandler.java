@@ -24,7 +24,7 @@ public class ConfigHandler
         {
             if (config.hasSyncable())
             {
-                Dispatcher.sendTo(new PacketConfig(config, true), (EntityPlayerMP) event.player);
+                Dispatcher.sendTo(new PacketConfig(config.filterSyncable(), true), (EntityPlayerMP) event.player);
             }
         }
     }

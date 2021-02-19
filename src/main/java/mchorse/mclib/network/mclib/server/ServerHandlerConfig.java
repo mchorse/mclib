@@ -27,7 +27,7 @@ public class ServerHandlerConfig extends ServerMessageHandler<PacketConfig>
 
             if (present.hasSyncable())
             {
-                ConfigManager.synchronizeConfig(present, player.getServerWorld().getMinecraftServer(), player);
+                ConfigManager.synchronizeConfig(present.filterSyncable(), player.getServerWorld().getMinecraftServer(), player);
             }
         }
     }

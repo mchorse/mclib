@@ -24,7 +24,7 @@ public class ServerHandlerRequestConfigs extends ServerMessageHandler<PacketRequ
 
         for (Config config : manager.modules.values())
         {
-            Dispatcher.sendTo(new PacketConfig(config), player);
+            Dispatcher.sendTo(new PacketConfig(config.filterServerSide()), player);
         }
     }
 }

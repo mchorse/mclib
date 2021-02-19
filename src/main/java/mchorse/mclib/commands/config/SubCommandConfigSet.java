@@ -49,7 +49,7 @@ public class SubCommandConfigSet extends SubCommandConfigBase
                 {
                     String mod = args[0].substring(0, args[0].indexOf("."));
 
-                    ConfigManager.synchronizeConfig(McLib.proxy.configs.modules.get(mod), server);
+                    ConfigManager.synchronizeConfig(McLib.proxy.configs.modules.get(mod).filterSyncable(), server);
                 }
 
                 this.getL10n().info(sender, "config.set", args[0], value.toString());

@@ -1,5 +1,6 @@
 package mchorse.mclib.config;
 
+import com.google.common.base.Predicates;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.config.json.ConfigParser;
 import mchorse.mclib.config.values.IConfigValue;
@@ -16,8 +17,12 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Config implements IByteBufSerializable
 {
@@ -208,6 +213,42 @@ public class Config implements IByteBufSerializable
     public String toJSON()
     {
         return JsonUtils.jsonToPretty(ConfigParser.toJson(this));
+    }
+
+    public Config filterSyncable()
+    {
+        return this.filter(IConfigValue::isSyncable);
+    }
+
+    public Config filterServerSide()
+    {
+        return this.filter(Predicates.not(IConfigValue::isClientSide));
+    }
+
+    public Config filter(Predicate<IConfigValue> predicate)
+    {
+        Config config = new Config(this.id);
+
+        for (ConfigCategory category : this.categories.values())
+        {
+            List<IConfigValue> values = new ArrayList<IConfigValue>(category.values.values().stream().filter(predicate).collect(Collectors.toList()));
+
+            if (!values.isEmpty())
+            {
+                ConfigCategory newCategory = new ConfigCategory(category.id);
+
+                newCategory.config = config;
+
+                for (IConfigValue value : values)
+                {
+                    newCategory.values.put(value.getId(), value);
+                }
+
+                config.categories.put(newCategory.id, newCategory);
+            }
+        }
+
+        return config;
     }
 
     @Override
