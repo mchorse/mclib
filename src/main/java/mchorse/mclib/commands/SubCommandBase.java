@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,24 +57,12 @@ public abstract class SubCommandBase extends McCommandBase
         this.subcommands.put(subcommand.getName(), subcommand);
     }
 
-    /**
-     * Get help message language key
-     */
-    protected abstract String getHelp();
-
-    /**
-     * Automated way to output command's and sub-commands' usage messages.
-     */
     @Override
-    public String getUsage(ICommandSender sender)
-    {
-        return this.getHelp();
-    }
-
     public ITextComponent getUsageMessage(ICommandSender sender)
     {
-        ITextComponent message = new TextComponentTranslation(this.getHelp());
+        ITextComponent message = new TextComponentTranslation(this.getUsage(sender));
 
+        message.getStyle().setColor(TextFormatting.WHITE);
         message.appendSibling(new TextComponentString("\n\n"));
 
         int i = 0;
@@ -81,7 +70,9 @@ public abstract class SubCommandBase extends McCommandBase
 
         for (McCommandBase command : this.subcommands.values())
         {
-            message.appendSibling(new TextComponentString(command.getSyntax() + (i == c - 1 ? "" : "\n")));
+            String extra = i == c - 1 ? "" : "\n";
+
+            message.appendSibling(new TextComponentString(command.getProcessedSyntax() + extra));
 
             i += 1;
         }
@@ -99,28 +90,24 @@ public abstract class SubCommandBase extends McCommandBase
     {
         if (args.length < 1)
         {
-            sender.sendMessage(this.getUsageMessage(sender));
-
-            return;
+            throw new WrongUsageException("mclib.commands.wrapper", this.getUsageMessage(sender));
         }
 
-        CommandBase command = this.subcommands.get(args[0]);
-
-        if (args.length >= 2 && args[1].equals("-h"))
-        {
-            sender.sendMessage(this.getUsageMessage(sender));
-
-            return;
-        }
+        McCommandBase command = this.subcommands.get(args[0]);
 
         if (command != null)
         {
+            if (args.length >= 2 && args[1].equals("-h"))
+            {
+                throw new WrongUsageException("mclib.commands.wrapper", command.getUsageMessage(sender));
+            }
+
             command.execute(server, sender, dropFirstArgument(args));
-
-            return;
         }
-
-        sender.sendMessage(this.getUsageMessage(sender));
+        else
+        {
+            throw new WrongUsageException("mclib.commands.wrapper", this.getUsageMessage(sender));
+        }
     }
 
     @Override

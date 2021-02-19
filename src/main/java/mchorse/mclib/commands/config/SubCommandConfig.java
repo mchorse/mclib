@@ -5,6 +5,7 @@ import mchorse.mclib.commands.SubCommandBase;
 import mchorse.mclib.commands.utils.L10n;
 import mchorse.mclib.config.values.IConfigValue;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
 
 public class SubCommandConfig extends SubCommandBase
 {
@@ -40,7 +41,7 @@ public class SubCommandConfig extends SubCommandBase
     }
 
     @Override
-    protected String getHelp()
+    public String getUsage(ICommandSender sender)
     {
         return "mclib.commands.mclib.config.help";
     }
@@ -48,7 +49,7 @@ public class SubCommandConfig extends SubCommandBase
     @Override
     public String getSyntax()
     {
-        return "§l§6/§rmclib §8config§r";
+        return "{l}{6}/{r}mclib {8}config{r}";
     }
 
     @Override

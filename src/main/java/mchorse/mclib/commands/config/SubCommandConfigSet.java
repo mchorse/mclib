@@ -25,7 +25,7 @@ public class SubCommandConfigSet extends SubCommandConfigBase
     @Override
     public String getSyntax()
     {
-        return "§l§6/§rmclib §8config set§r §7<mod.category.option> <value...>§r";
+        return "{l}{6}/{r}mclib {8}config set{r} {7}<mod.category.option> <value...>{r}";
     }
 
     @Override
@@ -56,7 +56,7 @@ public class SubCommandConfigSet extends SubCommandConfigBase
             }
             else
             {
-                this.getL10n().error(sender, "config.invalid_format", args[0]);
+                throw new CommandException("config.invalid_format", args[0], args[1]);
             }
         }
         else

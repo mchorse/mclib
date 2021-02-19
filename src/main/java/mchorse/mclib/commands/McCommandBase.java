@@ -7,6 +7,10 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
 
@@ -22,9 +26,30 @@ public abstract class McCommandBase extends CommandBase
 {
     public static final List<String> BOOLEANS = ImmutableList.of("true", "false", "1", "0");
 
+    public static String processSyntax(String str)
+    {
+        return str.replaceAll("\\{([\\w\\d_]+)\\}", "§$1");
+    }
+
     public abstract L10n getL10n();
 
     public abstract String getSyntax();
+
+    public String getProcessedSyntax()
+    {
+        return processSyntax(this.getSyntax());
+    }
+
+    public ITextComponent getUsageMessage(ICommandSender sender)
+    {
+        ITextComponent message = new TextComponentTranslation(this.getProcessedSyntax());
+
+        message.getStyle().setColor(TextFormatting.WHITE);
+
+        return message
+            .appendSibling(new TextComponentString("\n\n"))
+            .appendSibling(new TextComponentTranslation(this.getUsage(sender)));
+    }
 
     /**
      * Get the count of arguments which are required
@@ -39,7 +64,7 @@ public abstract class McCommandBase extends CommandBase
     {
         if (args.length < this.getRequiredArgs())
         {
-            throw new WrongUsageException(this.getUsage(sender));
+            throw new WrongUsageException("mclib.commands.wrapper", this.getUsageMessage(sender));
         }
 
         try
@@ -53,7 +78,7 @@ public abstract class McCommandBase extends CommandBase
                 throw e;
             }
 
-            this.getL10n().error(sender, e.getMessage(), e.getErrorObjects());
+            throw new CommandException("mclib.commands.wrapper", this.getL10n().error(e.getMessage(), e.getErrorObjects()));
         }
     }
 

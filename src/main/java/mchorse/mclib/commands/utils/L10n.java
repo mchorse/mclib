@@ -51,11 +51,27 @@ public class L10n
     }
 
     /**
+     * Get error message
+     */
+    public ITextComponent error(String key, Object... objects)
+    {
+        return this.messageWithMarker( "§4(§cX§4)§r ", this.id + ".error." + key, objects);
+    }
+
+    /**
      * Send success message to the sender
      */
     public void success(ICommandSender sender, String key, Object... objects)
     {
         this.sendWithMarker(sender, "§2(§aV§2)§r ", this.id + ".success." + key, objects);
+    }
+
+    /**
+     * Get success message
+     */
+    public ITextComponent success(String key, Object... objects)
+    {
+        return this.messageWithMarker("§2(§aV§2)§r ", this.id + ".success." + key, objects);
     }
 
     /**
@@ -67,9 +83,22 @@ public class L10n
     }
 
     /**
+     * Get informing message
+     */
+    public ITextComponent info(String key, Object... objects)
+    {
+        return  this.messageWithMarker("§9(§bi§9)§r ", this.id + ".info." + key, objects);
+    }
+
+    /**
      * Send a message with given marker
      */
     public void sendWithMarker(ICommandSender sender, String marker, String key, Object... objects)
+    {
+        sender.sendMessage(this.messageWithMarker(marker, key, objects));
+    }
+
+    public ITextComponent messageWithMarker(String marker, String key, Object... objects)
     {
         ITextComponent message = new TextComponentString(marker);
         ITextComponent string = new TextComponentTranslation(key, objects);
@@ -77,6 +106,7 @@ public class L10n
         string.getStyle().setColor(TextFormatting.GRAY);
 
         message.appendSibling(string);
-        sender.sendMessage(message);
+
+        return message;
     }
 }

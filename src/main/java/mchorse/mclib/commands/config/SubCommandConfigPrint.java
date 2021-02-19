@@ -22,7 +22,7 @@ public class SubCommandConfigPrint extends SubCommandConfigBase
     @Override
     public String getSyntax()
     {
-        return "§l§6/§rmclib §8config print§r §7<mod.category.option>§r";
+        return "{l}{6}/{r}mclib {8}config print{r} {7}<mod.category.option>{r}";
     }
 
     @Override

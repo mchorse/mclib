@@ -3,6 +3,7 @@ package mchorse.mclib.commands;
 import mchorse.mclib.McLib;
 import mchorse.mclib.commands.config.SubCommandConfig;
 import mchorse.mclib.commands.utils.L10n;
+import net.minecraft.command.ICommandSender;
 
 public class CommandMcLib extends SubCommandBase
 {
@@ -18,7 +19,7 @@ public class CommandMcLib extends SubCommandBase
     }
 
     @Override
-    protected String getHelp()
+    public String getUsage(ICommandSender sender)
     {
         return "mclib.commands.mclib.help";
     }
