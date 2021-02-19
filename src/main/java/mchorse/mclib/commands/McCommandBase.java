@@ -62,6 +62,11 @@ public abstract class McCommandBase extends CommandBase
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
     {
+        if (args.length >= 1 && args[0].equals("-h"))
+        {
+            throw new WrongUsageException("mclib.commands.wrapper", this.getUsageMessage(sender));
+        }
+
         if (args.length < this.getRequiredArgs())
         {
             throw new WrongUsageException("mclib.commands.wrapper", this.getUsageMessage(sender));

@@ -58,6 +58,12 @@ public abstract class SubCommandBase extends McCommandBase
     }
 
     @Override
+    public String getSyntax()
+    {
+        return "";
+    }
+
+    @Override
     public ITextComponent getUsageMessage(ICommandSender sender)
     {
         ITextComponent message = new TextComponentTranslation(this.getUsage(sender));

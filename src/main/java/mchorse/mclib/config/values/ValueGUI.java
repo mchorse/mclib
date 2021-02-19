@@ -31,6 +31,12 @@ public abstract class ValueGUI extends Value
     public abstract List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui);
 
     @Override
+    public boolean parseFromCommand(String value)
+    {
+        return false;
+    }
+
+    @Override
     public void fromJSON(JsonElement element)
     {}
 
