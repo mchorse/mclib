@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -314,6 +315,9 @@ public class GuiDopeSheet extends GuiKeyframeElement
         int sheetCount = this.sheets.size();
         int h = (this.area.h - TOP_MARGIN) / sheetCount;
         int y = this.area.ey() - h * sheetCount;
+        boolean alt = GuiScreen.isAltKeyDown();
+        boolean finished = false;
+        boolean isMultiSelect = this.isMultipleSelected();
 
         for (GuiSheet sheet : this.sheets)
         {
@@ -325,13 +329,13 @@ public class GuiDopeSheet extends GuiKeyframeElement
             {
                 boolean left = sheet.handles && prev != null && prev.interp == KeyframeInterpolation.BEZIER && this.isInside(this.toGraphX(frame.tick - frame.lx), y + h / 2, mouseX, mouseY);
                 boolean right = sheet.handles && frame.interp == KeyframeInterpolation.BEZIER && this.isInside(this.toGraphX(frame.tick + frame.rx), y + h / 2, mouseX, mouseY) && index != count - 1;
-                boolean point = this.isInside(this.toGraphX(frame.tick), y + h / 2, mouseX, mouseY);
+                boolean point = this.isInside(this.toGraphX(frame.tick), alt ? mouseY : y + h / 2, mouseX, mouseY);
 
                 if (left || right || point)
                 {
                     int key = sheet.selected.indexOf(index);
 
-                    if (!shift && key == -1)
+                    if (!shift && key == -1 && !alt)
                     {
                         this.clearSelection();
                     }
@@ -342,7 +346,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
                     {
                         this.which = which;
 
-                        if (shift && this.isMultipleSelected() && key != -1)
+                        if (shift && isMultiSelect && key != -1)
                         {
                             sheet.selected.remove(key);
                             frame = this.getCurrent();
@@ -350,7 +354,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
                         else if (key == -1)
                         {
                             sheet.selected.add(index);
-                            frame = this.isMultipleSelected() ? this.getCurrent() : frame;
+                            frame = isMultiSelect ? this.getCurrent() : frame;
                         }
                         else
                         {
@@ -366,7 +370,17 @@ public class GuiDopeSheet extends GuiKeyframeElement
                         this.lastV = left ? frame.value + frame.ly : (right ? frame.value + frame.ry : frame.value);
                     }
 
-                    return true;
+                    if (alt)
+                    {
+                        if (frame != null)
+                        {
+                            finished = true;
+                        }
+                    }
+                    else
+                    {
+                        return true;
+                    }
                 }
 
                 prev = frame;
@@ -376,7 +390,7 @@ public class GuiDopeSheet extends GuiKeyframeElement
             y += h;
         }
 
-        return false;
+        return finished;
     }
 
     private boolean isInside(double x, double y, int mouseX, int mouseY)

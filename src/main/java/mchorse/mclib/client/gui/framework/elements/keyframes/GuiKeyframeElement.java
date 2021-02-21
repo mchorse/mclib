@@ -177,15 +177,16 @@ public abstract class GuiKeyframeElement extends GuiElement
         {
             if (context.mouseButton == 0)
             {
+                boolean shift = GuiScreen.isShiftKeyDown();
+
                 /* Duplicate the keyframe */
-                if (GuiScreen.isAltKeyDown() && this.which == Selection.KEYFRAME)
+                if (GuiScreen.isAltKeyDown() && !shift && this.which == Selection.KEYFRAME)
                 {
                     this.duplicateKeyframe(context, mouseX, mouseY);
 
                     return false;
                 }
 
-                boolean shift = GuiScreen.isShiftKeyDown();
                 this.lastX = mouseX;
                 this.lastY = mouseY;
 
