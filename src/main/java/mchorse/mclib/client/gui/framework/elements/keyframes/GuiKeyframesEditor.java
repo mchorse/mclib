@@ -43,6 +43,8 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
     private int clicks;
     private long clickTimer;
 
+    private IAxisConverter converter;
+
     public GuiKeyframesEditor(Minecraft mc)
     {
         super(mc);
@@ -107,6 +109,19 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
     protected void toggleEasing()
     {
         this.easing.clickItself(GuiBase.getCurrent(), GuiScreen.isShiftKeyDown() ? 1 : 0);
+    }
+
+    public void setConverter(IAxisConverter converter)
+    {
+        this.converter = converter;
+        this.graph.setConverter(converter);
+
+        if (converter != null)
+        {
+            converter.updateField(this.tick);
+        }
+
+        this.fillData(this.graph.getCurrent());
     }
 
     @Override
@@ -355,7 +370,7 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
 
     public void setTick(double tick)
     {
-        this.graph.setTick(tick, false);
+        this.graph.setTick(this.converter == null ? tick : this.converter.from(tick), false);
     }
 
     public void setValue(double value)
@@ -386,8 +401,11 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
             return;
         }
 
-        this.tick.integer = this.graph.which == Selection.KEYFRAME;
-        this.tick.setValue(this.graph.which.getX(frame));
+        double tick = this.graph.which.getX(frame);
+        boolean forceInteger = this.graph.which == Selection.KEYFRAME;
+
+        this.tick.integer = this.converter == null ? forceInteger : this.converter.forceInteger(frame, this.graph.which, forceInteger);
+        this.tick.setValue(this.converter == null ? tick : this.converter.to(tick));
         this.value.setValue(this.graph.which.getY(frame));
         this.interp.label.set(frame.interp.getKey());
         this.interpolations.setCurrent(frame.interp);

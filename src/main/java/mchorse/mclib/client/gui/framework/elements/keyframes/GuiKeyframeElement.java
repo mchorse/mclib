@@ -40,6 +40,8 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     protected Scale scaleX;
 
+    protected IAxisConverter converter;
+
     public GuiKeyframeElement(Minecraft mc, Consumer<Keyframe> callback)
     {
         super(mc);
@@ -47,6 +49,11 @@ public abstract class GuiKeyframeElement extends GuiElement
         this.callback = callback;
         this.scaleX = new Scale(this.area, false);
         this.scaleX.anchor(0.5F);
+    }
+
+    public void setConverter(IAxisConverter converter)
+    {
+        this.converter = converter;
     }
 
     public Scale getScaleX()
@@ -343,8 +350,10 @@ public abstract class GuiKeyframeElement extends GuiElement
                 break;
             }
 
+            String label = this.converter == null ? String.valueOf(j * mult) : this.converter.format(j * mult);
+
             Gui.drawRect(x, this.area.y, x + 1, this.area.ey(), 0x44ffffff);
-            this.font.drawString(String.valueOf(j * mult), x + 4, this.area.y + 4, 0xffffff);
+            this.font.drawString(label, x + 4, this.area.y + 4, 0xffffff);
         }
     }
 
