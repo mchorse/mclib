@@ -46,6 +46,21 @@ public class ValueBoolean extends Value
     }
 
     @Override
+    public Object getValue()
+    {
+        return this.get();
+    }
+
+    @Override
+    public void setValue(Object value)
+    {
+        if (value instanceof Boolean)
+        {
+            this.set((Boolean) value);
+        }
+    }
+
+    @Override
     public void reset()
     {
         this.set(this.defaultValue);

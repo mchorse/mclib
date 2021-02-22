@@ -19,6 +19,16 @@ public abstract class ValueGUI extends Value
     }
 
     @Override
+    public Object getValue()
+    {
+        return null;
+    }
+
+    @Override
+    public void setValue(Object value)
+    {}
+
+    @Override
     public void reset()
     {}
 

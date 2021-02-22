@@ -50,6 +50,21 @@ public class ValueString extends Value
     }
 
     @Override
+    public Object getValue()
+    {
+        return this.get();
+    }
+
+    @Override
+    public void setValue(Object value)
+    {
+        if (value instanceof String)
+        {
+            this.set((String) value);
+        }
+    }
+
+    @Override
     public void reset()
     {
         this.set(this.defaultValue);

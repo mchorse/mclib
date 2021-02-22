@@ -84,6 +84,21 @@ public class ValueInt extends Value
         this.saveLater();
     }
 
+    @Override
+    public Object getValue()
+    {
+        return this.get();
+    }
+
+    @Override
+    public void setValue(Object value)
+    {
+        if (value instanceof Integer)
+        {
+            this.set((Integer) value);
+        }
+    }
+
     public void setColorValue(String value)
     {
         this.set(ColorUtils.parseColor(value));

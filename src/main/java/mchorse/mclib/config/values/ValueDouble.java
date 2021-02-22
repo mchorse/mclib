@@ -75,6 +75,21 @@ public class ValueDouble extends Value
     }
 
     @Override
+    public Object getValue()
+    {
+        return this.get();
+    }
+
+    @Override
+    public void setValue(Object value)
+    {
+        if (value instanceof Double)
+        {
+            this.set((Double) value);
+        }
+    }
+
+    @Override
     public void reset()
     {
         this.set(this.defaultValue);

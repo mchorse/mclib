@@ -54,6 +54,21 @@ public class ValueRL extends Value
         this.saveLater();
     }
 
+    @Override
+    public Object getValue()
+    {
+        return this.get();
+    }
+
+    @Override
+    public void setValue(Object value)
+    {
+        if (value instanceof ResourceLocation)
+        {
+            this.set((ResourceLocation) value);
+        }
+    }
+
     public void set(String value)
     {
         this.set(RLUtils.create(value));

@@ -14,6 +14,10 @@ public interface IConfigValue extends IByteBufSerializable
 {
     public String getId();
 
+    public Object getValue();
+
+    public void setValue(Object value);
+
     public void reset();
 
     public void resetServer();

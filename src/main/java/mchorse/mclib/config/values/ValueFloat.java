@@ -75,6 +75,21 @@ public class ValueFloat extends Value
     }
 
     @Override
+    public Object getValue()
+    {
+        return this.get();
+    }
+
+    @Override
+    public void setValue(Object value)
+    {
+        if (value instanceof Float)
+        {
+            this.set((Float) value);
+        }
+    }
+
+    @Override
     public void reset()
     {
         this.set(this.defaultValue);

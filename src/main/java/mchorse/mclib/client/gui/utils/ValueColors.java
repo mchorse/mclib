@@ -28,6 +28,36 @@ public class ValueColors extends Value
         super(id);
     }
 
+    @Override
+    public Object getValue()
+    {
+        return this.getColors();
+    }
+
+    @Override
+    public void setValue(Object value)
+    {
+        if (value instanceof List)
+        {
+            List list = (List) value;
+
+            if (list.isEmpty())
+            {
+                return;
+            }
+
+            this.colors.clear();
+
+            for (Object object : list)
+            {
+                if (object instanceof Color)
+                {
+                    this.colors.add((Color) object);
+                }
+            }
+        }
+    }
+
     public List<Color> getCurrentColors()
     {
         return this.colors;
