@@ -5,6 +5,9 @@ import mchorse.mclib.config.ConfigCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collections;
+import java.util.List;
+
 public abstract class Value implements IConfigValue
 {
     public final String id;
@@ -18,10 +21,40 @@ public abstract class Value implements IConfigValue
         this.id = id;
     }
 
+    @SideOnly(Side.CLIENT)
+    public String getTitle()
+    {
+        return this.category.config.getValueTitle(this.category.id, this.id);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public String getTitleKey()
+    {
+        return this.category.config.getValueTitleKey(this.category.id, this.id);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public String getTooltip()
+    {
+        return this.category.config.getValueTooltip(this.category.id, this.id);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public String getTooltipKey()
+    {
+        return this.category.config.getValueTooltipKey(this.category.id, this.id);
+    }
+
     @Override
     public String getId()
     {
         return this.id;
+    }
+
+    @Override
+    public List<IConfigValue> getSubValues()
+    {
+        return Collections.emptyList();
     }
 
     public Value invisible()
@@ -71,32 +104,18 @@ public abstract class Value implements IConfigValue
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public String getTitle()
+    @Override
+    public boolean parseFromCommand(String value)
     {
-        return this.category.config.getValueTitle(this.category.id, this.id);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public String getTitleKey()
-    {
-        return this.category.config.getValueTitleKey(this.category.id, this.id);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public String getTooltip()
-    {
-        return this.category.config.getValueTooltip(this.category.id, this.id);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public String getTooltipKey()
-    {
-        return this.category.config.getValueTooltipKey(this.category.id, this.id);
+        return false;
     }
 
     @Override
     public void copy(IConfigValue value)
+    {}
+
+    @Override
+    public void copyServer(IConfigValue value)
     {}
 
     @Override

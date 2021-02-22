@@ -9,6 +9,7 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueDouble;
 import mchorse.mclib.config.values.ValueFloat;
 import mchorse.mclib.config.values.ValueInt;
+import mchorse.mclib.config.values.ValueLong;
 import mchorse.mclib.math.MathBuilder;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
@@ -71,6 +72,23 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         this(mc, callback == null ? (v) -> value.set(v.intValue()) : (v) ->
         {
             value.set(v.intValue());
+            callback.accept(v);
+        });
+        this.limit(value.getMin(), value.getMax(), true);
+        this.setValue(value.get());
+        this.tooltip(IKey.lang(value.getTooltipKey()));
+    }
+
+    public GuiTrackpadElement(Minecraft mc, ValueLong value)
+    {
+        this(mc, value, null);
+    }
+
+    public GuiTrackpadElement(Minecraft mc, ValueLong value, Consumer<Double> callback)
+    {
+        this(mc, callback == null ? (v) -> value.set(v.longValue()) : (v) ->
+        {
+            value.set(v.longValue());
             callback.accept(v);
         });
         this.limit(value.getMin(), value.getMax(), true);
