@@ -1,7 +1,11 @@
 package mchorse.mclib.utils.keyframes;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import io.netty.buffer.ByteBuf;
+import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.network.IByteBufSerializable;
 
 import java.util.ArrayList;
@@ -183,6 +187,39 @@ public class KeyframeChannel implements IByteBufSerializable
         }
 
         this.sort();
+    }
+
+    public void fromJSON(JsonArray array)
+    {
+        this.keyframes.clear();
+
+        for (JsonElement element : array)
+        {
+            if (!element.isJsonObject())
+            {
+                continue;
+            }
+
+            JsonObject object = element.getAsJsonObject();
+            Keyframe keyframe = new Keyframe();
+
+            keyframe.fromJSON(object);
+            this.keyframes.add(keyframe);
+        }
+    }
+
+    public JsonElement toJSON()
+    {
+        JsonArray array = new JsonArray();
+
+        for (Keyframe keyframe : this.keyframes)
+        {
+            JsonObject frame = new JsonObject();
+
+            array.add(keyframe.toJSON());
+        }
+
+        return array;
     }
 
     @Override

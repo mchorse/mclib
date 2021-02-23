@@ -1,5 +1,6 @@
 package mchorse.mclib.utils.keyframes;
 
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.network.IByteBufSerializable;
@@ -160,5 +161,33 @@ public class Keyframe implements IByteBufSerializable, INBTSerializable
         if (this.ly != 0) tag.setFloat("LY", this.ly);
 
         return tag;
+    }
+
+    public void fromJSON(JsonObject object)
+    {
+        this.tick = object.get("tick").getAsLong();
+        this.value = object.get("value").getAsDouble();
+        this.interp = KeyframeInterpolation.valueOf(object.get("interp").getAsString());
+        this.easing = KeyframeEasing.valueOf(object.get("easing").getAsString());
+        this.rx = object.get("rx").getAsFloat();
+        this.ry = object.get("ry").getAsFloat();
+        this.lx = object.get("lx").getAsFloat();
+        this.ly = object.get("ly").getAsFloat();
+    }
+
+    public JsonObject toJSON()
+    {
+        JsonObject frame = new JsonObject();
+
+        frame.addProperty("tick", this.tick);
+        frame.addProperty("value", this.value);
+        frame.addProperty("interp", this.interp.toString());
+        frame.addProperty("easing", this.easing.toString());
+        frame.addProperty("rx", this.rx);
+        frame.addProperty("ry", this.ry);
+        frame.addProperty("lx", this.lx);
+        frame.addProperty("ly", this.ly);
+
+        return frame;
     }
 }

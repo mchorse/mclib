@@ -133,18 +133,6 @@ public class ConfigCategory implements IByteBufSerializable
         }
     }
 
-    public JsonObject toJSON()
-    {
-        JsonObject object = new JsonObject();
-
-        for (IConfigValue value : this.values.values())
-        {
-            object.add(value.getId(), value.toJSON());
-        }
-
-        return object;
-    }
-
     public void fromJSON(JsonObject object)
     {
         for (Map.Entry<String, JsonElement> entry : object.entrySet())
@@ -157,6 +145,18 @@ public class ConfigCategory implements IByteBufSerializable
                 value.fromJSON(entry.getValue());
             }
         }
+    }
+
+    public JsonObject toJSON()
+    {
+        JsonObject object = new JsonObject();
+
+        for (IConfigValue value : this.values.values())
+        {
+            object.add(value.getId(), value.toJSON());
+        }
+
+        return object;
     }
 
     @Override
