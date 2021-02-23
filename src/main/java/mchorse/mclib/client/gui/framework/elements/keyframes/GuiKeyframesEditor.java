@@ -275,9 +275,9 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
     }
 
     /**
-     * Pastec copied keyframes to clipboard
+     * Paste copied keyframes to clipboard
      */
-    private void pasteKeyframes(Map<String, List<Keyframe>> keyframes, long offset, int mouseY)
+    protected void pasteKeyframes(Map<String, List<Keyframe>> keyframes, long offset, int mouseY)
     {
         List<GuiSheet> sheets = this.graph.getSheets();
 

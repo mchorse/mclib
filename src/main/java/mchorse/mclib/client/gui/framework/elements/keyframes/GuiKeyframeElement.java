@@ -202,6 +202,7 @@ public abstract class GuiKeyframeElement extends GuiElement
                 }
 
                 this.dragging = true;
+                this.pickedKeyframe(this.getSelectedCount());
             }
             else if (context.mouseButton == 2)
             {
@@ -211,6 +212,9 @@ public abstract class GuiKeyframeElement extends GuiElement
 
         return false;
     }
+
+    protected void pickedKeyframe(int amount)
+    {}
 
     protected abstract void duplicateKeyframe(GuiContext context, int mouseX, int mouseY);
 
@@ -388,8 +392,12 @@ public abstract class GuiKeyframeElement extends GuiElement
         else if (this.moving && !this.grabbing)
         {
             this.setKeyframe(this.moving(context, mouseX, mouseY));
+            this.keepMoving();
         }
     }
+
+    protected void keepMoving()
+    {}
 
     protected void scrolling(int mouseX, int mouseY)
     {
