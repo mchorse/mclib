@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.McLib;
 import mchorse.mclib.config.values.IConfigValue;
+import mchorse.mclib.config.values.IServerValue;
 import mchorse.mclib.config.values.Value;
 import mchorse.mclib.network.IByteBufSerializable;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -126,9 +127,9 @@ public class ConfigCategory implements IByteBufSerializable
         {
             IConfigValue value = this.values.get(entry.getKey());
 
-            if (value != null && value.isSyncable())
+            if (value != null && value.isSyncable() && value instanceof IServerValue)
             {
-                value.copyServer(entry.getValue());
+                ((IServerValue) value).copyServer(entry.getValue());
             }
         }
     }
@@ -190,7 +191,10 @@ public class ConfigCategory implements IByteBufSerializable
     {
         for (IConfigValue value : this.values.values())
         {
-            value.resetServer();
+            if (value instanceof IServerValue)
+            {
+                ((IServerValue) value).resetServer();
+            }
         }
     }
 }

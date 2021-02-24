@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.config.values.IConfigValue;
+import mchorse.mclib.config.values.IServerValue;
 import mchorse.mclib.config.values.Value;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
-public class ValueColors extends Value
+public class ValueColors extends Value implements IServerValue
 {
     private List<Color> colors = new ArrayList<Color>();
     private List<Color> serverColors;

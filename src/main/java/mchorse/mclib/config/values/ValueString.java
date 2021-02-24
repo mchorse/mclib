@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueString extends Value
+public class ValueString extends Value implements IServerValue
 {
     private String value = "";
     private String defaultValue = "";

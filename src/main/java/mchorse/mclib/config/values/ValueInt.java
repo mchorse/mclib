@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ValueInt extends Value
+public class ValueInt extends Value implements IServerValue
 {
     private int value;
     private int defaultValue;

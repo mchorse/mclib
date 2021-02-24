@@ -105,20 +105,6 @@ public abstract class Value implements IConfigValue
     }
 
     @Override
-    public boolean parseFromCommand(String value)
-    {
-        return false;
-    }
-
-    @Override
-    public void copy(IConfigValue value)
-    {}
-
-    @Override
-    public void copyServer(IConfigValue value)
-    {}
-
-    @Override
     public void fromBytes(ByteBuf buffer)
     {
         this.visible = buffer.readBoolean();

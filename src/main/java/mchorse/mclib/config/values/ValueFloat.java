@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueFloat extends Value
+public class ValueFloat extends Value implements IServerValue
 {
     private float value;
     private float defaultValue;

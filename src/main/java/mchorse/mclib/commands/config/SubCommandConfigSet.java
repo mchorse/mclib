@@ -4,6 +4,7 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.commands.SubCommandBase;
 import mchorse.mclib.config.ConfigManager;
 import mchorse.mclib.config.values.IConfigValue;
+import mchorse.mclib.config.values.IServerValue;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -39,11 +40,11 @@ public class SubCommandConfigSet extends SubCommandConfigBase
     {
         IConfigValue value = SubCommandConfig.get(args[0]);
 
-        if (!value.isClientSide())
+        if (!value.isClientSide() && value instanceof IServerValue)
         {
             String command = String.join(" ", SubCommandBase.dropFirstArguments(args, 1));
 
-            if (value.parseFromCommand(command))
+            if (((IServerValue) value).parseFromCommand(command))
             {
                 if (value.isSyncable())
                 {

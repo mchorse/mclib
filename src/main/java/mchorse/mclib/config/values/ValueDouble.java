@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueDouble extends Value
+public class ValueDouble extends Value implements IServerValue
 {
     private double value;
     private double defaultValue;

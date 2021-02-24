@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ValueLong extends Value
+public class ValueLong extends Value implements IServerValue
 {
     private long value;
     private long defaultValue;
