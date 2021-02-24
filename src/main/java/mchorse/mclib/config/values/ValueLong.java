@@ -176,10 +176,10 @@ public class ValueLong extends Value implements IServerValue
     {
         super.fromBytes(buffer);
 
-        this.value = buffer.readInt();
-        this.defaultValue = buffer.readInt();
-        this.min = buffer.readInt();
-        this.max = buffer.readInt();
+        this.value = buffer.readLong();
+        this.defaultValue = buffer.readLong();
+        this.min = buffer.readLong();
+        this.max = buffer.readLong();
     }
 
     @Override
