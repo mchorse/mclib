@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueRL extends Value implements IServerValue
+public class ValueRL extends Value implements IServerValue, IConfigGuiProvider
 {
     @SideOnly(Side.CLIENT)
     public static GuiTexturePicker picker;

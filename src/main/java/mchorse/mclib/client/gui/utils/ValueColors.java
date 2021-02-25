@@ -82,13 +82,6 @@ public class ValueColors extends Value implements IServerValue
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
-    {
-        return null;
-    }
-
-    @Override
     public void fromJSON(JsonElement element)
     {
         if (!element.isJsonArray())

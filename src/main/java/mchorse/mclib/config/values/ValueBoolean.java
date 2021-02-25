@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueBoolean extends Value implements IServerValue
+public class ValueBoolean extends Value implements IServerValue, IConfigGuiProvider
 {
     private boolean value;
     private boolean defaultValue;

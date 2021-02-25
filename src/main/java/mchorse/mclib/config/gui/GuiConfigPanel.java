@@ -18,6 +18,7 @@ import mchorse.mclib.client.gui.utils.ScrollDirection;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigCategory;
+import mchorse.mclib.config.values.IConfigGuiProvider;
 import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.network.mclib.Dispatcher;
 import mchorse.mclib.network.mclib.common.PacketRequestConfigs;
@@ -181,7 +182,12 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
                     continue;
                 }
 
-                for (GuiElement element : value.getFields(this.mc, this))
+                if (!(value instanceof IConfigGuiProvider))
+                {
+                    continue;
+                }
+
+                for (GuiElement element : ((IConfigGuiProvider) value).getFields(this.mc, this))
                 {
                     this.options.add(element);
 

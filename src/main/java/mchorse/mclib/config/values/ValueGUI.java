@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public abstract class ValueGUI extends Value
+public abstract class ValueGUI extends Value implements IConfigGuiProvider
 {
     public ValueGUI(String id)
     {
@@ -31,10 +31,6 @@ public abstract class ValueGUI extends Value
     @Override
     public void reset()
     {}
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public abstract List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui);
 
     @Override
     public void fromJSON(JsonElement element)

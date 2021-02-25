@@ -97,7 +97,6 @@ public class McLib
         userIntefaceScale = builder.getInt("user_interface_scale", 2, 0, 4);
 
         favoriteColors = new ValueColors("favorite_colors");
-        favoriteColors.invisible();
         builder.register(favoriteColors);
 
         builder.getCategory().markClientSide();
