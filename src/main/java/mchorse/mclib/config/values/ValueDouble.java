@@ -21,8 +21,8 @@ public class ValueDouble extends Value implements IServerValue, IConfigGuiProvid
 {
     private double value;
     private double defaultValue;
-    private double min;
-    private double max;
+    private double min = Double.NEGATIVE_INFINITY;
+    private double max = Double.POSITIVE_INFINITY;
 
     private Double serverValue;
 
@@ -36,8 +36,6 @@ public class ValueDouble extends Value implements IServerValue, IConfigGuiProvid
         super(id);
 
         this.defaultValue = defaultValue;
-        this.min = Double.NEGATIVE_INFINITY;
-        this.max = Double.POSITIVE_INFINITY;
 
         this.reset();
     }

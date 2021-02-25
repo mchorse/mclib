@@ -21,8 +21,8 @@ public class ValueFloat extends Value implements IServerValue, IConfigGuiProvide
 {
     private float value;
     private float defaultValue;
-    private float min;
-    private float max;
+    private float min = Float.NEGATIVE_INFINITY;
+    private float max = Float.POSITIVE_INFINITY;
 
     private Float serverValue;
 
@@ -36,8 +36,6 @@ public class ValueFloat extends Value implements IServerValue, IConfigGuiProvide
         super(id);
 
         this.defaultValue = defaultValue;
-        this.min = Float.NEGATIVE_INFINITY;
-        this.max = Float.POSITIVE_INFINITY;
 
         this.reset();
     }

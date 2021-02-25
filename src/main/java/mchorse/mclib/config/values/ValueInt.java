@@ -29,8 +29,8 @@ public class ValueInt extends Value implements IServerValue, IConfigGuiProvider
 {
     private int value;
     private int defaultValue;
-    private int min;
-    private int max;
+    private int min = Integer.MIN_VALUE;
+    private int max = Integer.MAX_VALUE;
     private Subtype subtype = Subtype.INTEGER;
     private List<IKey> labels;
 
@@ -46,8 +46,6 @@ public class ValueInt extends Value implements IServerValue, IConfigGuiProvider
         super(id);
 
         this.defaultValue = defaultValue;
-        this.min = Integer.MIN_VALUE;
-        this.max = Integer.MAX_VALUE;
 
         this.reset();
     }

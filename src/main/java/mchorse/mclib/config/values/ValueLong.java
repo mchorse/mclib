@@ -28,8 +28,8 @@ public class ValueLong extends Value implements IServerValue, IConfigGuiProvider
 {
     private long value;
     private long defaultValue;
-    private long min;
-    private long max;
+    private long min = Long.MIN_VALUE;
+    private long max = Long.MAX_VALUE;
 
     private Long serverValue;
 
@@ -43,8 +43,6 @@ public class ValueLong extends Value implements IServerValue, IConfigGuiProvider
         super(id);
 
         this.defaultValue = defaultValue;
-        this.min = Integer.MIN_VALUE;
-        this.max = Integer.MAX_VALUE;
 
         this.reset();
     }
