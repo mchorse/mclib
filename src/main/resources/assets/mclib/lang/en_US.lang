@@ -11,6 +11,9 @@ mclib.gui.no_data=No data available...
 mclib.gui.open_folder=Open folder
 mclib.gui.pick_texture=Pick texture
 
+mclib.gui.context.multi_skin.copy=Copy texture location
+mclib.gui.context.multi_skin.paste=Paste copied texture location
+
 # Don't remove space on the end!
 mclib.gui.dashboard.category=Dashboard
 mclib.gui.dashboard.open_panel=Open 

@@ -4,6 +4,7 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
+import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.input.multiskin.GuiMultiSkinEditor;
 import mchorse.mclib.client.gui.framework.elements.list.GuiFolderEntryListElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiListElement;
@@ -25,6 +26,9 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
@@ -75,6 +79,20 @@ public class GuiTexturePicker extends GuiElement
 
         this.right = new GuiElement(mc);
         this.text = new GuiTextElement(mc, 1000, (str) -> this.selectCurrent(str.isEmpty() ? null : RLUtils.create(str)));
+        this.text.context(() ->
+        {
+            GuiSimpleContextMenu menu = new GuiSimpleContextMenu(mc);
+            ResourceLocation location = this.parseRL();
+
+            menu.action(Icons.COPY, IKey.lang("mclib.gui.context.multi_skin.copy"), this::copyRL);
+
+            if (location != null)
+            {
+                menu.action(Icons.PASTE, IKey.lang("mclib.gui.context.multi_skin.paste"), () -> this.pasteRL(location));
+            }
+
+            return menu;
+        });
         this.close = new GuiButtonElement(mc, IKey.str("X"), (b) -> this.close());
         this.folder = new GuiButtonElement(mc, IKey.lang("mclib.gui.open_folder"), (b) -> this.openFolder());
         this.picker = new GuiFolderEntryListElement(mc, (entry) ->
@@ -96,7 +114,7 @@ public class GuiTexturePicker extends GuiElement
 
         this.multi = new GuiButtonElement(mc, IKey.lang("mclib.gui.multi_skin"), (b) -> this.toggleMultiSkin());
         this.multiList = new GuiFRLListElement(mc, (list) -> this.setFRL(list.get(0)));
-        this.multiList.sorting();
+
         this.editor = new GuiMultiSkinEditor(mc, this);
         this.editor.setVisible(false);
 
@@ -128,6 +146,45 @@ public class GuiTexturePicker extends GuiElement
 
         this.fill(null);
         this.markContainer();
+    }
+
+    private ResourceLocation parseRL()
+    {
+        ResourceLocation location = null;
+
+        try
+        {
+            NBTTagCompound compound = JsonToNBT.getTagFromJson(GuiScreen.getClipboardString());
+
+            location = RLUtils.create(compound.getTag("RL"));
+        }
+        catch (Exception e)
+        {}
+
+        return location;
+    }
+
+    private void copyRL()
+    {
+        NBTBase location = RLUtils.writeNbt(this.multiRL != null ? this.multiRL : this.current);
+
+        if (location == null)
+        {
+            GuiScreen.setClipboardString("");
+        }
+        else
+        {
+            NBTTagCompound tag = new NBTTagCompound();
+
+            tag.setTag("RL", location);
+
+            GuiScreen.setClipboardString(tag.toString());
+        }
+    }
+
+    private void pasteRL(ResourceLocation location)
+    {
+        this.setMultiSkin(location, true);
     }
 
     public void close()
