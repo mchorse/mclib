@@ -11,7 +11,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -56,9 +55,9 @@ public class Value implements IByteBufSerializable
         this.config = config;
     }
 
-    public Collection<Value> getSubValues()
+    public List<Value> getSubValues()
     {
-        return this.children.values();
+        return new ArrayList<Value>(this.children.values());
     }
 
     public void addSubValue(Value value)
@@ -95,6 +94,13 @@ public class Value implements IByteBufSerializable
     public Value getParent()
     {
         return this.parent;
+    }
+
+    public Value setParent(Value parent)
+    {
+        this.parent = parent;
+
+        return this;
     }
 
     public String getPath()
