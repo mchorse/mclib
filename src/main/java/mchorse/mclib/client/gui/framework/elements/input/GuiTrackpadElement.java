@@ -76,7 +76,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         });
         this.limit(value.getMin(), value.getMax(), true);
         this.setValue(value.get());
-        this.tooltip(IKey.lang(value.getTooltipKey()));
+        this.tooltip(IKey.lang(value.getCommentKey()));
     }
 
     public GuiTrackpadElement(Minecraft mc, ValueLong value)
@@ -93,7 +93,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         });
         this.limit(value.getMin(), value.getMax(), true);
         this.setValue(value.get());
-        this.tooltip(IKey.lang(value.getTooltipKey()));
+        this.tooltip(IKey.lang(value.getCommentKey()));
     }
 
     public GuiTrackpadElement(Minecraft mc, ValueFloat value)
@@ -110,7 +110,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         });
         this.limit(value.getMin(), value.getMax());
         this.setValue(value.get());
-        this.tooltip(IKey.lang(value.getTooltipKey()));
+        this.tooltip(IKey.lang(value.getCommentKey()));
     }
 
     public GuiTrackpadElement(Minecraft mc, ValueDouble value)
@@ -127,7 +127,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         });
         this.limit((float) value.getMin(), (float) value.getMax());
         this.setValue((float) value.get());
-        this.tooltip(IKey.lang(value.getTooltipKey()));
+        this.tooltip(IKey.lang(value.getCommentKey()));
     }
 
     public GuiTrackpadElement(Minecraft mc, Consumer<Double> callback)

@@ -15,46 +15,36 @@ import java.util.List;
 
 public class ConfigBuilder
 {
-    public final String id;
-    public final File file;
-
-    private List<ConfigCategory> categories = new ArrayList<ConfigCategory>();
-    private ConfigCategory category;
+    private Config config;
+    private Value category;
 
     public ConfigBuilder(String id, File file)
     {
-        this.id = id;
-        this.file = file;
+        this.config = new Config(id, file);
     }
 
-    public ConfigCategory getCategory()
+    public Config getConfig()
+    {
+        return this.config;
+    }
+
+    public Value getCategory()
     {
         return this.category;
     }
 
-    public Config build()
-    {
-        Config config = new Config(this.id, this.file);
-
-        for (ConfigCategory category : this.categories)
-        {
-            category.config = config;
-            config.categories.put(category.id, category);
-        }
-
-        return config;
-    }
-
     public ConfigBuilder category(String id)
     {
-        this.categories.add(this.category = new ConfigCategory(id));
+        this.config.values.put(id, this.category = new Value(id));
+        this.category.setConfig(this.config);
 
         return this;
     }
 
     public ConfigBuilder register(Value value)
     {
-        this.category.register(value.getId(), value);
+        this.category.addSubValue(value);
+        value.setConfig(this.config);
 
         return this;
     }

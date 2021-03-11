@@ -3,12 +3,11 @@ package mchorse.mclib.config;
 import com.google.common.base.Predicates;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.config.json.ConfigParser;
-import mchorse.mclib.config.values.IConfigValue;
+import mchorse.mclib.config.values.Value;
 import mchorse.mclib.network.IByteBufSerializable;
 import mchorse.mclib.network.mclib.Dispatcher;
 import mchorse.mclib.network.mclib.common.PacketConfig;
 import mchorse.mclib.utils.JsonUtils;
-import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,7 +16,6 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +27,7 @@ public class Config implements IByteBufSerializable
     public final String id;
     public final File file;
 
-    public final Map<String, ConfigCategory> categories = new LinkedHashMap<String, ConfigCategory>();
+    public final Map<String, Value> values = new LinkedHashMap<String, Value>();
 
     private boolean serverSide;
 
@@ -59,9 +57,9 @@ public class Config implements IByteBufSerializable
 
     public boolean hasSyncable()
     {
-        for (ConfigCategory category : this.categories.values())
+        for (Value value : this.values.values())
         {
-            if (category.hasSyncable())
+            if (value.hasSyncable())
             {
                 return true;
             }
@@ -73,75 +71,45 @@ public class Config implements IByteBufSerializable
     /* Translation string related methods */
 
     @SideOnly(Side.CLIENT)
-    public String getTitle()
-    {
-        return I18n.format(this.getTitleKey());
-    }
-
-    @SideOnly(Side.CLIENT)
     public String getTitleKey()
     {
         return this.id + ".config.title";
     }
 
     @SideOnly(Side.CLIENT)
-    public String getCategoryTitle(String category)
+    public String getCategoryTitleKey(Value value)
     {
-        return I18n.format(this.getCategoryTitleKey(category));
+        return this.id + ".config." + value.getPath() + ".title";
     }
 
     @SideOnly(Side.CLIENT)
-    public String getCategoryTitleKey(String category)
+    public String getCategoryTooltipKey(Value value)
     {
-        return this.id + ".config." + category + ".title";
+        return this.id + ".config." + value.getPath() + ".tooltip";
     }
 
     @SideOnly(Side.CLIENT)
-    public String getCategoryTooltip(String category)
+    public String getValueLabelKey(Value value)
     {
-        return I18n.format(this.getCategoryTooltipKey(category));
+        return this.id + ".config." + value.getPath();
     }
 
     @SideOnly(Side.CLIENT)
-    public String getCategoryTooltipKey(String category)
+    public String getValueCommentKey(Value value)
     {
-        return this.id + ".config." + category + ".tooltip";
-    }
-
-    @SideOnly(Side.CLIENT)
-    public String getValueTitle(String category, String value)
-    {
-        return I18n.format(this.getValueTitleKey(category, value));
-    }
-
-    @SideOnly(Side.CLIENT)
-    public String getValueTitleKey(String category, String value)
-    {
-        return this.id + ".config." + category + "." + value;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public String getValueTooltip(String category, String value)
-    {
-        return I18n.format(this.getValueTooltipKey(category, value));
-    }
-
-    @SideOnly(Side.CLIENT)
-    public String getValueTooltipKey(String category, String value)
-    {
-        return this.id + ".config.comments." + category + "." + value;
+        return this.id + ".config.comments." + value.getPath();
     }
 
     /**
      * Get a value from category by their ids
      */
-    public IConfigValue get(String category, String value)
+    public Value get(String category, String value)
     {
-        ConfigCategory cat = this.categories.get(category);
+        Value cat = this.values.get(category);
 
         if (cat != null)
         {
-            return cat.values.get(value);
+            return cat.getSubValue(value);
         }
 
         return null;
@@ -170,9 +138,9 @@ public class Config implements IByteBufSerializable
     {
         try
         {
-            if (this.file != null)
+            if (file != null)
             {
-                FileUtils.writeStringToFile(this.file, this.toJSON(), Charset.defaultCharset());
+                FileUtils.writeStringToFile(file, this.toJSON(), Charset.defaultCharset());
             }
             else
             {
@@ -193,17 +161,17 @@ public class Config implements IByteBufSerializable
      */
     public void copy(Config config)
     {
-        for (Map.Entry<String, ConfigCategory> entry : config.categories.entrySet())
+        for (Map.Entry<String, Value> entry : config.values.entrySet())
         {
-            this.categories.get(entry.getKey()).copy(entry.getValue());
+            this.values.get(entry.getKey()).copy(entry.getValue());
         }
     }
 
     public void copyServer(Config config)
     {
-        for (Map.Entry<String, ConfigCategory> entry : config.categories.entrySet())
+        for (Map.Entry<String, Value> entry : config.values.entrySet())
         {
-            this.categories.get(entry.getKey()).copyServer(entry.getValue());
+            this.values.get(entry.getKey()).copyServer(entry.getValue());
         }
     }
 
@@ -217,34 +185,34 @@ public class Config implements IByteBufSerializable
 
     public Config filterSyncable()
     {
-        return this.filter(IConfigValue::isSyncable);
+        return this.filter(Value::isSyncable);
     }
 
     public Config filterServerSide()
     {
-        return this.filter(Predicates.not(IConfigValue::isClientSide));
+        return this.filter(Predicates.not(Value::isClientSide));
     }
 
-    public Config filter(Predicate<IConfigValue> predicate)
+    public Config filter(Predicate<Value> predicate)
     {
         Config config = new Config(this.id);
 
-        for (ConfigCategory category : this.categories.values())
+        for (Value category : this.values.values())
         {
-            List<IConfigValue> values = new ArrayList<IConfigValue>(category.values.values().stream().filter(predicate).collect(Collectors.toList()));
+            List<Value> values = category.getSubValues().stream().filter(predicate).collect(Collectors.toList());
 
             if (!values.isEmpty())
             {
-                ConfigCategory newCategory = new ConfigCategory(category.id);
+                Value newCategory = new Value(category.id);
 
-                newCategory.config = config;
+                newCategory.setConfig(config);
 
-                for (IConfigValue value : values)
+                for (Value value : values)
                 {
-                    newCategory.values.put(value.getId(), value);
+                    newCategory.addSubValue(value);
                 }
 
-                config.categories.put(newCategory.id, newCategory);
+                config.values.put(newCategory.id, newCategory);
             }
         }
 
@@ -254,25 +222,25 @@ public class Config implements IByteBufSerializable
     @Override
     public void fromBytes(ByteBuf buffer)
     {
-        this.categories.clear();
+        this.values.clear();
 
         for (int i = 0, c = buffer.readInt(); i < c; i++)
         {
             String key = ByteBufUtils.readUTF8String(buffer);
-            ConfigCategory category = new ConfigCategory(key);
+            Value category = new Value(key);
 
-            category.config = this;
+            category.setConfig(this);
             category.fromBytes(buffer);
-            this.categories.put(key, category);
+            this.values.put(key, category);
         }
     }
 
     @Override
     public void toBytes(ByteBuf buffer)
     {
-        buffer.writeInt(this.categories.size());
+        buffer.writeInt(this.values.size());
 
-        for (Map.Entry<String, ConfigCategory> entry : this.categories.entrySet())
+        for (Map.Entry<String, Value> entry : this.values.entrySet())
         {
             ByteBufUtils.writeUTF8String(buffer, entry.getKey());
 
@@ -282,7 +250,7 @@ public class Config implements IByteBufSerializable
 
     public void resetServerValues()
     {
-        for (ConfigCategory category : this.categories.values())
+        for (Value category : this.values.values())
         {
             category.resetServerValues();
         }

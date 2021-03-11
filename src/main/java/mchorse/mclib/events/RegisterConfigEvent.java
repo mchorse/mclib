@@ -24,11 +24,19 @@ public class RegisterConfigEvent extends Event
 
     public ConfigBuilder createBuilder(String id)
     {
-        return this.createBuilder(id, id + "/config.json");
+        ConfigBuilder builder = this.createBuilder(id, id + "/config.json");
+
+        this.modules.add(builder.getConfig());
+
+        return builder;
     }
 
     public ConfigBuilder createBuilder(String id, String path)
     {
-        return new ConfigBuilder(id, new File(this.configs, path));
+        ConfigBuilder builder = new ConfigBuilder(id, new File(this.configs, path));
+
+        this.modules.add(builder.getConfig());
+
+        return builder;
     }
 }

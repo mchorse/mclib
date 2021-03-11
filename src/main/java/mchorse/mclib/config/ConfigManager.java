@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.utils.ValueColors;
 import mchorse.mclib.config.json.ConfigParser;
-import mchorse.mclib.config.values.IConfigValue;
+import mchorse.mclib.config.values.Value;
 import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueDouble;
 import mchorse.mclib.config.values.ValueFloat;
@@ -14,7 +14,6 @@ import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.config.values.ValueRL;
 import mchorse.mclib.config.values.ValueString;
 import mchorse.mclib.events.RegisterConfigEvent;
-import mchorse.mclib.network.IByteBufSerializable;
 import mchorse.mclib.network.mclib.Dispatcher;
 import mchorse.mclib.network.mclib.common.PacketConfig;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,7 +27,7 @@ import java.util.Map;
 
 public class ConfigManager
 {
-    public static final BiMap<String, Class<? extends IConfigValue>> TYPES = HashBiMap.<String, Class<? extends  IConfigValue>>create();
+    public static final BiMap<String, Class<? extends Value>> TYPES = HashBiMap.<String, Class<? extends  Value>>create();
 
     public final Map<String, Config> modules = new HashMap<String, Config>();
 
@@ -67,7 +66,7 @@ public class ConfigManager
     /**
      * Config value to bytes
      */
-    public static IConfigValue fromBytes(ByteBuf buffer)
+    public static Value fromBytes(ByteBuf buffer)
     {
         String key = ByteBufUtils.readUTF8String(buffer);
         String type = ByteBufUtils.readUTF8String(buffer);
@@ -79,8 +78,8 @@ public class ConfigManager
 
         try
         {
-            Class<? extends IConfigValue> clazz = TYPES.get(type);
-            IConfigValue value = clazz.getConstructor(String.class).newInstance(key);
+            Class<? extends Value> clazz = TYPES.get(type);
+            Value value = clazz.getConstructor(String.class).newInstance(key);
 
             value.fromBytes(buffer);
 
@@ -95,11 +94,11 @@ public class ConfigManager
     /**
      * Config value from bytes
      */
-    public static void toBytes(ByteBuf buffer, IConfigValue value)
+    public static void toBytes(ByteBuf buffer, Value value)
     {
         String type = TYPES.inverse().get(value.getClass());
 
-        ByteBufUtils.writeUTF8String(buffer, value.getId());
+        ByteBufUtils.writeUTF8String(buffer, value.id);
         ByteBufUtils.writeUTF8String(buffer, type == null ? "" : type);
 
         if (type != null)
@@ -114,7 +113,7 @@ public class ConfigManager
 
         McLib.EVENT_BUS.post(event);
 
-        Config opAccess = event.opAccess.build().serverSide();
+        Config opAccess = event.opAccess.getConfig().serverSide();
 
         this.modules.put(opAccess.id, opAccess);
 

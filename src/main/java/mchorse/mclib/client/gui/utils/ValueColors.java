@@ -4,16 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.netty.buffer.ByteBuf;
-import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.config.gui.GuiConfigPanel;
-import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.config.values.IServerValue;
 import mchorse.mclib.config.values.Value;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +76,7 @@ public class ValueColors extends Value implements IServerValue
     }
 
     @Override
-    public void fromJSON(JsonElement element)
+    public void valueFromJSON(JsonElement element)
     {
         if (!element.isJsonArray())
         {
@@ -101,7 +95,7 @@ public class ValueColors extends Value implements IServerValue
     }
 
     @Override
-    public JsonElement toJSON()
+    public JsonElement valueToJSON()
     {
         JsonArray array = new JsonArray();
 
@@ -141,7 +135,7 @@ public class ValueColors extends Value implements IServerValue
     }
 
     @Override
-    public void copy(IConfigValue value)
+    public void copy(Value value)
     {
         if (value instanceof ValueColors)
         {
@@ -151,7 +145,7 @@ public class ValueColors extends Value implements IServerValue
     }
 
     @Override
-    public void copyServer(IConfigValue value)
+    public void copyServer(Value value)
     {
         if (value instanceof ValueColors)
         {

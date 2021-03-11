@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import io.netty.buffer.ByteBuf;
-import mchorse.mclib.config.values.IConfigValue;
 import mchorse.mclib.network.IByteBufSerializable;
 
 import java.util.ArrayList;

@@ -3,13 +3,13 @@ package mchorse.mclib.commands.config;
 import mchorse.mclib.McLib;
 import mchorse.mclib.commands.SubCommandBase;
 import mchorse.mclib.commands.utils.L10n;
-import mchorse.mclib.config.values.IConfigValue;
+import mchorse.mclib.config.values.Value;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 
 public class SubCommandConfig extends SubCommandBase
 {
-    public static IConfigValue get(String id) throws CommandException
+    public static Value get(String id) throws CommandException
     {
         try
         {
@@ -20,7 +20,7 @@ public class SubCommandConfig extends SubCommandBase
                 throw new Exception("Identifier should have exactly 3 strings separated by a period!");
             }
 
-            return McLib.proxy.configs.modules.get(splits[0]).categories.get(splits[1]).values.get(splits[2]);
+            return McLib.proxy.configs.modules.get(splits[0]).values.get(splits[1]).getSubValue(splits[2]);
         }
         catch (Exception e)
         {

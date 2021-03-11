@@ -4,8 +4,7 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.commands.McCommandBase;
 import mchorse.mclib.commands.utils.L10n;
 import mchorse.mclib.config.Config;
-import mchorse.mclib.config.ConfigCategory;
-import mchorse.mclib.config.values.IConfigValue;
+import mchorse.mclib.config.values.Value;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -37,16 +36,16 @@ public abstract class SubCommandConfigBase extends McCommandBase
 
             for (Config config : McLib.proxy.configs.modules.values())
             {
-                for (ConfigCategory category : config.categories.values())
+                for (Value category : config.values.values())
                 {
-                    for (IConfigValue value : category.values.values())
+                    for (Value value : category.getSubValues())
                     {
                         if (value.isClientSide())
                         {
                             continue;
                         }
 
-                        ids.add(config.id + "." + category.id + "." + value.getId());
+                        ids.add(config.id + "." + category.id + "." + value.id);
                     }
                 }
             }

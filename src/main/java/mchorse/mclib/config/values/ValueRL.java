@@ -92,7 +92,7 @@ public class ValueRL extends Value implements IServerValue, IConfigGuiProvider
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
         GuiElement element = new GuiElement(mc);
-        GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
+        GuiLabel label = Elements.label(IKey.lang(this.getLabelKey()), 0).anchor(0, 0.5F);
         GuiButtonElement pick = new GuiButtonElement(mc, IKey.lang("mclib.gui.pick_texture"),  (button) ->
         {
             if (picker == null)
@@ -118,17 +118,17 @@ public class ValueRL extends Value implements IServerValue, IConfigGuiProvider
         element.flex().row(0).preferred(0).height(20);
         element.add(label, pick);
 
-        return Arrays.asList(element.tooltip(IKey.lang(this.getTooltipKey())));
+        return Arrays.asList(element.tooltip(IKey.lang(this.getCommentKey())));
     }
 
     @Override
-    public void fromJSON(JsonElement element)
+    public void valueFromJSON(JsonElement element)
     {
         this.value = RLUtils.create(element);
     }
 
     @Override
-    public JsonElement toJSON()
+    public JsonElement valueToJSON()
     {
         return RLUtils.writeJson(this.value);
     }
@@ -142,7 +142,7 @@ public class ValueRL extends Value implements IServerValue, IConfigGuiProvider
     }
 
     @Override
-    public void copy(IConfigValue value)
+    public void copy(Value value)
     {
         if (value instanceof ValueRL)
         {
@@ -151,7 +151,7 @@ public class ValueRL extends Value implements IServerValue, IConfigGuiProvider
     }
 
     @Override
-    public void copyServer(IConfigValue value)
+    public void copyServer(Value value)
     {
         if (value instanceof ValueRL)
         {

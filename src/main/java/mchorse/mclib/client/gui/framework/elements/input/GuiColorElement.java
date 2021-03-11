@@ -1,7 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements.input;
 
 import mchorse.mclib.McLib;
-import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.color.GuiColorPicker;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
@@ -11,7 +10,6 @@ import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import org.lwjgl.opengl.GL11;
 
 import java.util.function.Consumer;
 
@@ -40,7 +38,7 @@ public class GuiColorElement extends GuiElement
             value.set(integer);
             callback.accept(integer);
         });
-        this.tooltip(IKey.lang(value.getTooltipKey()));
+        this.tooltip(IKey.lang(value.getCommentKey()));
 
         if (value.getSubtype() == ValueInt.Subtype.COLOR_ALPHA)
         {

@@ -81,7 +81,7 @@ public class ValueString extends Value implements IServerValue, IConfigGuiProvid
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
         GuiElement element = new GuiElement(mc);
-        GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
+        GuiLabel label = Elements.label(IKey.lang(this.getConfig().getValueLabelKey(this)), 0).anchor(0, 0.5F);
         GuiTextElement textbox = new GuiTextElement(mc, this);
 
         textbox.flex().w(90);
@@ -89,17 +89,17 @@ public class ValueString extends Value implements IServerValue, IConfigGuiProvid
         element.flex().row(0).preferred(0).height(20);
         element.add(label, textbox.removeTooltip());
 
-        return Arrays.asList(element.tooltip(IKey.lang(this.getTooltipKey())));
+        return Arrays.asList(element.tooltip(IKey.lang(this.getConfig().getValueCommentKey(this))));
     }
 
     @Override
-    public void fromJSON(JsonElement element)
+    public void valueFromJSON(JsonElement element)
     {
         this.set(element.getAsString());
     }
 
     @Override
-    public JsonElement toJSON()
+    public JsonElement valueToJSON()
     {
         return new JsonPrimitive(this.value);
     }
@@ -113,7 +113,7 @@ public class ValueString extends Value implements IServerValue, IConfigGuiProvid
     }
 
     @Override
-    public void copy(IConfigValue value)
+    public void copy(Value value)
     {
         if (value instanceof ValueString)
         {
@@ -122,7 +122,7 @@ public class ValueString extends Value implements IServerValue, IConfigGuiProvid
     }
 
     @Override
-    public void copyServer(IConfigValue value)
+    public void copyServer(Value value)
     {
         if (value instanceof ValueString)
         {

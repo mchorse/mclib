@@ -11,15 +11,13 @@ import mchorse.mclib.client.gui.framework.elements.utils.ITextColoring;
 import mchorse.mclib.client.gui.mclib.GuiAbstractDashboard;
 import mchorse.mclib.client.gui.mclib.GuiDashboardPanel;
 import mchorse.mclib.client.gui.utils.Elements;
-import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.Label;
 import mchorse.mclib.client.gui.utils.ScrollDirection;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.Config;
-import mchorse.mclib.config.ConfigCategory;
 import mchorse.mclib.config.values.IConfigGuiProvider;
-import mchorse.mclib.config.values.IConfigValue;
+import mchorse.mclib.config.values.Value;
 import mchorse.mclib.network.mclib.Dispatcher;
 import mchorse.mclib.network.mclib.common.PacketRequestConfigs;
 import mchorse.mclib.utils.Direction;
@@ -163,19 +161,22 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         boolean checkForClient = this.serverConfigs != null;
         boolean isSingleplayer = Minecraft.getMinecraft().isIntegratedServerRunning();
 
-        for (ConfigCategory category : this.config.categories.values())
+        for (Value category : this.config.values.values())
         {
             if (!category.isVisible() || (checkForClient && category.isClientSide()))
             {
                 continue;
             }
 
-            GuiLabel label = Elements.label(IKey.lang(category.getTitleKey()), !first ? 40 : this.font.FONT_HEIGHT).anchor(0, 1).background(0x88000000);
+            String catTitleKey = this.config.getCategoryTitleKey(category);
+            String catTooltipKey = this.config.getCategoryTooltipKey(category);
 
-            label.tooltip(IKey.lang(category.getTooltipKey()), Direction.BOTTOM).flex().w(this.font.getStringWidth(label.label.get()));
+            GuiLabel label = Elements.label(IKey.lang(catTitleKey), !first ? 40 : this.font.FONT_HEIGHT).anchor(0, 1).background(0x88000000);
+
+            label.tooltip(IKey.lang(catTooltipKey), Direction.BOTTOM).flex().w(this.font.getStringWidth(label.label.get()));
             this.options.add(label);
 
-            for (IConfigValue value : category.values.values())
+            for (Value value : category.getSubValues())
             {
                 if (!value.isVisible() || (checkForClient && value.isClientSide()))
                 {

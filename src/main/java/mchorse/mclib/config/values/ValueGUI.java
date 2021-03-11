@@ -33,15 +33,15 @@ public abstract class ValueGUI extends Value implements IConfigGuiProvider
     {}
 
     @Override
-    public void fromJSON(JsonElement element)
+    public void valueFromJSON(JsonElement element)
     {}
 
     @Override
-    public void copy(IConfigValue value)
+    public void copy(Value value)
     {}
 
     @Override
-    public JsonElement toJSON()
+    public JsonElement valueToJSON()
     {
         return JsonNull.INSTANCE;
     }

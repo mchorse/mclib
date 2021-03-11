@@ -1,61 +1,120 @@
 package mchorse.mclib.config.values;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
 import io.netty.buffer.ByteBuf;
-import mchorse.mclib.config.ConfigCategory;
+import mchorse.mclib.config.Config;
+import mchorse.mclib.config.ConfigManager;
+import mchorse.mclib.network.IByteBufSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-public abstract class Value implements IConfigValue
+public class Value implements IByteBufSerializable
 {
     public final String id;
-    public ConfigCategory category;
     private boolean visible = true;
     private boolean clientSide;
     private boolean syncable;
+
+    private Config config;
+    private Map<String, Value> children = new LinkedHashMap<String, Value>();
+    private Value parent;
 
     public Value(String id)
     {
         this.id = id;
     }
 
-    @SideOnly(Side.CLIENT)
-    public String getTitle()
+    public Object getValue()
     {
-        return this.category.config.getValueTitle(this.category.id, this.id);
+        return null;
     }
 
-    @SideOnly(Side.CLIENT)
-    public String getTitleKey()
+    public void setValue(Object value)
+    {}
+
+    public void reset()
+    {}
+
+    /* Hierarchy code */
+
+    public Config getConfig()
     {
-        return this.category.config.getValueTitleKey(this.category.id, this.id);
+        return this.config;
     }
 
-    @SideOnly(Side.CLIENT)
-    public String getTooltip()
+    public void setConfig(Config config)
     {
-        return this.category.config.getValueTooltip(this.category.id, this.id);
+        this.config = config;
     }
 
-    @SideOnly(Side.CLIENT)
-    public String getTooltipKey()
+    public Collection<Value> getSubValues()
     {
-        return this.category.config.getValueTooltipKey(this.category.id, this.id);
+        return this.children.values();
     }
 
-    @Override
-    public String getId()
+    public void addSubValue(Value value)
     {
-        return this.id;
+        if (value != null)
+        {
+            this.children.put(value.id, value);
+            value.parent = this;
+        }
     }
 
-    @Override
-    public List<IConfigValue> getSubValues()
+    public Value getSubValue(String key)
     {
-        return Collections.emptyList();
+        return this.children.get(key);
     }
+
+    public Value getRoot()
+    {
+        Value value = this;
+
+        while (value != null)
+        {
+            if (value.parent == null)
+            {
+                return value;
+            }
+
+            value = value.parent;
+        }
+
+        return null;
+    }
+
+    public Value getParent()
+    {
+        return this.parent;
+    }
+
+    public String getPath()
+    {
+        List<String> strings = new ArrayList<String>();
+        Value value = this;
+
+        while (value != null)
+        {
+            strings.add(value.id);
+
+            value = value.parent;
+        }
+
+        Collections.reverse(strings);
+
+        return String.join(".", strings);
+    }
+
+    /* Base property getters and setters */
 
     public Value invisible()
     {
@@ -71,6 +130,16 @@ public abstract class Value implements IConfigValue
         return this;
     }
 
+    public Value markClientSide()
+    {
+        for (Value value : this.children.values())
+        {
+            value.markClientSide();
+        }
+
+        return this.clientSide();
+    }
+
     public Value syncable()
     {
         this.syncable = true;
@@ -78,29 +147,161 @@ public abstract class Value implements IConfigValue
         return this;
     }
 
-    @Override
     public boolean isVisible()
     {
-        return this.visible;
+        boolean visible = true;
+        Value value = this;
+
+        while (value != null)
+        {
+            visible = visible && value.visible;
+            value = value.parent;
+        }
+
+        return visible;
     }
 
-    @Override
     public boolean isClientSide()
     {
-        return this.clientSide;
+        boolean visible = false;
+        Value value = this;
+
+        while (value != null)
+        {
+            visible = visible || value.clientSide;
+            value = value.parent;
+        }
+
+        return visible;
     }
 
-    @Override
     public boolean isSyncable()
     {
         return this.syncable;
     }
 
+    public boolean hasSyncable()
+    {
+        if (this.syncable)
+        {
+            return true;
+        }
+
+        for (Value value : this.children.values())
+        {
+            if (value.hasSyncable())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void saveLater()
     {
-        if (this.category != null && this.category.config != null)
+        if (this.config != null)
         {
-            this.category.config.saveLater();
+            this.config.saveLater();
+        }
+    }
+
+    /* Saving data */
+
+    public final void fromJSON(JsonElement element)
+    {
+        if (element.isJsonObject())
+        {
+            JsonObject object = element.getAsJsonObject();
+
+            if (object.has("value") && object.has("subvalues") && object.size() == 2)
+            {
+                for (Map.Entry<String, JsonElement> entry : object.get("subvalues").getAsJsonObject().entrySet())
+                {
+                    Value value = this.children.get(entry.getKey());
+
+                    if (value != null)
+                    {
+                        value.reset();
+                        value.fromJSON(entry.getValue());
+                    }
+                }
+
+                this.valueFromJSON(object.get("value"));
+            }
+            else
+            {
+                for (Map.Entry<String, JsonElement> entry : object.entrySet())
+                {
+                    Value value = this.children.get(entry.getKey());
+
+                    if (value != null)
+                    {
+                        value.reset();
+                        value.fromJSON(entry.getValue());
+                    }
+                }
+            }
+        }
+        else
+        {
+            this.valueFromJSON(element);
+        }
+    }
+
+    protected void valueFromJSON(JsonElement element)
+    {}
+
+    public final JsonElement toJSON()
+    {
+        JsonElement child = this.valueToJSON();
+        JsonObject object = new JsonObject();
+
+        for (Value value : this.children.values())
+        {
+            object.add(value.id, value.toJSON());
+        }
+
+        if (child.isJsonNull())
+        {
+            return object;
+        }
+        else if (object.size() == 0)
+        {
+            return child;
+        }
+
+        JsonObject container = new JsonObject();
+
+        container.add("value", child);
+        container.add("subvalues", object);
+
+        return container;
+    }
+
+    protected JsonElement valueToJSON()
+    {
+        return JsonNull.INSTANCE;
+    }
+
+    public void copy(Value category)
+    {
+        for (Map.Entry<String, Value> entry : category.children.entrySet())
+        {
+            this.children.get(entry.getKey()).copy(entry.getValue());
+        }
+    }
+
+    public void copyServer(Value category)
+    {
+        for (Map.Entry<String, Value> entry : category.children.entrySet())
+        {
+            Value value = this.children.get(entry.getKey());
+
+            if (value != null && value.isSyncable() && value instanceof IServerValue)
+            {
+                ((IServerValue) value).copyServer(entry.getValue());
+            }
         }
     }
 
@@ -109,6 +310,19 @@ public abstract class Value implements IConfigValue
     {
         this.visible = buffer.readBoolean();
         this.clientSide = buffer.readBoolean();
+
+        this.children.clear();
+
+        for (int i = 0, c = buffer.readInt(); i < c; i++)
+        {
+            Value value = ConfigManager.fromBytes(buffer);
+
+            if (value != null)
+            {
+                value.setConfig(this.config);
+                this.addSubValue(value);
+            }
+        }
     }
 
     @Override
@@ -116,5 +330,37 @@ public abstract class Value implements IConfigValue
     {
         buffer.writeBoolean(this.visible);
         buffer.writeBoolean(this.clientSide);
+
+        buffer.writeInt(this.children.size());
+
+        for (Map.Entry<String, Value> entry : this.children.entrySet())
+        {
+            ConfigManager.toBytes(buffer, entry.getValue());
+        }
+    }
+
+    public void resetServerValues()
+    {
+        for (Value value : this.children.values())
+        {
+            if (value instanceof IServerValue)
+            {
+                ((IServerValue) value).resetServer();
+            }
+        }
+    }
+
+    /* Client side stuff */
+
+    @SideOnly(Side.CLIENT)
+    public String getLabelKey()
+    {
+        return this.config.getValueLabelKey(this);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public String getCommentKey()
+    {
+        return this.config.getValueCommentKey(this);
     }
 }

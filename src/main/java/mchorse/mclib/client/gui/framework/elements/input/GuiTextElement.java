@@ -41,7 +41,7 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder
             callback.accept(string);
         });
         this.setText(value.get());
-        this.tooltip(IKey.lang(value.getTooltipKey()));
+        this.tooltip(IKey.lang(value.getConfig().getValueLabelKey(value)));
     }
 
     public GuiTextElement(Minecraft mc, int maxLength, Consumer<String> callback)

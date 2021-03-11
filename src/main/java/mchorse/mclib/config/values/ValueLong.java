@@ -4,24 +4,17 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.buttons.GuiCirculateElement;
-import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
-import mchorse.mclib.client.gui.framework.elements.input.GuiKeybindElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.client.gui.utils.keys.KeyParser;
 import mchorse.mclib.config.gui.GuiConfigPanel;
-import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ValueLong extends Value implements IServerValue, IConfigGuiProvider
@@ -111,7 +104,7 @@ public class ValueLong extends Value implements IServerValue, IConfigGuiProvider
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
         GuiElement element = new GuiElement(mc);
-        GuiLabel label = Elements.label(IKey.lang(this.getTitleKey()), 0).anchor(0, 0.5F);
+        GuiLabel label = Elements.label(IKey.lang(this.getLabelKey()), 0).anchor(0, 0.5F);
 
         element.flex().row(0).preferred(0).height(20);
         element.add(label);
@@ -121,17 +114,17 @@ public class ValueLong extends Value implements IServerValue, IConfigGuiProvider
         trackpad.flex().w(90);
         element.add(trackpad.removeTooltip());
 
-        return Arrays.asList(element.tooltip(IKey.lang(this.getTooltipKey())));
+        return Arrays.asList(element.tooltip(IKey.lang(this.getCommentKey())));
     }
 
     @Override
-    public void fromJSON(JsonElement element)
+    public void valueFromJSON(JsonElement element)
     {
         this.set(element.getAsInt());
     }
 
     @Override
-    public JsonElement toJSON()
+    public JsonElement valueToJSON()
     {
         return new JsonPrimitive(this.value);
     }
@@ -152,7 +145,7 @@ public class ValueLong extends Value implements IServerValue, IConfigGuiProvider
     }
 
     @Override
-    public void copy(IConfigValue value)
+    public void copy(Value value)
     {
         if (value instanceof ValueLong)
         {
@@ -161,7 +154,7 @@ public class ValueLong extends Value implements IServerValue, IConfigGuiProvider
     }
 
     @Override
-    public void copyServer(IConfigValue value)
+    public void copyServer(Value value)
     {
         if (value instanceof ValueLong)
         {

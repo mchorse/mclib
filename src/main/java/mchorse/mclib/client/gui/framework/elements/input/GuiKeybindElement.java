@@ -32,7 +32,7 @@ public class GuiKeybindElement extends GuiElement
             callback.accept(integer);
         });
         this.setKeybind(value.get());
-        this.tooltip(IKey.lang(value.getTooltipKey()));
+        this.tooltip(IKey.lang(value.getCommentKey()));
     }
 
     public GuiKeybindElement(Minecraft mc, Consumer<Integer> callback)

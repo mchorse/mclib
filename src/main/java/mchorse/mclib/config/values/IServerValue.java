@@ -6,5 +6,5 @@ public interface IServerValue
 
     public boolean parseFromCommand(String value);
 
-    public void copyServer(IConfigValue value);
+    public void copyServer(Value value);
 }

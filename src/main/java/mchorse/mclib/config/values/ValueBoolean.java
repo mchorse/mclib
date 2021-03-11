@@ -84,13 +84,13 @@ public class ValueBoolean extends Value implements IServerValue, IConfigGuiProvi
     }
 
     @Override
-    public void fromJSON(JsonElement element)
+    public void valueFromJSON(JsonElement element)
     {
         this.set(element.getAsBoolean());
     }
 
     @Override
-    public JsonElement toJSON()
+    public JsonElement valueToJSON()
     {
         return new JsonPrimitive(this.value);
     }
@@ -115,8 +115,10 @@ public class ValueBoolean extends Value implements IServerValue, IConfigGuiProvi
     }
 
     @Override
-    public void copy(IConfigValue value)
+    public void copy(Value value)
     {
+        super.copy(value);
+
         if (value instanceof ValueBoolean)
         {
             this.value = ((ValueBoolean) value).value;
@@ -124,8 +126,10 @@ public class ValueBoolean extends Value implements IServerValue, IConfigGuiProvi
     }
 
     @Override
-    public void copyServer(IConfigValue value)
+    public void copyServer(Value value)
     {
+        super.copyServer(value);
+
         if (value instanceof ValueBoolean)
         {
             this.serverValue = ((ValueBoolean) value).value;
