@@ -28,11 +28,36 @@ public abstract class GuiKeyframeElement extends GuiElement
     public double minZoom = 0.01D;
     public double maxZoom = 1000D;
 
+    /**
+     * Sliding flag, whether keyframes should be sorted after
+     * dragging keyframes around
+     */
     public boolean sliding;
+
+    /**
+     * Dragging flag, whether dragging got initiated (it might be possible
+     * that there are 0 keyframes selected)
+     */
     public boolean dragging;
+
+    /**
+     * Moving flag, whether the user dragged 3 pixels away from the original
+     * place (also could have 0 keyframes selected)
+     */
     protected boolean moving;
+
+    /**
+     * Scrolling flag, whether the user was navigating by dragging with
+     * middle mouse held
+     */
     protected boolean scrolling;
+
+    /**
+     * Grabbing flag, whether the user selected an area with Shift + click dragging
+     * in order to select multiple keyframes
+     */
     protected boolean grabbing;
+
     protected int lastX;
     protected int lastY;
     protected double lastT;
