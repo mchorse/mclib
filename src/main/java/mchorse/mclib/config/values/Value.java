@@ -55,6 +55,11 @@ public class Value implements IByteBufSerializable
         this.config = config;
     }
 
+    public void removeAllSubValues()
+    {
+        this.children.clear();
+    }
+
     public List<Value> getSubValues()
     {
         return new ArrayList<Value>(this.children.values());
@@ -110,7 +115,10 @@ public class Value implements IByteBufSerializable
 
         while (value != null)
         {
-            strings.add(value.id);
+            if (!value.id.isEmpty())
+            {
+                strings.add(value.id);
+            }
 
             value = value.parent;
         }
@@ -214,7 +222,7 @@ public class Value implements IByteBufSerializable
 
     /* Saving data */
 
-    public final void fromJSON(JsonElement element)
+    public void fromJSON(JsonElement element)
     {
         if (element.isJsonObject())
         {
@@ -222,31 +230,12 @@ public class Value implements IByteBufSerializable
 
             if (object.has("value") && object.has("subvalues") && object.size() == 2)
             {
-                for (Map.Entry<String, JsonElement> entry : object.get("subvalues").getAsJsonObject().entrySet())
-                {
-                    Value value = this.children.get(entry.getKey());
-
-                    if (value != null)
-                    {
-                        value.reset();
-                        value.fromJSON(entry.getValue());
-                    }
-                }
-
+                this.childrenFromJSON(object.get("subvalues").getAsJsonObject());
                 this.valueFromJSON(object.get("value"));
             }
             else
             {
-                for (Map.Entry<String, JsonElement> entry : object.entrySet())
-                {
-                    Value value = this.children.get(entry.getKey());
-
-                    if (value != null)
-                    {
-                        value.reset();
-                        value.fromJSON(entry.getValue());
-                    }
-                }
+                this.childrenFromJSON(object);
             }
         }
         else
@@ -255,10 +244,25 @@ public class Value implements IByteBufSerializable
         }
     }
 
+    private void childrenFromJSON(JsonObject object)
+    {
+        for (Map.Entry<String, JsonElement> entry : object.entrySet())
+        {
+            Value value = this.children.get(entry.getKey());
+
+            if (value != null)
+            {
+                value.reset();
+                value.setParent(this);
+                value.fromJSON(entry.getValue());
+            }
+        }
+    }
+
     protected void valueFromJSON(JsonElement element)
     {}
 
-    public final JsonElement toJSON()
+    public JsonElement toJSON()
     {
         JsonElement child = this.valueToJSON();
         JsonObject object = new JsonObject();
@@ -326,6 +330,7 @@ public class Value implements IByteBufSerializable
             if (value != null)
             {
                 value.setConfig(this.config);
+                value.setParent(this);
                 this.addSubValue(value);
             }
         }
