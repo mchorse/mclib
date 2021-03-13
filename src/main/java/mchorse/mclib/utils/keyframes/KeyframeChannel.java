@@ -213,8 +213,6 @@ public class KeyframeChannel implements IByteBufSerializable
 
         for (Keyframe keyframe : this.keyframes)
         {
-            JsonObject frame = new JsonObject();
-
             array.add(keyframe.toJSON());
         }
 
