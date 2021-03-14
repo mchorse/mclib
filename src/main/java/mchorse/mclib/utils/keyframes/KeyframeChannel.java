@@ -150,6 +150,14 @@ public class KeyframeChannel implements IByteBufSerializable
         return index;
     }
 
+    public void moveX(long offset)
+    {
+        for (Keyframe keyframe : this.keyframes)
+        {
+            keyframe.tick += offset;
+        }
+    }
+
     /**
      * Sorts keyframes based on their ticks. This method should be used
      * when you modify individual tick values of keyframes.
