@@ -5,7 +5,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import javax.vecmath.Matrix4f;
+import javax.annotation.Nullable;
+import javax.vecmath.*;
 import java.nio.FloatBuffer;
 
 @SideOnly(Side.CLIENT)
@@ -92,5 +93,108 @@ public class MatrixUtils
     public static void releaseMatrix()
     {
         matrix = null;
+    }
+
+    /**
+     * This method extracts the rotation, translation and scale from the modelview matrix. It needs the view matrix to work properly
+     * @author Christian F. (known as Chryfi)
+     * @param cameraMatrix The cameraMatrix from rendering so you can extract modelView from OpenGL's matrix.
+     * @param modelView The matrix containing the transformations that should be extracted.
+     * @return Transformation contains translation, rotation and scale as 4x4 matrices. It also has getter methods for the 3x3 matrices.
+     */
+    public static Transformation extractTransformations(@Nullable Matrix4f cameraMatrix, Matrix4f modelView)
+    {
+        Matrix4f parent = new Matrix4f(modelView);
+
+        if(cameraMatrix!=null)
+        {
+            parent.set(cameraMatrix);
+            parent.invert();
+            parent.mul(modelView);
+        }
+
+        Matrix4f translation = new Matrix4f();
+        Matrix4f scale = new Matrix4f();
+        Matrix4f rotation = new Matrix4f();
+
+        translation.setIdentity();
+        rotation.setIdentity();
+        scale.setIdentity();
+
+        translation.m03 = parent.m03;
+        translation.m13 = parent.m13;
+        translation.m23 = parent.m23;
+
+        Vector4f ax = new Vector4f(parent.m00, parent.m01, parent.m02, 0);
+        Vector4f ay = new Vector4f(parent.m10, parent.m11, parent.m12, 0);
+        Vector4f az = new Vector4f(parent.m20, parent.m21, parent.m22, 0);
+
+        ax.normalize();
+        ay.normalize();
+        az.normalize();
+        rotation.setRow(0, ax);
+        rotation.setRow(1, ay);
+        rotation.setRow(2, az);
+
+        scale.m00 = (float) Math.sqrt(parent.m00*parent.m00+parent.m01*parent.m01+parent.m02*parent.m02);
+        scale.m11 = (float) Math.sqrt(parent.m10*parent.m10+parent.m11*parent.m11+parent.m12*parent.m12);
+        scale.m22 = (float) Math.sqrt(parent.m20*parent.m20+parent.m21*parent.m21+parent.m22*parent.m22);
+
+        return new Transformation(translation, rotation, scale);
+    }
+
+    public static class Transformation
+    {
+        public Matrix4f translation = new Matrix4f();
+        public Matrix4f rotation = new Matrix4f();
+        public Matrix4f scale = new Matrix4f();
+
+        public Transformation(Matrix4f translation, Matrix4f rotation, Matrix4f scale)
+        {
+            this.translation.set(translation);
+            this.rotation.set(rotation);
+            this.scale.set(scale);
+        }
+
+        public Transformation()
+        {
+            this.translation.setIdentity();
+            this.rotation.setIdentity();
+            this.scale.setIdentity();
+        }
+
+        public Matrix3f getScale3f()
+        {
+            Matrix3f scale3f = new Matrix3f();
+
+            scale3f.setIdentity();
+
+            scale3f.m00 = this.scale.m00;
+            scale3f.m11 = this.scale.m11;
+            scale3f.m22 = this.scale.m22;
+
+            return scale3f;
+        }
+
+        public Vector3f getTranslation3f()
+        {
+            Vector3f translation3f = new Vector3f();
+
+            translation3f.set(this.translation.m03,this.translation.m13, this.translation.m23);
+
+            return translation3f;
+        }
+
+        public Matrix3f getRotation3f()
+        {
+            Matrix3f rotation3f = new Matrix3f();
+
+            rotation3f.setIdentity();
+            rotation3f.setRow(0, this.rotation.m00, this.rotation.m01, this.rotation.m02);
+            rotation3f.setRow(1, this.rotation.m10, this.rotation.m11, this.rotation.m12);
+            rotation3f.setRow(2, this.rotation.m20, this.rotation.m21, this.rotation.m22);
+
+            return rotation3f;
+        }
     }
 }
