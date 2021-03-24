@@ -37,6 +37,7 @@ mclib.gui.transforms.context.paste=Paste transformations
 mclib.gui.transforms.context.paste_translation=Paste translation
 mclib.gui.transforms.context.paste_scale=Paste scale
 mclib.gui.transforms.context.paste_rotation=Paste rotation
+mclib.gui.transforms.context.reset=Reset transformation
 
 mclib.gui.keyframes.tick=Tick
 mclib.gui.keyframes.value=Value

@@ -1,7 +1,6 @@
 package mchorse.mclib.client.gui.framework.elements.input;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
-import mchorse.mclib.client.gui.framework.elements.GuiScrollElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
@@ -14,12 +13,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 
 import javax.vecmath.Vector3d;
-import javax.vecmath.Vector3f;
 
 /**
  * Transformation editor GUI
@@ -111,6 +108,24 @@ public class GuiTransformations extends GuiElement
         this.sz.setVisible(!this.one.isToggled());
     }
 
+    public void fillSetT(double x, double y, double z)
+    {
+        this.fillT(x, y, z);
+        this.setT(x, y, z);
+    }
+
+    public void fillSetS(double x, double y, double z)
+    {
+        this.fillS(x, y, z);
+        this.setS(x, y, z);
+    }
+
+    public void fillSetR(double x, double y, double z)
+    {
+        this.fillR(x, y, z);
+        this.setR(x, y, z);
+    }
+
     public void fillT(double x, double y, double z)
     {
         this.tx.setValue(x);
@@ -173,6 +188,8 @@ public class GuiTransformations extends GuiElement
             menu.action(Icons.MAXIMIZE, IKey.lang("mclib.gui.transforms.context.paste_scale"), () -> this.pasteScale(innerList));
             menu.action(Icons.REFRESH, IKey.lang("mclib.gui.transforms.context.paste_rotation"), () -> this.pasteRotation(innerList));
         }
+
+        menu.action(Icons.CLOSE, IKey.lang("mclib.gui.transforms.context.reset"), this::reset);
 
         return menu;
     }
@@ -237,6 +254,13 @@ public class GuiTransformations extends GuiElement
         result.z = list.getDoubleAt(offset + 2);
 
         return result;
+    }
+
+    private void reset()
+    {
+        this.fillSetT(0, 0, 0);
+        this.fillSetS(1, 1, 1);
+        this.fillSetR(0, 0, 0);
     }
 
     @Override
