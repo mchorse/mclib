@@ -256,7 +256,7 @@ public class GuiTransformations extends GuiElement
         return result;
     }
 
-    private void reset()
+    protected void reset()
     {
         this.fillSetT(0, 0, 0);
         this.fillSetS(1, 1, 1);
