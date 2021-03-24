@@ -76,6 +76,7 @@ public class McLib
     public static ValueInt scrollbarWidth;
 
     public static ValueBoolean multiskinMultiThreaded;
+    public static ValueBoolean multiskinClear;
 
     public static ValueInt maxPacketSize;
 
@@ -127,6 +128,7 @@ public class McLib
         builder.getCategory().markClientSide();
 
         multiskinMultiThreaded = builder.category("multiskin").getBoolean("multithreaded", true);
+        multiskinClear = builder.getBoolean("clear", true);
 
         builder.getCategory().markClientSide();
 

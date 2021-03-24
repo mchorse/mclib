@@ -121,7 +121,9 @@ mclib.config.multiskin.title=Multi-skin
 mclib.config.multiskin.tooltip=Options regarding Multi-skin feature
 
 mclib.config.multiskin.multithreaded=Multi-threaded processing
-mclib.config.comments.multiskin.multithreaded=Allows you to enable multi-threaded processing of multi-skins, which should fix the lag at cost of longer processing
+mclib.config.comments.multiskin.multithreaded=Allows you to toggle multi-threaded processing of multi-skins, which should fix the lag at cost of longer processing
+mclib.config.multiskin.clear=Clear upon RPs reloading
+mclib.config.comments.multiskin.clear=Allows you to toggle deleting all multi-skin textures during resource pack reloading
 
 mclib.config.vanilla.title=Vanilla tweaks
 mclib.config.vanilla.tooltip=Options regarding to tweaks done to Minecraft's code
