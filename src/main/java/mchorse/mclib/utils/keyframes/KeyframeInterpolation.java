@@ -1,5 +1,6 @@
 package mchorse.mclib.utils.keyframes;
 
+import mchorse.mclib.utils.IInterpolation;
 import mchorse.mclib.utils.Interpolation;
 import mchorse.mclib.utils.Interpolations;
 import mchorse.mclib.utils.MathUtils;
@@ -9,43 +10,49 @@ public enum KeyframeInterpolation
     CONST("const")
     {
         @Override
-        public double interpolate(Keyframe a, Keyframe b, float x)
+        public IInterpolation from(KeyframeEasing easing)
         {
-            return a.value;
+            return KeyframeInterpolations.CONSTANT;
         }
     },
     LINEAR("linear")
     {
         @Override
-        public double interpolate(Keyframe a, Keyframe b, float x)
+        public IInterpolation from(KeyframeEasing easing)
         {
-            return Interpolations.lerp(a.value, b.value, x);
+            return Interpolation.LINEAR;
         }
     },
     QUAD("quad")
     {
         @Override
-        public double interpolate(Keyframe a, Keyframe b, float x)
+        public IInterpolation from(KeyframeEasing easing)
         {
-            if (a.easing == KeyframeEasing.IN) return Interpolation.QUAD_IN.interpolate(a.value, b.value, x);
-            if (a.easing == KeyframeEasing.OUT) return Interpolation.QUAD_OUT.interpolate(a.value, b.value, x);
+            if (easing == KeyframeEasing.IN) return Interpolation.QUAD_IN;
+            if (easing == KeyframeEasing.OUT) return Interpolation.QUAD_OUT;
 
-            return Interpolation.QUAD_INOUT.interpolate(a.value, b.value, x);
+            return Interpolation.QUAD_INOUT;
         }
     },
     CUBIC("cubic")
     {
         @Override
-        public double interpolate(Keyframe a, Keyframe b, float x)
+        public IInterpolation from(KeyframeEasing easing)
         {
-            if (a.easing == KeyframeEasing.IN) return Interpolation.CUBIC_IN.interpolate(a.value, b.value, x);
-            if (a.easing == KeyframeEasing.OUT) return Interpolation.CUBIC_OUT.interpolate(a.value, b.value, x);
+            if (easing == KeyframeEasing.IN) return Interpolation.CUBIC_IN;
+            if (easing == KeyframeEasing.OUT) return Interpolation.CUBIC_OUT;
 
-            return Interpolation.CUBIC_INOUT.interpolate(a.value, b.value, x);
+            return Interpolation.CUBIC_INOUT;
         }
     },
     HERMITE("hermite")
     {
+        @Override
+        public IInterpolation from(KeyframeEasing easing)
+        {
+            return KeyframeInterpolations.HERMITE;
+        }
+
         @Override
         public double interpolate(Keyframe a, Keyframe b, float x)
         {
@@ -60,16 +67,22 @@ public enum KeyframeInterpolation
     EXP("exp")
     {
         @Override
-        public double interpolate(Keyframe a, Keyframe b, float x)
+        public IInterpolation from(KeyframeEasing easing)
         {
-            if (a.easing == KeyframeEasing.IN) return Interpolation.EXP_IN.interpolate(a.value, b.value, x);
-            if (a.easing == KeyframeEasing.OUT) return Interpolation.EXP_OUT.interpolate(a.value, b.value, x);
+            if (easing == KeyframeEasing.IN) return Interpolation.EXP_IN;
+            if (easing == KeyframeEasing.OUT) return Interpolation.EXP_OUT;
 
-            return Interpolation.EXP_INOUT.interpolate(a.value, b.value, x);
+            return Interpolation.EXP_INOUT;
         }
     },
     BEZIER("bezier")
     {
+        @Override
+        public IInterpolation from(KeyframeEasing easing)
+        {
+            return KeyframeInterpolations.BEZIER;
+        }
+
         @Override
         public double interpolate(Keyframe a, Keyframe b, float x)
         {
@@ -99,34 +112,34 @@ public enum KeyframeInterpolation
     BACK("back")
     {
         @Override
-        public double interpolate(Keyframe a, Keyframe b, float x)
+        public IInterpolation from(KeyframeEasing easing)
         {
-            if (a.easing == KeyframeEasing.IN) return Interpolation.BACK_IN.interpolate(a.value, b.value, x);
-            if (a.easing == KeyframeEasing.OUT) return Interpolation.BACK_OUT.interpolate(a.value, b.value, x);
+            if (easing == KeyframeEasing.IN) return Interpolation.BACK_IN;
+            if (easing == KeyframeEasing.OUT) return Interpolation.BACK_OUT;
 
-            return Interpolation.BACK_INOUT.interpolate(a.value, b.value, x);
+            return Interpolation.BACK_INOUT;
         }
     },
     ELASTIC("elastic")
     {
         @Override
-        public double interpolate(Keyframe a, Keyframe b, float x)
+        public IInterpolation from(KeyframeEasing easing)
         {
-            if (a.easing == KeyframeEasing.IN) return Interpolation.ELASTIC_IN.interpolate(a.value, b.value, x);
-            if (a.easing == KeyframeEasing.OUT) return Interpolation.ELASTIC_OUT.interpolate(a.value, b.value, x);
+            if (easing == KeyframeEasing.IN) return Interpolation.ELASTIC_IN;
+            if (easing == KeyframeEasing.OUT) return Interpolation.ELASTIC_OUT;
 
-            return Interpolation.ELASTIC_INOUT.interpolate(a.value, b.value, x);
+            return Interpolation.ELASTIC_INOUT;
         }
     },
     BOUNCE("bounce")
     {
         @Override
-        public double interpolate(Keyframe a, Keyframe b, float x)
+        public IInterpolation from(KeyframeEasing easing)
         {
-            if (a.easing == KeyframeEasing.IN) return Interpolation.BOUNCE_IN.interpolate(a.value, b.value, x);
-            if (a.easing == KeyframeEasing.OUT) return Interpolation.BOUNCE_OUT.interpolate(a.value, b.value, x);
+            if (easing == KeyframeEasing.IN) return Interpolation.BOUNCE_IN;
+            if (easing == KeyframeEasing.OUT) return Interpolation.BOUNCE_OUT;
 
-            return Interpolation.BOUNCE_INOUT.interpolate(a.value, b.value, x);
+            return Interpolation.BOUNCE_INOUT;
         }
     };
 
@@ -137,7 +150,17 @@ public enum KeyframeInterpolation
         this.key = key;
     }
 
-    public abstract double interpolate(Keyframe a, Keyframe b, float x);
+    public IInterpolation from(KeyframeEasing easing)
+    {
+        return null;
+    }
+
+    public double interpolate(Keyframe a, Keyframe b, float x)
+    {
+        IInterpolation interpolation = this.from(a.easing);
+
+        return interpolation == null ? a.value : interpolation.interpolate(a.value, b.value, x);
+    }
 
     public String getKey()
     {

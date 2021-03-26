@@ -173,6 +173,33 @@ mclib.interpolations.back=Back
 mclib.interpolations.elastic=Elastic
 mclib.interpolations.bounce=Bounce
 
+# Interpolation tooltips (feel free to add your own tips)
+
+mclib.interpolations.tooltips.linear=This interpolation goes at constant speed from A to B. It's useful for seamless rotations and slow movement.
+mclib.interpolations.tooltips.quad_in=
+mclib.interpolations.tooltips.quad_out=
+mclib.interpolations.tooltips.quad_inout=It's most useful for pose animation denoting an even more lazier degree of movement than Exponential or Cubic In/out.
+mclib.interpolations.tooltips.cubic_in=
+mclib.interpolations.tooltips.cubic_out=
+mclib.interpolations.tooltips.cubic_inout=It's most useful for pose animation denoting a more lazier movement than Exponential In/out.
+mclib.interpolations.tooltips.exp_in=It's useful for cameras in combination with Exponential Out, as you can create jumpy, spike-like, transition between two camera shots.
+mclib.interpolations.tooltips.exp_out=It's useful for creating rapid movement.
+mclib.interpolations.tooltips.exp_inout=It's most useful for pose animation or camera emphasis.
+
+mclib.interpolations.tooltips.back_in=
+mclib.interpolations.tooltips.back_out=
+mclib.interpolations.tooltips.back_inout=It can be used for swaying and natural pose animation movement.
+mclib.interpolations.tooltips.elastic_in=
+mclib.interpolations.tooltips.elastic_out=It's useful for jumpy cartoon movements.
+mclib.interpolations.tooltips.elastic_inout=
+mclib.interpolations.tooltips.bounce_in=
+mclib.interpolations.tooltips.bounce_out=It's useful for creating an animation of something falling on the ground and bouncing a couple of times.
+mclib.interpolations.tooltips.bounce_inout=
+
+mclib.interpolations.tooltips.const=This interpolation doesn't interpolate, but rather keeps the initial value till the end. It's useful for creating sharp steps using multiple keyframes.
+mclib.interpolations.tooltips.hermite=This interpolation that can smooth animation across multiple keyframes. Make sure that you have same distance between keyframes, as its smoothness breaks with variable distance.
+mclib.interpolations.tooltips.bezier=This interpolation allows customize the curve using control points, which allows also mimicking majority of other interpolations. It's useful for creating smoother transition between multiple keyframes.
+
 mclib.easing.in=Ease in
 mclib.easing.out=Ease out
 mclib.easing.inout=Ease in/out
