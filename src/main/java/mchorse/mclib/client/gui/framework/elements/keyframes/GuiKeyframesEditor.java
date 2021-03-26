@@ -9,6 +9,7 @@ import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.list.GuiListElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.framework.tooltips.InterpolationTooltip;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.GuiUtils;
 import mchorse.mclib.client.gui.utils.Icons;
@@ -53,6 +54,18 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
     {
         super(mc);
 
+        InterpolationTooltip tooltip = new InterpolationTooltip(0F, 0F, () ->
+        {
+            Keyframe keyframe = this.graph.getCurrent();
+
+            if (keyframe == null)
+            {
+                return null;
+            }
+
+            return keyframe.interp.from(keyframe.easing);
+        }, null);
+
         this.frameButtons = new GuiElement(mc);
         this.frameButtons.flex().relative(this).x(1F, -10).y(10).w(170).h(50).anchorX(1F);
         this.frameButtons.setVisible(false);
@@ -61,10 +74,12 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         this.value = new GuiTrackpadElement(mc, this::setValue);
         this.value.tooltip(IKey.lang("mclib.gui.keyframes.value"));
         this.interp = new GuiButtonElement(mc, IKey.lang(""), (b) -> this.interpolations.toggleVisible());
+        this.interp.tooltip(tooltip);
         this.interpolations = new GuiKeyframeInterpolationsList(mc, (interp) -> this.pickInterpolation(interp.get(0)));
-        this.interpolations.setVisible(false);
+        this.interpolations.tooltip(tooltip).setVisible(false);
 
         this.easing = new GuiCirculateElement(mc, (b) -> this.changeEasing());
+        this.easing.tooltip(tooltip);
 
         for (KeyframeEasing easing : KeyframeEasing.values())
         {
@@ -414,27 +429,5 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
         this.interp.label.set(frame.interp.getKey());
         this.interpolations.setCurrent(frame.interp);
         this.easing.setValue(frame.easing.ordinal());
-    }
-
-    @Override
-    public void draw(GuiContext context)
-    {
-        super.draw(context);
-
-        Area.SHARED.setPoints(this.interp.area.x, this.interp.area.y, this.easing.area.ex(), this.easing.area.ey());
-
-        if (Area.SHARED.isInside(context) || (this.interpolations.isVisible() && this.interpolations.area.isInside(context)))
-        {
-            Keyframe keyframe = this.graph.getCurrent();
-
-            if (keyframe == null)
-            {
-                return;
-            }
-
-            IInterpolation interpolation = keyframe.interp.from(keyframe.easing);
-
-            InterpolationRenderer.drawInterpolationPreview(interpolation, context, this.interp.area.x - 5, this.area.y + 10, 1F, 0F, 40);
-        }
     }
 }

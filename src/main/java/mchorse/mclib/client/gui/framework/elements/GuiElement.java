@@ -1,9 +1,10 @@
 package mchorse.mclib.client.gui.framework.elements;
 
 import mchorse.mclib.client.gui.framework.GuiBase;
-import mchorse.mclib.client.gui.framework.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.framework.tooltips.ITooltip;
+import mchorse.mclib.client.gui.framework.tooltips.LabelTooltip;
 import mchorse.mclib.client.gui.utils.KeybindManager;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.keys.IKey;
@@ -42,7 +43,7 @@ public class GuiElement extends Gui implements IGuiElement
     /**
      * Tooltip instance
      */
-    public GuiTooltip.Tooltip tooltip;
+    public ITooltip tooltip;
 
     /**
      * Keybind manager
@@ -312,23 +313,30 @@ public class GuiElement extends Gui implements IGuiElement
         return this;
     }
 
+    public GuiElement tooltip(ITooltip tooltip)
+    {
+        this.tooltip = tooltip;
+
+        return this;
+    }
+
     public GuiElement tooltip(IKey label)
     {
-        this.tooltip = new GuiTooltip.Tooltip(label, Direction.BOTTOM);
+        this.tooltip = new LabelTooltip(label, Direction.BOTTOM);
 
         return this;
     }
 
     public GuiElement tooltip(IKey label, Direction direction)
     {
-        this.tooltip = new GuiTooltip.Tooltip(label, direction);
+        this.tooltip = new LabelTooltip(label, direction);
 
         return this;
     }
 
     public GuiElement tooltip(IKey label, int width, Direction direction)
     {
-        this.tooltip = new GuiTooltip.Tooltip(label, width, direction);
+        this.tooltip = new LabelTooltip(label, width, direction);
 
         return this;
     }
