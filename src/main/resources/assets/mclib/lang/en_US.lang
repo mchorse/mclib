@@ -173,7 +173,10 @@ mclib.interpolations.back=Back
 mclib.interpolations.elastic=Elastic
 mclib.interpolations.bounce=Bounce
 
-# Interpolation tooltips (feel free to add your own tips)
+# Interpolation tooltips
+#
+# Feel free to add your own tips. If there is no tip, then leave it empty.
+# DO NOT REMOVE THESE LINES!
 
 mclib.interpolations.tooltips.linear=This interpolation goes at constant speed from A to B. It's useful for seamless rotations and slow movement.
 mclib.interpolations.tooltips.quad_in=
