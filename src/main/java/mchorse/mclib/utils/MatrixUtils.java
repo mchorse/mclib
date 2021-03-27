@@ -95,6 +95,95 @@ public class MatrixUtils
         matrix = null;
     }
 
+    public static Quat4d matrixToQuaternion(Matrix3f matrix)
+    {
+        double tr = matrix.m00 + matrix.m11 + matrix.m22;
+        double qw = 0;
+        double qx = 0;
+        double qy = 0;
+        double qz = 0;
+
+        if (tr > 0)
+        {
+            double S = Math.sqrt(tr+1.0) * 2; // S=4*qw
+            qw = 0.25 * S;
+            qx = (matrix.m21 - matrix.m12) / S;
+            qy = (matrix.m02 - matrix.m20) / S;
+            qz = (matrix.m10 - matrix.m01) / S;
+        }
+        else if ((matrix.m00 > matrix.m11) & (matrix.m00 > matrix.m22))
+        {
+            double S = Math.sqrt(1.0 + matrix.m00 - matrix.m11 - matrix.m22) * 2; // S=4*qx
+            qw = (matrix.m21 - matrix.m12) / S;
+            qx = 0.25 * S;
+            qy = (matrix.m01 + matrix.m10) / S;
+            qz = (matrix.m02 + matrix.m20) / S;
+        }
+        else if (matrix.m11 > matrix.m22)
+        {
+            double S = Math.sqrt(1.0 + matrix.m11 - matrix.m00 - matrix.m22) * 2; // S=4*qy
+            qw = (matrix.m02 - matrix.m20) / S;
+            qx = (matrix.m01 + matrix.m10) / S;
+            qy = 0.25 * S;
+            qz = (matrix.m12 + matrix.m21) / S;
+        }
+        else
+        {
+            double S = Math.sqrt(1.0 + matrix.m22 - matrix.m00 - matrix.m11) * 2; // S=4*qz
+            qw = (matrix.m10 - matrix.m01) / S;
+            qx = (matrix.m02 + matrix.m20) / S;
+            qy = (matrix.m12 + matrix.m21) / S;
+            qz = 0.25 * S;
+        }
+
+        return new Quat4d(qw, qx, qy, qz);
+    }
+
+    /**
+     * This method calculates the angular velocity around the arbitrary axis.
+     * The arbitrary axis and the angle around it can be obtained from this result.
+     * @param rotation
+     * @return the angular velocity vector.
+     */
+    public static Vector3f getAngularVelocity(Matrix3f rotation)
+    {
+        Matrix3f step = new Matrix3f(rotation);
+        Matrix3f angularVelocity = new Matrix3f();
+        Matrix3f i = new Matrix3f();
+
+        i.setIdentity();
+        angularVelocity.setIdentity();
+        angularVelocity.mul(2);
+
+        step.add(i);
+        step.invert();
+        step.mul(4);
+
+        angularVelocity.sub(step);
+
+        Vector3f angularV = new Vector3f(angularVelocity.m21,
+                                    -angularVelocity.m20,
+                                     angularVelocity.m10);
+
+        return angularV;
+    }
+
+    public static Matrix3f getZYXrotationMatrix(float x, float y, float z)
+    {
+        Matrix3f rotation = new Matrix3f();
+        Matrix3f rot = new Matrix3f();
+
+        rotation.setIdentity();
+        rot.rotZ(z);
+        rotation.mul(rot);
+        rot.rotY(y);
+        rotation.mul(rot);
+        rot.rotX(x);
+        rotation.mul(rot);
+
+        return rotation;
+    }
+
     /**
      * This method extracts the rotation, translation and scale from the modelview matrix. It needs the view matrix to work properly
      * @author Christian F. (known as Chryfi)
@@ -106,7 +195,7 @@ public class MatrixUtils
     {
         Matrix4f parent = new Matrix4f(modelView);
 
-        if(cameraMatrix!=null)
+        if (cameraMatrix != null)
         {
             parent.set(cameraMatrix);
             parent.invert();
