@@ -1,7 +1,7 @@
 package mchorse.mclib.client.gui.framework.elements.utils;
 
 import mchorse.mclib.client.gui.framework.GuiBase;
-import mchorse.mclib.client.gui.framework.GuiTooltip;
+import mchorse.mclib.client.gui.framework.tooltips.GuiTooltip;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
 import mchorse.mclib.client.gui.framework.elements.IGuiElement;

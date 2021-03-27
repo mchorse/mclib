@@ -4,7 +4,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public enum Interpolation
+public enum Interpolation implements IInterpolation
 {
     LINEAR("linear")
     {
@@ -437,19 +437,15 @@ public enum Interpolation
         this.key = key;
     }
 
-    public abstract float interpolate(float a, float b, float x);
-
-    public abstract double interpolate(double a, double b, double x);
-
-    @SideOnly(Side.CLIENT)
-    public String getName()
-    {
-        return I18n.format(this.getKey());
-    }
-
     @SideOnly(Side.CLIENT)
     public String getKey()
     {
         return "mclib.interpolations." + this.key;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public String getTooltipKey()
+    {
+        return "mclib.interpolations.tooltips." + this.key;
     }
 }

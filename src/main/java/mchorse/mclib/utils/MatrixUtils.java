@@ -184,6 +184,7 @@ public class MatrixUtils
         return rotation;
     }
 
+
     /**
      * This method extracts the rotation, translation and scale from the modelview matrix. It needs the view matrix to work properly
      * @author Christian F. (known as Chryfi)
@@ -195,7 +196,8 @@ public class MatrixUtils
     {
         Matrix4f parent = new Matrix4f(modelView);
 
-        if (cameraMatrix != null)
+
+        if(cameraMatrix!=null)
         {
             parent.set(cameraMatrix);
             parent.invert();
