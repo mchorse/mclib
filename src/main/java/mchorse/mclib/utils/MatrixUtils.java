@@ -196,8 +196,7 @@ public class MatrixUtils
     {
         Matrix4f parent = new Matrix4f(modelView);
 
-
-        if(cameraMatrix!=null)
+        if (cameraMatrix != null)
         {
             parent.set(cameraMatrix);
             parent.invert();
@@ -227,9 +226,9 @@ public class MatrixUtils
         rotation.setRow(1, ay);
         rotation.setRow(2, az);
 
-        scale.m00 = (float) Math.sqrt(parent.m00*parent.m00+parent.m01*parent.m01+parent.m02*parent.m02);
-        scale.m11 = (float) Math.sqrt(parent.m10*parent.m10+parent.m11*parent.m11+parent.m12*parent.m12);
-        scale.m22 = (float) Math.sqrt(parent.m20*parent.m20+parent.m21*parent.m21+parent.m22*parent.m22);
+        scale.m00 = (float) Math.sqrt(parent.m00 * parent.m00 + parent.m01 * parent.m01 + parent.m02 * parent.m02);
+        scale.m11 = (float) Math.sqrt(parent.m10 * parent.m10 + parent.m11 * parent.m11 + parent.m12 * parent.m12);
+        scale.m22 = (float) Math.sqrt(parent.m20 * parent.m20 + parent.m21 * parent.m21 + parent.m22 * parent.m22);
 
         return new Transformation(translation, rotation, scale);
     }
