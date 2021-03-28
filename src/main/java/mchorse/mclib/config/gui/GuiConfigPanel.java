@@ -58,7 +58,7 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         this.reload.flex().relative(this).set(120 - 14, 12, 16, 16);
         this.request.flex().relative(this.reload.resizer()).set(-20, 0, 16, 16);
         this.mods.flex().relative(this).set(10, 35, 110, 0).h(1, -45);
-        this.options.flex().relative(this).set(130, 0, 0, 0).w(1, -120).h(1F);
+        this.options.flex().relative(this).set(130, 0, 0, 0).w(1, -130).h(1F);
         this.options.flex().column(5).scroll().width(240).height(20).padding(15);
 
         this.fillClientMods();
