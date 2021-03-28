@@ -401,7 +401,6 @@ public abstract class GuiKeyframesEditor<T extends GuiKeyframeElement> extends G
     {
         this.graph.setInterpolation(interp);
         this.interp.label.set(interp.getKey());
-        this.interpolations.setVisible(false);
     }
 
     public void changeEasing()
