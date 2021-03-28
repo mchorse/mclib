@@ -16,6 +16,10 @@ public class FilteredResourceLocation implements IWritableLocation
 
     public ResourceLocation path;
 
+    public boolean autoSize = true;
+    public int sizeW;
+    public int sizeH;
+
     public int color = DEFAULT_COLOR;
     public float scale = 1F;
     public boolean scaleToLargest;
@@ -66,6 +70,26 @@ public class FilteredResourceLocation implements IWritableLocation
         this.path = path;
     }
 
+    public int getWidth(int width)
+    {
+        if (!this.autoSize && this.sizeW > 0)
+        {
+            return this.sizeW;
+        }
+
+        return width;
+    }
+
+    public int getHeight(int height)
+    {
+        if (!this.autoSize && this.sizeH > 0)
+        {
+            return this.sizeH;
+        }
+
+        return height;
+    }
+
     @Override
     public String toString()
     {
@@ -85,6 +109,9 @@ public class FilteredResourceLocation implements IWritableLocation
             FilteredResourceLocation frl = (FilteredResourceLocation) obj;
 
             return Objects.equals(this.path, frl.path)
+                && this.autoSize == frl.autoSize
+                && this.sizeW == frl.sizeW
+                && this.sizeH == frl.sizeH
                 && this.scaleToLargest == frl.scaleToLargest
                 && this.color == frl.color
                 && this.scale == frl.scale
@@ -102,6 +129,9 @@ public class FilteredResourceLocation implements IWritableLocation
     {
         int hashCode = this.path.hashCode();
 
+        hashCode = 31 * hashCode + (this.autoSize ? 1 : 0);
+        hashCode = 31 * hashCode + this.sizeW;
+        hashCode = 31 * hashCode + this.sizeH;
         hashCode = 31 * hashCode + (this.scaleToLargest ? 1 : 0);
         hashCode = 31 * hashCode + this.color;
         hashCode = 31 * hashCode + (int) (this.scale * 1000);
@@ -115,7 +145,7 @@ public class FilteredResourceLocation implements IWritableLocation
 
     public boolean isDefault()
     {
-        return this.color == DEFAULT_COLOR && !this.scaleToLargest && this.scale == 1F && this.shiftX == 0 && this.shiftY == 0 && this.pixelate <= 1 && !this.erase;
+        return (this.autoSize || (this.sizeW == 0 && this.sizeH == 0)) && this.color == DEFAULT_COLOR && !this.scaleToLargest && this.scale == 1F && this.shiftX == 0 && this.shiftY == 0 && this.pixelate <= 1 && !this.erase;
     }
 
     @Override
@@ -165,6 +195,21 @@ public class FilteredResourceLocation implements IWritableLocation
         if (tag.hasKey("Erase"))
         {
             this.erase = tag.getBoolean("Erase");
+        }
+
+        if (tag.hasKey("AutoSize"))
+        {
+            this.autoSize = tag.getBoolean("AutoSize");
+        }
+
+        if (tag.hasKey("SizeW"))
+        {
+            this.sizeW = tag.getInteger("SizeW");
+        }
+
+        if (tag.hasKey("SizeH"))
+        {
+            this.sizeH = tag.getInteger("SizeH");
         }
     }
 
@@ -216,6 +261,21 @@ public class FilteredResourceLocation implements IWritableLocation
         {
             this.erase = object.get("erase").getAsBoolean();
         }
+
+        if (object.has("autoSize"))
+        {
+            this.autoSize = object.get("autoSize").getAsBoolean();
+        }
+
+        if (object.has("sizeW"))
+        {
+            this.sizeW = object.get("sizeW").getAsInt();
+        }
+
+        if (object.has("sizeH"))
+        {
+            this.sizeH = object.get("sizeH").getAsInt();
+        }
     }
 
     @Override
@@ -232,6 +292,9 @@ public class FilteredResourceLocation implements IWritableLocation
         if (this.shiftY != 0) tag.setInteger("ShiftY", this.shiftY);
         if (this.pixelate > 1) tag.setInteger("Pixelate", this.pixelate);
         if (this.erase) tag.setBoolean("Erase", this.erase);
+        if (!this.autoSize) tag.setBoolean("AutoSize", this.autoSize);
+        if (this.sizeW > 0) tag.setInteger("SizeW", this.sizeW);
+        if (this.sizeH > 0) tag.setInteger("SizeH", this.sizeH);
 
         return tag;
     }
@@ -250,6 +313,9 @@ public class FilteredResourceLocation implements IWritableLocation
         if (this.shiftY != 0) object.addProperty("shiftY", this.shiftY);
         if (this.pixelate > 1) object.addProperty("pixelate", this.pixelate);
         if (this.erase) object.addProperty("erase", this.erase);
+        if (!this.autoSize) object.addProperty("autoSize", this.autoSize);
+        if (this.sizeW > 0) object.addProperty("sizeW", this.sizeW);
+        if (this.sizeH > 0) object.addProperty("sizeH", this.sizeH);
 
         return object;
     }

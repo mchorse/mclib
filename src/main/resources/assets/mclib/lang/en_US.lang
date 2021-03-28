@@ -57,6 +57,11 @@ mclib.gui.multiskin.shift=Shift
 mclib.gui.multiskin.pixelate=Pixelate
 mclib.gui.multiskin.erase=Erase
 mclib.gui.multiskin.erase_tooltip=This feature allows to using current skin as difference mask, meaning, any opaque pixels will erase pixels of all skins underneath it.
+mclib.gui.multiskin.custom_size=Custom size
+mclib.gui.multiskin.auto_size=Auto size
+mclib.gui.multiskin.auto_size_tooltip=When enabled, it will use texture's original size, otherwise custom size provided below. 
+mclib.gui.multiskin.size_w=Custom width
+mclib.gui.multiskin.size_h=Custom height
 
 mclib.gui.color.favorite=Favorite colors
 mclib.gui.color.recent=Recent colors

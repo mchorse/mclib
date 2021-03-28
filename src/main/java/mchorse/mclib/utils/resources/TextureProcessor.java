@@ -52,8 +52,8 @@ public class TextureProcessor
 
                 images.add(image);
 
-                w = Math.max(w, image.getWidth());
-                h = Math.max(h, image.getHeight());
+                w = Math.max(w, child.getWidth(image.getWidth()));
+                h = Math.max(h, child.getHeight(image.getHeight()));
             }
             catch (Exception e)
             {

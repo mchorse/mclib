@@ -38,6 +38,10 @@ public class GuiMultiSkinEditor extends GuiCanvasEditor
     public GuiTexturePicker picker;
     public FilteredResourceLocation location;
 
+    public GuiToggleElement autoSize;
+    public GuiTrackpadElement sizeW;
+    public GuiTrackpadElement sizeH;
+
     public GuiColorElement color;
     public GuiTrackpadElement scale;
     public GuiToggleElement scaleToLargest;
@@ -52,6 +56,25 @@ public class GuiMultiSkinEditor extends GuiCanvasEditor
         super(mc);
 
         this.picker = picker;
+
+        this.autoSize = new GuiToggleElement(mc, IKey.lang("mclib.gui.multiskin.auto_size"), (toggle) ->
+        {
+            this.location.autoSize = toggle.isToggled();
+            this.resizeCanvas();
+        });
+        this.autoSize.tooltip(IKey.lang("mclib.gui.multiskin.auto_size_tooltip"));
+        this.sizeW = new GuiTrackpadElement(mc, (value) ->
+        {
+            this.location.sizeW = value.intValue();
+            this.resizeCanvas();
+        });
+        this.sizeW.integer().limit(0).tooltip(IKey.lang("mclib.gui.multiskin.size_w"));
+        this.sizeH = new GuiTrackpadElement(mc, (value) ->
+        {
+            this.location.sizeH = value.intValue();
+            this.resizeCanvas();
+        });
+        this.sizeH.integer().limit(0).tooltip(IKey.lang("mclib.gui.multiskin.size_h"));
 
         this.color = new GuiColorElement(mc, (value) -> this.location.color = value);
         this.color.picker.editAlpha();
@@ -73,6 +96,7 @@ public class GuiMultiSkinEditor extends GuiCanvasEditor
         this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.scale")).background(0x88000000), this.scale, this.scaleToLargest);
         this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.shift")).background(0x88000000), this.shiftX, this.shiftY);
         this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.pixelate")).background(0x88000000), this.pixelate, this.erase);
+        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.custom_size")).background(0x88000000), this.autoSize, this.sizeW, this.sizeH);
 
         if (shader == null)
         {
@@ -105,12 +129,30 @@ public class GuiMultiSkinEditor extends GuiCanvasEditor
         for (FilteredResourceLocation child : this.picker.multiRL.children)
         {
             this.mc.renderEngine.bindTexture(child.path);
-            w = Math.max(w, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH));
-            h = Math.max(h, GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT));
+            w = Math.max(w, child.getWidth(GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH)));
+            h = Math.max(h, child.getHeight(GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT)));
         }
 
         this.setSize(w, h);
         this.color.picker.removeFromParent();
+    }
+
+    private void resizeCanvas()
+    {
+        int w = 0;
+        int h = 0;
+
+        for (FilteredResourceLocation child : this.picker.multiRL.children)
+        {
+            this.mc.renderEngine.bindTexture(child.path);
+            w = Math.max(w, child.getWidth(GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH)));
+            h = Math.max(h, child.getHeight(GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT)));
+        }
+
+        if (w != this.getWidth() || h != this.getHeight())
+        {
+            this.setSize(w, h);
+        }
     }
 
     public void close()
@@ -130,6 +172,10 @@ public class GuiMultiSkinEditor extends GuiCanvasEditor
 
         this.pixelate.setValue(location.pixelate);
         this.erase.toggled(location.erase);
+
+        this.autoSize.toggled(location.autoSize);
+        this.sizeW.setValue(location.sizeW);
+        this.sizeH.setValue(location.sizeH);
     }
 
     @Override
