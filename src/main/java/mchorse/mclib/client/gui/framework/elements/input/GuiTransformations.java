@@ -40,30 +40,30 @@ public class GuiTransformations extends GuiElement
     {
         super(mc);
 
-        this.tx = new GuiTrackpadElement(mc, (value) -> this.setT(value, this.ty.value, this.tz.value)).block();
+        this.tx = new GuiTrackpadElement(mc, (value) -> this.internalSetT(value, this.ty.value, this.tz.value)).block();
         this.tx.tooltip(IKey.lang("mclib.gui.transforms.x"));
-        this.ty = new GuiTrackpadElement(mc, (value) -> this.setT(this.tx.value, value, this.tz.value)).block();
+        this.ty = new GuiTrackpadElement(mc, (value) -> this.internalSetT(this.tx.value, value, this.tz.value)).block();
         this.ty.tooltip(IKey.lang("mclib.gui.transforms.y"));
-        this.tz = new GuiTrackpadElement(mc, (value) -> this.setT(this.tx.value, this.ty.value, value)).block();
+        this.tz = new GuiTrackpadElement(mc, (value) -> this.internalSetT(this.tx.value, this.ty.value, value)).block();
         this.tz.tooltip(IKey.lang("mclib.gui.transforms.z"));
 
         this.sx = new GuiTrackpadElement(mc, (value) ->
         {
             boolean one = this.one.isToggled();
 
-            this.setS(value, one ? value : this.sy.value, one ? value : this.sz.value);
+            this.internalSetS(value, one ? value : this.sy.value, one ? value : this.sz.value);
         });
         this.sx.tooltip(IKey.lang("mclib.gui.transforms.x"));
-        this.sy = new GuiTrackpadElement(mc, (value) -> this.setS(this.sx.value, value, this.sz.value));
+        this.sy = new GuiTrackpadElement(mc, (value) -> this.internalSetS(this.sx.value, value, this.sz.value));
         this.sy.tooltip(IKey.lang("mclib.gui.transforms.y"));
-        this.sz = new GuiTrackpadElement(mc, (value) -> this.setS(this.sx.value, this.sy.value, value));
+        this.sz = new GuiTrackpadElement(mc, (value) -> this.internalSetS(this.sx.value, this.sy.value, value));
         this.sz.tooltip(IKey.lang("mclib.gui.transforms.z"));
 
-        this.rx = new GuiTrackpadElement(mc, (value) -> this.setR(value, this.ry.value, this.rz.value)).degrees();
+        this.rx = new GuiTrackpadElement(mc, (value) -> this.internalSetR(value, this.ry.value, this.rz.value)).degrees();
         this.rx.tooltip(IKey.lang("mclib.gui.transforms.x"));
-        this.ry = new GuiTrackpadElement(mc, (value) -> this.setR(this.rx.value, value, this.rz.value)).degrees();
+        this.ry = new GuiTrackpadElement(mc, (value) -> this.internalSetR(this.rx.value, value, this.rz.value)).degrees();
         this.ry.tooltip(IKey.lang("mclib.gui.transforms.y"));
-        this.rz = new GuiTrackpadElement(mc, (value) -> this.setR(this.rx.value, this.ry.value, value)).degrees();
+        this.rz = new GuiTrackpadElement(mc, (value) -> this.internalSetR(this.rx.value, this.ry.value, value)).degrees();
         this.rz.tooltip(IKey.lang("mclib.gui.transforms.z"));
         this.one = new GuiToggleElement(mc, IKey.EMPTY, false, (b) ->
         {
@@ -147,6 +147,42 @@ public class GuiTransformations extends GuiElement
         this.rx.setValue(x);
         this.ry.setValue(y);
         this.rz.setValue(z);
+    }
+    
+    private void internalSetT(double x, double y, double z)
+    {
+        try
+        {
+            this.setT(x, y, z);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void internalSetS(double x, double y, double z)
+    {
+        try
+        {
+            this.setS(x, y, z);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void internalSetR(double x, double y, double z)
+    {
+        try
+        {
+            this.setR(x, y, z);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void setT(double x, double y, double z)
