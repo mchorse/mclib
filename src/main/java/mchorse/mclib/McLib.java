@@ -3,6 +3,7 @@ package mchorse.mclib;
 import mchorse.mclib.client.gui.utils.ValueColors;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.commands.CommandMcLib;
+import mchorse.mclib.commands.CommandCheats;
 import mchorse.mclib.commands.utils.L10n;
 import mchorse.mclib.config.ConfigBuilder;
 import mchorse.mclib.config.values.ValueBoolean;
@@ -23,7 +24,6 @@ import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Map;
 
@@ -157,10 +157,16 @@ public class McLib
     }
 
     @Mod.EventHandler
-    @SideOnly(Side.SERVER)
     public void serverInit(FMLServerStartingEvent event)
     {
-        event.registerServerCommand(new CommandMcLib());
+        if (event.getServer().isSinglePlayer())
+        {
+            event.registerServerCommand(new CommandCheats());
+        }
+        else
+        {
+            event.registerServerCommand(new CommandMcLib());
+        }
     }
 
     public static void main(String[] args) throws Exception
