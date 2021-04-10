@@ -63,7 +63,7 @@ public enum Operation
             return Math.pow(a, b);
         }
     },
-    AND("&&", 5)
+    AND("&&", -1)
     {
         @Override
         public double calculate(double a, double b)
@@ -71,7 +71,7 @@ public enum Operation
             return a != 0 && b != 0 ? 1 : 0;
         }
     },
-    OR("||", 5)
+    OR("||", -1)
     {
         @Override
         public double calculate(double a, double b)
@@ -79,7 +79,7 @@ public enum Operation
             return a != 0 || b != 0 ? 1 : 0;
         }
     },
-    LESS("<", 5)
+    LESS("<", 0)
     {
         @Override
         public double calculate(double a, double b)
@@ -87,7 +87,7 @@ public enum Operation
             return a < b ? 1 : 0;
         }
     },
-    LESS_THAN("<=", 5)
+    LESS_THAN("<=", 0)
     {
         @Override
         public double calculate(double a, double b)
@@ -95,7 +95,7 @@ public enum Operation
             return a <= b ? 1 : 0;
         }
     },
-    GREATER_THAN(">=", 5)
+    GREATER_THAN(">=", 0)
     {
         @Override
         public double calculate(double a, double b)
@@ -103,7 +103,7 @@ public enum Operation
             return a >= b ? 1 : 0;
         }
     },
-    GREATER(">", 5)
+    GREATER(">", 0)
     {
         @Override
         public double calculate(double a, double b)
@@ -111,7 +111,7 @@ public enum Operation
             return a > b ? 1 : 0;
         }
     },
-    EQUALS("==", 5)
+    EQUALS("==", 0)
     {
         @Override
         public double calculate(double a, double b)
@@ -119,7 +119,7 @@ public enum Operation
             return equals(a, b) ? 1 : 0;
         }
     },
-    NOT_EQUALS("!=", 5)
+    NOT_EQUALS("!=", 0)
     {
         @Override
         public double calculate(double a, double b)
