@@ -212,7 +212,12 @@ public class MathBuilder
                 if (longOperator)
                 {
                     s = chars[i - 1] + s;
-                    buffer = buffer.substring(0, buffer.length() - 1);
+                    buffer = "";
+
+                    if (this.isOperator(symbols.get(symbols.size() - 1)))
+                    {
+                        symbols.remove(symbols.size() - 1);
+                    }
                 }
 
                 /* Push buffer and operator */
