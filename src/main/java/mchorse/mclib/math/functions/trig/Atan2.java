@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.trig;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class Atan2 extends Function
+public class Atan2 extends NNFunction
 {
     public Atan2(IValue[] values, String name) throws Exception
     {
@@ -17,8 +17,8 @@ public class Atan2 extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return Math.atan2(this.getArg(0), this.getArg(1));
+        return Math.atan2(this.getArg(0).doubleValue(), this.getArg(1).doubleValue());
     }
 }

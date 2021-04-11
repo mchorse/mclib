@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.trig;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class Sin extends Function
+public class Sin extends NNFunction
 {
     public Sin(IValue[] values, String name) throws Exception
     {
@@ -17,8 +17,8 @@ public class Sin extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return Math.sin(this.getArg(0));
+        return Math.sin(this.getArg(0).doubleValue());
     }
 }

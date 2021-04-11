@@ -1,0 +1,57 @@
+package mchorse.mclib.math.functions;
+
+import mchorse.mclib.math.IValue;
+import mchorse.mclib.math.Operation;
+
+/**
+ * Function that expects number input arguments and outputs a string
+ */
+public abstract class NSFunction extends Function
+{
+    public NSFunction(IValue[] values, String name) throws Exception
+    {
+        super(values, name);
+
+        for (IValue value : values)
+        {
+            if (!value.isNumber())
+            {
+                throw new IllegalStateException("Function " + name + " cannot receive string arguments!");
+            }
+        }
+    }
+
+    @Override
+    public IValue get()
+    {
+        this.result.set(this.stringValue());
+
+        return this.result;
+    }
+
+    @Override
+    public boolean isNumber()
+    {
+        return true;
+    }
+
+    @Override
+    public void set(double value)
+    {}
+
+    @Override
+    public void set(String value)
+    {}
+
+    @Override
+    public double doubleValue()
+    {
+        return 0;
+    }
+
+    @Override
+    public boolean booleanValue()
+    {
+        return this.stringValue().equalsIgnoreCase("true");
+    }
+}

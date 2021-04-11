@@ -2,16 +2,10 @@ package mchorse.mclib.math;
 
 import mchorse.mclib.math.functions.Function;
 import mchorse.mclib.math.functions.classic.Abs;
-import mchorse.mclib.math.functions.trig.Acos;
-import mchorse.mclib.math.functions.trig.Asin;
-import mchorse.mclib.math.functions.trig.Atan;
-import mchorse.mclib.math.functions.trig.Atan2;
-import mchorse.mclib.math.functions.trig.Cos;
 import mchorse.mclib.math.functions.classic.Exp;
 import mchorse.mclib.math.functions.classic.Ln;
 import mchorse.mclib.math.functions.classic.Mod;
 import mchorse.mclib.math.functions.classic.Pow;
-import mchorse.mclib.math.functions.trig.Sin;
 import mchorse.mclib.math.functions.classic.Sqrt;
 import mchorse.mclib.math.functions.limit.Clamp;
 import mchorse.mclib.math.functions.limit.Max;
@@ -20,6 +14,15 @@ import mchorse.mclib.math.functions.rounding.Ceil;
 import mchorse.mclib.math.functions.rounding.Floor;
 import mchorse.mclib.math.functions.rounding.Round;
 import mchorse.mclib.math.functions.rounding.Trunc;
+import mchorse.mclib.math.functions.string.StringContains;
+import mchorse.mclib.math.functions.string.StringEndsWith;
+import mchorse.mclib.math.functions.string.StringStartsWith;
+import mchorse.mclib.math.functions.trig.Acos;
+import mchorse.mclib.math.functions.trig.Asin;
+import mchorse.mclib.math.functions.trig.Atan;
+import mchorse.mclib.math.functions.trig.Atan2;
+import mchorse.mclib.math.functions.trig.Cos;
+import mchorse.mclib.math.functions.trig.Sin;
 import mchorse.mclib.math.functions.utility.DieRoll;
 import mchorse.mclib.math.functions.utility.DieRollInteger;
 import mchorse.mclib.math.functions.utility.HermiteBlend;
@@ -102,6 +105,11 @@ public class MathBuilder
         this.functions.put("roll", DieRoll.class);
         this.functions.put("rolli", DieRollInteger.class);
         this.functions.put("hermite", HermiteBlend.class);
+
+        /* String functions */
+        this.functions.put("str_contains", StringContains.class);
+        this.functions.put("str_starts", StringStartsWith.class);
+        this.functions.put("str_ends", StringEndsWith.class);
     }
 
     /**
@@ -127,13 +135,10 @@ public class MathBuilder
     public String[] breakdown(String expression) throws Exception
     {
         /* If given string have illegal characters, then it can't be parsed */
-        if (!expression.matches("^[\\w\\d\\s_+-/*%^&|<>=!?:.,()]+$"))
+        if (!expression.matches("^[\\w\\d\\s_+-/*%^&|<>=!?:.,()\"']+$"))
         {
             throw new Exception("Given expression '" + expression + "' contains illegal characters!");
         }
-
-        /* Remove all spaces, and leading and trailing parenthesis */
-        expression = expression.replaceAll("\\s+", "");
 
         String[] chars = expression.split("(?!^)");
 
@@ -260,7 +265,36 @@ public class MathBuilder
             symbols.add(buffer);
         }
 
-        return symbols;
+        return this.trimSymbols(symbols);
+    }
+
+    /**
+     * Trims spaces from individual symbols
+     */
+    private List<Object> trimSymbols(List<Object> symbols)
+    {
+        List<Object> newSymbols = new ArrayList<Object>();
+
+        for (int i = 0; i < symbols.size(); i++)
+        {
+            Object value = symbols.get(i);
+
+            if (value instanceof String)
+            {
+                String string = ((String) value).trim();
+
+                if (!string.isEmpty())
+                {
+                    newSymbols.add(string);
+                }
+            }
+            else
+            {
+                newSymbols.add(this.trimSymbols((List) value));
+            }
+        }
+
+        return newSymbols;
     }
 
     /**
@@ -537,6 +571,11 @@ public class MathBuilder
             if (symbol.startsWith("!"))
             {
                 return new Negate(this.valueFromObject(symbol.substring(1)));
+            }
+
+            if (symbol.startsWith("\"") && symbol.endsWith("\""))
+            {
+                return new Constant(symbol.substring(1, symbol.length() - 1));
             }
 
             if (this.isDecimal(symbol))

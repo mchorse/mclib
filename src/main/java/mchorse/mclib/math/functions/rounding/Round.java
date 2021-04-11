@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.rounding;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class Round extends Function
+public class Round extends NNFunction
 {
     public Round(IValue[] values, String name) throws Exception
     {
@@ -17,8 +17,8 @@ public class Round extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return Math.round(this.getArg(0));
+        return Math.round(this.getArg(0).doubleValue());
     }
 }

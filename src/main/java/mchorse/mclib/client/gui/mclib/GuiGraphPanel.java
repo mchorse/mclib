@@ -175,7 +175,7 @@ public class GuiGraphPanel extends GuiDashboardPanel<GuiDashboard>
 
                 this.x.set(x);
 
-                double y = this.expression.get();
+                double y = this.expression.get().doubleValue();
                 int y1 = context.mouseY;
                 int y2 = (int) this.scaleY.to(y) + 1;
                 boolean isNaN = Double.isNaN(y);
@@ -216,10 +216,10 @@ public class GuiGraphPanel extends GuiDashboardPanel<GuiDashboard>
                 double current = min + j / (double) sub;
 
                 this.x.set(previous);
-                double y1 = this.expression.get();
+                double y1 = this.expression.get().doubleValue();
 
                 this.x.set(current);
-                double y2 = this.expression.get();
+                double y2 = this.expression.get().doubleValue();
 
                 double fx1 = this.scaleX.to(previous);
                 double fy1 = this.scaleY.to(y1);

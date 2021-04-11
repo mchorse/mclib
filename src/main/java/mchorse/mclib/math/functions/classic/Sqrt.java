@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.classic;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class Sqrt extends Function
+public class Sqrt extends NNFunction
 {
     public Sqrt(IValue[] values, String name) throws Exception
     {
@@ -17,8 +17,8 @@ public class Sqrt extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return Math.sqrt(this.getArg(0));
+        return Math.sqrt(this.getArg(0).doubleValue());
     }
 }

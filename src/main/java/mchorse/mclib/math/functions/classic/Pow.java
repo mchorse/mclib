@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.classic;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class Pow extends Function
+public class Pow extends NNFunction
 {
     public Pow(IValue[] values, String name) throws Exception
     {
@@ -17,8 +17,8 @@ public class Pow extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return Math.pow(this.getArg(0), this.getArg(1));
+        return Math.pow(this.getArg(0).doubleValue(), this.getArg(1).doubleValue());
     }
 }

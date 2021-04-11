@@ -1,12 +1,12 @@
 package mchorse.mclib.math.functions.classic;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
 /**
  * Absolute value function 
  */
-public class Abs extends Function
+public class Abs extends NNFunction
 {
     public Abs(IValue[] values, String name) throws Exception
     {
@@ -20,8 +20,8 @@ public class Abs extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return Math.abs(this.getArg(0));
+        return Math.abs(this.getArg(0).doubleValue());
     }
 }

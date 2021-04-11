@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.trig;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class Acos extends Function
+public class Acos extends NNFunction
 {
     public Acos(IValue[] values, String name) throws Exception
     {
@@ -17,8 +17,8 @@ public class Acos extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return Math.acos(this.getArg(0));
+        return Math.acos(this.getArg(0).doubleValue());
     }
 }

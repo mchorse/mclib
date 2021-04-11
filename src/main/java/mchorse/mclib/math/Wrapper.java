@@ -1,16 +1,12 @@
 package mchorse.mclib.math;
 
-/**
- * Group class
- * 
- * Simply wraps given {@link IValue} into parenthesis in the 
- * {@link #toString()} method.
- */
-public class Group implements IValue
+public abstract class Wrapper implements IValue
 {
-    private IValue value;
+    public IValue value;
 
-    public Group(IValue value)
+    protected IValue result = new Constant(0);
+
+    public Wrapper(IValue value)
     {
         this.value = value;
     }
@@ -18,8 +14,12 @@ public class Group implements IValue
     @Override
     public IValue get()
     {
-        return this.value.get();
+        this.process();
+
+        return this.result;
     }
+
+    protected abstract void process();
 
     @Override
     public boolean isNumber()
@@ -55,11 +55,5 @@ public class Group implements IValue
     public String stringValue()
     {
         return this.value.stringValue();
-    }
-
-    @Override
-    public String toString()
-    {
-        return "(" + this.value.toString() + ")";
     }
 }

@@ -11,8 +11,8 @@ public class RandomInteger extends Random
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return (int) super.get();
+        return (int) super.doubleValue();
     }
 }

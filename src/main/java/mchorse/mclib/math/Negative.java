@@ -5,19 +5,29 @@ package mchorse.mclib.math;
  *
  * This class is responsible for inverting given value
  */
-public class Negative implements IValue
+public class Negative extends Wrapper
 {
-    public IValue value;
-
     public Negative(IValue value)
     {
-        this.value = value;
+        super(value);
     }
 
     @Override
-    public double get()
+    protected void process()
     {
-        return -this.value.get();
+        this.result.set(this.doubleValue());
+    }
+
+    @Override
+    public double doubleValue()
+    {
+        return -this.value.doubleValue();
+    }
+
+    @Override
+    public boolean booleanValue()
+    {
+        return Operation.isTrue(this.doubleValue());
     }
 
     @Override

@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.utility;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class Random extends Function
+public class Random extends NNFunction
 {
     public java.util.Random random;
 
@@ -15,13 +15,13 @@ public class Random extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
         double random;
 
         if (this.args.length >= 3)
         {
-            this.random.setSeed((long) this.getArg(2));
+            this.random.setSeed((long) this.getArg(2).doubleValue());
             random = this.random.nextDouble();
         }
         else
@@ -31,8 +31,8 @@ public class Random extends Function
 
         if (this.args.length >= 2)
         {
-            double a = this.getArg(0);
-            double b = this.getArg(1);
+            double a = this.getArg(0).doubleValue();
+            double b = this.getArg(1).doubleValue();
 
             double min = Math.min(a, b);
             double max = Math.max(a, b);
@@ -41,7 +41,7 @@ public class Random extends Function
         }
         else if (this.args.length >= 1)
         {
-            random = random * this.getArg(0);
+            random = random * this.getArg(0).doubleValue();
         }
 
         return random;

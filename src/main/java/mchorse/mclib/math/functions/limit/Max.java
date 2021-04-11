@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.limit;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class Max extends Function
+public class Max extends NNFunction
 {
     public Max(IValue[] values, String name) throws Exception
     {
@@ -17,8 +17,8 @@ public class Max extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return Math.max(this.getArg(0), this.getArg(1));
+        return Math.max(this.getArg(0).doubleValue(), this.getArg(1).doubleValue());
     }
 }

@@ -11,8 +11,8 @@ public class DieRollInteger extends DieRoll
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return (int) super.get();
+        return (int) super.doubleValue();
     }
 }

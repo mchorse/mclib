@@ -5,19 +5,29 @@ package mchorse.mclib.math;
  *
  * This class is responsible for negating given value
  */
-public class Negate implements IValue
+public class Negate extends Wrapper
 {
-    public IValue value;
-
     public Negate(IValue value)
     {
-        this.value = value;
+        super(value);
     }
 
     @Override
-    public double get()
+    protected void process()
     {
-        return this.value.get() == 0 ? 1 : 0;
+        this.result.set(this.doubleValue());
+    }
+
+    @Override
+    public double doubleValue()
+    {
+        return this.booleanValue() ? 1 : 0;
+    }
+
+    @Override
+    public boolean booleanValue()
+    {
+        return !this.value.booleanValue();
     }
 
     @Override

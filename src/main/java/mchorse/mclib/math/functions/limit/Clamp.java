@@ -1,10 +1,10 @@
 package mchorse.mclib.math.functions.limit;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 import mchorse.mclib.utils.MathUtils;
 
-public class Clamp extends Function
+public class Clamp extends NNFunction
 {
     public Clamp(IValue[] values, String name) throws Exception
     {
@@ -18,8 +18,8 @@ public class Clamp extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return MathUtils.clamp(this.getArg(0), this.getArg(1), this.getArg(2));
+        return MathUtils.clamp(this.getArg(0).doubleValue(), this.getArg(1).doubleValue(), this.getArg(2).doubleValue());
     }
 }

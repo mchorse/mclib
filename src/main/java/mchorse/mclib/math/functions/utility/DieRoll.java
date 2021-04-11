@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.utility;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class DieRoll extends Function
+public class DieRoll extends NNFunction
 {
     public static double rollDie(int num, double min, double max)
     {
@@ -32,8 +32,8 @@ public class DieRoll extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return rollDie((int) this.getArg(0), this.getArg(1), this.getArg(2));
+        return rollDie((int) this.getArg(0).doubleValue(), this.getArg(1).doubleValue(), this.getArg(2).doubleValue());
     }
 }

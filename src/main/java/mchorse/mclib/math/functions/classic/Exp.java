@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.classic;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class Exp extends Function
+public class Exp extends NNFunction
 {
     public Exp(IValue[] values, String name) throws Exception
     {
@@ -17,8 +17,8 @@ public class Exp extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return Math.exp(this.getArg(0));
+        return Math.exp(this.getArg(0).doubleValue());
     }
 }

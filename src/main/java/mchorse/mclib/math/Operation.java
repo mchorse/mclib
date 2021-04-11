@@ -135,6 +135,11 @@ public enum Operation
         return Math.abs(a - b) < 0.00001;
     }
 
+    public static boolean isTrue(double value)
+    {
+        return !equals(value, 0);
+    }
+
     static
     {
         for (Operation op : values())

@@ -1,5 +1,6 @@
 package mchorse.mclib.math.functions;
 
+import mchorse.mclib.math.Constant;
 import mchorse.mclib.math.IValue;
 
 /**
@@ -12,6 +13,8 @@ public abstract class Function implements IValue
 {
     protected IValue[] args;
     protected String name;
+
+    protected IValue result = new Constant(0);
 
     public Function(IValue[] values, String name) throws Exception
     {
@@ -29,11 +32,11 @@ public abstract class Function implements IValue
     /**
      * Get the value of nth argument 
      */
-    public double getArg(int index)
+    public IValue getArg(int index)
     {
         if (index < 0 || index >= this.args.length)
         {
-            return 0;
+            throw new IllegalStateException("Index should be within the argument's length range! Given " + index + ", arguments length: " +this.args.length);
         }
 
         return this.args[index].get();

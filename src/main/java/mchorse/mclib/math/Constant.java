@@ -7,27 +7,71 @@ package mchorse.mclib.math;
  */
 public class Constant implements IValue
 {
-    private double value;
+    private double doubleValue;
+    private String stringValue;
 
-    public Constant(double value)
+    public Constant(double doubleValue)
     {
-        this.value = value;
+        this.doubleValue = doubleValue;
+    }
+
+    public Constant(String stringValue)
+    {
+        this.stringValue = stringValue;
     }
 
     @Override
-    public double get()
+    public IValue get()
     {
-        return this.value;
+        return this;
     }
 
+    @Override
+    public boolean isNumber()
+    {
+        return this.stringValue == null;
+    }
+
+    @Override
     public void set(double value)
     {
-        this.value = value;
+        this.doubleValue = value;
+        this.stringValue = null;
+    }
+
+    @Override
+    public void set(String value)
+    {
+        this.doubleValue = 0;
+        this.stringValue = value;
+    }
+
+    @Override
+    public double doubleValue()
+    {
+        return this.doubleValue;
+    }
+
+    @Override
+    public boolean booleanValue()
+    {
+        if (this.isNumber())
+        {
+            return Operation.isTrue(this.doubleValue);
+        }
+
+        return this.stringValue.equalsIgnoreCase("true");
+    }
+
+    @Override
+    public String stringValue()
+    {
+        return this.stringValue;
     }
 
     @Override
     public String toString()
     {
-        return String.valueOf(this.value);
+        return this.stringValue == null ? String.valueOf(this.doubleValue) : "\"" + this.stringValue + "\"";
     }
 }

@@ -401,7 +401,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                 {
                     MathBuilder builder = new MathBuilder();
 
-                    this.setValueAndNotify(builder.parse(this.field.getText()).get());
+                    this.setValueAndNotify(builder.parse(this.field.getText()).get().doubleValue());
                 }
                 catch (Exception e)
                 {}

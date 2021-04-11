@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.limit;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class Min extends Function
+public class Min extends NNFunction
 {
     public Min(IValue[] values, String name) throws Exception
     {
@@ -17,8 +17,8 @@ public class Min extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return Math.min(this.getArg(0), this.getArg(1));
+        return Math.min(this.getArg(0).doubleValue(), this.getArg(1).doubleValue());
     }
 }

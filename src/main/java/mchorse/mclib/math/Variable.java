@@ -10,29 +10,22 @@ package mchorse.mclib.math;
  * But in practice, it's simply returns stored value and provides a 
  * method to modify it.
  */
-public class Variable implements IValue
+public class Variable extends Constant
 {
     private String name;
-    private double value;
 
     public Variable(String name, double value)
     {
+        super(value);
+
         this.name = name;
-        this.value = value;
     }
 
-    /**
-     * Set the value of this variable 
-     */
-    public void set(double value)
+    public Variable(String name, String value)
     {
-        this.value = value;
-    }
+        super(value);
 
-    @Override
-    public double get()
-    {
-        return this.value;
+        this.name = name;
     }
 
     public String getName()

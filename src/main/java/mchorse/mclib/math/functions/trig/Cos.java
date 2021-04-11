@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.trig;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class Cos extends Function
+public class Cos extends NNFunction
 {
     public Cos(IValue[] values, String name) throws Exception
     {
@@ -17,8 +17,8 @@ public class Cos extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        return Math.cos(this.getArg(0));
+        return Math.cos(this.getArg(0).doubleValue());
     }
 }

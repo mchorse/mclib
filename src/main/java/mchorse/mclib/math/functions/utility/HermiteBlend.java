@@ -1,9 +1,9 @@
 package mchorse.mclib.math.functions.utility;
 
 import mchorse.mclib.math.IValue;
-import mchorse.mclib.math.functions.Function;
+import mchorse.mclib.math.functions.NNFunction;
 
-public class HermiteBlend extends Function
+public class HermiteBlend extends NNFunction
 {
     public HermiteBlend(IValue[] values, String name) throws Exception
     {
@@ -17,9 +17,9 @@ public class HermiteBlend extends Function
     }
 
     @Override
-    public double get()
+    public double doubleValue()
     {
-        double x = this.getArg(0);
+        double x = this.getArg(0).doubleValue();
 
         return 3 * x * x - 2 * x * x * x;
     }
