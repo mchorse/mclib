@@ -185,7 +185,7 @@ public class McLib
         test(builder, "7 - 2 ^ 4 - 4 * 5 + 15 ^ 2", 7 - Math.pow(2, 4) - 4 * 5 + Math.pow(15, 2));
         test(builder, "5 -(10 + 20)", 5 -(10 + 20));
 
-        IValue test = builder.parse("str_contains(\"abc\", \"d\") ? \"It contains!\" : \"It doesn't...\"");
+        IValue test = builder.parse("str_contains(\"minecraft:diamond_axe\", \"axe\") ? \"It contains!\" : \"It doesn't...\"");
 
         System.out.println(test.isNumber() + " " + test.stringValue() + " " + test.booleanValue() + " " + test.doubleValue());
     }

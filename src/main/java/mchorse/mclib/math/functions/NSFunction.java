@@ -32,7 +32,7 @@ public abstract class NSFunction extends Function
     @Override
     public boolean isNumber()
     {
-        return true;
+        return false;
     }
 
     @Override

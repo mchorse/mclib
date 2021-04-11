@@ -32,7 +32,7 @@ public abstract class SNFunction extends Function
     @Override
     public boolean isNumber()
     {
-        return false;
+        return true;
     }
 
     @Override

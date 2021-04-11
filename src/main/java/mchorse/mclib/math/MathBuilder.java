@@ -174,13 +174,23 @@ public class MathBuilder
         List<Object> symbols = new ArrayList<Object>();
         String buffer = "";
         int len = chars.length;
+        boolean string = false;
 
         for (int i = 0; i < len; i++)
         {
             String s = chars[i];
             boolean longOperator = i > 0 && this.isOperator(chars[i - 1] + s);
 
-            if (this.isOperator(s) || longOperator || s.equals(","))
+            if (s.equals("\""))
+            {
+                string = !string;
+            }
+
+            if (string)
+            {
+                buffer += s;
+            }
+            else if (this.isOperator(s) || longOperator || s.equals(","))
             {
                 /* Taking care of a special case of using minus sign to 
                  * invert the positive value */
