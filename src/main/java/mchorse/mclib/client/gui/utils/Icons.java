@@ -66,6 +66,9 @@ public class Icons
     public static final Icon MOVE_TO = new Icon(ICONS, 224, 32);
     public static final Icon GRAPH = new Icon(ICONS, 240, 32);
 
+    public static final Icon WRENCH = new Icon(ICONS, 0, 48);
+    public static final Icon EXCLAMATION = new Icon(ICONS, 16, 48);
+
     public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240, 16, 16);
     public static final Icon DISABLED = new Icon(ICONS, 16, 240, 16, 16);
     public static final Icon CURSOR = new Icon(ICONS, 32, 240, 16, 16);
