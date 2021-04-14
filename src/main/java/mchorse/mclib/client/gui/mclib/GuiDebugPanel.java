@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.mclib;
 
+import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiModelRenderer;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
@@ -36,6 +37,8 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
 
     private WavePlayer player;
     private Waveform wave;
+
+    public GuiElement element;
 
     public GuiDebugPanel(Minecraft mc, GuiAbstractDashboard dashboard)
     {
@@ -110,8 +113,22 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         this.renderer.flex().relative(this).wh(1F, 1F);
         this.play.flex().relative(this).xy(10, 10).w(80);
         // this.add(this.renderer, this.play, this.slot);
-        this.add(this.graph, this.dopesheet);
+        // this.add(this.graph, this.dopesheet);
         // this.add(this.top, this.bottom);
+
+        this.element = new GuiElement(mc);
+        this.element.flex().relative(this).wh(0.33F, 0.33F).grid(5).resizes(true).width(40).padding(10);
+
+        for (int i = 0; i < 20; i ++)
+        {
+            GuiButtonElement buttonElement = new GuiButtonElement(mc, IKey.str(String.valueOf(i)), null);
+
+            buttonElement.flex().h(10 + (int) (Math.random() * 30));
+
+            this.element.add(buttonElement);
+        }
+
+        this.add(this.element);
     }
 
     @Override
@@ -166,6 +183,8 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
     @Override
     public void draw(GuiContext context)
     {
+        this.element.area.draw(0x88000000);
+
         if (this.player != null && !this.player.isPlaying())
         {
             this.player.delete();
