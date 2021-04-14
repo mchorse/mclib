@@ -69,16 +69,6 @@ public class GuiLabel extends GuiElement implements ITextColoring
     }
 
     @Override
-    public boolean isEnabled()
-    {
-        return false;
-    }
-
-    @Override
-    public void setEnabled(boolean enabled)
-    {}
-
-    @Override
     public void draw(GuiContext context)
     {
         String label = this.label.get();
