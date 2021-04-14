@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 {
@@ -32,6 +33,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
     public int slot;
     public ItemStack stack = ItemStack.EMPTY;
     public GuiInventoryElement inventory;
+    public Consumer<ItemStack> stackCallback;
 
     public GuiSlotElement(Minecraft mc, int slot, GuiInventoryElement inventory)
     {
@@ -58,6 +60,21 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
         this.inventory = inventory;
 
         return this;
+    }
+
+    public GuiSlotElement stackCallback(Consumer<ItemStack> callback)
+    {
+        this.stackCallback = callback;
+
+        return this;
+    }
+
+    public void acceptStack(ItemStack stack)
+    {
+        if (this.stackCallback != null)
+        {
+            this.stackCallback.accept(stack);
+        }
     }
 
     @Override
