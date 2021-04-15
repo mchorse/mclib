@@ -24,6 +24,26 @@ public class ColorUtils
         return COLOR.getRGBAColor();
     }
 
+    public static void interpolate(Color target, int a, int b, float x)
+    {
+        interpolate(target, a, b, x, true);
+    }
+
+    public static void interpolate(Color target, int a, int b, float x, boolean alpha)
+    {
+        target.set(a, alpha);
+        COLOR.set(b, alpha);
+
+        target.r = Interpolations.lerp(target.r, COLOR.r, x);
+        target.g = Interpolations.lerp(target.g, COLOR.g, x);
+        target.b = Interpolations.lerp(target.b, COLOR.b, x);
+
+        if (alpha)
+        {
+            target.a = Interpolations.lerp(target.a, COLOR.a, x);
+        }
+    }
+
     public static void bindColor(int color)
     {
         COLOR.set(color, true);
