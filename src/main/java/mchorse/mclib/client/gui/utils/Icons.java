@@ -70,6 +70,9 @@ public class Icons
     public static final Icon EXCLAMATION = new Icon(ICONS, 16, 48);
     public static final Icon LEFTLOAD = new Icon(ICONS, 32, 48);
     public static final Icon RIGHTLOAD = new Icon(ICONS, 48, 48);
+    public static final Icon BUBBLE = new Icon(ICONS, 64, 48);
+    public static final Icon FILE = new Icon(ICONS, 80, 48);
+    public static final Icon PROCESSOR = new Icon(ICONS, 96, 48);
 
     public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240, 16, 16);
     public static final Icon DISABLED = new Icon(ICONS, 16, 240, 16, 16);
