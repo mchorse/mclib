@@ -171,7 +171,7 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
             String catTitleKey = this.config.getCategoryTitleKey(category);
             String catTooltipKey = this.config.getCategoryTooltipKey(category);
 
-            GuiLabel label = Elements.label(IKey.lang(catTitleKey)).anchor(0, 1).background(0x88000000);
+            GuiLabel label = Elements.label(IKey.lang(catTitleKey)).anchor(0, 1).background();
 
             if (!first)
             {

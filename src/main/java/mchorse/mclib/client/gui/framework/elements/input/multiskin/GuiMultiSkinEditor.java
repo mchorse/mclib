@@ -93,10 +93,10 @@ public class GuiMultiSkinEditor extends GuiCanvasEditor
         this.erase.tooltip(IKey.lang("mclib.gui.multiskin.erase_tooltip"), Direction.TOP);
 
         this.editor.add(this.color);
-        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.scale")).background(0x88000000), this.scale, this.scaleToLargest);
-        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.shift")).background(0x88000000), this.shiftX, this.shiftY);
-        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.pixelate")).background(0x88000000), this.pixelate, this.erase);
-        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.custom_size")).background(0x88000000), this.autoSize, this.sizeW, this.sizeH);
+        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.scale")).background(), this.scale, this.scaleToLargest);
+        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.shift")).background(), this.shiftX, this.shiftY);
+        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.pixelate")).background(), this.pixelate, this.erase);
+        this.editor.add(Elements.label(IKey.lang("mclib.gui.multiskin.custom_size")).background(), this.autoSize, this.sizeW, this.sizeH);
 
         if (shader == null)
         {
