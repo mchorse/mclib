@@ -82,24 +82,31 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
     {
         if (this.contextMenu == null)
         {
-            return new GuiSimpleContextMenu(this.mc)
-                .action(Icons.DOWNLOAD, IKey.lang("mclib.gui.item_slot.context.drop"), () -> {
-                    if (!stack.isEmpty())
-                    {
-                        Dispatcher.sendToServer(new PacketDropItem(this.stack));
-                    }
-                })
-                .action(Icons.CLOSE, IKey.lang("mclib.gui.item_slot.context.clear"), () -> {
-                    this.stack = ItemStack.EMPTY;
-
-                    if (this.inventory != null && this.inventory.callback != null)
-                    {
-                        this.inventory.callback.accept(this.stack);
-                    }
-                });
+            return this.createDefaultSlotContextMenu();
         }
 
         return super.createContextMenu(context);
+    }
+
+    public GuiSimpleContextMenu createDefaultSlotContextMenu()
+    {
+        return new GuiSimpleContextMenu(this.mc)
+            .action(Icons.DOWNLOAD, IKey.lang("mclib.gui.item_slot.context.drop"), () ->
+            {
+                if (!this.stack.isEmpty())
+                {
+                    Dispatcher.sendToServer(new PacketDropItem(this.stack));
+                }
+            })
+            .action(Icons.CLOSE, IKey.lang("mclib.gui.item_slot.context.clear"), () ->
+            {
+                this.stack = ItemStack.EMPTY;
+
+                if (this.inventory != null && this.inventory.callback != null)
+                {
+                    this.inventory.callback.accept(this.stack);
+                }
+            });
     }
 
     @Override
