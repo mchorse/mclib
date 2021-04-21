@@ -5,6 +5,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Scale;
 import mchorse.mclib.utils.Color;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.keyframes.Keyframe;
 import mchorse.mclib.utils.keyframes.KeyframeEasing;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
@@ -352,15 +353,15 @@ public abstract class GuiKeyframeElement extends GuiElement
 
     protected void drawBackground(GuiContext context)
     {
-        this.area.draw(0x88000000);
+        this.area.draw(ColorUtils.HALF_BLACK);
 
         if (this.duration > 0)
         {
             int leftBorder = this.toGraphX(0);
             int rightBorder = this.toGraphX(this.duration);
 
-            if (leftBorder > this.area.x) Gui.drawRect(this.area.x, this.area.y, leftBorder, this.area.y + this.area.h, 0x88000000);
-            if (rightBorder < this.area.ex()) Gui.drawRect(rightBorder, this.area.y, this.area.ex() , this.area.y + this.area.h, 0x88000000);
+            if (leftBorder > this.area.x) Gui.drawRect(this.area.x, this.area.y, leftBorder, this.area.y + this.area.h, ColorUtils.HALF_BLACK);
+            if (rightBorder < this.area.ex()) Gui.drawRect(rightBorder, this.area.y, this.area.ex() , this.area.y + this.area.h, ColorUtils.HALF_BLACK);
         }
     }
 

@@ -2,6 +2,7 @@ package mchorse.mclib.client.gui.framework.elements.utils;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 
 import java.util.function.Supplier;
@@ -43,7 +44,7 @@ public class GuiLabel extends GuiElement implements ITextColoring
 
     public GuiLabel background()
     {
-        return this.background(0x88000000);
+        return this.background(ColorUtils.HALF_BLACK);
     }
 
     public GuiLabel background(int color)

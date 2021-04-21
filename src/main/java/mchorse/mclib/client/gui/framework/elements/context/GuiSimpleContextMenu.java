@@ -7,6 +7,7 @@ import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.client.gui.utils.resizers.constraint.BoundsResizer;
+import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -83,7 +84,7 @@ public class GuiSimpleContextMenu extends GuiContextMenu
 
             if (hover)
             {
-                Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
+                Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, ColorUtils.HALF_BLACK + McLib.primaryColor.get());
             }
 
             GlStateManager.color(1, 1, 1, 1);

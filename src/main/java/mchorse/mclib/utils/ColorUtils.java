@@ -4,6 +4,8 @@ import net.minecraft.client.renderer.GlStateManager;
 
 public class ColorUtils
 {
+    public static final int HALF_BLACK = 0x88000000;
+
     public static final Color COLOR = new Color();
 
     public static int multiplyColor(int color, float factor)

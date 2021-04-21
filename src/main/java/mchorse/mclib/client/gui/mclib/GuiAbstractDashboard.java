@@ -112,8 +112,8 @@ public abstract class GuiAbstractDashboard extends GuiBase
         }
         else
         {
-            this.drawGradientRect(0, 0, this.width, this.height / 8, 0x44000000, 0x00000000);
-            this.drawGradientRect(0, this.height - this.height / 8, this.width, this.height, 0x00000000, 0x44000000);
+            this.drawGradientRect(0, 0, this.width, this.height / 8, 0x44000000, 0);
+            this.drawGradientRect(0, this.height - this.height / 8, this.width, this.height, 0, 0x44000000);
         }
 
         super.drawScreen(mouseX, mouseY, partialTicks);

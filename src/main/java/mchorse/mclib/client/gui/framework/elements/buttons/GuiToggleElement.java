@@ -111,7 +111,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implemen
 
             if (!this.isEnabled())
             {
-                Gui.drawRect(this.area.x, y - 3, this.area.x + 11, y + 8, 0x88000000);
+                Gui.drawRect(this.area.x, y - 3, this.area.x + 11, y + 8, ColorUtils.HALF_BLACK);
                 GuiDraw.drawOutlinedIcon(Icons.LOCKED, this.area.x + 5, y + 2, 0xffffffff, 0.5F, 0.5F);
             }
         }
@@ -146,7 +146,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implemen
 
             if (!this.isEnabled())
             {
-                Gui.drawRect(x, y - h / 2, x + w, y - h / 2 + h, 0x88000000);
+                Gui.drawRect(x, y - h / 2, x + w, y - h / 2 + h, ColorUtils.HALF_BLACK);
             }
 
             x += this.state ? w - 2 : 2;
@@ -159,7 +159,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implemen
 
             if (!this.isEnabled())
             {
-                Gui.drawRect(x - 4, y - 8, x + 4, y + 8, 0x88000000);
+                Gui.drawRect(x - 4, y - 8, x + 4, y + 8, ColorUtils.HALF_BLACK);
 
                 GuiDraw.drawOutlinedIcon(Icons.LOCKED, this.area.ex() - w / 2 - 2, y, 0xffffffff, 0.5F, 0.5F);
             }

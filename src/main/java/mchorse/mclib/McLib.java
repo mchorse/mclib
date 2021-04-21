@@ -14,6 +14,7 @@ import mchorse.mclib.math.IValue;
 import mchorse.mclib.math.MathBuilder;
 import mchorse.mclib.math.Operation;
 import mchorse.mclib.math.Operator;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.PayloadASM;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -122,7 +123,7 @@ public class McLib
         builder.getCategory().markClientSide();
 
         scrollbarFlat = builder.category("scrollbars").getBoolean("flat", false);
-        scrollbarShadow = builder.getInt("shadow", 0x88000000).colorAlpha();
+        scrollbarShadow = builder.getInt("shadow", ColorUtils.HALF_BLACK).colorAlpha();
         scrollbarWidth = builder.getInt("width", 4, 2, 10);
 
         builder.getCategory().markClientSide();

@@ -57,7 +57,7 @@ public class LabelTooltip implements ITooltip
 
         for (String line : strings)
         {
-            context.font.drawString(line, x, y, 0x000000);
+            context.font.drawString(line, x, y, 0);
             y += context.font.FONT_HEIGHT + 3;
         }
     }

@@ -5,6 +5,7 @@ import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.events.RenderOverlayEvent;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.Interpolation;
 import mchorse.mclib.utils.Keys;
 import mchorse.mclib.utils.MatrixUtils;
@@ -194,7 +195,7 @@ public class InputRenderer
 
                 int color = McLib.primaryColor.get();
 
-                GuiDraw.drawDropShadow(x, y, x + 4, y + 16, 2, 0x88000000 + color, color);
+                GuiDraw.drawDropShadow(x, y, x + 4, y + 16, 2, ColorUtils.HALF_BLACK + color, color);
                 Gui.drawRect(x, y, x + 4, y + 16, 0xff111111);
                 Gui.drawRect(x + 1, y, x + 3, y + 15, 0xff2a2a2a);
 

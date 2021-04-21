@@ -315,7 +315,7 @@ public class GuiDraw
     {
         if (!element.isEnabled())
         {
-            element.area.draw(0x88000000, padding);
+            element.area.draw(ColorUtils.HALF_BLACK, padding);
 
             GuiDraw.drawOutlinedIcon(Icons.LOCKED, element.area.mx(), element.area.my(), 0xffffffff, 0.5F, 0.5F);
         }

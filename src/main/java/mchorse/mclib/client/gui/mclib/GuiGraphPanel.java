@@ -11,6 +11,7 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.math.IValue;
 import mchorse.mclib.math.MathBuilder;
 import mchorse.mclib.math.Variable;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -104,7 +105,7 @@ public class GuiGraphPanel extends GuiDashboardPanel<GuiDashboard>
         @Override
         protected void drawCanvas(GuiContext context)
         {
-            this.area.draw(0x88000000);
+            this.area.draw(ColorUtils.HALF_BLACK);
 
             this.drawVerticalGrid(context);
             this.drawHorizontalGridAndGraph(context);
@@ -198,7 +199,7 @@ public class GuiGraphPanel extends GuiDashboardPanel<GuiDashboard>
                 mouseX += 1;
 
                 Gui.drawRect(mouseX, y3, mouseX + w + 4, y3 + 12, 0xffffffff);
-                this.font.drawString(coordinate, mouseX + 2, y3 + 2, 0x000000);
+                this.font.drawString(coordinate, mouseX + 2, y3 + 2, 0);
             }
 
             GlStateManager.glLineWidth(4);

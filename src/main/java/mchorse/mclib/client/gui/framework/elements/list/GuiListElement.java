@@ -12,6 +12,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.utils.ScrollArea;
 import mchorse.mclib.client.gui.utils.ScrollDirection;
+import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
@@ -59,7 +60,7 @@ public abstract class GuiListElement<T> extends GuiElement
     public boolean sorting;
 
     public boolean background = false;
-    public int color = 0x88000000;
+    public int color = ColorUtils.HALF_BLACK;
 
     private String filter = "";
     private List<Pair<T>> filtered = new ArrayList<Pair<T>>();
@@ -650,11 +651,11 @@ public abstract class GuiListElement<T> extends GuiElement
         {
             if (this.isHorizontal())
             {
-                Gui.drawRect(x, y, x + this.scroll.scrollItemSize, y + this.scroll.h, 0x88000000 + McLib.primaryColor.get());
+                Gui.drawRect(x, y, x + this.scroll.scrollItemSize, y + this.scroll.h, ColorUtils.HALF_BLACK + McLib.primaryColor.get());
             }
             else
             {
-                Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, 0x88000000 + McLib.primaryColor.get());
+                Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, ColorUtils.HALF_BLACK + McLib.primaryColor.get());
             }
         }
 

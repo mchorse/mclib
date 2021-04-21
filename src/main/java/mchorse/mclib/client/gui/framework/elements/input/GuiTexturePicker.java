@@ -12,6 +12,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.Timer;
 import mchorse.mclib.utils.files.FileTree;
 import mchorse.mclib.utils.files.GlobalTree;
@@ -540,18 +541,18 @@ public class GuiTexturePicker extends GuiElement
         }
 
         /* Draw the background */
-        drawGradientRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 0x88000000, 0xff000000);
+        drawGradientRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), ColorUtils.HALF_BLACK, 0xff000000);
 
         if (this.multiList.isVisible())
         {
             drawRect(this.area.x, this.area.y, this.area.x + 120, this.area.ey(), 0xff181818);
             drawRect(this.area.x, this.area.y, this.area.x + 120, this.area.y + 30, 0x44000000);
-            drawGradientRect(this.area.x, this.area.ey() - 20, this.buttons.area.ex(), this.area.ey(), 0x00, 0x88000000);
+            drawGradientRect(this.area.x, this.area.ey() - 20, this.buttons.area.ex(), this.area.ey(), 0, ColorUtils.HALF_BLACK);
         }
 
         if (this.editor.isVisible())
         {
-            this.edit.area.draw(0x88000000 + McLib.primaryColor.get());
+            this.edit.area.draw(ColorUtils.HALF_BLACK + McLib.primaryColor.get());
         }
 
         super.draw(context);
@@ -570,7 +571,7 @@ public class GuiTexturePicker extends GuiElement
                 int x = this.text.area.x;
                 int y = this.text.area.ey();
 
-                Gui.drawRect(x, y, x + w + 4, y + 4 + this.font.FONT_HEIGHT, 0x88000000 + McLib.primaryColor.get());
+                Gui.drawRect(x, y, x + w + 4, y + 4 + this.font.FONT_HEIGHT, ColorUtils.HALF_BLACK + McLib.primaryColor.get());
                 this.font.drawStringWithShadow(this.typed, x + 2, y + 2, 0xffffff);
             }
 

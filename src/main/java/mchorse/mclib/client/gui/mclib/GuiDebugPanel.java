@@ -12,6 +12,7 @@ import mchorse.mclib.client.gui.framework.elements.keyframes.GuiSheet;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.Color;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.keyframes.Keyframe;
 import mchorse.mclib.utils.keyframes.KeyframeChannel;
 import mchorse.mclib.utils.keyframes.KeyframeInterpolation;
@@ -183,7 +184,7 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
     @Override
     public void draw(GuiContext context)
     {
-        this.element.area.draw(0x88000000);
+        this.element.area.draw(ColorUtils.HALF_BLACK);
 
         if (this.player != null && !this.player.isPlaying())
         {

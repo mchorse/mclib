@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.utils;
 import com.google.common.collect.ImmutableList;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.IInterpolation;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.gui.Gui;
@@ -38,14 +39,14 @@ public class InterpolationRenderer
         x -= (int) (w * anchorX);
         y -= (int) (h * anchorY);
 
-        GuiDraw.drawDropShadow(x, y, x + w, y + h + ah, 4, 0x88000000, 0x00000000);
+        GuiDraw.drawDropShadow(x, y, x + w, y + h + ah, 4, ColorUtils.HALF_BLACK, 0);
         Gui.drawRect(x, y, x + w, y + h + ah, 0xffffffff);
 
-        context.font.drawString(interp.getName(), x + 10, y + 10, 0x000000);
+        context.font.drawString(interp.getName(), x + 10, y + 10, 0);
 
         for (int i = 0; i < lines.size(); i++)
         {
-            context.font.drawString(lines.get(i), x + 10, y + h - 5 + i * (context.font.FONT_HEIGHT + 4), 0x000000);
+            context.font.drawString(lines.get(i), x + 10, y + h - 5 + i * (context.font.FONT_HEIGHT + 4), 0);
         }
 
         BufferBuilder builder = Tessellator.getInstance().getBuffer();
@@ -102,8 +103,8 @@ public class InterpolationRenderer
 
         GlStateManager.enableTexture2D();
 
-        context.font.drawString("A", x + 14, (int)(y + h - 10 - padding / 2) + 4, 0x000000);
-        context.font.drawString("B", x + w - 19, (int)(y + 20 + padding / 2) - context.font.FONT_HEIGHT - 4, 0x000000);
+        context.font.drawString("A", x + 14, (int)(y + h - 10 - padding / 2) + 4, 0);
+        context.font.drawString("B", x + w - 19, (int)(y + 20 + padding / 2) - context.font.FONT_HEIGHT - 4, 0);
 
         float tick = ((context.tick + context.partialTicks) % (duration + 20)) / (float) duration;
         float factor = MathUtils.clamp(tick, 0, 1);
