@@ -450,6 +450,53 @@ public class GuiElement extends Gui implements IGuiElement
         return this;
     }
 
+    /* Margin */
+
+    public GuiElement margin(int all)
+    {
+        return this.margin(all, all);
+    }
+
+    public GuiElement margin(int horizontal, int vertical)
+    {
+        return this.margin(horizontal, vertical, horizontal, vertical);
+    }
+
+    public GuiElement margin(int left, int top, int right, int bottom)
+    {
+        this.margin.all(left, top, right, bottom);
+
+        return this;
+    }
+
+    public GuiElement marginLeft(int left)
+    {
+        this.margin.left(left);
+
+        return this;
+    }
+
+    public GuiElement marginTop(int top)
+    {
+        this.margin.top(top);
+
+        return this;
+    }
+
+    public GuiElement marginRight(int right)
+    {
+        this.margin.right(right);
+
+        return this;
+    }
+
+    public GuiElement marginBottom(int bottom)
+    {
+        this.margin.bottom(bottom);
+
+        return this;
+    }
+
     /* Enabled methods */
 
     @Override

@@ -41,6 +41,11 @@ public class GuiLabel extends GuiElement implements ITextColoring
         return this;
     }
 
+    public GuiLabel background()
+    {
+        return this.background(0x88000000);
+    }
+
     public GuiLabel background(int color)
     {
         this.background = color;
