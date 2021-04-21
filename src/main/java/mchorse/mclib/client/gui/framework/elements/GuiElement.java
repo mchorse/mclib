@@ -10,6 +10,7 @@ import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.client.gui.utils.resizers.IResizer;
 import mchorse.mclib.client.gui.utils.resizers.Flex;
+import mchorse.mclib.client.gui.utils.resizers.Margin;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -29,6 +30,11 @@ public class GuiElement extends Gui implements IGuiElement
      * Area of this element (i.e. position and size) 
      */
     public Area area = new Area();
+
+    /**
+     * Element's margin (it's used only by layout resizers)
+     */
+    public final Margin margin = new Margin();
 
     /**
      * Resizer of this class

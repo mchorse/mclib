@@ -6,7 +6,9 @@ import mchorse.mclib.client.gui.utils.ScrollArea;
 import mchorse.mclib.client.gui.utils.ScrollDirection;
 import mchorse.mclib.client.gui.utils.resizers.AutomaticResizer;
 import mchorse.mclib.client.gui.utils.resizers.ChildResizer;
+import mchorse.mclib.client.gui.utils.resizers.Flex;
 import mchorse.mclib.client.gui.utils.resizers.IResizer;
+import mchorse.mclib.client.gui.utils.resizers.Margin;
 
 public class ColumnResizer extends AutomaticResizer
 {
@@ -100,6 +102,7 @@ public class ColumnResizer extends AutomaticResizer
     @Override
     public void apply(Area area, IResizer resizer, ChildResizer child)
     {
+        Margin margin = child.element.margin;
         int w = resizer == null ? this.width : resizer.getW();
         int h = resizer == null ? this.height : resizer.getH();
 
@@ -118,19 +121,23 @@ public class ColumnResizer extends AutomaticResizer
             w = this.parent.area.w - this.padding * 2;
         }
 
-        if (!this.vertical && this.y + h > this.parent.area.h - this.padding * 2)
+        int marginTop = margin.top;
+
+        if (!this.vertical && this.y + h + marginTop > this.parent.area.h - this.padding * 2)
         {
             this.x += (this.w + this.padding) * (this.flip ? -1 : 1);
             this.y = this.w = 0;
+
+            marginTop = 0;
         }
 
-        int x = this.parent.area.x + this.x + this.padding;
-        int y = this.parent.area.y + this.y + this.padding;
+        int x = this.parent.area.x + this.x + this.padding + margin.left;
+        int y = this.parent.area.y + this.y + this.padding + marginTop;
 
         area.set(x, y, w, h);
 
-        this.w = Math.max(this.w, w);
-        this.y += h + this.margin;
+        this.w = Math.max(this.w, w + margin.horizontal());
+        this.y += h + this.margin + marginTop + margin.bottom;
     }
 
     @Override
@@ -164,7 +171,7 @@ public class ColumnResizer extends AutomaticResizer
             {
                 int h = child.resizer == null ? 0 : child.resizer.getH();
 
-                y += (h == 0 ? this.height : h) + this.margin;
+                y += (h == 0 ? this.height : h) + this.margin + child.element.margin.vertical();
             }
 
             return y - this.margin;
