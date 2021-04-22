@@ -87,6 +87,22 @@ public abstract class SubCommandBase extends McCommandBase
     }
 
     /**
+     * Delegate isUsernameIndex method to a subcommand
+     */
+    @Override
+    public boolean isUsernameIndex(String[] args, int index)
+    {
+        McCommandBase command = this.subcommands.get(args[0]);
+
+        if (command != null && command.isUsernameIndex(dropFirstArgument(args), index - 1))
+        {
+            return true;
+        }
+
+        return super.isUsernameIndex(args, index);
+    }
+
+    /**
      * Execute the command
      *
      * This method basically delegates the execution to the matched sub-command,
