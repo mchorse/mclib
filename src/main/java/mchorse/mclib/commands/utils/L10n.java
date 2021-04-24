@@ -16,6 +16,10 @@ import net.minecraft.util.text.TextFormatting;
  */
 public class L10n
 {
+    public static String ERROR_MARKER = "§4(§cX§4)§r ";
+    public static String SUCCESS_MARKER = "§2(§aV§2)§r ";
+    public static String INFO_MARKER = "§9(§bi§9)§r ";
+
     private final String id;
 
     public L10n(String id)
@@ -47,7 +51,7 @@ public class L10n
      */
     public void error(ICommandSender sender, String key, Object... objects)
     {
-        this.sendWithMarker(sender, "§4(§cX§4)§r ", this.id + ".error." + key, objects);
+        this.sendWithMarker(sender, ERROR_MARKER, this.id + ".error." + key, objects);
     }
 
     /**
@@ -55,7 +59,7 @@ public class L10n
      */
     public ITextComponent error(String key, Object... objects)
     {
-        return this.messageWithMarker( "§4(§cX§4)§r ", this.id + ".error." + key, objects);
+        return this.messageWithMarker(ERROR_MARKER, this.id + ".error." + key, objects);
     }
 
     /**
@@ -63,7 +67,7 @@ public class L10n
      */
     public void success(ICommandSender sender, String key, Object... objects)
     {
-        this.sendWithMarker(sender, "§2(§aV§2)§r ", this.id + ".success." + key, objects);
+        this.sendWithMarker(sender, SUCCESS_MARKER, this.id + ".success." + key, objects);
     }
 
     /**
@@ -71,7 +75,7 @@ public class L10n
      */
     public ITextComponent success(String key, Object... objects)
     {
-        return this.messageWithMarker("§2(§aV§2)§r ", this.id + ".success." + key, objects);
+        return this.messageWithMarker(SUCCESS_MARKER, this.id + ".success." + key, objects);
     }
 
     /**
@@ -79,7 +83,7 @@ public class L10n
      */
     public void info(ICommandSender sender, String key, Object... objects)
     {
-        this.sendWithMarker(sender, "§9(§bi§9)§r ", this.id + ".info." + key, objects);
+        this.sendWithMarker(sender, INFO_MARKER, this.id + ".info." + key, objects);
     }
 
     /**
@@ -87,7 +91,7 @@ public class L10n
      */
     public ITextComponent info(String key, Object... objects)
     {
-        return  this.messageWithMarker("§9(§bi§9)§r ", this.id + ".info." + key, objects);
+        return  this.messageWithMarker(INFO_MARKER, this.id + ".info." + key, objects);
     }
 
     /**

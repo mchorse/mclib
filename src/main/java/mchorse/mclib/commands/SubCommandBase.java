@@ -92,7 +92,7 @@ public abstract class SubCommandBase extends McCommandBase
     @Override
     public boolean isUsernameIndex(String[] args, int index)
     {
-        McCommandBase command = this.subcommands.get(args[0]);
+        McCommandBase command = this.subcommands.get(args.length >= 1 ? args[0] : "");
 
         if (command != null && command.isUsernameIndex(dropFirstArgument(args), index - 1))
         {
