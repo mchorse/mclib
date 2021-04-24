@@ -10,13 +10,14 @@ public abstract class SSFunction extends Function
     public SSFunction(IValue[] values, String name) throws Exception
     {
         super(values, name);
+    }
 
-        for (IValue value : values)
+    @Override
+    protected void verifyArgument(int index, IValue value)
+    {
+        if (value.isNumber())
         {
-            if (value.isNumber())
-            {
-                throw new IllegalStateException("Function " + name + " cannot receive number arguments!");
-            }
+            throw new IllegalStateException("Function " + this.name + " cannot receive number arguments!");
         }
     }
 

@@ -25,9 +25,17 @@ public abstract class Function implements IValue
             throw new Exception(message);
         }
 
+        for (int i = 0; i < values.length; i++)
+        {
+            this.verifyArgument(i, values[i]);
+        }
+
         this.args = values;
         this.name = name;
     }
+
+    protected void verifyArgument(int index, IValue value)
+    {}
 
     /**
      * Get the value of nth argument 

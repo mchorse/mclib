@@ -22,6 +22,15 @@ public abstract class NSFunction extends Function
     }
 
     @Override
+    protected void verifyArgument(int index, IValue value)
+    {
+        if (!value.isNumber())
+        {
+            throw new IllegalStateException("Function " + this.name + " cannot receive string arguments!");
+        }
+    }
+
+    @Override
     public IValue get()
     {
         this.result.set(this.stringValue());
