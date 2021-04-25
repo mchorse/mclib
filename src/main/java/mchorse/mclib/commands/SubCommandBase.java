@@ -13,7 +13,7 @@ import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public abstract class SubCommandBase extends McCommandBase
     /**
      * Sub-commands list, add your sub commands in this list.
      */
-    protected Map<String, McCommandBase> subcommands = new HashMap<String, McCommandBase>();
+    protected Map<String, McCommandBase> subcommands = new LinkedHashMap<String, McCommandBase>();
 
     /**
      * Drop only the first argument
