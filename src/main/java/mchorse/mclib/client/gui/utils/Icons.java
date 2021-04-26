@@ -73,6 +73,8 @@ public class Icons
     public static final Icon BUBBLE = new Icon(ICONS, 64, 48);
     public static final Icon FILE = new Icon(ICONS, 80, 48);
     public static final Icon PROCESSOR = new Icon(ICONS, 96, 48);
+    public static final Icon MAZE = new Icon(ICONS, 112, 48);
+    public static final Icon BOOKMARK = new Icon(ICONS, 128, 48);
 
     public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240, 16, 16);
     public static final Icon DISABLED = new Icon(ICONS, 16, 240, 16, 16);
