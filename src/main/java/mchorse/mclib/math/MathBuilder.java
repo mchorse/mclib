@@ -179,7 +179,7 @@ public class MathBuilder
         for (int i = 0; i < len; i++)
         {
             String s = chars[i];
-            boolean longOperator = i > 0 && this.isOperator(chars[i - 1] + s);
+            boolean longOperator = i < chars.length - 1 && this.isOperator(chars[i + 1] + s);
 
             if (s.equals("\""))
             {
@@ -209,17 +209,6 @@ public class MathBuilder
                     }
                 }
 
-                if (longOperator)
-                {
-                    s = chars[i - 1] + s;
-                    buffer = "";
-
-                    if (this.isOperator(symbols.get(symbols.size() - 1)))
-                    {
-                        symbols.remove(symbols.size() - 1);
-                    }
-                }
-
                 /* Push buffer and operator */
                 if (!buffer.isEmpty())
                 {
@@ -227,7 +216,15 @@ public class MathBuilder
                     buffer = "";
                 }
 
-                symbols.add(s);
+                if (longOperator)
+                {
+                    symbols.add(s + chars[i + 1]);
+                    i += 1;
+                }
+                else
+                {
+                    symbols.add(s);
+                }
             }
             else if (s.equals("("))
             {
