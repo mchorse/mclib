@@ -188,7 +188,7 @@ public class McLib
         test(builder, "5 -(10 + 20)", 5 -(10 + 20));
 
         builder.variables.put("variable.particle_random_3", new Variable("variable.particle_random_3", 0.5));
-        IValue test = builder.parse("variable.particle_random_3 > 0.2 ? -10 : -4");
+        IValue test = builder.parse("variable.particle_random_3 >= 0.2 ? -10 : -4");
 
         System.out.println(test.isNumber() + " " + test.stringValue() + " " + test.booleanValue() + " " + test.doubleValue());
     }

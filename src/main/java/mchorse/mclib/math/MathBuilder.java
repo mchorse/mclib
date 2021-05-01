@@ -179,7 +179,7 @@ public class MathBuilder
         for (int i = 0; i < len; i++)
         {
             String s = chars[i];
-            boolean longOperator = i < chars.length - 1 && this.isOperator(chars[i + 1] + s);
+            boolean longOperator = i < chars.length - 1 && this.isOperator(s + chars[i + 1]);
 
             if (s.equals("\""))
             {
