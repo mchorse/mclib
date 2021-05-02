@@ -35,6 +35,8 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
     public GuiInventoryElement inventory;
     public Consumer<ItemStack> stackCallback;
 
+    public boolean drawDisabled = true;
+
     public GuiSlotElement(Minecraft mc, int slot, GuiInventoryElement inventory)
     {
         this(mc, slot, inventory, inventory::link);
@@ -175,7 +177,10 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
             RenderHelper.disableStandardItemLighting();
         }
 
-        GuiDraw.drawLockedArea(this, McLib.enableBorders.get() ? 1 : 0);
+        if (this.drawDisabled)
+        {
+            GuiDraw.drawLockedArea(this, McLib.enableBorders.get() ? 1 : 0);
+        }
     }
 
     @Override
