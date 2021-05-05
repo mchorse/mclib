@@ -46,6 +46,7 @@ public abstract class GuiModelRenderer extends GuiElement
     protected boolean position;
     protected Vector3f temp = new Vector3f();
 
+    public float fov = 70.0F;
     public float scale;
     public float yaw;
     public float pitch;
@@ -344,7 +345,7 @@ public abstract class GuiModelRenderer extends GuiElement
         GlStateManager.viewport(vx, vy, vw, vh);
         GlStateManager.matrixMode(GL11.GL_PROJECTION);
         GlStateManager.loadIdentity();
-        Project.gluPerspective(70, (float) vw / (float) vh, 0.05F, 1000);
+        Project.gluPerspective(this.fov, (float) vw / (float) vh, 0.05F, 1000);
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
     }
 
