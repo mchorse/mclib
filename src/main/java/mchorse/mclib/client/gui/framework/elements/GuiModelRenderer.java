@@ -66,6 +66,11 @@ public abstract class GuiModelRenderer extends GuiElement
         return rendering;
     }
 
+    public static void disableRenderingFlag()
+    {
+        rendering = false;
+    }
+
     public GuiModelRenderer(Minecraft mc)
     {
         super(mc);
