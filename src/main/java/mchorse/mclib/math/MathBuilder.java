@@ -198,8 +198,9 @@ public class MathBuilder
                 {
                     int size = symbols.size();
 
-                    boolean isFirst = buffer.trim().isEmpty();
-                    boolean isOperatorBehind = size > 0 && (this.isOperator(symbols.get(size - 1)) || symbols.get(size - 1).equals(",")) && buffer.isEmpty();
+                    boolean isEmpty = buffer.trim().isEmpty();
+                    boolean isFirst = size == 0 && isEmpty;
+                    boolean isOperatorBehind = size > 0 && (this.isOperator(symbols.get(size - 1)) || symbols.get(size - 1).equals(",")) && isEmpty;
 
                     if (isFirst || isOperatorBehind)
                     {
