@@ -106,6 +106,7 @@ public class GuiSlotElement extends GuiClickElement<GuiSlotElement>
 
                 if (this.inventory != null && this.inventory.callback != null)
                 {
+                    this.inventory.linked = this;
                     this.inventory.callback.accept(this.stack);
                 }
             });
