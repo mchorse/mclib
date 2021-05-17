@@ -96,6 +96,12 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         }
     }
 
+    @Override
+    public boolean canBeOpened(int opLevel)
+    {
+        return true;
+    }
+
     public void storeServerConfig(Config config)
     {
         this.serverConfigs.put(config.id, config);
