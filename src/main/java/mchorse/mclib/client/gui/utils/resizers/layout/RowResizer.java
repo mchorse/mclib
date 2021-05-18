@@ -105,12 +105,12 @@ public class RowResizer extends AutomaticResizer
         int c = resizers.size();
         int original = this.parent.area.w - this.padding * 2 - this.margin * (c - 1);
         int w = this.count > 0 ? (original - this.w) / this.count : 0;
-        int x = this.parent.area.x + this.padding + this.x + child.element.margin.right;
+        int x = this.parent.area.x + this.padding + this.x + child.element.margin.left;
 
         /* If it's reverse, start adding from the right side */
         if (this.reverse)
         {
-            x = this.parent.area.ex() - this.padding - this.x + child.element.margin.left;
+            x = this.parent.area.ex() - this.padding - this.x - child.element.margin.right;
         }
 
         /* If resizer specifies its custom width, use that one instead */
