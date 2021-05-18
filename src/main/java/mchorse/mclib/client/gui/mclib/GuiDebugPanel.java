@@ -118,13 +118,27 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         // this.add(this.top, this.bottom);
 
         this.element = new GuiElement(mc);
-        this.element.flex().relative(this).wh(0.33F, 0.33F).grid(5).resizes(true).width(40).padding(10);
+        this.element.flex().relative(this).wh(0.33F, 0.33F).row(5).resize().width(80).padding(10);
 
-        for (int i = 0; i < 20; i ++)
+        for (int i = 0; i < 5; i ++)
         {
             GuiButtonElement buttonElement = new GuiButtonElement(mc, IKey.str(String.valueOf(i)), null);
 
-            buttonElement.flex().h(10 + (int) (Math.random() * 30));
+            buttonElement.flex().h(20);
+
+            if (i == 1)
+            {
+                buttonElement.marginLeft(0);
+                buttonElement.marginRight(30);
+            }
+            else if (i == 2)
+            {
+                buttonElement.marginTop(50);
+            }
+            else if (i == 3)
+            {
+                buttonElement.marginBottom(50);
+            }
 
             this.element.add(buttonElement);
         }

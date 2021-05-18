@@ -105,12 +105,12 @@ public class RowResizer extends AutomaticResizer
         int c = resizers.size();
         int original = this.parent.area.w - this.padding * 2 - this.margin * (c - 1);
         int w = this.count > 0 ? (original - this.w) / this.count : 0;
-        int x = this.parent.area.x + this.padding + this.x;
+        int x = this.parent.area.x + this.padding + this.x + child.element.margin.right;
 
         /* If it's reverse, start adding from the right side */
         if (this.reverse)
         {
-            x = this.parent.area.ex() - this.padding - this.x;
+            x = this.parent.area.ex() - this.padding - this.x + child.element.margin.left;
         }
 
         /* If resizer specifies its custom width, use that one instead */
@@ -143,9 +143,9 @@ public class RowResizer extends AutomaticResizer
             x -= cw;
         }
 
-        area.set(x, this.parent.area.y + this.padding, cw, ch > 0 ? ch : this.parent.area.h - this.padding * 2);
+        area.set(x, this.parent.area.y + this.padding + child.element.margin.top, cw, ch > 0 ? ch : this.parent.area.h - this.padding * 2);
 
-        this.x += cw + this.margin;
+        this.x += cw + this.margin + child.element.margin.horizontal();
         this.i ++;
     }
 
@@ -166,7 +166,7 @@ public class RowResizer extends AutomaticResizer
                     cw = this.width;
                 }
 
-                w += Math.max(cw, 0) + this.margin;
+                w += Math.max(cw, 0) + this.margin + resizer.element.margin.horizontal();
             }
 
             return w + this.padding * 2;
@@ -183,7 +183,7 @@ public class RowResizer extends AutomaticResizer
 
         for (ChildResizer child : resizers)
         {
-            h = child.resizer == null ? 0 : child.resizer.getH();
+            h = Math.max(h, child.resizer == null ? 0 : child.resizer.getH() + child.element.margin.vertical());
         }
 
         if (h == 0)
