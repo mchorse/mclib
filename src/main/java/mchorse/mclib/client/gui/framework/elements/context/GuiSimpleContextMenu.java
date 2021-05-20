@@ -7,7 +7,6 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.client.gui.utils.resizers.constraint.BoundsResizer;
 import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -61,6 +60,16 @@ public class GuiSimpleContextMenu extends GuiContextMenu
         }
 
         return this.action(new Action(icon, label, runnable));
+    }
+
+    public GuiSimpleContextMenu action(Icon icon, IKey label, Runnable runnable, int color)
+    {
+        if (icon == null || label == null)
+        {
+            return this;
+        }
+
+        return this.action(new ColorfulAction(icon, label, runnable, color));
     }
 
     public GuiSimpleContextMenu action(Action action)
@@ -147,6 +156,27 @@ public class GuiSimpleContextMenu extends GuiContextMenu
             {
                 Gui.drawRect(x, y, x + w, y + h, ColorUtils.HALF_BLACK + McLib.primaryColor.get());
             }
+        }
+    }
+
+    public static class ColorfulAction extends Action
+    {
+        public int color;
+
+        public ColorfulAction(Icon icon, IKey label, Runnable runnable, int color)
+        {
+            super(icon, label, runnable);
+
+            this.color = color;
+        }
+
+        @Override
+        protected void drawBackground(FontRenderer font, int x, int y, int w, int h, boolean hover, boolean selected)
+        {
+            super.drawBackground(font, x, y, w, h, hover, selected);
+
+            drawRect(x, y, x + 2, y + h, 0xff000000 + this.color);
+            GuiDraw.drawHorizontalGradientRect(x + 2, y, x + 24, y + h, 0x44000000 + this.color, this.color);
         }
     }
 }
