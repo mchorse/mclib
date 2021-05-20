@@ -68,7 +68,7 @@ public enum Operation
         @Override
         public double calculate(double a, double b)
         {
-            return a != 0 && b != 0 ? 1 : 0;
+            return isTrue(a) && isTrue(b) ? 1 : 0;
         }
     },
     OR("||", -1)
@@ -76,7 +76,7 @@ public enum Operation
         @Override
         public double calculate(double a, double b)
         {
-            return a != 0 || b != 0 ? 1 : 0;
+            return isTrue(a) || isTrue(b) ? 1 : 0;
         }
     },
     LESS("<", 0)
@@ -92,7 +92,7 @@ public enum Operation
         @Override
         public double calculate(double a, double b)
         {
-            return a <= b ? 1 : 0;
+            return a < b || equals(a, b) ? 1 : 0;
         }
     },
     GREATER_THAN(">=", 0)
@@ -100,7 +100,7 @@ public enum Operation
         @Override
         public double calculate(double a, double b)
         {
-            return a >= b ? 1 : 0;
+            return a > b || equals(a, b) ? 1 : 0;
         }
     },
     GREATER(">", 0)
