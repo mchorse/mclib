@@ -78,45 +78,43 @@ public class InputRenderer
         McLib.EVENT_BUS.post(new RenderOverlayEvent.Post(mc, resolution));
     }
 
+    /* Shift -6 and -8 to get it into the center */
     public static void renderMouseButtons(int x, int y, int scroll, boolean left, boolean right, boolean middle, boolean isScrolling)
     {
-        if (left || right || middle || isScrolling)
+        /* Outline */
+        Gui.drawRect(x - 1, y, x + 13, y + 16, 0xff000000);
+        Gui.drawRect(x, y - 1, x + 12, y + 17, 0xff000000);
+        /* Background */
+        Gui.drawRect(x, y + 1, x + 12, y + 15, 0xffffffff);
+        Gui.drawRect(x + 1, y, x + 11, y + 1, 0xffffffff);
+        Gui.drawRect(x + 1, y + 15, x + 11, y + 16, 0xffffffff);
+        /* Over outline */
+        Gui.drawRect(x, y + 7, x + 12, y + 8, 0xffeeeeee);
+
+        if (left)
         {
-            /* Outline */
-            Gui.drawRect(x - 1, y, x + 13, y + 16, 0xff000000);
-            Gui.drawRect(x, y - 1, x + 12, y + 17, 0xff000000);
-            /* Background */
-            Gui.drawRect(x, y + 1, x + 12, y + 15, 0xffffffff);
-            Gui.drawRect(x + 1, y, x + 11, y + 1, 0xffffffff);
-            Gui.drawRect(x + 1, y + 15, x + 11, y + 16, 0xffffffff);
-            /* Over outline */
-            Gui.drawRect(x, y + 7, x + 12, y + 8, 0xffeeeeee);
+            Gui.drawRect(x + 1, y, x + 6, y + 7, 0xffcccccc);
+            Gui.drawRect(x, y + 1, x + 1, y + 7, 0xffaaaaaa);
+        }
 
-            if (left)
+        if (right)
+        {
+            Gui.drawRect(x + 6, y, x + 11, y + 7, 0xffaaaaaa);
+            Gui.drawRect(x + 11, y + 1, x + 12, y + 7, 0xff888888);
+        }
+
+        if (middle || isScrolling)
+        {
+            int offset = 0;
+
+            if (isScrolling)
             {
-                Gui.drawRect(x + 1, y, x + 6, y + 7, 0xffcccccc);
-                Gui.drawRect(x, y + 1, x + 1, y + 7, 0xffaaaaaa);
+                offset = scroll < 0 ? 1 : -1;
             }
 
-            if (right)
-            {
-                Gui.drawRect(x + 6, y, x + 11, y + 7, 0xffaaaaaa);
-                Gui.drawRect(x + 11, y + 1, x + 12, y + 7, 0xff888888);
-            }
-
-            if (middle || isScrolling)
-            {
-                int offset = 0;
-
-                if (isScrolling)
-                {
-                    offset = scroll < 0 ? 1 : -1;
-                }
-
-                Gui.drawRect(x + 4, y, x + 8, y + 6, 0x20000000);
-                Gui.drawRect(x + 5, y + 1 + offset, x + 7, y + 5 + offset, 0xff444444);
-                Gui.drawRect(x + 5, y + 4 + offset, x + 7, y + 5 + offset, 0xff333333);
-            }
+            Gui.drawRect(x + 4, y, x + 8, y + 6, 0x20000000);
+            Gui.drawRect(x + 5, y + 1 + offset, x + 7, y + 5 + offset, 0xff444444);
+            Gui.drawRect(x + 5, y + 4 + offset, x + 7, y + 5 + offset, 0xff333333);
         }
     }
 
@@ -215,7 +213,10 @@ public class InputRenderer
             x += 16;
             y += 2;
 
-            renderMouseButtons(x, y, scroll, left, right, middle, isScrolling);
+            if (left || right || middle || isScrolling)
+            {
+                renderMouseButtons(x, y, scroll, left, right, middle, isScrolling);
+            }
 
             if (isScrolling)
             {
