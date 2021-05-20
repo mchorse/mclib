@@ -37,7 +37,7 @@ public class Elements
 
     public static GuiElement column(Minecraft mc, int margin, int padding, GuiElement... elements)
     {
-        return row(mc, margin, padding, 0, elements);
+        return column(mc, margin, padding, 0, elements);
     }
 
     public static GuiElement column(Minecraft mc, int margin, int padding, int height, GuiElement... elements)
