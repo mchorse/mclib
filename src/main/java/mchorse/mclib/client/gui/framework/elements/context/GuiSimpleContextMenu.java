@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.context;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.list.GuiListElement;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
@@ -19,6 +20,8 @@ import java.util.function.Consumer;
 public class GuiSimpleContextMenu extends GuiContextMenu
 {
     public GuiListElement<Action> actions;
+
+    private boolean shadow;
 
     public GuiSimpleContextMenu(Minecraft mc)
     {
@@ -38,6 +41,13 @@ public class GuiSimpleContextMenu extends GuiContextMenu
         this.add(this.actions);
     }
 
+    public GuiSimpleContextMenu shadow()
+    {
+        this.shadow = true;
+
+        return this;
+    }
+
     public GuiSimpleContextMenu action(IKey label, Runnable runnable)
     {
         return this.action(Icons.NONE, label, runnable);
@@ -50,7 +60,12 @@ public class GuiSimpleContextMenu extends GuiContextMenu
             return this;
         }
 
-        this.actions.add(new Action(icon, label, runnable));
+        return this.action(new Action(icon, label, runnable));
+    }
+
+    public GuiSimpleContextMenu action(Action action)
+    {
+        this.actions.add(action);
 
         return this;
     }
@@ -68,6 +83,19 @@ public class GuiSimpleContextMenu extends GuiContextMenu
         this.flex().set(context.mouseX(), context.mouseY(), w, this.actions.scroll.scrollSize).bounds(context.screen.root, 5);
     }
 
+    @Override
+    public void draw(GuiContext context)
+    {
+        if (this.shadow)
+        {
+            int color = McLib.primaryColor.get();
+
+            GuiDraw.drawDropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 10, 0x44000000 + color, color);
+        }
+
+        super.draw(context);
+    }
+
     public static class GuiActionListElement extends GuiListElement<Action>
     {
         public GuiActionListElement(Minecraft mc, Consumer<List<Action>> callback)
@@ -82,14 +110,7 @@ public class GuiSimpleContextMenu extends GuiContextMenu
         {
             int h = this.scroll.scrollItemSize;
 
-            if (hover)
-            {
-                Gui.drawRect(x, y, x + this.scroll.w, y + this.scroll.scrollItemSize, ColorUtils.HALF_BLACK + McLib.primaryColor.get());
-            }
-
-            GlStateManager.color(1, 1, 1, 1);
-            element.icon.render(x + 2, y + h / 2, 0, 0.5F);
-            this.font.drawString(element.label.get(), x + 22, y + (h - this.font.FONT_HEIGHT) / 2 + 1, 0xffffff);
+            element.draw(this.font, x, y, this.scroll.w, h, hover, selected);
         }
     }
 
@@ -109,6 +130,23 @@ public class GuiSimpleContextMenu extends GuiContextMenu
         public int getWidth(FontRenderer font)
         {
             return 28 + font.getStringWidth(this.label.get());
+        }
+
+        public void draw(FontRenderer font, int x, int y, int w, int h, boolean hover, boolean selected)
+        {
+            this.drawBackground(font, x, y, w, h, hover, selected);
+
+            GlStateManager.color(1, 1, 1, 1);
+            this.icon.render(x + 2, y + h / 2, 0, 0.5F);
+            font.drawString(this.label.get(), x + 22, y + (h - font.FONT_HEIGHT) / 2 + 1, 0xffffff);
+        }
+
+        protected void drawBackground(FontRenderer font, int x, int y, int w, int h, boolean hover, boolean selected)
+        {
+            if (hover)
+            {
+                Gui.drawRect(x, y, x + w, y + h, ColorUtils.HALF_BLACK + McLib.primaryColor.get());
+            }
         }
     }
 }
