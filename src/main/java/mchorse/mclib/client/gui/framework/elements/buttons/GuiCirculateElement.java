@@ -4,12 +4,15 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class GuiCirculateElement extends GuiButtonElement
 {
     protected List<IKey> labels = new ArrayList<IKey>();
+    protected Set<Integer> disabled = new HashSet<Integer>();
     protected int value = 0;
 
     public GuiCirculateElement(Minecraft mc, Consumer<GuiButtonElement> callback)
@@ -32,6 +35,14 @@ public class GuiCirculateElement extends GuiButtonElement
         this.labels.add(label);
     }
 
+    public void disable(int value)
+    {
+        if (this.disabled.size() < this.labels.size())
+        {
+            this.disabled.add(value);
+        }
+    }
+
     public int getValue()
     {
         return this.value;
@@ -44,7 +55,19 @@ public class GuiCirculateElement extends GuiButtonElement
 
     public void setValue(int value)
     {
+        this.setValue(value, 1);
+    }
+
+    public void setValue(int value, int direction)
+    {
         this.value = value;
+
+        if (this.disabled.contains(value))
+        {
+            this.setValue(value + direction, direction);
+
+            return;
+        }
 
         if (this.value > this.labels.size() - 1)
         {
@@ -68,7 +91,9 @@ public class GuiCirculateElement extends GuiButtonElement
     @Override
     protected void click(int mouseButton)
     {
-        this.setValue(this.value + (mouseButton == 0 ? 1 : -1));
+        int direction = mouseButton == 0 ? 1 : -1;
+
+        this.setValue(this.value + direction, direction);
 
         super.click(mouseButton);
     }
