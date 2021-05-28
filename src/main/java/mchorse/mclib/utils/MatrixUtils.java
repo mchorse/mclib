@@ -199,7 +199,19 @@ public class MatrixUtils
         if (cameraMatrix != null)
         {
             parent.set(cameraMatrix);
-            parent.invert();
+
+            try
+            {
+                parent.invert();
+            }
+            catch (SingularMatrixException e)
+            {
+                Transformation transformation = new Transformation();
+                transformation.creationException = e;
+
+                return transformation;
+            }
+
             parent.mul(modelView);
         }
 
@@ -238,6 +250,11 @@ public class MatrixUtils
         public Matrix4f translation = new Matrix4f();
         public Matrix4f rotation = new Matrix4f();
         public Matrix4f scale = new Matrix4f();
+        /**
+         * contains the exception that may have
+         * occurred during calculation of transformation data
+         */
+        private Exception creationException = null;
 
         public Transformation(Matrix4f translation, Matrix4f rotation, Matrix4f scale)
         {
@@ -285,6 +302,11 @@ public class MatrixUtils
             rotation3f.setRow(2, this.rotation.m20, this.rotation.m21, this.rotation.m22);
 
             return rotation3f;
+        }
+
+        public Exception getCreationException()
+        {
+            return this.creationException;
         }
     }
 }
