@@ -414,34 +414,23 @@ public class MathBuilder
 
             if (this.isOperator(o))
             {
+                /* - before a group isn't considered an operator per se */
+                if (o.equals("-"))
+                {
+                    Object next = i < symbols.size() - 1 ? symbols.get(i + 1) : null;
+                    Object prev = i > 0 ? symbols.get(i - 1) : null;
+
+                    if (next instanceof List && (this.isOperator(prev) || prev == null))
+                    {
+                        continue;
+                    }
+                }
+
                 return i;
             }
         }
 
         return -1;
-    }
-
-    protected int seekFirstOperator(List<Object> symbols)
-    {
-        return this.seekFirstOperator(symbols, 0);
-    }
-
-    /**
-     * Find the index of the first operator
-     */
-    protected int seekFirstOperator(List<Object> symbols, int offset)
-    {
-        for (int i = offset, size = symbols.size(); i < size; i++)
-        {
-            Object o = symbols.get(i);
-
-            if (this.isOperator(o))
-            {
-                return i;
-            }
-        }
-
-         return -1;
     }
 
     /**

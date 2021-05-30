@@ -187,13 +187,8 @@ public class McLib
         test(builder, "7 - 2 ^ 4 - 4 * 5 + 15 ^ 2", 7 - Math.pow(2, 4) - 4 * 5 + Math.pow(15, 2));
         test(builder, "5 -(10 + 20)", 5 -(10 + 20));
 
-        builder.variables.put("variable.particle_random_2", new Variable("variable.particle_random_2", 1));
-        IValue test = builder.parse("variable.particle_random_2 * (2.0 / 16.0) - 1.0 / 16.0");
-
-        System.out.println(test.isNumber() + " " + test.stringValue() + " " + test.booleanValue() + " " + test.doubleValue());
-
-        builder.variables.put("variable.particle_random_1", new Variable("variable.particle_random_1", 1));
-        test = builder.parse("(variable.particle_random_1 > 0.5 ? 20.0 : -20.0) * -4.0");
+        builder.variables.put("abc", new Variable("abc", 1));
+        IValue test = builder.parse("- (40 + 2) / -2");
 
         System.out.println(test.isNumber() + " " + test.stringValue() + " " + test.booleanValue() + " " + test.doubleValue());
     }
