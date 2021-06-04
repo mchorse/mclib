@@ -90,6 +90,8 @@ mclib.config.appearance.enable_grid_rendering=Model grid
 mclib.config.comments.appearance.enable_grid_rendering=Enable grid rendering instead of the ground grass block
 mclib.config.appearance.user_interface_scale=GUI scale
 mclib.config.comments.appearance.user_interface_scale=GUI scale for McHorse's mods instead of Video Settings' GUI scale. If set to 0, it will use Minecraft's GUI scale setting
+mclib.config.appearance.tooltip_style=Tooltip style
+mclib.config.comments.appearance.tooltip_style=This option allows to change GUI tooltip style 
 
 mclib.config.tutorials.title=Tutorials options
 mclib.config.tutorials.tooltip=This category provides options which are useful for making tutorial videos
@@ -232,3 +234,7 @@ mclib.keystrokes_position.bottom_left=Bottom left
 mclib.keystrokes_position.bottom_right=Bottom right
 mclib.keystrokes_position.top_right=Top right
 mclib.keystrokes_position.top_left=Top left
+
+# Tootlip styles
+mclib.tooltip_style.light=Light
+mclib.tooltip_style.dark=Dark

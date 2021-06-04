@@ -114,7 +114,7 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         this.renderer.flex().relative(this).wh(1F, 1F);
         this.play.flex().relative(this).xy(10, 10).w(80);
         // this.add(this.renderer, this.play, this.slot);
-        // this.add(this.graph, this.dopesheet);
+        this.add(this.graph, this.dopesheet);
         // this.add(this.top, this.bottom);
 
         this.element = new GuiElement(mc);
@@ -143,7 +143,7 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
             this.element.add(buttonElement);
         }
 
-        this.add(this.element);
+        // this.add(this.element);
     }
 
     @Override

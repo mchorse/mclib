@@ -63,6 +63,7 @@ public class McLib
     public static ValueBoolean enableTrackpadIncrements;
     public static ValueBoolean enableGridRendering;
     public static ValueInt userIntefaceScale;
+    public static ValueInt tooltipStyle;
 
     public static ValueBoolean enableCursorRendering;
     public static ValueBoolean enableMouseButtonRendering;
@@ -98,6 +99,10 @@ public class McLib
         enableTrackpadIncrements = builder.getBoolean("enable_trackpad_increments", true);
         enableGridRendering = builder.getBoolean("enable_grid_rendering", true);
         userIntefaceScale = builder.getInt("user_interface_scale", 2, 0, 4);
+        tooltipStyle = builder.getInt("tooltip_style", 1).modes(
+            IKey.lang("mclib.tooltip_style.light"),
+            IKey.lang("mclib.tooltip_style.dark")
+        );
 
         favoriteColors = new ValueColors("favorite_colors");
         builder.register(favoriteColors);

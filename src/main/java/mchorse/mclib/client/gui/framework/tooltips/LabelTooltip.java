@@ -1,7 +1,7 @@
 package mchorse.mclib.client.gui.framework.tooltips;
 
-import mchorse.mclib.client.gui.framework.elements.input.GuiColorElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.framework.tooltips.styles.TooltipStyle;
 import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.Direction;
@@ -44,6 +44,7 @@ public class LabelTooltip implements ITooltip
             return;
         }
 
+        TooltipStyle style = TooltipStyle.get();
         Direction dir = this.direction;
         Area area = context.tooltip.area;
 
@@ -54,11 +55,13 @@ public class LabelTooltip implements ITooltip
             this.calculate(context, strings, dir.opposite(), area, Area.SHARED);
         }
 
-        Gui.drawRect(Area.SHARED.x - 3, Area.SHARED.y - 3, Area.SHARED.x + Area.SHARED.w + 3, Area.SHARED.y + Area.SHARED.h + 3, 0xffffffff);
+        Area.SHARED.offset(3);
+        style.drawBackground(Area.SHARED);
+        Area.SHARED.offset(-3);
 
         for (String line : strings)
         {
-            context.font.drawString(line, Area.SHARED.x, Area.SHARED.y, 0);
+            context.font.drawString(line, Area.SHARED.x, Area.SHARED.y, style.getTextColor());
             Area.SHARED.y += context.font.FONT_HEIGHT + 3;
         }
     }
