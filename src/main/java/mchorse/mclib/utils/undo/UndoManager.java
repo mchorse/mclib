@@ -16,6 +16,7 @@ public class UndoManager<T>
 
     private int limit = 20;
     private IUndoListener<T> callback;
+    private boolean simpleMerge;
 
     public UndoManager()
     {}
@@ -34,6 +35,13 @@ public class UndoManager<T>
     {
         this.limit = limit;
         this.callback = callback;
+    }
+
+    public UndoManager<T> simpleMerge()
+    {
+        this.simpleMerge = true;
+
+        return this;
     }
 
     public IUndoListener<T> getCallback()
@@ -89,7 +97,7 @@ public class UndoManager<T>
     {
         IUndo<T> present = this.position == -1 ? null : this.undos.get(this.position);
 
-        if (present != null && (present.isMergeable(undo) && undo.isMergeable(present)))
+        if (present != null && this.checkMergeability(present, undo))
         {
             this.removeConsequent();
             present.merge(undo);
@@ -111,6 +119,16 @@ public class UndoManager<T>
         }
 
         return present;
+    }
+
+    private boolean checkMergeability(IUndo<T> present, IUndo<T> undo)
+    {
+        if (this.simpleMerge)
+        {
+            return present.isMergeable(undo);
+        }
+
+        return present.isMergeable(undo) && undo.isMergeable(present);
     }
 
     protected void removeConsequent()
