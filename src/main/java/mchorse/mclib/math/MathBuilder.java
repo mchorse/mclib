@@ -135,7 +135,7 @@ public class MathBuilder
     public String[] breakdown(String expression) throws Exception
     {
         /* If given string have illegal characters, then it can't be parsed */
-        if (!expression.matches("^[\\w\\d\\s_+-/*%^&|<>=!?:.,()\"'@~]+$"))
+        if (!expression.matches("^[\\w\\d\\s_+-/*%^&|<>=!?:.,()\"'@~\\[\\]]+$"))
         {
             throw new Exception("Given expression '" + expression + "' contains illegal characters!");
         }
