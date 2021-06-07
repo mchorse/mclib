@@ -468,7 +468,7 @@ public abstract class GuiListElement<T> extends GuiElement
             return true;
         }
 
-        if (this.scroll.isInside(context))
+        if (this.scroll.isInside(context) && context.mouseButton < 2)
         {
             int index = this.scroll.getIndex(context.mouseX, context.mouseY);
             boolean filtering = this.isFiltering();
@@ -499,7 +499,7 @@ public abstract class GuiListElement<T> extends GuiElement
                 {
                     this.callback.accept(this.getCurrent());
 
-                    return true;
+                    return context.mouseButton == 0;
                 }
             }
         }
