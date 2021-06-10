@@ -37,14 +37,6 @@ public abstract class NNFunction extends Function
     }
 
     @Override
-    public void set(double value)
-    {}
-
-    @Override
-    public void set(String value)
-    {}
-
-    @Override
     public boolean booleanValue()
     {
         return Operation.isTrue(this.doubleValue());
