@@ -271,7 +271,7 @@ public abstract class GuiKeyframeElement extends GuiElement
                 scroll = -scroll;
             }
 
-            this.zoom(scroll);
+            this.zoom(scroll, context.mouseX, context.mouseY);
 
             return true;
         }
@@ -279,9 +279,11 @@ public abstract class GuiKeyframeElement extends GuiElement
         return false;
     }
 
-    protected void zoom(int scroll)
+    protected void zoom(int scroll, int mouseX, int mouseY)
     {
+        this.scaleX.setShift(this.scaleX.from(mouseX));
         this.scaleX.zoom(Math.copySign(this.scaleX.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
+        this.scaleX.setShift(2 * this.scaleX.getShift() - this.scaleX.from(mouseX));
     }
 
     @Override
