@@ -382,7 +382,7 @@ public class GuiGraphView extends GuiKeyframeElement
     }
 
     @Override
-    protected void zoom(int scroll)
+    protected void zoom(int scroll, int mouseX, int mouseY)
     {
         boolean x = GuiScreen.isShiftKeyDown();
         boolean y = GuiScreen.isCtrlKeyDown();
@@ -391,13 +391,17 @@ public class GuiGraphView extends GuiKeyframeElement
         /* Scaling X */
         if (x && !y || none)
         {
+            this.scaleX.setShift(this.scaleX.from(mouseX));
             this.scaleX.zoom(Math.copySign(this.scaleX.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
+            this.scaleX.setShift(2 * this.scaleX.getShift() - this.scaleX.from(mouseX));
         }
 
         /* Scaling Y */
         if (y && !x || none)
         {
+            this.scaleY.setShift(this.scaleY.from(mouseY));
             this.scaleY.zoom(Math.copySign(this.scaleY.getZoomFactor(), scroll), this.minZoom, this.maxZoom);
+            this.scaleY.setShift(2 * this.scaleY.getShift() - this.scaleY.from(mouseY));
         }
     }
 
