@@ -70,6 +70,12 @@ public class GuiIconElement extends GuiClickElement<GuiIconElement>
     }
 
     @Override
+    protected GuiIconElement get()
+    {
+        return this;
+    }
+
+    @Override
     protected void drawSkin(GuiContext context)
     {
         Icon icon = this.hover ? this.hoverIcon : this.icon;

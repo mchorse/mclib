@@ -64,7 +64,7 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         };
 
         this.slot = new GuiSlotElement(mc, 0, (t) -> {});
-        this.slot.flex().relative(this).y(10).x(1F, -10).anchorX(1F);
+        this.slot.flex().relative(this).x(0.5F).y(20).anchorX(0.5F);
         this.slot.stack = new ItemStack(Items.BAKED_POTATO, 42);
 
         KeyframeChannel channel = new KeyframeChannel();
@@ -113,8 +113,8 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
 
         this.renderer.flex().relative(this).wh(1F, 1F);
         this.play.flex().relative(this).xy(10, 10).w(80);
-        // this.add(this.renderer, this.play, this.slot);
-        this.add(this.graph, this.dopesheet);
+        this.add(/* this.renderer, this.play, */this.slot);
+        // this.add(this.graph, this.dopesheet);
         // this.add(this.top, this.bottom);
 
         this.element = new GuiElement(mc);

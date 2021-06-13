@@ -69,6 +69,8 @@ mclib.gui.color.recent=Recent colors
 mclib.gui.color.context.favorites.add=Add to favorites
 mclib.gui.color.context.favorites.remove=Remove from favorites
 
+mclib.gui.item_slot.context.copy=Copy item's NBT
+mclib.gui.item_slot.context.paste=Paste item NBT
 mclib.gui.item_slot.context.drop=Drop the item down
 mclib.gui.item_slot.context.clear=Clear the item
 

@@ -33,6 +33,12 @@ public class GuiButtonElement extends GuiClickElement<GuiButtonElement>
     }
 
     @Override
+    protected GuiButtonElement get()
+    {
+        return this;
+    }
+
+    @Override
     protected void drawSkin(GuiContext context)
     {
         int color = 0xff000000 + (this.custom ? this.customColor : McLib.primaryColor.get());

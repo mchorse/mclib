@@ -89,6 +89,12 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implemen
     }
 
     @Override
+    protected GuiToggleElement get()
+    {
+        return this;
+    }
+
+    @Override
     protected void drawSkin(GuiContext context)
     {
         if (McLib.enableCheckboxRendering.get())

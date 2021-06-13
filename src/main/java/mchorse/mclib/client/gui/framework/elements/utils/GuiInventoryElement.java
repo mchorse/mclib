@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.utils;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.utils.Area;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -19,12 +20,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class GuiInventoryElement extends GuiElement
 {
-    public Consumer<ItemStack> callback;
-    public GuiSlotElement linked;
+    public GuiTrackpadElement count;
+    public GuiSlotElement slot;
 
     protected Area inventory = new Area();
     protected Area hotbar = new Area();
@@ -91,24 +91,18 @@ public class GuiInventoryElement extends GuiElement
         net.minecraftforge.fml.client.config.GuiUtils.postItemToolTip();
     }
 
-    public GuiInventoryElement(Minecraft mc, Consumer<ItemStack> callback)
+    public GuiInventoryElement(Minecraft mc, GuiSlotElement slot)
     {
         super(mc);
 
-        this.callback = callback;
-        this.flex().wh(10 * 20, 5 * 20);
-    }
+        this.count = new GuiTrackpadElement(mc, (v) -> this.slot.stack.setCount(v.intValue()));
+        this.count.limit(1).integer();
 
-    public void link(GuiSlotElement slot)
-    {
-        this.linked = slot;
-        this.setVisible(true);
-    }
+        this.slot = slot;
+        this.flex().wh(10 * 20, 7 * 20);
 
-    public void unlink()
-    {
-        this.linked = null;
-        this.setVisible(false);
+        this.count.flex().relative(this).x(10).y(10).w(1F, -20);
+        this.add(this.count);
     }
 
     @Override
@@ -120,7 +114,7 @@ public class GuiInventoryElement extends GuiElement
         int row = 9 * tile;
         int fourth = this.area.h / 4;
 
-        this.inventory.set(this.area.mx(row), this.area.y + (this.area.h - fourth) / 2 - 30, row, 3 * tile);
+        this.inventory.set(this.area.mx(row), this.area.ey() - (fourth + tile) / 2 - tile * 4, row, 3 * tile);
         this.hotbar.set(this.area.mx(row), this.area.ey() - (fourth + tile) / 2, row, tile);
     }
 
@@ -134,7 +128,7 @@ public class GuiInventoryElement extends GuiElement
 
         if (!this.area.isInside(context))
         {
-            this.setVisible(false);
+            this.removeFromParent();
 
             return false;
         }
@@ -151,25 +145,41 @@ public class GuiInventoryElement extends GuiElement
 
             if (inventory)
             {
-                y ++;
+                y += 1;
             }
 
-            if (x >= 9 || y >= 4 || x < 0 || y < 0 || !this.visible)
+            if (x >= 9 || y >= 4 || x < 0 || y < 0 || !this.isVisible())
             {
                 return true;
             }
 
             int index = x + y * 9;
 
-            if (this.callback != null)
+            if (this.slot != null)
             {
-                this.callback.accept(Minecraft.getMinecraft().player.inventory.mainInventory.get(index));
+                this.setStack(Minecraft.getMinecraft().player.inventory.mainInventory.get(index));
+                this.removeFromParent();
 
                 return true;
             }
         }
 
         return false;
+    }
+
+    private void setStack(ItemStack stack)
+    {
+        this.slot.acceptStack(stack);
+
+        this.count.setVisible(!stack.isEmpty());
+        this.count.limit(1, stack.getMaxStackSize());
+    }
+
+    public void updateStack()
+    {
+        this.count.setVisible(!this.slot.stack.isEmpty());
+        this.count.limit(1, this.slot.stack.getMaxStackSize());
+        this.count.setValue(this.slot.stack.getCount());
     }
 
     @Override

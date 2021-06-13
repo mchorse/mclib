@@ -9,7 +9,7 @@ import net.minecraft.init.SoundEvents;
 
 import java.util.function.Consumer;
 
-public abstract class GuiClickElement<T extends GuiClickElement> extends GuiElement
+public abstract class GuiClickElement<T> extends GuiElement
 {
     public Consumer<T> callback;
 
@@ -52,9 +52,11 @@ public abstract class GuiClickElement<T extends GuiClickElement> extends GuiElem
     {
         if (this.callback != null)
         {
-            this.callback.accept((T) this);
+            this.callback.accept(this.get());
         }
     }
+
+    protected abstract T get();
 
     @Override
     public void mouseReleased(GuiContext context)
