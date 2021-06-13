@@ -239,6 +239,13 @@ public class GuiTrackpadElement extends GuiBaseTextElement
      */
     public void setValue(double value)
     {
+        this.setValueInternal(value);
+        this.field.setText(this.integer ? String.valueOf((int) value) : FORMAT.format(value));
+        this.field.setCursorPositionZero();
+    }
+
+    private void setValueInternal(double value)
+    {
         value = Math.round(value * 1000F) / 1000F;
         value = MathUtils.clamp(value, this.min, this.max);
 
@@ -248,8 +255,6 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         }
 
         this.value = value;
-        this.field.setText(this.integer ? String.valueOf((int) value) : FORMAT.format(value));
-        this.field.setCursorPositionZero();
     }
 
     /**
@@ -262,7 +267,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
         if (this.callback != null)
         {
-            this.callback.accept(value);
+            this.callback.accept(this.value);
         }
     }
 
@@ -416,11 +421,11 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         {
             try
             {
-                this.value = text.isEmpty() ? 0 : Float.parseFloat(text);
+                this.setValueInternal(text.isEmpty() ? 0 : Double.parseDouble(text));
 
                 if (this.callback != null)
                 {
-                    this.callback.accept(value);
+                    this.callback.accept(this.value);
                 }
             }
             catch (Exception e)
