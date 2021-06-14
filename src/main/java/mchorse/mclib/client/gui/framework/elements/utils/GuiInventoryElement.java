@@ -2,34 +2,49 @@ package mchorse.mclib.client.gui.framework.elements.utils;
 
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.utils.Area;
+import mchorse.mclib.client.gui.utils.GuiUtils;
+import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.ScrollArea;
+import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.util.SearchTreeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
+import org.lwjgl.opengl.GL11;
 
 import java.util.List;
+import java.util.Locale;
 
 public class GuiInventoryElement extends GuiElement
 {
-    public GuiTrackpadElement count;
-    public GuiSlotElement slot;
+    public static GuiContainerCreative.ContainerCreative container;
 
-    protected Area inventory = new Area();
+    public GuiTrackpadElement count;
+    public GuiIconElement toggle;
+    public GuiTextElement search;
+
+    public GuiSlotElement slot;
+    protected ScrollArea inventory = new ScrollArea(20);
     protected Area hotbar = new Area();
 
     private ItemStack active = ItemStack.EMPTY;
+    private boolean searching;
 
     public static void drawItemStack(ItemStack stack, int x, int y, String altText)
     {
@@ -97,12 +112,74 @@ public class GuiInventoryElement extends GuiElement
 
         this.count = new GuiTrackpadElement(mc, (v) -> this.slot.stack.setCount(v.intValue()));
         this.count.limit(1).integer();
+        this.toggle = new GuiIconElement(mc, Icons.SEARCH, this::toggleList);
+        this.search = new GuiTextElement(mc, (t) -> this.updateList());
+        this.search.setVisible(false);
 
         this.slot = slot;
         this.flex().wh(10 * 20, 7 * 20);
 
-        this.count.flex().relative(this).x(10).y(10).w(1F, -20);
-        this.add(this.count);
+        this.count.flex().relative(this).x(10).y(10).w(1F, -40);
+        this.search.flex().relative(this).x(10).y(10).w(1F, -40);
+        this.toggle.flex().relative(this).x(1F, -30).y(10);
+
+        this.add(this.count, this.toggle, this.search);
+
+        this.inventory.scrollSpeed = 20;
+    }
+
+    private void toggleList(GuiIconElement element)
+    {
+        this.searching = !this.searching;
+
+        this.updateElements();
+        this.updateList();
+    }
+
+    private void updateElements()
+    {
+        this.count.setVisible(!this.searching && !this.slot.stack.isEmpty());
+        this.search.setVisible(this.searching);
+        this.inventory.h = this.searching ? 100 : 60;
+    }
+
+    private void updateList()
+    {
+        if (container == null)
+        {
+            container = new GuiContainerCreative.ContainerCreative(this.mc.player);
+        }
+
+        container.itemList.clear();
+        container.itemList.addAll(this.mc.getSearchTree(SearchTreeManager.ITEMS).search(this.search.field.getText().toLowerCase()));
+        container.scrollTo(0);
+
+        this.inventory.scroll = 0;
+        this.inventory.scrollSize = (int) (Math.ceil(container.itemList.size() / 9D) * this.inventory.scrollItemSize);
+    }
+
+    private void setStack(ItemStack stack)
+    {
+        this.slot.acceptStack(stack);
+
+        this.updateElements();
+        this.fillStack(this.slot.stack);
+    }
+
+    public void updateInventory()
+    {
+        this.inventory.scroll = 0;
+
+        this.searching = false;
+        this.fillStack(this.slot.stack);
+        this.updateElements();
+    }
+
+    private void fillStack(ItemStack stack)
+    {
+        this.count.setVisible(!stack.isEmpty());
+        this.count.limit(1, stack.getMaxStackSize());
+        this.count.setValue(stack.getCount());
     }
 
     @Override
@@ -114,7 +191,7 @@ public class GuiInventoryElement extends GuiElement
         int row = 9 * tile;
         int fourth = this.area.h / 4;
 
-        this.inventory.set(this.area.mx(row), this.area.ey() - (fourth + tile) / 2 - tile * 4, row, 3 * tile);
+        this.inventory.set(this.area.mx(row), this.area.ey() - (fourth + tile) / 2 - tile * 4, row, (this.searching ? 5 : 3) * tile);
         this.hotbar.set(this.area.mx(row), this.area.ey() - (fourth + tile) / 2, row, tile);
     }
 
@@ -133,6 +210,11 @@ public class GuiInventoryElement extends GuiElement
             return false;
         }
 
+        if (this.searching && this.inventory.mouseClicked(context))
+        {
+            return true;
+        }
+
         boolean inventory = this.inventory.isInside(context);
         boolean hotbar = this.hotbar.isInside(context);
 
@@ -143,12 +225,12 @@ public class GuiInventoryElement extends GuiElement
             int x = (context.mouseX - area.x - 2) / 20;
             int y = (context.mouseY - area.y - 2) / 20;
 
-            if (inventory)
+            if (inventory && !this.searching)
             {
                 y += 1;
             }
 
-            if (x >= 9 || y >= 4 || x < 0 || y < 0 || !this.isVisible())
+            if (x >= 9 || y >= (this.inventory.h / 20) + 1 || x < 0 || y < 0 || !this.isVisible())
             {
                 return true;
             }
@@ -157,8 +239,18 @@ public class GuiInventoryElement extends GuiElement
 
             if (this.slot != null)
             {
-                this.setStack(Minecraft.getMinecraft().player.inventory.mainInventory.get(index));
-                this.removeFromParent();
+                NonNullList<ItemStack> items = this.searching ? container.itemList : this.mc.player.inventory.mainInventory;
+
+                if (this.searching)
+                {
+                    index += this.inventory.scroll / 20 * 9;
+                }
+
+                if (index < items.size())
+                {
+                    this.setStack(items.get(index));
+                    this.removeFromParent();
+                }
 
                 return true;
             }
@@ -167,19 +259,18 @@ public class GuiInventoryElement extends GuiElement
         return false;
     }
 
-    private void setStack(ItemStack stack)
+    @Override
+    public boolean mouseScrolled(GuiContext context)
     {
-        this.slot.acceptStack(stack);
-
-        this.count.setVisible(!stack.isEmpty());
-        this.count.limit(1, stack.getMaxStackSize());
+        return super.mouseScrolled(context) || (this.searching && this.inventory.mouseScroll(context));
     }
 
-    public void updateStack()
+    @Override
+    public void mouseReleased(GuiContext context)
     {
-        this.count.setVisible(!this.slot.stack.isEmpty());
-        this.count.limit(1, this.slot.stack.getMaxStackSize());
-        this.count.setValue(this.slot.stack.getCount());
+        super.mouseReleased(context);
+
+        this.inventory.mouseReleased(context);
     }
 
     @Override
@@ -188,6 +279,8 @@ public class GuiInventoryElement extends GuiElement
         this.active = null;
 
         /* Background rendering */
+        GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT);
+
         int border = 0xffffffff;
         int fourth = this.area.y(0.75F);
 
@@ -196,36 +289,82 @@ public class GuiInventoryElement extends GuiElement
             Gui.drawRect(this.area.x + 1, this.area.y, this.area.ex() - 1, this.area.ey(), 0xff000000);
             Gui.drawRect(this.area.x, this.area.y + 1, this.area.ex(), this.area.ey() - 1, 0xff000000);
             Gui.drawRect(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, border);
-            Gui.drawRect(this.area.x + 2, this.area.y + 2, this.area.ex() - 2, fourth, 0xffc6c6c6);
-            Gui.drawRect(this.area.x + 1, fourth, this.area.ex() - 1, this.area.ey() - 1, 0xff222222);
+            Gui.drawRect(this.area.x + 2, this.area.y + 2, this.area.ex() - 2, this.area.ey() - 2, 0xffc6c6c6);
+
+            if (!this.searching)
+            {
+                Gui.drawRect(this.area.x + 1, fourth, this.area.ex() - 1, this.area.ey() - 1, 0xff222222);
+            }
         }
         else
         {
             Gui.drawRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), border);
-            Gui.drawRect(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, fourth, 0xffc6c6c6);
-            Gui.drawRect(this.area.x, fourth, this.area.ex(), this.area.ey(), 0xff222222);
+            Gui.drawRect(this.area.x + 1, this.area.y + 1, this.area.ex() - 1, this.area.ey() - 1, 0xffc6c6c6);
+
+            if (!this.searching)
+            {
+                Gui.drawRect(this.area.x, fourth, this.area.ex(), this.area.ey(), 0xff222222);
+            }
         }
+
+        GuiDraw.drawDropCircleShadow(this.toggle.area.mx(), this.toggle.area.my(), 10, 4, 8, 0x18000000, 0);
 
         GlStateManager.enableDepth();
         RenderHelper.enableGUIStandardItemLighting();
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
-        NonNullList<ItemStack> inventory = player.inventory.mainInventory;
+        if(this.searching)
+        {
+            NonNullList<ItemStack> inventory = container.itemList;
 
-        int index = this.drawGrid(context, this.inventory, inventory, -1, 9, inventory.size());
-        index = this.drawGrid(context, this.hotbar, inventory, index, 0, 9);
+            int scroll = 0;
 
-        if (index != -1)
+            if (inventory.size() > 45)
+            {
+                int rows = (int) Math.ceil(inventory.size() / 9F);
+                float factor = this.inventory.scroll / (float) this.inventory.scrollSize;
+                scroll = (int) (factor * rows);
+                scroll *= 9;
+            }
+
+            int index = this.drawGrid(context, this.inventory, inventory, -1, scroll, scroll + this.inventory.h / 20 * 9);
+
+            if (index != -1)
+            {
+                this.active = inventory.get(index);
+            }
+        }
+        else
+        {
+            NonNullList<ItemStack> inventory = this.mc.player.inventory.mainInventory;
+
+            int index = this.drawGrid(context, this.inventory, inventory, -1, 9, inventory.size());
+            index = this.drawGrid(context, this.hotbar, inventory, index, 0, 9);
+
+            if (index != -1)
+            {
+                this.active = inventory.get(index);
+            }
+        }
+
+        if (this.active != null)
         {
             context.tooltip.set(context, this);
-            this.active = inventory.get(index);
         }
 
         GlStateManager.disableDepth();
         RenderHelper.disableStandardItemLighting();
 
         GuiDraw.drawLockedArea(this, McLib.enableBorders.get() ? 1 : 0);
+
+        if (this.searching)
+        {
+            this.inventory.drag(context);
+
+            GuiDraw.scissor(this.inventory.x, this.inventory.y, this.inventory.w, this.inventory.h, context);
+            this.inventory.drawScrollbar();
+            GuiDraw.unscissor(context);
+        }
 
         super.draw(context);
     }
@@ -235,6 +374,12 @@ public class GuiInventoryElement extends GuiElement
         for (int j = 0; j < c - i; j ++)
         {
             int k = i + j;
+
+            if (k >= inventory.size())
+            {
+                return index;
+            }
+
             ItemStack stack = inventory.get(k);
 
             int x = j % 9;

@@ -76,6 +76,7 @@ public class Icons
     public static final Icon MAZE = new Icon(ICONS, 112, 48);
     public static final Icon BOOKMARK = new Icon(ICONS, 128, 48);
     public static final Icon SOUND = new Icon(ICONS, 144, 48);
+    public static final Icon SEARCH = new Icon(ICONS, 160, 48);
 
     public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240, 16, 16);
     public static final Icon DISABLED = new Icon(ICONS, 16, 240, 16, 16);
