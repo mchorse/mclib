@@ -27,6 +27,8 @@ public class GuiCirculateElement extends GuiClickElement<GuiCirculateElement>
     public GuiCirculateElement(Minecraft mc, Consumer<GuiCirculateElement> callback)
     {
         super(mc, callback);
+
+        this.flex().h(20);
     }
 
     public GuiCirculateElement color(int color)
