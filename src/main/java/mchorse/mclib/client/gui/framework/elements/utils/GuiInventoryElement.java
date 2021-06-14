@@ -110,7 +110,7 @@ public class GuiInventoryElement extends GuiElement
     {
         super(mc);
 
-        this.count = new GuiTrackpadElement(mc, (v) -> this.slot.stack.setCount(v.intValue()));
+        this.count = new GuiTrackpadElement(mc, (v) -> this.setCount(v.intValue()));
         this.count.limit(1).integer();
         this.toggle = new GuiIconElement(mc, Icons.SEARCH, this::toggleList);
         this.search = new GuiTextElement(mc, (t) -> this.updateList());
@@ -128,6 +128,14 @@ public class GuiInventoryElement extends GuiElement
         this.inventory.scrollSpeed = 20;
     }
 
+    private void setCount(int count)
+    {
+        ItemStack stack = this.slot.getStack().copy();
+
+        stack.setCount(count);
+        this.slot.acceptStack(stack);
+    }
+
     private void toggleList(GuiIconElement element)
     {
         this.searching = !this.searching;
@@ -138,7 +146,7 @@ public class GuiInventoryElement extends GuiElement
 
     private void updateElements()
     {
-        this.count.setVisible(!this.searching && !this.slot.stack.isEmpty());
+        this.count.setVisible(!this.searching && !this.slot.getStack().isEmpty());
         this.search.setVisible(this.searching);
         this.inventory.h = this.searching ? 100 : 60;
     }
@@ -163,7 +171,7 @@ public class GuiInventoryElement extends GuiElement
         this.slot.acceptStack(stack);
 
         this.updateElements();
-        this.fillStack(this.slot.stack);
+        this.fillStack(this.slot.getStack());
     }
 
     public void updateInventory()
@@ -171,7 +179,7 @@ public class GuiInventoryElement extends GuiElement
         this.inventory.scroll = 0;
 
         this.searching = false;
-        this.fillStack(this.slot.stack);
+        this.fillStack(this.slot.getStack());
         this.updateElements();
     }
 

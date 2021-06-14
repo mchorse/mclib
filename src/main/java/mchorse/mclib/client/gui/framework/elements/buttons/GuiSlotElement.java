@@ -32,9 +32,9 @@ public class GuiSlotElement extends GuiClickElement<ItemStack>
     public static final ResourceLocation CHESTPLATE = new ResourceLocation("minecraft:textures/items/empty_armor_slot_chestplate.png");
     public static final ResourceLocation HELMET = new ResourceLocation("minecraft:textures/items/empty_armor_slot_helmet.png");
 
-    public final int slot;
-    public ItemStack stack = ItemStack.EMPTY;
     public GuiInventoryElement inventory;
+    public final int slot;
+    private ItemStack stack = ItemStack.EMPTY;
 
     public boolean drawDisabled = true;
 
@@ -46,6 +46,21 @@ public class GuiSlotElement extends GuiClickElement<ItemStack>
         this.inventory = new GuiInventoryElement(mc, this);
 
         this.flex().wh(24, 24);
+    }
+
+    public ItemStack getStack()
+    {
+        return this.stack;
+    }
+
+    public void setStack(ItemStack stack)
+    {
+        this.stack = stack.copy();
+
+        if (this.inventory.hasParent())
+        {
+            this.inventory.updateInventory();
+        }
     }
 
     public void acceptStack(ItemStack stack)

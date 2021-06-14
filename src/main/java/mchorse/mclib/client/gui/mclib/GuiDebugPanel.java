@@ -65,7 +65,7 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
 
         this.slot = new GuiSlotElement(mc, 0, (t) -> {});
         this.slot.flex().relative(this).x(0.5F).y(20).anchorX(0.5F);
-        this.slot.stack = new ItemStack(Items.BAKED_POTATO, 42);
+        this.slot.setStack(new ItemStack(Items.BAKED_POTATO, 42));
 
         KeyframeChannel channel = new KeyframeChannel();
 
