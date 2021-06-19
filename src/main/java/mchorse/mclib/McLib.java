@@ -191,6 +191,11 @@ public class McLib
         test(builder, "2 + 3 - 4 + 5 ", 2 + 3 - 4 + 5  );
         test(builder, "7 - 2 ^ 4 - 4 * 5 + 15 ^ 2", 7 - Math.pow(2, 4) - 4 * 5 + Math.pow(15, 2));
         test(builder, "5 -(10 + 20)", 5 -(10 + 20));
+        test(builder, "1 << 4 - 1", 1 << 4 - 1);
+        test(builder, "256 >> 4 + 2", 256 >> 4 + 2);
+        test(builder, "255 & 7 + 1", 255 & 7 + 1);
+        test(builder, "256 | 7 + 1", 256 | 7 + 1);
+        test(builder, "5 % 2 + 1 == 0 * 2", 5 % 2 + 1 == 0 * 2 ? 1 : 0);
 
         builder.variables.put("abc", new Variable("abc", 1));
         IValue test = builder.parse("- (40 + 2) / -2");

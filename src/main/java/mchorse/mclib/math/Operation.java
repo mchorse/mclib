@@ -63,7 +63,7 @@ public enum Operation
             return Math.pow(a, b);
         }
     },
-    AND("&&", -1)
+    AND("&&", -3)
     {
         @Override
         public double calculate(double a, double b)
@@ -71,7 +71,7 @@ public enum Operation
             return isTrue(a) && isTrue(b) ? 1 : 0;
         }
     },
-    OR("||", -1)
+    OR("||", -3)
     {
         @Override
         public double calculate(double a, double b)
@@ -79,7 +79,47 @@ public enum Operation
             return isTrue(a) || isTrue(b) ? 1 : 0;
         }
     },
-    LESS("<", 0)
+    SHIFT_LEFT("<<", 0)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return ((int) a) << ((int) b);
+        }
+    },
+    SHIFT_RIGHT(">>", 0)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return ((int) a) >> ((int) b);
+        }
+    },
+    BIT_AND("&", -1)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return ((int) a) & ((int) b);
+        }
+    },
+    BIT_OR("|", -1)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return ((int) a) | ((int) b);
+        }
+    },
+    BIT_XOR("^^", -1)
+    {
+        @Override
+        public double calculate(double a, double b)
+        {
+            return ((int) a) ^ ((int) b);
+        }
+    },
+    LESS("<", -2)
     {
         @Override
         public double calculate(double a, double b)
@@ -87,7 +127,7 @@ public enum Operation
             return a < b ? 1 : 0;
         }
     },
-    LESS_THAN("<=", 0)
+    LESS_THAN("<=", -2)
     {
         @Override
         public double calculate(double a, double b)
@@ -95,7 +135,7 @@ public enum Operation
             return a < b || equals(a, b) ? 1 : 0;
         }
     },
-    GREATER_THAN(">=", 0)
+    GREATER_THAN(">=", -2)
     {
         @Override
         public double calculate(double a, double b)
@@ -103,7 +143,7 @@ public enum Operation
             return a > b || equals(a, b) ? 1 : 0;
         }
     },
-    GREATER(">", 0)
+    GREATER(">", -2)
     {
         @Override
         public double calculate(double a, double b)
@@ -111,7 +151,7 @@ public enum Operation
             return a > b ? 1 : 0;
         }
     },
-    EQUALS("==", 0)
+    EQUALS("==", -2)
     {
         @Override
         public double calculate(double a, double b)
@@ -119,7 +159,7 @@ public enum Operation
             return equals(a, b) ? 1 : 0;
         }
     },
-    NOT_EQUALS("!=", 0)
+    NOT_EQUALS("!=", -2)
     {
         @Override
         public double calculate(double a, double b)
