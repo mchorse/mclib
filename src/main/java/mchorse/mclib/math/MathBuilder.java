@@ -64,6 +64,12 @@ public class MathBuilder
      */
     public Map<String, Class<? extends Function>> functions = new HashMap<String, Class<? extends Function>>();
 
+    /**
+     * Whether math expression parser should be strict about which characters
+     * can be used within math expressions
+     */
+    protected boolean strict = true;
+
     public MathBuilder()
     {
         /* Some default values */
@@ -112,6 +118,13 @@ public class MathBuilder
         this.functions.put("str_ends", StringEndsWith.class);
     }
 
+    public MathBuilder lenient()
+    {
+        this.strict = false;
+
+        return this;
+    }
+
     /**
      * Register a variable 
      */
@@ -135,7 +148,7 @@ public class MathBuilder
     public String[] breakdown(String expression) throws Exception
     {
         /* If given string have illegal characters, then it can't be parsed */
-        if (!expression.matches("^[\\w\\d\\s_+-/*%^&|<>=!?:.,()\"'@~\\[\\]]+$"))
+        if (this.strict && !expression.matches("^[\\w\\d\\s_+-/*%^&|<>=!?:.,()\"'@~\\[\\]]+$"))
         {
             throw new Exception("Given expression '" + expression + "' contains illegal characters!");
         }
