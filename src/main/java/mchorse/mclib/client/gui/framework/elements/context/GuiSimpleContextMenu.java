@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GuiSimpleContextMenu extends GuiContextMenu
 {
@@ -89,7 +90,12 @@ public class GuiSimpleContextMenu extends GuiContextMenu
             w = Math.max(action.getWidth(this.font), w);
         }
 
-        this.flex().set(context.mouseX(), context.mouseY(), w, this.actions.scroll.scrollSize).bounds(context.screen.root, 5);
+        Supplier<Float> h = () ->
+        {
+            return (float) Math.min(this.actions.scroll.scrollSize, context.screen.height - 10);
+        };
+
+        this.flex().set(context.mouseX(), context.mouseY(), w, 0).h(h).bounds(context.screen.root, 5);
     }
 
     @Override
