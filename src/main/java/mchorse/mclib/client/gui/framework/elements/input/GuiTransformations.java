@@ -1,5 +1,11 @@
 package mchorse.mclib.client.gui.framework.elements.input;
 
+import java.util.function.Consumer;
+
+import javax.vecmath.Matrix4f;
+import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
+
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
@@ -7,6 +13,9 @@ import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.utils.MatrixUtils;
+import mchorse.mclib.utils.MatrixUtils.Transformation;
+import mchorse.mclib.utils.MatrixUtils.Transformation.RotationOrder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -15,8 +24,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
-
-import javax.vecmath.Vector3d;
 
 /**
  * Transformation editor GUI
@@ -35,6 +42,11 @@ public class GuiTransformations extends GuiElement
     public GuiTrackpadElement ry;
     public GuiTrackpadElement rz;
     public GuiToggleElement one;
+    
+    public GuiTrackpadElement drx;
+    public GuiTrackpadElement dry;
+    public GuiTrackpadElement drz;
+    public GuiToggleElement origin;
 
     public GuiTransformations(Minecraft mc)
     {
@@ -79,21 +91,28 @@ public class GuiTransformations extends GuiElement
         });
 
         this.one.flex().relative(this.sx).x(1F).y(-13).wh(11, 11).anchorX(1F);
-
+        
+        this.drx = new GuiRelativeTrackpadElement(mc, (value) -> this.deltaRotate(value, 0, 0), IKey.str("Rx"));
+        this.dry = new GuiRelativeTrackpadElement(mc, (value) -> this.deltaRotate(0, value, 0), IKey.str("Ry"));
+        this.drz = new GuiRelativeTrackpadElement(mc, (value) -> this.deltaRotate(0, 0, value), IKey.str("Rz"));
+        this.origin = new GuiToggleElement(mc, IKey.EMPTY, false, null);
+        this.origin.flex().relative(this.drx).x(1F).y(-13).wh(11, 11).anchorX(1F);
+        this.origin.tooltip(IKey.lang("mclib.gui.transforms.delta.origin"));
+        
         GuiElement first = new GuiElement(mc);
         GuiElement second = new GuiElement(mc);
         GuiElement third = new GuiElement(mc);
 
         first.flex().relative(this).w(1F).h(20).row(5).height(20);
-        first.add(this.tx, sx, rx);
+        first.add(this.tx, sx, rx, drx);
 
         second.flex().relative(this).y(0.5F, -10).w(1F).h(20).row(5).height(20);
-        second.add(this.ty, sy, ry);
+        second.add(this.ty, sy, ry, dry);
 
         third.flex().relative(this).y(1F, -20).w(1F).h(20).row(5).height(20);
-        third.add(this.tz, sz, rz);
+        third.add(this.tz, sz, rz, drz);
 
-        this.add(first, second, third, this.one);
+        this.add(first, second, third, this.one, this.origin);
     }
 
     public void resetScale()
@@ -298,6 +317,54 @@ public class GuiTransformations extends GuiElement
         this.fillSetS(1, 1, 1);
         this.fillSetR(0, 0, 0);
     }
+    
+    protected void prepareRotation(Matrix4f mat)
+    {
+        Matrix4f rot = new Matrix4f();
+        rot.rotZ((float) Math.toRadians(this.rz.value));
+        mat.mul(rot);
+        rot.rotY((float) Math.toRadians(this.ry.value));
+        mat.mul(rot);
+        rot.rotX((float) Math.toRadians(this.rx.value));
+        mat.mul(rot);
+    }
+    
+    protected void postRotation(Transformation transform)
+    {
+        Vector3f result = transform.getRotation(RotationOrder.XYZ, new Vector3f((float) this.rx.value, (float) this.ry.value, (float) this.rz.value));
+        this.rx.setValueAndNotify(result.x);
+        this.ry.setValueAndNotify(result.y);
+        this.rz.setValueAndNotify(result.z);
+    }
+
+    protected void deltaRotate(double x, double y, double z)
+    {
+        Matrix4f mat = new Matrix4f();
+        mat.setIdentity();
+        if (this.origin.isToggled())
+        {
+            mat.m03 = (float) this.tx.value;
+            mat.m13 = (float) this.ty.value;
+            mat.m23 = (float) this.tz.value;
+        }
+        Matrix4f rot = new Matrix4f();
+        rot.rotZ((float) Math.toRadians(z));
+        mat.mul(rot, mat);
+        rot.rotY((float) Math.toRadians(y));
+        mat.mul(rot, mat);
+        rot.rotX((float) Math.toRadians(x));
+        mat.mul(rot, mat);
+        prepareRotation(mat);
+        Transformation transform = MatrixUtils.extractTransformations(null, mat);
+        if (this.origin.isToggled())
+        {
+            Vector3f result = transform.getTranslation3f();
+            this.tx.setValueAndNotify(result.x);
+            this.ty.setValueAndNotify(result.y);
+            this.tz.setValueAndNotify(result.z);
+        }
+        postRotation(transform);
+    }
 
     @Override
     public void draw(GuiContext context)
@@ -307,5 +374,42 @@ public class GuiTransformations extends GuiElement
         this.font.drawStringWithShadow(I18n.format("mclib.gui.transforms.rotate"), this.rx.area.x, this.rx.area.y - 12, 0xffffff);
 
         super.draw(context);
+    }
+    
+    public static class GuiRelativeTrackpadElement extends GuiTrackpadElement
+    {
+        public IKey label;
+        public double lastValue;
+        
+        public GuiRelativeTrackpadElement(Minecraft mc, Consumer<Double> callback, IKey label)
+        {
+            super(mc, callback);
+            this.label = label;
+            this.field.setText(label.get());
+            this.field.setEnabled(false);
+            this.field.setDisabledTextColour(0xE0E0E0);
+            this.degrees();
+        }
+
+        @Override
+        public void mouseReleased(GuiContext context)
+        {
+            super.mouseReleased(context);
+            this.lastValue = 0;
+            this.setValue(0);
+            this.field.setText(this.label.get());
+        }
+
+        @Override
+        public void setValueAndNotify(double value)
+        {
+            this.setValue(value);
+
+            if (this.callback != null)
+            {
+                this.callback.accept(this.value - this.lastValue);
+                this.lastValue = this.value;
+            }
+        }
     }
 }
