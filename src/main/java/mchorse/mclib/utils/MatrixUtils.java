@@ -343,12 +343,10 @@ public class MatrixUtils
         {
             return this.getRotation(order, null);
         }
-
         public Vector3f getRotation(RotationOrder order, Vector3f ref)
         {
             return this.getRotation(order, ref, 0);
         }
-
         public Vector3f getRotation(RotationOrder order, int invAxis)
         {
             return this.getRotation(order, null, invAxis);
@@ -375,7 +373,6 @@ public class MatrixUtils
             Matrix3f mat = this.getRotation3f();
             float[] rotation = new float[3];
             float[] refFloats = null;
-
             if (ref != null)
             {
                 refFloats = new float[3];
@@ -408,7 +405,6 @@ public class MatrixUtils
                 {
                     angle = refFloats[order.thirdIndex] + MathHelper.wrapDegrees(2F * (angle - refFloats[order.thirdIndex])) / 2F;
                 }
-
                 rotation[order.thirdIndex] = angle;
                 mat.mul(getRotationMatrix(order.thirdIndex, -angle), mat);
             }
@@ -417,7 +413,6 @@ public class MatrixUtils
                 rotation[order.thirdIndex] = angle = refFloats[order.thirdIndex];
                 mat.mul(getRotationMatrix(order.thirdIndex, -angle), mat);
             }
-
             angle = order.doTest(order.secondIndex, mat);
 
             if (angle == null)

@@ -38,6 +38,7 @@ mclib.gui.transforms.context.paste_translation=仅粘贴平移
 mclib.gui.transforms.context.paste_scale=仅粘贴缩放
 mclib.gui.transforms.context.paste_rotation=仅粘贴旋转
 mclib.gui.transforms.context.reset=重置变换信息
+mclib.gui.transforms.delta.origin=围绕原点
 
 mclib.gui.keyframes.tick=Tick
 mclib.gui.keyframes.value=值
