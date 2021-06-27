@@ -7,16 +7,13 @@ import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.utils.Area;
-import mchorse.mclib.client.gui.utils.GuiUtils;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.ScrollArea;
-import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -29,11 +26,10 @@ import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
-import java.util.Locale;
 
 public class GuiInventoryElement extends GuiElement
 {
-    public static GuiContainerCreative.ContainerCreative container;
+    public static NonNullList<ItemStack> container;
 
     public GuiTrackpadElement count;
     public GuiIconElement toggle;
@@ -155,15 +151,14 @@ public class GuiInventoryElement extends GuiElement
     {
         if (container == null)
         {
-            container = new GuiContainerCreative.ContainerCreative(this.mc.player);
+            container = NonNullList.create();
         }
 
-        container.itemList.clear();
-        container.itemList.addAll(this.mc.getSearchTree(SearchTreeManager.ITEMS).search(this.search.field.getText().toLowerCase()));
-        container.scrollTo(0);
+        container.clear();
+        container.addAll(this.mc.getSearchTree(SearchTreeManager.ITEMS).search(this.search.field.getText().toLowerCase()));
 
         this.inventory.scroll = 0;
-        this.inventory.scrollSize = (int) (Math.ceil(container.itemList.size() / 9D) * this.inventory.scrollItemSize);
+        this.inventory.scrollSize = (int) (Math.ceil(container.size() / 9D) * this.inventory.scrollItemSize);
     }
 
     private void setStack(ItemStack stack)
@@ -247,7 +242,7 @@ public class GuiInventoryElement extends GuiElement
 
             if (this.slot != null)
             {
-                NonNullList<ItemStack> items = this.searching ? container.itemList : this.mc.player.inventory.mainInventory;
+                NonNullList<ItemStack> items = this.searching ? container : this.mc.player.inventory.mainInventory;
 
                 if (this.searching)
                 {
@@ -323,23 +318,21 @@ public class GuiInventoryElement extends GuiElement
 
         if(this.searching)
         {
-            NonNullList<ItemStack> inventory = container.itemList;
-
             int scroll = 0;
 
-            if (inventory.size() > 45)
+            if (container.size() > 45)
             {
-                int rows = (int) Math.ceil(inventory.size() / 9F);
+                int rows = (int) Math.ceil(container.size() / 9F);
                 float factor = this.inventory.scroll / (float) this.inventory.scrollSize;
                 scroll = (int) (factor * rows);
                 scroll *= 9;
             }
 
-            int index = this.drawGrid(context, this.inventory, inventory, -1, scroll, scroll + this.inventory.h / 20 * 9);
+            int index = this.drawGrid(context, this.inventory, container, -1, scroll, scroll + this.inventory.h / 20 * 9);
 
             if (index != -1)
             {
-                this.active = inventory.get(index);
+                this.active = container.get(index);
             }
         }
         else
