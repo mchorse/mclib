@@ -14,6 +14,7 @@ import mchorse.mclib.math.IValue;
 import mchorse.mclib.math.MathBuilder;
 import mchorse.mclib.math.Operation;
 import mchorse.mclib.math.Operator;
+import mchorse.mclib.math.Variable;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.PayloadASM;
 import net.minecraftforge.fml.common.Mod;
@@ -62,6 +63,7 @@ public class McLib
     public static ValueBoolean enableTrackpadIncrements;
     public static ValueBoolean enableGridRendering;
     public static ValueInt userIntefaceScale;
+    public static ValueInt tooltipStyle;
 
     public static ValueBoolean enableCursorRendering;
     public static ValueBoolean enableMouseButtonRendering;
@@ -97,6 +99,10 @@ public class McLib
         enableTrackpadIncrements = builder.getBoolean("enable_trackpad_increments", true);
         enableGridRendering = builder.getBoolean("enable_grid_rendering", true);
         userIntefaceScale = builder.getInt("user_interface_scale", 2, 0, 4);
+        tooltipStyle = builder.getInt("tooltip_style", 1).modes(
+            IKey.lang("mclib.tooltip_style.light"),
+            IKey.lang("mclib.tooltip_style.dark")
+        );
 
         favoriteColors = new ValueColors("favorite_colors");
         builder.register(favoriteColors);
@@ -185,8 +191,14 @@ public class McLib
         test(builder, "2 + 3 - 4 + 5 ", 2 + 3 - 4 + 5  );
         test(builder, "7 - 2 ^ 4 - 4 * 5 + 15 ^ 2", 7 - Math.pow(2, 4) - 4 * 5 + Math.pow(15, 2));
         test(builder, "5 -(10 + 20)", 5 -(10 + 20));
+        test(builder, "1 << 4 - 1", 1 << 4 - 1);
+        test(builder, "256 >> 4 + 2", 256 >> 4 + 2);
+        test(builder, "255 & 7 + 1", 255 & 7 + 1);
+        test(builder, "256 | 7 + 1", 256 | 7 + 1);
+        test(builder, "5 % 2 + 1 == 0 * 2", 5 % 2 + 1 == 0 * 2 ? 1 : 0);
 
-        IValue test = builder.parse("str_contains(\"minecraft:diamond_axe\", \"axe\") ? \"Yeet\" : \"olo\"");
+        builder.variables.put("abc", new Variable("abc", 1));
+        IValue test = builder.parse("- (40 + 2) / -2");
 
         System.out.println(test.isNumber() + " " + test.stringValue() + " " + test.booleanValue() + " " + test.doubleValue());
     }

@@ -10,6 +10,8 @@ public class GuiDashboard extends GuiAbstractDashboard
 {
     public static GuiDashboard dashboard;
 
+    public GuiConfigPanel config;
+
     public static GuiDashboard get()
     {
         if (dashboard == null)
@@ -37,6 +39,7 @@ public class GuiDashboard extends GuiAbstractDashboard
     protected void registerPanels(Minecraft mc)
     {
         this.panels.registerPanel(this.config = new GuiConfigPanel(mc, this), IKey.lang("mclib.gui.config.tooltip"), Icons.GEAR);
+        this.defaultPanel = this.config;
 
         if (McLib.debugPanel.get())
         {

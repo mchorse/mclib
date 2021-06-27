@@ -59,8 +59,9 @@ public abstract class GuiListElement<T> extends GuiElement
      */
     public boolean sorting;
 
-    public boolean background = false;
+    public boolean background;
     public int color = ColorUtils.HALF_BLACK;
+    protected boolean postDraw;
 
     private String filter = "";
     private List<Pair<T>> filtered = new ArrayList<Pair<T>>();
@@ -468,7 +469,7 @@ public abstract class GuiListElement<T> extends GuiElement
             return true;
         }
 
-        if (this.scroll.isInside(context))
+        if (this.scroll.isInside(context) && context.mouseButton < 2)
         {
             int index = this.scroll.getIndex(context.mouseX, context.mouseY);
             boolean filtering = this.isFiltering();
@@ -499,7 +500,7 @@ public abstract class GuiListElement<T> extends GuiElement
                 {
                     this.callback.accept(this.getCurrent());
 
-                    return true;
+                    return context.mouseButton == 0;
                 }
             }
         }
@@ -576,11 +577,26 @@ public abstract class GuiListElement<T> extends GuiElement
         {
             for (Pair<T> element : this.filtered)
             {
-                i = this.drawElement(context, element.value, i, element.index);
+                i = this.drawElement(context, element.value, i, element.index, false);
 
                 if (i == -1)
                 {
                     break;
+                }
+            }
+
+            if (this.postDraw)
+            {
+                i = 0;
+
+                for (Pair<T> element : this.filtered)
+                {
+                    i = this.drawElement(context, element.value, i, element.index, true);
+
+                    if (i == -1)
+                    {
+                        break;
+                    }
                 }
             }
         }
@@ -588,17 +604,32 @@ public abstract class GuiListElement<T> extends GuiElement
         {
             for (T element : this.list)
             {
-                i = this.drawElement(context, element, i, i);
+                i = this.drawElement(context, element, i, i, false);
 
                 if (i == -1)
                 {
                     break;
                 }
             }
+
+            if (this.postDraw)
+            {
+                i = 0;
+
+                for (T element : this.list)
+                {
+                    i = this.drawElement(context, element, i, i, true);
+
+                    if (i == -1)
+                    {
+                        break;
+                    }
+                }
+            }
         }
     }
 
-    public int drawElement(GuiContext context, T element, int i, int index)
+    public int drawElement(GuiContext context, T element, int i, int index, boolean postDraw)
     {
         int mouseX = context.mouseX;
         int mouseY = context.mouseY;
@@ -637,13 +668,26 @@ public abstract class GuiListElement<T> extends GuiElement
         boolean hover = mouseX >= x && mouseY >= y && mouseX < x + xSide && mouseY < y + ySide;
         boolean selected = this.current.indexOf(index) != -1;
 
-        this.drawListElement(element, index, x, y, hover, selected);
+        if (postDraw)
+        {
+            this.drawPostListElement(element, index, x, y, hover, selected);
+        }
+        else
+        {
+            this.drawListElement(element, index, x, y, hover, selected);
+        }
 
         return i + 1;
     }
 
     /**
-     * Draw individual element (with selection
+     * Draw second pass of individual list element
+     */
+    public void drawPostListElement(T element, int i, int x, int y, boolean hover, boolean selected)
+    {}
+
+    /**
+     * Draw individual element (with selection)
      */
     public void drawListElement(T element, int i, int x, int y, boolean hover, boolean selected)
     {

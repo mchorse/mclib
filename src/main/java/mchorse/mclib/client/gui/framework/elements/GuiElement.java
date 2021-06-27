@@ -116,6 +116,18 @@ public class GuiElement extends Gui implements IGuiElement
 
     /* Hierarchy management */
 
+    public GuiBase.GuiRootElement getRoot()
+    {
+        GuiElement element = this;
+
+        while (element.getParent() != null)
+        {
+            element = element.getParent();
+        }
+
+        return element instanceof GuiBase.GuiRootElement ? (GuiBase.GuiRootElement) element : null;
+    }
+
     public GuiElement getParent()
     {
         return this.parent;

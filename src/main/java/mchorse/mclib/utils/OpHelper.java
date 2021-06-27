@@ -1,6 +1,7 @@
 package mchorse.mclib.utils;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListOpsEntry;
@@ -17,7 +18,9 @@ public class OpHelper
     @SideOnly(Side.CLIENT)
     public static int getPlayerOpLevel()
     {
-        return Minecraft.getMinecraft().player.getPermissionLevel();
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
+
+        return player == null ? 0 : player.getPermissionLevel();
     }
 
     @SideOnly(Side.CLIENT)
@@ -28,20 +31,18 @@ public class OpHelper
 
     public static boolean isPlayerOp(EntityPlayerMP player)
     {
+        if (player == null)
+        {
+            return false;
+        }
+
         MinecraftServer server = player.mcServer;
 
         if (server.getPlayerList().canSendCommands(player.getGameProfile()))
         {
             UserListOpsEntry userEntry = server.getPlayerList().getOppedPlayers().getEntry(player.getGameProfile());
 
-            if (userEntry != null)
-            {
-                return userEntry.getPermissionLevel() >= VANILLA_OP_LEVEL;
-            }
-            else
-            {
-                return server.getOpPermissionLevel() >= VANILLA_OP_LEVEL;
-            }
+            return isOp(userEntry == null ? server.getOpPermissionLevel() : userEntry.getPermissionLevel());
         }
 
         return false;

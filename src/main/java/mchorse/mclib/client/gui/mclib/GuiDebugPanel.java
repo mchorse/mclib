@@ -4,12 +4,14 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.GuiModelRenderer;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
+import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTransformations;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiDopeSheet;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiGraphView;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiKeyframesEditor;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiSheet;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
@@ -64,8 +66,8 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         };
 
         this.slot = new GuiSlotElement(mc, 0, (t) -> {});
-        this.slot.flex().relative(this).y(10).x(1F, -10).anchorX(1F);
-        this.slot.stack = new ItemStack(Items.BAKED_POTATO, 42);
+        this.slot.flex().relative(this).x(0.5F).y(20).anchorX(0.5F);
+        this.slot.setStack(new ItemStack(Items.BAKED_POTATO, 42));
 
         KeyframeChannel channel = new KeyframeChannel();
 
@@ -113,23 +115,49 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
 
         this.renderer.flex().relative(this).wh(1F, 1F);
         this.play.flex().relative(this).xy(10, 10).w(80);
-        // this.add(this.renderer, this.play, this.slot);
+        this.add(/* this.renderer, this.play, */this.slot);
         // this.add(this.graph, this.dopesheet);
         // this.add(this.top, this.bottom);
 
-        this.element = new GuiElement(mc);
-        this.element.flex().relative(this).wh(0.33F, 0.33F).grid(5).resizes(true).width(40).padding(10);
+        this.context(() ->
+        {
+            GuiSimpleContextMenu contextMenu = new GuiSimpleContextMenu(mc);
 
-        for (int i = 0; i < 20; i ++)
+            for (int i = 0; i < 100; i++)
+            {
+                contextMenu.action(Icons.POSE, IKey.str("I came §8" + (i + 1)), null);
+            }
+
+            return contextMenu;
+        });
+
+        this.element = new GuiElement(mc);
+        this.element.flex().relative(this).wh(0.33F, 0.33F).row(5).resize().width(80).padding(10);
+
+        for (int i = 0; i < 5; i ++)
         {
             GuiButtonElement buttonElement = new GuiButtonElement(mc, IKey.str(String.valueOf(i)), null);
 
-            buttonElement.flex().h(10 + (int) (Math.random() * 30));
+            buttonElement.flex().h(20);
+
+            if (i == 1)
+            {
+                buttonElement.marginLeft(0);
+                buttonElement.marginRight(30);
+            }
+            else if (i == 2)
+            {
+                buttonElement.marginTop(50);
+            }
+            else if (i == 3)
+            {
+                buttonElement.marginBottom(50);
+            }
 
             this.element.add(buttonElement);
         }
 
-        this.add(this.element);
+        // this.add(this.element);
     }
 
     @Override

@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 public abstract class GuiAbstractDashboard extends GuiBase
 {
     public GuiDashboardPanels panels;
-    public GuiConfigPanel config;
+    public GuiDashboardPanel defaultPanel;
 
     private boolean wasClosed = true;
     private int opLevel = -1;
@@ -76,11 +76,6 @@ public abstract class GuiAbstractDashboard extends GuiBase
         {
             for (GuiDashboardPanel panel : this.panels.panels)
             {
-                if (panel == this.config)
-                {
-                    continue;
-                }
-
                 GuiIconElement button = this.panels.getButton(panel);
                 boolean enabled = panel.canBeOpened(newOpLevel);
 
@@ -95,9 +90,13 @@ public abstract class GuiAbstractDashboard extends GuiBase
 
         GuiDashboardPanel current = this.panels.view.delegate;
 
-        if (!current.canBeOpened(newOpLevel))
+        if (current != null && !current.canBeOpened(newOpLevel))
         {
-            this.panels.setPanel(this.config);
+            this.panels.setPanel(this.defaultPanel);
+        }
+        else if (current == null)
+        {
+            this.panels.setPanel(null);
         }
 
         this.opLevel = newOpLevel;

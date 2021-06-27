@@ -2,6 +2,7 @@ package mchorse.mclib.client;
 
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.GuiBase;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiInventoryElement;
 import mchorse.mclib.client.gui.mclib.GuiAbstractDashboard;
 import mchorse.mclib.client.gui.mclib.GuiDashboard;
 import mchorse.mclib.config.values.ValueRL;
@@ -74,6 +75,7 @@ public class KeyboardHandler
             {
                 GuiDashboard.dashboard = null;
                 ValueRL.picker = null;
+                GuiInventoryElement.container = null;
 
                 McLib.proxy.configs.resetServerValues();
                 McLib.EVENT_BUS.post(new RemoveDashboardPanels());

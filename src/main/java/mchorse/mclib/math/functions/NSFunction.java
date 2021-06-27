@@ -45,14 +45,6 @@ public abstract class NSFunction extends Function
     }
 
     @Override
-    public void set(double value)
-    {}
-
-    @Override
-    public void set(String value)
-    {}
-
-    @Override
     public double doubleValue()
     {
         return 0;

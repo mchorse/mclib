@@ -107,14 +107,19 @@ public class ScrollArea extends Area
 
     public void scrollIntoView(int x)
     {
-        this.scrollIntoView(x, this.scrollItemSize);
+        this.scrollIntoView(x, this.scrollItemSize, 0);
     }
 
     public void scrollIntoView(int x, int bottomOffset)
     {
-        if (this.scroll > x)
+        this.scrollIntoView(x, bottomOffset, 0);
+    }
+
+    public void scrollIntoView(int x, int bottomOffset, int topOffset)
+    {
+        if (this.scroll + topOffset > x)
         {
-            this.scrollTo(x);
+            this.scrollTo(x - topOffset);
         }
         else if (x > this.scroll + this.direction.getSide(this) - bottomOffset)
         {

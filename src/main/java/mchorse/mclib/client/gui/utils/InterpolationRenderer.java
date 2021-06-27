@@ -3,6 +3,8 @@ package mchorse.mclib.client.gui.utils;
 import com.google.common.collect.ImmutableList;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.client.gui.framework.tooltips.styles.TooltipStyle;
+import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.IInterpolation;
 import mchorse.mclib.utils.MathUtils;
@@ -30,23 +32,27 @@ public class InterpolationRenderer
         int w = 140;
         int h = 130;
 
+        TooltipStyle style = TooltipStyle.get();
         String tooltip = interp.getTooltip();
         List<String> lines = tooltip.isEmpty() ? ImmutableList.of() : context.font.listFormattedStringToWidth(tooltip, w - 20);
-        int ah = lines.isEmpty() ? 0 : lines.size() * (context.font.FONT_HEIGHT + 4) - 4;
+        int ah = lines.isEmpty() ? 0 : lines.size() * (context.font.FONT_HEIGHT + 4);
 
         y = MathUtils.clamp(y, 0, context.screen.height - h - ah);
 
         x -= (int) (w * anchorX);
         y -= (int) (h * anchorY);
 
-        GuiDraw.drawDropShadow(x, y, x + w, y + h + ah, 4, ColorUtils.HALF_BLACK, 0);
-        Gui.drawRect(x, y, x + w, y + h + ah, 0xffffffff);
+        Area.SHARED.set(x, y, w, h + ah);
+        style.drawBackground(Area.SHARED);
 
-        context.font.drawString(interp.getName(), x + 10, y + 10, 0);
+        Color fg = ColorUtils.COLOR.set(style.getForegroundColor(), false);
+        int font = style.getTextColor();
+
+        context.font.drawString(interp.getName(), x + 10, y + 10, font);
 
         for (int i = 0; i < lines.size(); i++)
         {
-            context.font.drawString(lines.get(i), x + 10, y + h - 5 + i * (context.font.FONT_HEIGHT + 4), 0);
+            context.font.drawString(lines.get(i), x + 10, y + h - 5 + i * (context.font.FONT_HEIGHT + 4), font);
         }
 
         BufferBuilder builder = Tessellator.getInstance().getBuffer();
@@ -59,24 +65,24 @@ public class InterpolationRenderer
 
         builder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 
-        builder.pos(x + 10, y + 20, 0).color(0, 0, 0, 0.2F).endVertex();
-        builder.pos(x + 10, y + h - 10, 0).color(0, 0, 0, 0.2F).endVertex();
-        builder.pos(x + w / 2, y + 20, 0).color(0, 0, 0, 0.2F).endVertex();
-        builder.pos(x + w / 2, y + h - 10, 0).color(0, 0, 0, 0.2F).endVertex();
-        builder.pos(x + w - 10, y + 20, 0).color(0, 0, 0, 0.2F).endVertex();
-        builder.pos(x + w - 10, y + h - 10, 0).color(0, 0, 0, 0.2F).endVertex();
+        builder.pos(x + 10, y + 20, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
+        builder.pos(x + 10, y + h - 10, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
+        builder.pos(x + w / 2, y + 20, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
+        builder.pos(x + w / 2, y + h - 10, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
+        builder.pos(x + w - 10, y + 20, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
+        builder.pos(x + w - 10, y + h - 10, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
 
-        builder.pos(x + 10, y + 20, 0).color(0, 0, 0, 0.2F).endVertex();
-        builder.pos(x + w - 10, y + 20, 0).color(0, 0, 0, 0.2F).endVertex();
-        builder.pos(x + 10, y + 20 + (h - 30) / 2, 0).color(0, 0, 0, 0.2F).endVertex();
-        builder.pos(x + w - 10, y + 20 + (h - 30) / 2, 0).color(0, 0, 0, 0.2F).endVertex();
-        builder.pos(x + 10, y + h - 10, 0).color(0, 0, 0, 0.2F).endVertex();
-        builder.pos(x + w - 10, y + h - 10, 0).color(0, 0, 0, 0.2F).endVertex();
+        builder.pos(x + 10, y + 20, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
+        builder.pos(x + w - 10, y + 20, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
+        builder.pos(x + 10, y + 20 + (h - 30) / 2, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
+        builder.pos(x + w - 10, y + 20 + (h - 30) / 2, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
+        builder.pos(x + 10, y + h - 10, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
+        builder.pos(x + w - 10, y + h - 10, 0).color(fg.r, fg.g, fg.b, 0.2F).endVertex();
 
-        builder.pos(x + 10, y + h - 10 - padding / 2, 0).color(0, 0, 0, 0.11F).endVertex();
-        builder.pos(x + w - 10, y + h - 10 - padding / 2, 0).color(0, 0, 0, 0.11F).endVertex();
-        builder.pos(x + 10, y + 20 + padding / 2, 0).color(0, 0, 0, 0.11F).endVertex();
-        builder.pos(x + w - 10, y + 20 + padding / 2, 0).color(0, 0, 0, 0.11F).endVertex();
+        builder.pos(x + 10, y + h - 10 - padding / 2, 0).color(fg.r, fg.g, fg.b, 0.11F).endVertex();
+        builder.pos(x + w - 10, y + h - 10 - padding / 2, 0).color(fg.r, fg.g, fg.b, 0.11F).endVertex();
+        builder.pos(x + 10, y + 20 + padding / 2, 0).color(fg.r, fg.g, fg.b, 0.11F).endVertex();
+        builder.pos(x + w - 10, y + 20 + padding / 2, 0).color(fg.r, fg.g, fg.b, 0.11F).endVertex();
 
         Tessellator.getInstance().draw();
 
@@ -95,22 +101,22 @@ public class InterpolationRenderer
             float y1 = y + 20 + padding / 2 + value1 * (h - 30 - padding);
             float y2 = y + 20 + padding / 2 + value0 * (h - 30 - padding);
 
-            builder.pos(x1, y1, 0).color(0, 0, 0, 1F).endVertex();
-            builder.pos(x2, y2, 0).color(0, 0, 0, 1F).endVertex();
+            builder.pos(x1, y1, 0).color(fg.r, fg.g, fg.b, 1F).endVertex();
+            builder.pos(x2, y2, 0).color(fg.r, fg.g, fg.b, 1F).endVertex();
         }
 
         Tessellator.getInstance().draw();
 
         GlStateManager.enableTexture2D();
 
-        context.font.drawString("A", x + 14, (int)(y + h - 10 - padding / 2) + 4, 0);
-        context.font.drawString("B", x + w - 19, (int)(y + 20 + padding / 2) - context.font.FONT_HEIGHT - 4, 0);
+        context.font.drawString("A", x + 14, (int)(y + h - 10 - padding / 2) + 4, font);
+        context.font.drawString("B", x + w - 19, (int)(y + 20 + padding / 2) - context.font.FONT_HEIGHT - 4, font);
 
         float tick = ((context.tick + context.partialTicks) % (duration + 20)) / (float) duration;
         float factor = MathUtils.clamp(tick, 0, 1);
         int px = x + w - 5;
         int py = y + 20 + (int) (padding / 2) + (int) ((1 - interp.interpolate(0, 1, factor)) * (h - 30 - padding));
 
-        Gui.drawRect(px - 2, py - 2, px + 2, py + 2, 0xff000000);
+        Gui.drawRect(px - 2, py - 2, px + 2, py + 2, 0xff000000 + fg.getRGBColor());
     }
 }

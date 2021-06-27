@@ -64,6 +64,12 @@ public class MathBuilder
      */
     public Map<String, Class<? extends Function>> functions = new HashMap<String, Class<? extends Function>>();
 
+    /**
+     * Whether math expression parser should be strict about which characters
+     * can be used within math expressions
+     */
+    protected boolean strict = true;
+
     public MathBuilder()
     {
         /* Some default values */
@@ -112,6 +118,13 @@ public class MathBuilder
         this.functions.put("str_ends", StringEndsWith.class);
     }
 
+    public MathBuilder lenient()
+    {
+        this.strict = false;
+
+        return this;
+    }
+
     /**
      * Register a variable 
      */
@@ -135,7 +148,7 @@ public class MathBuilder
     public String[] breakdown(String expression) throws Exception
     {
         /* If given string have illegal characters, then it can't be parsed */
-        if (!expression.matches("^[\\w\\d\\s_+-/*%^&|<>=!?:.,()\"'@~]+$"))
+        if (this.strict && !expression.matches("^[\\w\\d\\s_+-/*%^&|<>=!?:.,()\"'@~\\[\\]]+$"))
         {
             throw new Exception("Given expression '" + expression + "' contains illegal characters!");
         }
@@ -179,7 +192,7 @@ public class MathBuilder
         for (int i = 0; i < len; i++)
         {
             String s = chars[i];
-            boolean longOperator = i > 0 && this.isOperator(chars[i - 1] + s);
+            boolean longOperator = i < chars.length - 1 && this.isOperator(s + chars[i + 1]);
 
             if (s.equals("\""))
             {
@@ -198,25 +211,15 @@ public class MathBuilder
                 {
                     int size = symbols.size();
 
-                    boolean isFirst = size == 0 && buffer.isEmpty();
-                    boolean isOperatorBehind = size > 0 && (this.isOperator(symbols.get(size - 1)) || symbols.get(size - 1).equals(",")) && buffer.isEmpty();
+                    boolean isEmpty = buffer.trim().isEmpty();
+                    boolean isFirst = size == 0 && isEmpty;
+                    boolean isOperatorBehind = size > 0 && (this.isOperator(symbols.get(size - 1)) || symbols.get(size - 1).equals(",")) && isEmpty;
 
                     if (isFirst || isOperatorBehind)
                     {
                         buffer += s;
 
                         continue;
-                    }
-                }
-
-                if (longOperator)
-                {
-                    s = chars[i - 1] + s;
-                    buffer = "";
-
-                    if (this.isOperator(symbols.get(symbols.size() - 1)))
-                    {
-                        symbols.remove(symbols.size() - 1);
                     }
                 }
 
@@ -227,7 +230,15 @@ public class MathBuilder
                     buffer = "";
                 }
 
-                symbols.add(s);
+                if (longOperator)
+                {
+                    symbols.add(s + chars[i + 1]);
+                    i += 1;
+                }
+                else
+                {
+                    symbols.add(s);
+                }
             }
             else if (s.equals("("))
             {
@@ -416,34 +427,23 @@ public class MathBuilder
 
             if (this.isOperator(o))
             {
+                /* - before a group isn't considered an operator per se */
+                if (o.equals("-"))
+                {
+                    Object next = i < symbols.size() - 1 ? symbols.get(i + 1) : null;
+                    Object prev = i > 0 ? symbols.get(i - 1) : null;
+
+                    if (next instanceof List && (this.isOperator(prev) || prev == null))
+                    {
+                        continue;
+                    }
+                }
+
                 return i;
             }
         }
 
         return -1;
-    }
-
-    protected int seekFirstOperator(List<Object> symbols)
-    {
-        return this.seekFirstOperator(symbols, 0);
-    }
-
-    /**
-     * Find the index of the first operator
-     */
-    protected int seekFirstOperator(List<Object> symbols, int offset)
-    {
-        for (int i = offset, size = symbols.size(); i < size; i++)
-        {
-            Object o = symbols.get(i);
-
-            if (this.isOperator(o))
-            {
-                return i;
-            }
-        }
-
-         return -1;
     }
 
     /**

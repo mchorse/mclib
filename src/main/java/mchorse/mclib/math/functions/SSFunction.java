@@ -36,14 +36,6 @@ public abstract class SSFunction extends Function
     }
 
     @Override
-    public void set(double value)
-    {}
-
-    @Override
-    public void set(String value)
-    {}
-
-    @Override
     public double doubleValue()
     {
         return 0;

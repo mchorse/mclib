@@ -3,7 +3,6 @@ package mchorse.mclib.client.gui.utils;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.keys.IKey;
-import mchorse.mclib.client.gui.utils.resizers.layout.RowResizer;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,6 +25,26 @@ public class Elements
         GuiElement element = new GuiElement(mc);
 
         element.flex().row(margin).padding(padding).height(height);
+        element.add(elements);
+
+        return element;
+    }
+
+    public static GuiElement column(Minecraft mc, int margin, GuiElement... elements)
+    {
+        return column(mc, margin, 0, elements);
+    }
+
+    public static GuiElement column(Minecraft mc, int margin, int padding, GuiElement... elements)
+    {
+        return column(mc, margin, padding, 0, elements);
+    }
+
+    public static GuiElement column(Minecraft mc, int margin, int padding, int height, GuiElement... elements)
+    {
+        GuiElement element = new GuiElement(mc);
+
+        element.flex().column(margin).vertical().stretch().padding(padding).height(height);
         element.add(elements);
 
         return element;
