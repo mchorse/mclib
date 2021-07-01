@@ -1,6 +1,7 @@
 {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/mchorses-mclib/",
     "1.12.2": {
+        "2.3": "This update complements release of Blockbuster 2.3, Aperture 1.6, Metamorph 1.2.7, Emoticons 1.0, Chameleon 1.0.3, Commander 1.1 and Extended Reach 1.1.",
         "2.2.2": "This patch updated needed for Blockbuster 2.2.2.",
         "2.2.1": "This hot patch update fixes an annoying issue with Optifine Shader's Anti-Aliasing.",
         "2.2": "This update features a couple of cool quality of life tweaks to different GUI elements, as well as GUI rendering optimization.",
@@ -33,8 +34,8 @@
     },
     
     "promos": {
-        "1.12.2-latest": "2.2.2",
-        "1.12.2-recommended": "2.2.2",
+        "1.12.2-latest": "2.3",
+        "1.12.2-recommended": "2.3",
         "1.10.2-latest": "1.0.4",
         "1.10.2-recommended": "1.0.4",
         "1.11.2-latest": "1.0.4",
