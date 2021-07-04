@@ -1,3 +1,31 @@
+## Version 2.3
+
+This update complements release of Blockbuster 2.3, Aperture 1.6, Metamorph 1.2.7, Emoticons 1.0, Chameleon 1.0.3, Commander 1.1 and Extended Reach 1.1.
+
+* Added OP check mechanism
+* Added copy/paste context menu items to keyframe editors
+* Added graphing calculator panel to McLib's dashboard
+* Added server-side options editing for OP users
+* Added OP access mod options
+* Added server side only `/mclib` command for managing mod configuration
+* Added ability to select all keyframes in the same column by Alt clicking on a keyframe
+* Added copy/paste context menu to texture picker's text field (suggested by Silverx)
+* Added an option to refresh multi-skin upon resource pack reloading
+* Added a context menu item to reset pose transformations (suggested by Silverx)
+* Added auto size, custom width and height options to multi-skin
+* Added `/cheats <true|fale>` command to toggle commands in a singleplayer world
+* Added string support to math expression parser
+* Added an option to change tooltip style (light and dark)
+* Added search all blocks section to inventory menu
+* Added `<<` (shift left), `>>` (shift right), `|` (or), `&` (and) and `^^` (xor) bitwise operators for 
+* Fixed the crash with transformation handlers (reported by Andruxioid)
+* Fixed math expression parser logical operators order
+* Fixed math expression parsing bugs invloving `-`
+* Fixed subcommands not showing in the order they were registed in
+* Fixed tooltips overlaying the element they are displaying the tooltip for
+* Fixed trackpad value gets out of limit when inputting manually
+* Fixed context menus that contain too many items to have scroll bar
+
 ## Version 2.2.2
 
 This patch updated needed for Blockbuster 2.2.2.

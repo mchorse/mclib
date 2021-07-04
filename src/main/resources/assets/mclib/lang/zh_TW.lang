@@ -11,13 +11,19 @@ mclib.gui.no_data=無可用的數據...
 mclib.gui.open_folder=打開文件夾
 mclib.gui.pick_texture=選擇材質
 
+mclib.gui.context.multi_skin.copy=拷貝材質路徑
+mclib.gui.context.multi_skin.paste=粘貼材質路徑
+
 # Don't remove space on the end!
 mclib.gui.dashboard.category=儀表盤
 mclib.gui.dashboard.open_panel=打開 
 
+mclib.gui.graph.tooltip=圖形計算器
+mclib.gui.graph.help=點擊該按鈕會進入一個網頁，其中詳細列出了該圖形計算器的功能。\n\n此處使用的表達式，也可以在 Aperture 的“數學”調整器以及 Commander 的數學表達式計算命令中使用。\n\n該圖形計算器只提供一個變量 "x"，它是你可以插入 y=x（又稱 f(x)）圖形函數的水平坐標。
 mclib.gui.config.title=選項
 mclib.gui.config.tooltip=模組選項
 mclib.gui.config.reload_tooltip=從文件重載選項...
+mclib.gui.config.request_tooltip=在服務端配置和客戶端配置之間進行切換...
 mclib.gui.keys.list=快捷鍵列表
 
 mclib.gui.transforms.x=X
@@ -31,23 +37,31 @@ mclib.gui.transforms.context.paste=粘貼變換信息
 mclib.gui.transforms.context.paste_translation=僅粘貼平移
 mclib.gui.transforms.context.paste_scale=僅粘貼縮放
 mclib.gui.transforms.context.paste_rotation=僅粘貼旋轉
+mclib.gui.transforms.context.reset=重置變換信息
 
 mclib.gui.keyframes.tick=Tick
 mclib.gui.keyframes.value=值
 mclib.gui.keyframes.context.maximize=框顯所有關鍵幀
 mclib.gui.keyframes.context.select_all=全選
 mclib.gui.keyframes.context.remove=移除關鍵幀
+mclib.gui.keyframes.context.copy=拷貝關鍵幀
+mclib.gui.keyframes.context.paste=粘貼關鍵幀
 mclib.gui.keyframes.context.to_left=選中左側手柄
 mclib.gui.keyframes.context.to_main=選中主手柄
 mclib.gui.keyframes.context.to_right=選中右側手柄
 
-mclib.gui.multiskin.color=通過該顏色控件，妳可以調整顏色（RGB）通道。最適用於白色/灰度圖像。
+mclib.gui.multiskin.color=通過該顏色控件，你可以調整顏色（RGB）通道。最適用於白色/灰度圖像。
 mclib.gui.multiskin.scale=縮放
 mclib.gui.multiskin.scale_to_largest=縮放至最大
 mclib.gui.multiskin.shift=偏移
 mclib.gui.multiskin.pixelate=像素化
 mclib.gui.multiskin.erase=擦除
 mclib.gui.multiskin.erase_tooltip=該功可以使用當前皮膚作為差值蒙板，也就是說，任何不透明的像素都會擦去其下層所有皮膚的像素。
+mclib.gui.multiskin.custom_size=自定義尺寸
+mclib.gui.multiskin.auto_size=自適應尺寸
+mclib.gui.multiskin.auto_size_tooltip=啟用後，會使用材質的原始尺寸，否則便會應用下面給出的自定義尺寸。
+mclib.gui.multiskin.size_w=自定義寬度
+mclib.gui.multiskin.size_h=自定義高度
 
 mclib.gui.color.favorite=收藏的顏色
 mclib.gui.color.recent=最近的顏色
@@ -55,6 +69,8 @@ mclib.gui.color.recent=最近的顏色
 mclib.gui.color.context.favorites.add=添加至收藏
 mclib.gui.color.context.favorites.remove=移出收藏
 
+mclib.gui.item_slot.context.copy=拷貝物品 NBT 數據
+mclib.gui.item_slot.context.paste=粘貼物品 NBT 數據
 mclib.gui.item_slot.context.drop=獲取該物品到背包
 mclib.gui.item_slot.context.clear=清除物品
 
@@ -68,14 +84,16 @@ mclib.config.appearance.primary_color=主色調
 mclib.config.comments.appearance.primary_color=GUI 系統中最常見的顏色
 mclib.config.appearance.enable_borders=按鈕邊框
 mclib.config.comments.appearance.enable_borders=按鈕與其他控件是否顯示邊框？
-mclib.config.appearance.enable_checkbox_rendering=復選框
-mclib.config.comments.appearance.enable_checkbox_rendering=啟用復選框呈現而不是開關元件（憑個人喜好）
+mclib.config.appearance.enable_checkbox_rendering=覆選框
+mclib.config.comments.appearance.enable_checkbox_rendering=啟用覆選框呈現而不是開關元件（憑個人喜好）
 mclib.config.appearance.enable_trackpad_increments=觸控板增量
 mclib.config.comments.appearance.enable_trackpad_increments=啟用觸控板控件上的 < 和 > 按鈕（用於觸控板值的遞增）
 mclib.config.appearance.enable_grid_rendering=模型網絡
 mclib.config.comments.appearance.enable_grid_rendering=啟用網絡地面呈現而非草方塊地面
 mclib.config.appearance.user_interface_scale=GUI 尺寸
 mclib.config.comments.appearance.user_interface_scale=McHorse 的模組的 GUI 尺寸，代替視頻設置中的界面尺寸。若設為 0，則會使用 Minecraft 的界面尺寸設置
+mclib.config.appearance.tooltip_style=工具提示樣式
+mclib.config.comments.appearance.tooltip_style=該選項用於更改 GUI 工具提示的樣式
 
 mclib.config.tutorials.title=教學選項
 mclib.config.tutorials.tooltip=該分類提供了利於制作教程視頻的選項
@@ -89,7 +107,7 @@ mclib.config.comments.tutorials.enable_keystrokes_rendering=啟用按鍵顯示�
 mclib.config.tutorials.keystroke_offset=按鍵顯示偏移
 mclib.config.comments.tutorials.keystroke_offset=允許設置按鍵顯示行從邊角處起的偏移像素數量
 mclib.config.tutorials.keystroke_position=按鍵顯示位置
-mclib.config.comments.tutorials.keystroke_position=允許更改按鍵顯示行處於哪個角落 
+mclib.config.comments.tutorials.keystroke_position=允許更改按鍵顯示行處於哪個角落
 
 mclib.config.background.title=背景
 mclib.config.background.tooltip=背景選項，例如使用的顏色和材質
@@ -114,12 +132,23 @@ mclib.config.multiskin.tooltip=多重皮膚功能相關選項
 
 mclib.config.multiskin.multithreaded=多線程處理
 mclib.config.comments.multiskin.multithreaded=允許您啟用多重皮膚的多線程處理，可以適當解決卡頓問題，但需要更長的處理時間
+mclib.config.multiskin.clear=重載 RP 時清空
+mclib.config.comments.multiskin.clear=用於開關在重載資源包時刪除所有多重皮膚的材質
 
 mclib.config.vanilla.title=原版屬性微調
 mclib.config.vanilla.tooltip=關於對 Minecraft 的代碼進行微調的選項
 
 mclib.config.vanilla.max_packet_size=最大數據包大小
 mclib.config.comments.vanilla.max_packet_size=用於配置模型數據包的最大大小（以字節為單位）。警告：請勿在公開服務器中修改該屬性，因為這會讓服務器更容易遭到 DDoS。該選項是為單人模式設計的！
+
+# OP access
+op_access.config.title=OP 訪問權限
+
+op_access.config.mclib.title=McLib
+op_access.config.mclib.tooltip=McLib OP 訪問權限選項
+
+op_access.config.mclib.drop_items=獲取物品到背包
+op_access.config.comments.mclib.drop_items=非 OP 玩家是否可以使用物品槽控件中的“獲取該物品到背包”選項？
 
 # Interpolations
 mclib.interpolations.linear=線性
@@ -153,9 +182,53 @@ mclib.interpolations.back=回彈
 mclib.interpolations.elastic=彈性
 mclib.interpolations.bounce=彈跳
 
+# Interpolation tooltips
+#
+# Feel free to add your own tips. If there is no tip, then leave it empty.
+# DO NOT REMOVE THESE LINES!
+
+mclib.interpolations.tooltips.linear=該插值會以恒定的速度從 A 過渡到 B。它適用於無縫旋轉和緩慢移動的使用場景。
+mclib.interpolations.tooltips.quad_in=
+mclib.interpolations.tooltips.quad_out=
+mclib.interpolations.tooltips.quad_inout=該插值適用於姿勢動畫，用於表現比指數或三次曲線緩入/緩出的程度更平緩的運動。
+mclib.interpolations.tooltips.cubic_in=
+mclib.interpolations.tooltips.cubic_out=
+mclib.interpolations.tooltips.cubic_inout=該插值適用於姿勢動畫，用於表現比指數緩入/緩出的程度更平緩的運動。
+mclib.interpolations.tooltips.exp_in=適合與“指數緩出”類型的相機相結合，因為你可以在兩個相機鏡頭之間實現跳躍的、銳增/銳減的過渡。
+mclib.interpolations.tooltips.exp_out=適用於創建動作迅速的運動。
+mclib.interpolations.tooltips.exp_inout=適用於姿勢動畫或強調類型的鏡頭運動。
+
+mclib.interpolations.tooltips.back_in=
+mclib.interpolations.tooltips.back_out=
+mclib.interpolations.tooltips.back_inout=適用於搖擺和比較自然的動作。
+mclib.interpolations.tooltips.elastic_in=
+mclib.interpolations.tooltips.elastic_out=適用於跳躍性的卡通風格的動作。
+mclib.interpolations.tooltips.elastic_inout=
+mclib.interpolations.tooltips.bounce_in=
+mclib.interpolations.tooltips.bounce_out=適用於創建一個東西掉在地上並彈跳幾下的動畫。
+mclib.interpolations.tooltips.bounce_inout=
+
+mclib.interpolations.tooltips.const=該插值並不算是真正意義上的插值，而是將初始值保持到最後。適用於通過多個關鍵幀來創建變化強烈的的階梯式運動曲線。
+mclib.interpolations.tooltips.hermite=該插值可以使動畫在多個關鍵幀之間平滑地進行過渡。請確保關鍵幀之間擁有相同的距離，因為這一平滑的特性會在不同距離的情況下被打破。
+mclib.interpolations.tooltips.bezier=該插值能夠適用控制點來調整曲線，進而能通過它模仿出其他大多數插值的的效果。適用於在多個關鍵幀之間創建更平滑的過渡。
+
 mclib.easing.in=緩入
 mclib.easing.out=緩出
 mclib.easing.inout=緩入/緩出
+
+# Commands
+mclib.commands.wrapper=%s
+mclib.commands.mclib.help=McLib 命令，提供了在服務器端編輯配置的功能。
+mclib.commands.mclib.config.help=McLib 子命令，用於管理 McHorse 系列模組的選項。
+mclib.commands.mclib.config.print=§f該命令會輸出當前給定模組選項（選項 ID 為 §7<mod.category.option>§f）的值。
+mclib.commands.mclib.config.set=§f該命令用於將模組選項 ID 為 §7<mod.category.option>§f 的值設置為 §7<值...>§f。
+mclib.commands.cheats=作弊命令可以在單人遊戲世界中開關作弊命令。\n\n該命令既可用於在一個開啟了命令的創造模式存檔中禁用作弊，例如你打算發布一張冒險地圖；也可用於在一個禁用了作弊命令的存檔中啟用命令，因為你需要在制作視頻時使用命令。
+
+mclib.error.config.invalid_id=§f給定的模組選項標識符 %s§f 不存在！
+mclib.error.config.invalid_format=§f給定的值 %s§f 對於模組選項標識符 %s§f 而言，無法進行解析！
+mclib.info.config.set=§f模組選項 %s§f 的值已更新為： %s§f
+mclib.info.config.print=§f模組選項 %s§f 的值為： %s§f
+mclib.info.config.client_side=§f給定的模組選項 %s§f 僅適用於本地客戶端...
 
 # Keystroke modes
 mclib.keystrokes_position.auto=自動
@@ -163,3 +236,7 @@ mclib.keystrokes_position.bottom_left=左下
 mclib.keystrokes_position.bottom_right=右下
 mclib.keystrokes_position.top_right=右上
 mclib.keystrokes_position.top_left=左上
+
+# Tootlip styles
+mclib.tooltip_style.light=淺色
+mclib.tooltip_style.dark=深色

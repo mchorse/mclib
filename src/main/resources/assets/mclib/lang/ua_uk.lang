@@ -69,6 +69,8 @@ mclib.gui.color.recent=Недавні кольори
 mclib.gui.color.context.favorites.add=Додати до обраних
 mclib.gui.color.context.favorites.remove=Видалити з обраних
 
+mclib.gui.item_slot.context.copy=Copy item's NBT
+mclib.gui.item_slot.context.paste=Paste item NBT
 mclib.gui.item_slot.context.drop=Викинути предмет
 mclib.gui.item_slot.context.clear=Видалити предмет
 
@@ -90,6 +92,8 @@ mclib.config.appearance.enable_grid_rendering=Сітка у моделей
 mclib.config.comments.appearance.enable_grid_rendering=Вмикає відображення сітки замість відображення блоку трави
 mclib.config.appearance.user_interface_scale=Розмір інтерфейсу
 mclib.config.comments.appearance.user_interface_scale=Розмір інтерфейсу для модів від McHorse, який використовується замість розміру інтерфейсу у налаштуваннях відео. Якщо значення цього параметру буде встановлено на 0, то буде використано розмір інтерфейсу Майнкрафту за замовченням.
+mclib.config.appearance.tooltip_style=Tooltip style
+mclib.config.comments.appearance.tooltip_style=This option allows to change GUI tooltip style 
 
 mclib.config.tutorials.title=Налаштування для відеоуроків
 mclib.config.tutorials.tooltip=Ця категорія містить налаштування, які можуть стати у нагоді під час запису відеоуроків, гайдів або туторіалів
@@ -232,4 +236,7 @@ mclib.keystrokes_position.bottom_left=Зліва знизу
 mclib.keystrokes_position.bottom_right=Справа знизу
 mclib.keystrokes_position.top_right=Справа зверху
 mclib.keystrokes_position.top_left=Зліва зверху
-#Переклад зробив Дюха Лавський, шляк би те трафив!
+
+# Tootlip styles
+mclib.tooltip_style.light=Light
+mclib.tooltip_style.dark=Dark
