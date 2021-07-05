@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 public class PacketConfirm implements IMessage
 {
-    public int callbackId;
+    public int confirmId;
     public int behaviourId;
     public boolean confirm;
 
@@ -18,12 +18,12 @@ public class PacketConfirm implements IMessage
     {
         Map.Entry<Integer, Consumer<Boolean>> entry = ServerHandlerConfirm.consumers.lastEntry();
 
-        this.callbackId =  ServerHandlerConfirm.consumers.lastEntry()!=null ? entry.getKey()+1 : 0;
+        this.confirmId =  ServerHandlerConfirm.consumers.lastEntry()!=null ? entry.getKey()+1 : 0;
 
         entry = ClientHandlerConfirm.consumers.lastEntry();
         this.behaviourId =  ClientHandlerConfirm.consumers.lastEntry()!=null ? entry.getKey()+1 : 0;
 
-        ServerHandlerConfirm.consumers.put(callbackId, callback);
+        ServerHandlerConfirm.consumers.put(confirmId, callback);
         ClientHandlerConfirm.consumers.put(behaviourId, behaviour);
     }
 
@@ -38,7 +38,7 @@ public class PacketConfirm implements IMessage
     @Override
     public void fromBytes(ByteBuf buf)
     {
-        this.callbackId = buf.readInt();
+        this.confirmId = buf.readInt();
         this.behaviourId = buf.readInt();
         this.confirm = buf.readBoolean();
     }
@@ -46,7 +46,7 @@ public class PacketConfirm implements IMessage
     @Override
     public void toBytes(ByteBuf buf)
     {
-        buf.writeInt(this.callbackId);
+        buf.writeInt(this.confirmId);
         buf.writeInt(this.behaviourId);
         buf.writeBoolean(this.confirm);
     }
