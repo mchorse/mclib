@@ -21,7 +21,9 @@ public class ClientHandlerConfirm extends ClientMessageHandler<PacketConfirm>
     @SideOnly(Side.CLIENT)
     public void run(EntityPlayerSP entityPlayerSP, PacketConfirm packetConfirm)
     {
-        consumers.get(packetConfirm.behaviourId).accept(true);
-        consumers.remove(packetConfirm.behaviourId);
+        if (consumers.containsKey(packetConfirm.behaviourId))
+        {
+            consumers.remove(packetConfirm.behaviourId).accept(true);
+        }
     }
 }
