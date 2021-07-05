@@ -9,14 +9,19 @@ import java.util.function.Consumer;
 
 public class GuiConfirmationScreen extends GuiBase
 {
+    private Consumer<Boolean> callback;
+    private boolean value;
+
     public GuiConfirmationScreen(IKey label, Consumer<Boolean> callback)
     {
         super();
 
+        this.callback = callback;
+
         this.root.add(GuiConfirmModal.createTemplate(Minecraft.getMinecraft(), this.viewport, label, (value) ->
         {
-            callback.accept(value);
-            this.closeScreen();
+            this.value = value;
+            closeScreen();
         }));
     }
 
@@ -29,6 +34,7 @@ public class GuiConfirmationScreen extends GuiBase
     @Override
     protected void closeScreen()
     {
+        this.callback.accept(this.value);
         super.closeScreen();
     }
 

@@ -10,12 +10,13 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
 public class ClientHandlerConfirm extends ClientMessageHandler<PacketConfirm>
 {
-    public static TreeMap<Integer, Consumer<Boolean>> consumers = new TreeMap<Integer, Consumer<Boolean>>();
+    private static TreeMap<Integer, Consumer<Boolean>> consumers = new TreeMap<Integer, Consumer<Boolean>>();
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -25,5 +26,15 @@ public class ClientHandlerConfirm extends ClientMessageHandler<PacketConfirm>
         {
             consumers.remove(packetConfirm.behaviourId).accept(true);
         }
+    }
+
+    public static void addConsumer(int id, Consumer<Boolean> item)
+    {
+        consumers.put(id, item);
+    }
+
+    public static Entry getLastConsumerEntry()
+    {
+        return consumers.lastEntry();
     }
 }

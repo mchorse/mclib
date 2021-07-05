@@ -16,15 +16,15 @@ public class PacketConfirm implements IMessage
 
     public PacketConfirm(Consumer<Boolean> behaviour, Consumer<Boolean> callback)
     {
-        Map.Entry<Integer, Consumer<Boolean>> entry = ServerHandlerConfirm.consumers.lastEntry();
+        Map.Entry<Integer, Consumer<Boolean>> entry = ServerHandlerConfirm.getLastConsumerEntry();
 
-        this.confirmId =  ServerHandlerConfirm.consumers.lastEntry()!=null ? entry.getKey()+1 : 0;
+        this.confirmId = (entry != null) ? entry.getKey()+1 : 0;
 
-        entry = ClientHandlerConfirm.consumers.lastEntry();
-        this.behaviourId =  ClientHandlerConfirm.consumers.lastEntry()!=null ? entry.getKey()+1 : 0;
+        entry = ClientHandlerConfirm.getLastConsumerEntry();
+        this.behaviourId = (entry != null) ? entry.getKey()+1 : 0;
 
-        ServerHandlerConfirm.consumers.put(confirmId, callback);
-        ClientHandlerConfirm.consumers.put(behaviourId, behaviour);
+        ServerHandlerConfirm.addConsumer(confirmId, callback);
+        ClientHandlerConfirm.addConsumer(behaviourId, behaviour);
     }
 
     public PacketConfirm(boolean confirm)
