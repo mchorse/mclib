@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.modals;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.utils.Area;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
@@ -33,6 +34,15 @@ public class GuiConfirmModal extends GuiModal
         GuiConfirmModal modal = new GuiConfirmModal(mc, label, callback);
 
         modal.flex().relative(parent).xy(0.5F, 0.5F).wh(160, 180).anchor(0.5F, 0.5F);
+
+        return modal;
+    }
+
+    public static GuiConfirmModal createTemplate(Minecraft mc, Area area, IKey label, Consumer<Boolean> callback)
+    {
+        GuiConfirmModal modal = new GuiConfirmModal(mc, label, callback);
+
+        modal.flex().relative(area).xy(0.5F, 0.5F).wh(160, 180).anchor(0.5F, 0.5F);
 
         return modal;
     }

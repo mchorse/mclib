@@ -3,10 +3,13 @@ package mchorse.mclib.network.mclib;
 import mchorse.mclib.McLib;
 import mchorse.mclib.network.AbstractDispatcher;
 import mchorse.mclib.network.mclib.client.ClientHandlerConfig;
+import mchorse.mclib.network.mclib.client.ClientHandlerConfirm;
 import mchorse.mclib.network.mclib.common.PacketConfig;
+import mchorse.mclib.network.mclib.common.PacketConfirm;
 import mchorse.mclib.network.mclib.common.PacketDropItem;
 import mchorse.mclib.network.mclib.common.PacketRequestConfigs;
 import mchorse.mclib.network.mclib.server.ServerHandlerConfig;
+import mchorse.mclib.network.mclib.server.ServerHandlerConfirm;
 import mchorse.mclib.network.mclib.server.ServerHandlerDropItem;
 import mchorse.mclib.network.mclib.server.ServerHandlerRequestConfigs;
 import net.minecraft.entity.Entity;
@@ -27,6 +30,10 @@ public class Dispatcher
             register(PacketRequestConfigs.class, ServerHandlerRequestConfigs.class, Side.SERVER);
             register(PacketConfig.class, ServerHandlerConfig.class, Side.SERVER);
             register(PacketConfig.class, ClientHandlerConfig.class, Side.CLIENT);
+
+            /* Confirm related packets */
+            register(PacketConfirm.class, ClientHandlerConfirm.class, Side.CLIENT);
+            register(PacketConfirm.class, ServerHandlerConfirm.class, Side.SERVER);
         }
     };
 
