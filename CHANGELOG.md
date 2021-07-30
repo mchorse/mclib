@@ -1,3 +1,10 @@
+## Version 2.3.1
+
+This patch complements release of Blockbuster 2.3.1 and Metamorph 1.2.9.
+
+* Added `ReflectionUtils.isOptifineShadowPass()` (thanks to NyaNLI)
+* Added `GuiConfirmModal.createTemplate()` (thanks to Chryfi)
+
 ## Version 2.3
 
 This update complements release of Blockbuster 2.3, Aperture 1.6, Metamorph 1.2.7, Emoticons 1.0, Chameleon 1.0.3, Commander 1.1 and Extended Reach 1.1.
