@@ -170,7 +170,7 @@ public class GuiBase extends GuiScreen
      */
     protected void closeScreen()
     {
-        this.mc.displayGuiScreen((GuiScreen) null);
+        this.mc.displayGuiScreen(null);
 
         if (this.mc.currentScreen == null)
         {
