@@ -1,12 +1,5 @@
 package mchorse.mclib.utils;
 
-import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.List;
-import java.util.Map;
-
-import mchorse.mclib.utils.files.GlobalTree;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -18,6 +11,11 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.Map;
+
 public class ReflectionUtils
 {
     /**
@@ -26,6 +24,16 @@ public class ReflectionUtils
      * OpenGL textures). 
      */
     public static Field TEXTURE_MAP;
+
+    /**
+     * Whether isShadowPass field was checked
+     */
+    private static boolean SHADOW_PASS_CHECK;
+
+    /**
+     * Optifine's shadow pass field
+     */
+    private static Field SHADOW_PASS;
 
     /**
      * Get texture map from texture manager using reflection API
@@ -104,6 +112,39 @@ public class ReflectionUtils
         catch (Exception e)
         {
             e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks whether Optifine is currently rendering shadow map. Thanks to
+     * NyaNLI for suggesting how to do it!
+     */
+    public static boolean isOptifineShadowPass()
+    {
+        if (!SHADOW_PASS_CHECK)
+        {
+            try
+            {
+                Class clazz = Class.forName("net.optifine.shaders.Shaders");
+
+                SHADOW_PASS = clazz.getDeclaredField("isShadowPass");
+            }
+            catch (Exception e)
+            {}
+
+            SHADOW_PASS_CHECK = true;
+        }
+
+        if (SHADOW_PASS != null)
+        {
+            try
+            {
+                return (boolean) SHADOW_PASS.get(null);
+            }
+            catch (Exception e)
+            {}
         }
 
         return false;
