@@ -52,6 +52,18 @@ public abstract class GuiModelRenderer extends GuiElement
     public float pitch;
     public Vector3f pos = new Vector3f();
 
+    public boolean hideModel;
+    public boolean fullScreen;
+
+    public Consumer<GuiContext> beforeRender;
+    public Consumer<GuiContext> afterRender;
+
+    public boolean customEntity;
+    public float entityPitch;
+    public float entityYawHead;
+    public float entityYawBody;
+    public int entityTicksExisted;
+
     protected float lastX;
     protected float lastY;
 
@@ -118,6 +130,18 @@ public abstract class GuiModelRenderer extends GuiElement
         this.pitch = 0;
         this.scale = 2;
         this.pos = new Vector3f(0, 1, 0);
+
+        this.hideModel = false;
+        this.fullScreen = false;
+
+        this.beforeRender = null;
+        this.afterRender = null;
+
+        this.customEntity = false;
+        this.entityPitch = 0F;
+        this.entityYawHead = 0F;
+        this.entityYawBody = 0F;
+        this.entityTicksExisted = 0;
     }
 
     @Override
@@ -195,6 +219,8 @@ public abstract class GuiModelRenderer extends GuiElement
         rendering = false;
 
         super.draw(context);
+
+        this.updatePosition(context);
     }
 
     private void updateLogic(GuiContext context)
@@ -231,6 +257,7 @@ public abstract class GuiModelRenderer extends GuiElement
     {
         this.setupViewport(context);
         this.setupPosition(context);
+        this.setupEntity();
 
         /* Enable rendering states */
         RenderHelper.enableStandardItemLighting();
@@ -247,9 +274,32 @@ public abstract class GuiModelRenderer extends GuiElement
         GlStateManager.rotate(this.yaw, 0.0F, 1.0F, 0.0F);
         GlStateManager.translate(-this.temp.x, -this.temp.y, -this.temp.z);
 
+        /* Custom render settings */
+        if (this.hideModel)
+        {
+            GlStateManager.depthFunc(GL11.GL_NEVER);
+        }
+
         /* Drawing begins */
         this.drawGround();
+
+        if (this.beforeRender != null)
+        {
+            this.beforeRender.accept(context);
+        }
+
         this.drawUserModel(context);
+
+        if (this.afterRender != null)
+        {
+            this.afterRender.accept(context);
+        }
+
+        /* Reset custom settings */
+        if (this.hideModel)
+        {
+            GlStateManager.depthFunc(GL11.GL_LEQUAL);
+        }
 
         GlStateManager.popMatrix();
 
@@ -272,7 +322,7 @@ public abstract class GuiModelRenderer extends GuiElement
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
     }
 
-    protected void setupPosition(GuiContext context)
+    protected void updatePosition(GuiContext context)
     {
         int mouseX = context.mouseX;
         int mouseY = context.mouseY;
@@ -313,7 +363,10 @@ public abstract class GuiModelRenderer extends GuiElement
             this.lastX = mouseX;
             this.lastY = mouseY;
         }
+    }
 
+    protected void setupPosition(GuiContext context)
+    {
         this.temp = new Vector3f(this.pos);
 
         vec.set(0, 0, -this.scale);
@@ -342,16 +395,33 @@ public abstract class GuiModelRenderer extends GuiElement
         float rx = (float) Math.ceil(mc.displayWidth / (double) context.screen.width);
         float ry = (float) Math.ceil(mc.displayHeight / (double) context.screen.height);
 
-        int vx = (int) (this.area.x * rx);
-        int vy = (int) (this.mc.displayHeight - (this.area.y + this.area.h) * ry);
-        int vw = (int) (this.area.w * rx);
-        int vh = (int) (this.area.h * ry);
+        int vx = this.fullScreen ? 0 : (int) (this.area.x * rx);
+        int vy = this.fullScreen ? 0 : (int) (this.mc.displayHeight - (this.area.y + this.area.h) * ry);
+        int vw = this.fullScreen ? this.mc.displayWidth : (int) (this.area.w * rx);
+        int vh = this.fullScreen ? this.mc.displayHeight : (int) (this.area.h * ry);
 
         GlStateManager.viewport(vx, vy, vw, vh);
         GlStateManager.matrixMode(GL11.GL_PROJECTION);
         GlStateManager.loadIdentity();
         Project.gluPerspective(this.fov, (float) vw / (float) vh, 0.05F, 1000);
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+    }
+
+    protected void setupEntity()
+    {
+        if (this.customEntity)
+        {
+            this.entity.prevRotationPitch = this.entity.rotationPitch = this.entityPitch;
+            this.entity.prevRotationYawHead = this.entity.rotationYawHead = this.entityYawHead;
+            this.entity.prevRenderYawOffset = this.entity.renderYawOffset = this.entityYawBody;
+            this.entity.ticksExisted = this.entityTicksExisted;
+        }
+        else
+        {
+            this.entity.prevRotationPitch = this.entity.rotationPitch = 0;
+            this.entity.prevRotationYawHead = this.entity.rotationYawHead = 0;
+            this.entity.prevRenderYawOffset = this.entity.renderYawOffset = 0;
+        }
     }
 
     /**
@@ -382,9 +452,19 @@ public abstract class GuiModelRenderer extends GuiElement
         GL11.glEnable(GL11.GL_STENCIL_TEST);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
 
+        if (this.hideModel)
+        {
+            GlStateManager.depthFunc(GL11.GL_LEQUAL);
+        }
+
         GL11.glColorMask(false, false, false, false);
         this.drawForStencil(context);
         GL11.glColorMask(true, true, true, true);
+
+        if (this.hideModel)
+        {
+            GlStateManager.depthFunc(GL11.GL_NEVER);
+        }
 
         ByteBuffer buffer = ByteBuffer.allocateDirect(1);
         GL11.glReadPixels(x, y, 1, 1, GL11.GL_STENCIL_INDEX, GL11.GL_UNSIGNED_BYTE, buffer);
