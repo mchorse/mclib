@@ -20,34 +20,7 @@ public class CPacketCustomPayloadTransformer extends ClassTransformer
     {
         for (MethodNode method : node.methods)
         {
-            this.replaceConstant(method, PayloadASM.MIN_SIZE);
-        }
-    }
-
-    private void replaceConstant(MethodNode method, int constant)
-    {
-        List<AbstractInsnNode> targets = new ArrayList<AbstractInsnNode>();
-        Iterator<AbstractInsnNode> it = method.instructions.iterator();
-
-        while (it.hasNext())
-        {
-            AbstractInsnNode node = it.next();
-
-            if (node.getOpcode() == Opcodes.SIPUSH && ((IntInsnNode) node).operand == constant)
-            {
-                targets.add(node);
-            }
-        }
-
-        for (AbstractInsnNode target : targets)
-        {
-            method.instructions.insert(target, new MethodInsnNode(Opcodes.INVOKESTATIC, "mchorse/mclib/utils/PayloadASM", "getPayloadSize", "()I", false));
-            method.instructions.remove(target);
-        }
-
-        if (!targets.isEmpty())
-        {
-            System.out.println("McLib: successfully patched " + method.name + "!");
+            PacketBufferTransformer.replaceConstant(method, PayloadASM.MIN_SIZE);
         }
     }
 }
