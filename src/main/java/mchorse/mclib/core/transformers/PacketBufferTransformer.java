@@ -20,11 +20,11 @@ public class PacketBufferTransformer extends ClassTransformer
     {
         for (MethodNode method : node.methods)
         {
-            replaceConstant(method, PayloadASM.MIN_SIZE);
+            replaceConstant(method, node.name, PayloadASM.MIN_SIZE);
         }
     }
 
-    public static void replaceConstant(MethodNode method, int constant)
+    public static void replaceConstant(MethodNode method, String className, int constant)
     {
         List<AbstractInsnNode> targets = new ArrayList<AbstractInsnNode>();
         Iterator<AbstractInsnNode> it = method.instructions.iterator();
@@ -47,7 +47,7 @@ public class PacketBufferTransformer extends ClassTransformer
 
         if (!targets.isEmpty())
         {
-            System.out.println("McLib: successfully patched " + method.name + "!");
+            System.out.println("McLib: successfully patched " + className + "." + method.name + "!");
         }
     }
 }

@@ -2,6 +2,7 @@ package mchorse.mclib.core;
 
 import mchorse.mclib.core.transformers.CPacketCustomPayloadTransformer;
 import mchorse.mclib.core.transformers.EntityRendererTransformer;
+import mchorse.mclib.core.transformers.PacketBufferTransformer;
 import mchorse.mclib.core.transformers.SimpleReloadableResourceManagerTransformer;
 import mchorse.mclib.utils.coremod.CoreClassTransformer;
 
@@ -10,6 +11,7 @@ public class McLibCMClassTransformer extends CoreClassTransformer
     private SimpleReloadableResourceManagerTransformer resourcePack = new SimpleReloadableResourceManagerTransformer();
     private CPacketCustomPayloadTransformer customPayload = new CPacketCustomPayloadTransformer();
     private EntityRendererTransformer entityRenderer = new EntityRendererTransformer();
+    private PacketBufferTransformer packetBuffer = new PacketBufferTransformer();
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass)
@@ -31,6 +33,12 @@ public class McLibCMClassTransformer extends CoreClassTransformer
             System.out.println("McLib: patching EntityRenderer (" + name + ")");
 
             return this.entityRenderer.transform(name, basicClass);
+        }
+        else if (checkName(name, "gy", "net.minecraft.network.PacketBuffer"))
+        {
+            System.out.println("McLib: Transforming PacketBuffer class (" + name + ")");
+
+            return this.packetBuffer.transform(name, basicClass);
         }
 
         return basicClass;

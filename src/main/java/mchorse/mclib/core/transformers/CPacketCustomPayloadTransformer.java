@@ -2,6 +2,7 @@ package mchorse.mclib.core.transformers;
 
 import mchorse.mclib.utils.PayloadASM;
 import mchorse.mclib.utils.coremod.ClassTransformer;
+import net.minecraft.network.PacketBuffer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -18,9 +19,11 @@ public class CPacketCustomPayloadTransformer extends ClassTransformer
     @Override
     public void process(String name, ClassNode node)
     {
+        PacketBuffer
+
         for (MethodNode method : node.methods)
         {
-            PacketBufferTransformer.replaceConstant(method, PayloadASM.MIN_SIZE);
+            PacketBufferTransformer.replaceConstant(method, node.name, PayloadASM.MIN_SIZE);
         }
     }
 }
