@@ -16,25 +16,33 @@ import java.util.function.Consumer;
 
 public class ClientHandlerConfirm extends ClientMessageHandler<PacketConfirm>
 {
-    private static TreeMap<Integer, Consumer<Boolean>> consumers = new TreeMap<Integer, Consumer<Boolean>>();
 
+    /**
+     * Renders the GUI based on the enum value of packet. Every GUI confirmation screen dispatches the packet back to the server
+     * @param packet
+     */
     @Override
     @SideOnly(Side.CLIENT)
-    public void run(EntityPlayerSP entityPlayerSP, PacketConfirm packetConfirm)
+    public void run(EntityPlayerSP entityPlayerSP, PacketConfirm packet)
     {
-        if (consumers.containsKey(packetConfirm.behaviourId))
+        switch(packet.gui)
         {
-            consumers.remove(packetConfirm.behaviourId).accept(true);
+            case MCSCREEN:
+                Minecraft.getMinecraft().displayGuiScreen(new GuiConfirmationScreen(IKey.lang(packet.messageKey), (value) ->
+                {
+                    this.dispatchPacket(packet, value);
+                }));
         }
     }
 
-    public static void addConsumer(int id, Consumer<Boolean> item)
+    private void dispatchPacket(PacketConfirm packet, boolean value)
     {
-        consumers.put(id, item);
+        packet.confirm = value;
+
+        Dispatcher.sendToServer(packet);
     }
 
-    public static Entry getLastConsumerEntry()
-    {
-        return consumers.lastEntry();
+    public enum GUI {
+        MCSCREEN;
     }
 }
