@@ -15,9 +15,9 @@ public class ServerHandlerConfirm extends ServerMessageHandler<PacketConfirm>
     @Override
     public void run(EntityPlayerMP entityPlayerMP, PacketConfirm packetConfirm)
     {
-        if (consumers.containsKey(packetConfirm.confirmId))
+        if (consumers.containsKey(packetConfirm.consumerID))
         {
-            consumers.remove(packetConfirm.confirmId).accept(packetConfirm.confirm);
+            consumers.remove(packetConfirm.consumerID).accept(packetConfirm.confirm);
         }
     }
 
