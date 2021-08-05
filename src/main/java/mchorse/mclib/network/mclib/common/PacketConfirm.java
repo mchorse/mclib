@@ -1,6 +1,8 @@
 package mchorse.mclib.network.mclib.common;
 
 import io.netty.buffer.ByteBuf;
+import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.client.gui.utils.keys.KeyParser;
 import mchorse.mclib.network.mclib.client.ClientHandlerConfirm;
 import mchorse.mclib.network.mclib.server.ServerHandlerConfirm;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -15,15 +17,13 @@ public class PacketConfirm implements IMessage
 
     public int consumerID;
     public ClientHandlerConfirm.GUI gui;
-    public String messageKey;
-    public String[] args;
+    public IKey langKey;
     public boolean confirm;
 
-    public PacketConfirm(ClientHandlerConfirm.GUI gui, String messageKey, @Nullable String[] args, Consumer<Boolean> callback)
+    public PacketConfirm(ClientHandlerConfirm.GUI gui, IKey langKey, Consumer<Boolean> callback)
     {
         this.gui = gui;
-        this.messageKey = messageKey;
-        this.args = args;
+        this.langKey = langKey;
 
         Map.Entry<Integer, Consumer<Boolean>> entry = ServerHandlerConfirm.getLastConsumerEntry();
         this.consumerID = (entry != null) ? entry.getKey()+1 : 0;
@@ -37,17 +37,8 @@ public class PacketConfirm implements IMessage
     @Override
     public void fromBytes(ByteBuf buf)
     {
-        int length = buf.readInt();
-
-        this.args = new String[length];
-
-        for(int i = 0; i<length; i++)
-        {
-            this.args[i] = ByteBufUtils.readUTF8String(buf);
-        }
-
+        this.langKey = KeyParser.keyFromBytes(buf);
         this.gui = ClientHandlerConfirm.GUI.values()[buf.readInt()];
-        this.messageKey = ByteBufUtils.readUTF8String(buf);
         this.consumerID = buf.readInt();
         this.confirm = buf.readBoolean();
     }
@@ -55,18 +46,8 @@ public class PacketConfirm implements IMessage
     @Override
     public void toBytes(ByteBuf buf)
     {
-        buf.writeInt(this.args.length);
-
-        if(this.args != null)
-        {
-            for(String arg : this.args)
-            {
-                ByteBufUtils.writeUTF8String(buf, arg);
-            }
-        }
-
+        KeyParser.keyToBytes(buf, this.langKey);
         buf.writeInt(this.gui.ordinal());
-        ByteBufUtils.writeUTF8String(buf, this.messageKey);
         buf.writeInt(this.consumerID);
         buf.writeBoolean(this.confirm);
     }
