@@ -28,7 +28,7 @@ public class ClientHandlerConfirm extends ClientMessageHandler<PacketConfirm>
         switch(packet.gui)
         {
             case MCSCREEN:
-                Minecraft.getMinecraft().displayGuiScreen(new GuiConfirmationScreen(IKey.lang(packet.messageKey), (value) ->
+                Minecraft.getMinecraft().displayGuiScreen(new GuiConfirmationScreen(IKey.format(packet.messageKey, packet.args), (value) ->
                 {
                     this.dispatchPacket(packet, value);
                 }));
