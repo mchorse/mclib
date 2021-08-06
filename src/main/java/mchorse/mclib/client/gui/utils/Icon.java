@@ -4,7 +4,8 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Icon
 {
@@ -37,11 +38,13 @@ public class Icon
         this.textureH = textureH;
     }
 
+    @SideOnly(Side.CLIENT)
     public void render(int x, int y)
     {
         this.render(x, y, 0, 0);
     }
 
+    @SideOnly(Side.CLIENT)
     public void render(int x, int y, float ax, float ay)
     {
         if (this.location == null)
@@ -60,6 +63,7 @@ public class Icon
         GlStateManager.disableAlpha();
     }
 
+    @SideOnly(Side.CLIENT)
     public void renderArea(int x, int y, int w, int h)
     {
         GlStateManager.enableAlpha();
