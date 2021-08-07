@@ -3,7 +3,7 @@ package mchorse.mclib.utils.shaders;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL20;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class Shader
 {
@@ -54,7 +54,7 @@ public class Shader
      */
     protected int createShader(String shaderPath, int shaderType, boolean code) throws Exception
     {
-        String shaderCode = code ? shaderPath : IOUtils.toString(this.getClass().getResourceAsStream(shaderPath), Charset.defaultCharset());
+        String shaderCode = code ? shaderPath : IOUtils.toString(this.getClass().getResourceAsStream(shaderPath), StandardCharsets.UTF_8);
         int shaderId = GL20.glCreateShader(shaderType);
 
         if (shaderId == 0)
