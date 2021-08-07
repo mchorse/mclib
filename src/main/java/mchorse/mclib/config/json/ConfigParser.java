@@ -7,7 +7,7 @@ import mchorse.mclib.config.values.Value;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class ConfigParser
@@ -35,7 +35,7 @@ public class ConfigParser
 
         try
         {
-            JsonObject object = (JsonObject) new JsonParser().parse(FileUtils.readFileToString(file, Charset.defaultCharset()));
+            JsonObject object = (JsonObject) new JsonParser().parse(FileUtils.readFileToString(file, StandardCharsets.UTF_8));
 
             for (Map.Entry<String, Value> entry : config.values.entrySet())
             {

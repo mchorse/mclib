@@ -15,7 +15,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,7 +140,7 @@ public class Config implements IByteBufSerializable
         {
             if (file != null)
             {
-                FileUtils.writeStringToFile(file, this.toJSON(), Charset.defaultCharset());
+                FileUtils.writeStringToFile(file, this.toJSON(), StandardCharsets.UTF_8);
             }
             else
             {
