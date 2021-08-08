@@ -427,6 +427,13 @@ public class GuiElement extends Gui implements IGuiElement
 
     /* Resizer methods */
 
+    /**
+     * This method assigns a {@link Flex} to this element and sets it as the main resizer.
+     *
+     * Flex isn't necessary when you place this element into an element with column, row or
+     * grid layouts. Use this to avoid manually calculating the position and scale.
+     * @return the {@link Flex} object that is assigned to the main resizer.
+     */
     public Flex flex()
     {
         if (this.flex == null)

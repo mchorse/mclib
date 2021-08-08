@@ -11,6 +11,7 @@ import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implements ITextColoring
@@ -24,7 +25,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implemen
         this(mc, value, null);
     }
 
-    public GuiToggleElement(Minecraft mc, ValueBoolean value, Consumer<GuiToggleElement> callback)
+    public GuiToggleElement(Minecraft mc, ValueBoolean value, @Nullable Consumer<GuiToggleElement> callback)
     {
         this(mc, IKey.lang(value.getLabelKey()), value.get(), callback == null ? (toggle) -> value.set(toggle.isToggled()) : (toggle) ->
         {
@@ -34,12 +35,12 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implemen
         this.tooltip(IKey.lang(value.getCommentKey()));
     }
 
-    public GuiToggleElement(Minecraft mc, IKey label, Consumer<GuiToggleElement> callback)
+    public GuiToggleElement(Minecraft mc, IKey label, @Nullable Consumer<GuiToggleElement> callback)
     {
         this(mc, label, false, callback);
     }
 
-    public GuiToggleElement(Minecraft mc, IKey label, boolean state, Consumer<GuiToggleElement> callback)
+    public GuiToggleElement(Minecraft mc, IKey label, boolean state, @Nullable Consumer<GuiToggleElement> callback)
     {
         super(mc, callback);
 
