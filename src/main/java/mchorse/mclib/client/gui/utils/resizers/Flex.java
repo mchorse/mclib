@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  * Flex class
  * 
  * This class is used to define resizing behavior for a 
- * {@link GuiElement}. 
+ * {@link GuiElement}.
  */
 public class Flex implements IResizer
 {
@@ -412,6 +412,11 @@ public class Flex implements IResizer
 
     /* Hierarchy */
 
+    /**
+     * This method assigns the element.area as the relative target.
+     * @param element {@link GuiElement} to which this is relative to.
+     * @return this
+     */
     public Flex relative(GuiElement element)
     {
         this.relative = element.area;
