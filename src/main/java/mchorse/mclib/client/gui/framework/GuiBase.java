@@ -200,6 +200,10 @@ public class GuiBase extends GuiScreen
 
             this.context.popViewport();
             this.context.drawTooltip();
+            this.context.postRenderCallbacks.forEach((element) ->
+            {
+                element.accept(this.context);
+            });
         }
     }
 
