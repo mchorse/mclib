@@ -18,6 +18,8 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
@@ -51,6 +53,7 @@ public abstract class GuiModelRenderer extends GuiElement
     public float yaw;
     public float pitch;
     public Vector3f pos = new Vector3f();
+    public boolean flight;
 
     public boolean hideModel;
     public boolean fullScreen;
@@ -155,6 +158,7 @@ public abstract class GuiModelRenderer extends GuiElement
         if (this.area.isInside(context) && (context.mouseButton == 0 || context.mouseButton == 2))
         {
             this.dragging = true;
+            this.flight = false;
             this.position = GuiScreen.isShiftKeyDown() || context.mouseButton == 2;
             this.lastX = context.mouseX;
             this.lastY = context.mouseY;
@@ -202,7 +206,46 @@ public abstract class GuiModelRenderer extends GuiElement
         this.dragging = false;
         this.tryPicking = false;
 
+        if (this.flight)
+        {
+            this.flight = false;
+
+            vec.set(0, 0, -this.scale);
+            this.rotateVector(vec);
+
+            this.pos.x -= vec.x;
+            this.pos.y -= vec.y;
+            this.pos.z -= vec.z;
+        }
+
         super.mouseReleased(context);
+    }
+
+    @Override
+    public boolean keyTyped(GuiContext context)
+    {
+        if (this.dragging && !this.position)
+        {
+            if (context.keyCode == Keyboard.KEY_W || context.keyCode == Keyboard.KEY_S || context.keyCode == Keyboard.KEY_A ||
+                    context.keyCode == Keyboard.KEY_D || context.keyCode == Keyboard.KEY_LSHIFT || context.keyCode == Keyboard.KEY_SPACE)
+            {
+                if (!this.flight)
+                {
+                    this.flight = true;
+
+                    vec.set(0, 0, -this.scale);
+                    this.rotateVector(vec);
+
+                    this.pos.x += vec.x;
+                    this.pos.y += vec.y;
+                    this.pos.z += vec.z;
+                }
+
+                return true;
+            }
+        }
+
+        return super.keyTyped(context);
     }
 
     @Override
@@ -363,11 +406,74 @@ public abstract class GuiModelRenderer extends GuiElement
             this.lastX = mouseX;
             this.lastY = mouseY;
         }
+
+        if (this.dragging && !this.position)
+        {
+            float multiplier = 0.1F;
+
+            if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
+            {
+                multiplier *= 5;
+            }
+            else if (Keyboard.isKeyDown(Keyboard.KEY_LMENU))
+            {
+                multiplier *= 0.2F;
+            }
+
+            vec.set(0, 0, 0);
+
+            if (Keyboard.isKeyDown(Keyboard.KEY_W))
+            {
+                vec.z++;
+            }
+
+            if (Keyboard.isKeyDown(Keyboard.KEY_S))
+            {
+                vec.z--;
+            }
+
+            if (Keyboard.isKeyDown(Keyboard.KEY_A))
+            {
+                vec.x++;
+            }
+
+            if (Keyboard.isKeyDown(Keyboard.KEY_D))
+            {
+                vec.x--;
+            }
+
+            mat.rotY((180 - this.yaw) / 180 * (float) Math.PI);
+            mat.transform(vec);
+
+            if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+            {
+                vec.y++;
+            }
+
+            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+            {
+                vec.y--;
+            }
+
+            if (vec.length() > 0)
+            {
+                vec.normalize();
+            }
+
+            this.pos.x += vec.x * multiplier;
+            this.pos.y += vec.y * multiplier;
+            this.pos.z += vec.z * multiplier;
+        }
     }
 
     protected void setupPosition(GuiContext context)
     {
         this.temp = new Vector3f(this.pos);
+
+        if (this.flight)
+        {
+            return;
+        }
 
         vec.set(0, 0, -this.scale);
         this.rotateVector(vec);
