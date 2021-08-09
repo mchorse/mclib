@@ -11,7 +11,9 @@ import mchorse.mclib.client.gui.utils.Area;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class GuiContext implements IViewportStack
 {
@@ -39,6 +41,7 @@ public class GuiContext implements IViewportStack
     public float partialTicks;
     public long tick;
 
+    public List<Consumer<GuiContext>> postRenderCallbacks = new ArrayList<>();
     public GuiViewportStack viewportStack = new GuiViewportStack();
 
     public GuiContext(GuiBase screen)
