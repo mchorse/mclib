@@ -26,6 +26,16 @@ public class Color
         this.a = a;
     }
 
+    public Color(int color)
+    {
+        this(color, true);
+    }
+
+    public Color(int color, boolean alpha)
+    {
+        this.set(color, alpha);
+    }
+
     public Color set(float r, float g, float b, float a)
     {
         this.r = r;
