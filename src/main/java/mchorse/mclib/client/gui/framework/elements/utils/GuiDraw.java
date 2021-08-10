@@ -521,6 +521,11 @@ public class GuiDraw
 
     public static void drawTextBackground(FontRenderer font, String text, int x, int y, int color, int background, int offset)
     {
+        drawTextBackground(font, text, x, y, color, background, offset, true);
+    }
+
+    public static void drawTextBackground(FontRenderer font, String text, int x, int y, int color, int background, int offset, boolean shadow)
+    {
         int a = background >> 24 & 0xff;
 
         if (a != 0)
@@ -528,7 +533,7 @@ public class GuiDraw
             Gui.drawRect(x - offset, y - offset, x + font.getStringWidth(text) + offset, y + font.FONT_HEIGHT + offset, background);
         }
 
-        font.drawStringWithShadow(text, x, y, color);
+        font.drawString(text, x, y, color, shadow);
     }
 
     public static void drawCustomBackground(int x, int y, int width, int height)

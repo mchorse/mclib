@@ -208,7 +208,7 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
                     {
                         for (ITextColoring elem : element.getChildren(ITextColoring.class, new ArrayList<ITextColoring>(), true))
                         {
-                            elem.setColor(0x999999);
+                            elem.setColor(0x999999, true);
                         }
                     }
                 }
