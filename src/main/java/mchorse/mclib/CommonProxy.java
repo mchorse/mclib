@@ -1,5 +1,6 @@
 package mchorse.mclib;
 
+import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.config.ConfigHandler;
 import mchorse.mclib.config.ConfigManager;
 import mchorse.mclib.network.mclib.Dispatcher;
@@ -26,5 +27,7 @@ public class CommonProxy
     public void init(FMLInitializationEvent event)
     {
         this.configs.register(this.configFolder);
+
+        Icons.register();
     }
 }
