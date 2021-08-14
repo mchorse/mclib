@@ -5,8 +5,8 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.Color;
-import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.Interpolations;
+import mchorse.mclib.utils.MathUtils;
 import mchorse.mclib.utils.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -15,10 +15,10 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiPopUpModal extends GuiModal
 {
-    private static final Color BACKGROUND_COLOR = new Color(0F, 0F, 0F, 1F);
-    private static final Color TEXT_COLOR = new Color(1F, 1F, 1F, 1F);
-    private static final float SHADOW_ALPHA = 0.26666668F;
-    private static final float ALPHA = 1F;
+    private Color backgroundColorDefault = new Color(0F, 0F, 0F, 0F);
+    private Color textColorDefault = new Color(1F, 1F, 1F, 0F);
+    private float shadowAlphaDefault = 0.26666668F;
+    private float alphaDefault = 1F;
 
     private boolean init = false;
     private int x0;
@@ -26,19 +26,24 @@ public class GuiPopUpModal extends GuiModal
     private Timer timer;
 
     /* Colours */
-    private float shadowAlpha = 0.26666668F;
-    private Color shadowColor = new Color(McLib.primaryColor.get());
-    private Color backgroundColor = BACKGROUND_COLOR.copy();
-    private Color textColor = TEXT_COLOR.copy();
+    private float shadowAlpha;
+    private float textAlpha;
+    private float backgroundAlpha;
+
+    private Color shadowColor;
+    private Color backgroundColor;
+    private Color textColor;
 
     /**
      * fade duration in milliseconds
      */
-    private int duration = 500;
+    private int duration = 350;
 
     public GuiPopUpModal(Minecraft mc, IKey label)
     {
         super(mc, label);
+
+        this.defaultColors();
     }
 
     /**
@@ -68,21 +73,24 @@ public class GuiPopUpModal extends GuiModal
         this.area.x = this.x0;
         this.area.y = this.y0;
 
-        GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
         GlStateManager.enableBlend();
-        GlStateManager.enableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
 
-        int shadowAlphaHEX = ColorUtils.COLOR.set(0, 0, 0, this.shadowAlpha).getRGBAColor();
+        int shadowAlpha = (int)(this.shadowAlpha * 255F) << 24;
+        int textAlpha = (int)(this.textAlpha * 255F) << 24;
+        int backgroundAlpha = (int)(this.backgroundAlpha * 255F) << 24;
 
-        GuiDraw.drawDropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 6, shadowAlphaHEX + this.shadowColor.getRGBColor(), this.shadowColor.getRGBColor());
-        Gui.drawRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), this.backgroundColor.getRGBAColor());
+        GuiDraw.drawDropShadow(this.area.x, this.area.y, this.area.ex(), this.area.ey(), 6, shadowAlpha + this.shadowColor.getRGBColor(), this.shadowColor.getRGBColor());
+        Gui.drawRect(this.area.x, this.area.y, this.area.ex(), this.area.ey(), backgroundAlpha + this.backgroundColor.getRGBAColor());
 
         this.y = 0;
-        int y = this.area.y + 10; //font offset
 
+        this.textColor.a = 0.001F;
         for (String line : this.font.listFormattedStringToWidth(this.label.get(), this.area.w - 20))
         {
-            this.font.drawStringWithShadow(line, this.area.x + 10, y + this.y, this.textColor.getRGBAColor());
+            this.font.drawStringWithShadow(line, this.area.x + 10, this.area.y + 10 + this.y, textAlpha + this.textColor.getRGBAColor());
+
             this.y += 11;
         }
 
@@ -91,16 +99,15 @@ public class GuiPopUpModal extends GuiModal
             if (this.timer == null)
             {
                 this.timer = new Timer(this.duration);
+
                 this.timer.mark();
             }
 
             float x = ((float)this.duration - this.timer.getRemaining()) / this.duration;
 
-            fadeAlpha(this.backgroundColor, this.ALPHA, x);
-            fadeAlpha(this.textColor, this.ALPHA, x);
-            fadeAlpha(ColorUtils.COLOR.set(0, 0, 0, this.shadowAlpha), this.SHADOW_ALPHA, x);
-
-            this.shadowAlpha = ColorUtils.COLOR.a;
+            this.backgroundAlpha = this.fadeAlpha(this.alphaDefault, 0F, x);
+            this.textAlpha = this.fadeAlpha(this.alphaDefault, 0F, x);
+            this.shadowAlpha =this.fadeAlpha(this.shadowAlphaDefault, 0F,  MathUtils.clamp(x * 1.7F, 0, 1));
 
             if(this.timer.check())
             {
@@ -113,16 +120,26 @@ public class GuiPopUpModal extends GuiModal
         else if (this.timer != null && !this.timer.check()) //if the mouse came back before the timer ended
         {
             this.timer = null;
-            this.backgroundColor = BACKGROUND_COLOR.copy();
-            this.textColor = TEXT_COLOR.copy();
-            this.shadowAlpha = SHADOW_ALPHA;
+
+            this.defaultColors();
         }
 
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
     }
 
-    private void fadeAlpha(Color color, float alpha, float x)
+    public void defaultColors()
     {
-        color.a = Interpolations.lerp(alpha, 0F, x);
+        this.shadowAlpha = this.shadowAlphaDefault;
+        this.textAlpha = this.alphaDefault;
+        this.backgroundAlpha = this.alphaDefault;
+
+        this.shadowColor = new Color(McLib.primaryColor.get());
+        this.backgroundColor = this.backgroundColorDefault.copy();
+        this.textColor = this.textColorDefault.copy();
+    }
+
+    private float fadeAlpha(float a, float b, float x)
+    {
+        return Interpolations.lerp(a, b, x);
     }
 }
