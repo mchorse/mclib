@@ -86,7 +86,6 @@ public class GuiPopUpModal extends GuiModal
 
         this.y = 0;
 
-        this.textColor.a = 0.001F;
         for (String line : this.font.listFormattedStringToWidth(this.label.get(), this.area.w - 20))
         {
             this.font.drawStringWithShadow(line, this.area.x + 10, this.area.y + 10 + this.y, textAlpha + this.textColor.getRGBAColor());
