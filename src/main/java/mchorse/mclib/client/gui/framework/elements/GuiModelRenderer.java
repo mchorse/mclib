@@ -409,7 +409,7 @@ public abstract class GuiModelRenderer extends GuiElement
 
         if (this.dragging && !this.position)
         {
-            float multiplier = 0.1F;
+            float multiplier = 0.2F;
 
             if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
             {
