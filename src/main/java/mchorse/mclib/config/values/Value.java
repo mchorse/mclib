@@ -79,6 +79,11 @@ public class Value implements IByteBufSerializable
         return this.children.get(key);
     }
 
+    public void removeSubValue(String key)
+    {
+        this.children.remove(key);
+    }
+
     public Value getRoot()
     {
         Value value = this;

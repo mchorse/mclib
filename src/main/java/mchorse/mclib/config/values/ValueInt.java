@@ -128,12 +128,22 @@ public class ValueInt extends Value implements IServerValue, IConfigGuiProvider
         return this.subtype(Subtype.KEYBIND);
     }
 
+    public ValueInt comboKey()
+    {
+        return this.subtype(Subtype.COMBOKEY);
+    }
+
     public ValueInt modes(IKey... labels)
     {
         this.labels = new ArrayList<IKey>();
         Collections.addAll(this.labels, labels);
 
         return this.subtype(Subtype.MODES);
+    }
+
+    public boolean hasChanged()
+    {
+        return this.value != this.defaultValue;
     }
 
     @Override
@@ -165,7 +175,7 @@ public class ValueInt extends Value implements IServerValue, IConfigGuiProvider
             color.flex().w(90);
             element.add(color.removeTooltip());
         }
-        else if (this.subtype == Subtype.KEYBIND)
+        else if (this.subtype == Subtype.KEYBIND || this.subtype == Subtype.COMBOKEY)
         {
             GuiKeybindElement keybind = new GuiKeybindElement(mc, this);
 
@@ -318,6 +328,7 @@ public class ValueInt extends Value implements IServerValue, IConfigGuiProvider
         COLOR,
         COLOR_ALPHA,
         KEYBIND,
+        COMBOKEY,
         MODES
     }
 }

@@ -6,17 +6,23 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueInt;
+import mchorse.mclib.config.values.ValueInt.Subtype;
 import mchorse.mclib.utils.Keys;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import org.lwjgl.input.Keyboard;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.function.Consumer;
+
+import org.lwjgl.input.Keyboard;
 
 public class GuiKeybindElement extends GuiElement
 {
     public int keybind;
     public boolean enabled;
+    public boolean comboKey;
+    public Set<Integer> holding;
     public Consumer<Integer> callback;
 
     public GuiKeybindElement(Minecraft mc, ValueInt value)
@@ -33,6 +39,12 @@ public class GuiKeybindElement extends GuiElement
         });
         this.setKeybind(value.get());
         this.tooltip(IKey.lang(value.getCommentKey()));
+
+        if (value.getSubtype() == Subtype.COMBOKEY)
+        {
+            this.comboKey = true;
+            this.holding = new LinkedHashSet<Integer>();
+        }
     }
 
     public GuiKeybindElement(Minecraft mc, Consumer<Integer> callback)
@@ -74,18 +86,61 @@ public class GuiKeybindElement extends GuiElement
 
         if (this.enabled)
         {
-            this.keybind = context.keyCode;
-            this.enabled = false;
-
-            if (this.callback != null)
+            if (this.comboKey && Keys.MODIFIERS.contains(context.keyCode))
             {
-                this.callback.accept(context.keyCode);
+                this.holding.add(context.keyCode);
+            }
+            else
+            {
+                if (context.keyCode == Keyboard.KEY_ESCAPE)
+                {
+                    this.keybind = Keyboard.KEY_NONE;
+                }
+                else
+                {
+                    if (this.comboKey)
+                    {
+                        this.keybind = Keys.getComboKeyCode(this.holding.stream().mapToInt(Integer::valueOf).toArray(), context.keyCode);
+                        this.holding.clear();
+                    }
+                    else
+                    {
+                        this.keybind = context.keyCode;
+                    }
+                }
+
+                this.enabled = false;
+
+                if (this.callback != null)
+                {
+                    this.callback.accept(this.keybind);
+                }
             }
 
             return true;
         }
 
         return false;
+    }
+
+    public void checkHolding()
+    {
+        for (int key : this.holding)
+        {
+            if (!Keys.isKeyDown(key))
+            {
+                this.keybind = Keys.getComboKeyCode(this.holding.stream().mapToInt(Integer::valueOf).toArray(), key);
+                this.enabled = false;
+                this.holding.clear();
+
+                if (this.callback != null)
+                {
+                    this.callback.accept(this.keybind);
+                }
+
+                return;
+            }
+        }
     }
 
     @Override
@@ -100,15 +155,17 @@ public class GuiKeybindElement extends GuiElement
             int a = (int) (Math.sin((context.tick + context.partialTicks) / 2D) * 127.5 + 127.5) << 24;
 
             Gui.drawRect(x - 1, y - 6, x + 1, y + 6, a + 0xffffff);
+
+            if (this.comboKey)
+            {
+                this.checkHolding();
+            }
         }
         else
         {
             this.area.draw(0xff000000);
 
-            /* Avoid a crash due to index out of bounds */
-            int keybind = this.keybind < 0 || this.keybind >= Keyboard.KEYBOARD_SIZE ? 0 : this.keybind;
-
-            this.drawCenteredString(this.font, Keys.getKeyName(keybind), this.area.mx(), this.area.my() - this.font.FONT_HEIGHT / 2, 0xffffff);
+            this.drawCenteredString(this.font, Keys.getComboKeyName(this.keybind), this.area.mx(), this.area.my() - this.font.FONT_HEIGHT / 2, 0xffffff);
         }
 
         super.draw(context);

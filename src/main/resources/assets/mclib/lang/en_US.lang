@@ -153,6 +153,12 @@ op_access.config.mclib.tooltip=McLib's OP access options
 op_access.config.mclib.drop_items=Drop items
 op_access.config.comments.mclib.drop_items=Can non-OP players use drop items option of item stack slot element?
 
+# Keybinds config
+keybinds.config.title=Keybinds
+
+keybinds.config.unknown_mod=Unknown mod
+keybinds.config.no_category=No category
+
 # Interpolations
 mclib.interpolations.linear=Linear
 mclib.interpolations.quad_in=Quadratic In
