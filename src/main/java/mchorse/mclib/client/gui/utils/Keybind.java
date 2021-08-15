@@ -1,10 +1,11 @@
 package mchorse.mclib.client.gui.utils;
 
+import mchorse.mclib.ClientProxy;
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.client.gui.utils.keys.KeyParser;
+import mchorse.mclib.config.values.ValueInt;
 import mchorse.mclib.utils.Keys;
-import org.lwjgl.input.Keyboard;
 
-import java.util.Arrays;
 import java.util.function.Supplier;
 
 /**
@@ -12,25 +13,35 @@ import java.util.function.Supplier;
  */
 public class Keybind
 {
+    public String modid;
     public IKey label;
     public IKey category = IKey.EMPTY;
-    public int mainKey;
-    public int[] heldKeys;
+    public int keyCode;
     public Runnable callback;
     public boolean inside;
     public boolean active = true;
     public Supplier<Boolean> activeSupplier;
 
-    public Keybind(IKey label, int mainKey, Runnable callback)
+    public String labelToken = "";
+    public String categoryToken = "";
+
+    public Keybind(String modid, IKey label, int keyCode, Runnable callback)
     {
+        this.modid = modid;
         this.label = label;
-        this.mainKey = mainKey;
+        this.keyCode = keyCode;
         this.callback = callback;
+
+        this.labelToken = KeyParser.toJson(label);
+
+        ClientProxy.keybinds.addKeybind(this);
     }
 
     public Keybind held(int... keys)
     {
-        this.heldKeys = Arrays.copyOf(keys, keys.length);
+        this.keyCode = Keys.getComboKeyCode(keys, keyCode);
+
+        ClientProxy.keybinds.addKeybind(this);
 
         return this;
     }
@@ -58,42 +69,39 @@ public class Keybind
 
     public Keybind category(IKey category)
     {
-        this.category = category;
+        ClientProxy.keybinds.updateCategory(this, category);
 
         return this;
     }
 
+    public void setCategory(IKey category)
+    {
+        this.category = category;
+        this.categoryToken = KeyParser.toJson(category);
+    }
+
     public String getKeyCombo()
     {
-        String label = Keys.getKeyName(this.mainKey);
+        ValueInt config = ClientProxy.keybinds.getKeybind(this.modid, this.categoryToken, this.labelToken);
 
-        if (this.heldKeys != null)
+        if (config != null)
         {
-            for (int held : this.heldKeys)
-            {
-                label = Keys.getKeyName(held) + " + " + label;
-            }
+            return Keys.getComboKeyName(config.get());
         }
-
-        return label;
+        else
+        {
+            return Keys.getComboKeyName(this.keyCode);
+        }
     }
 
     public boolean check(int keyCode, boolean inside)
     {
-        if (keyCode != this.mainKey)
+        ValueInt config = ClientProxy.keybinds.getKeybind(this.modid, this.categoryToken, this.labelToken);
+        int check = config == null ? this.keyCode : config.get();
+
+        if (Keys.getMainKey(check) != keyCode || !Keys.checkModifierKeys(check))
         {
             return false;
-        }
-
-        if (this.heldKeys != null)
-        {
-            for (int key : this.heldKeys)
-            {
-                if (!this.isKeyDown(key))
-                {
-                    return false;
-                }
-            }
         }
 
         if (this.inside)
@@ -102,24 +110,6 @@ public class Keybind
         }
 
         return true;
-    }
-
-    protected boolean isKeyDown(int key)
-    {
-        if (key == Keyboard.KEY_LSHIFT || key == Keyboard.KEY_RSHIFT)
-        {
-            return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
-        }
-        else if (key == Keyboard.KEY_LCONTROL || key == Keyboard.KEY_RCONTROL)
-        {
-            return Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
-        }
-        else if (key == Keyboard.KEY_LMENU || key == Keyboard.KEY_RMENU)
-        {
-            return Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU);
-        }
-
-        return Keyboard.isKeyDown(key);
     }
 
     public boolean isActive()
@@ -139,7 +129,7 @@ public class Keybind
         {
             Keybind keybind = (Keybind) obj;
 
-            return this.mainKey == keybind.mainKey && Arrays.equals(this.heldKeys, keybind.heldKeys) && this.inside == keybind.inside;
+            return this.keyCode == keybind.keyCode && this.inside == keybind.inside;
         }
 
         return super.equals(obj);

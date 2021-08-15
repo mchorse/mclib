@@ -3,11 +3,29 @@ package mchorse.mclib.client.gui.utils.keys;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+
 public class KeyParser
 {
+    public static final Gson JSON_PARSER = new GsonBuilder()
+            .registerTypeHierarchyAdapter(IKey.class, new KeyJsonAdapter())
+            .serializeNulls()
+            .create();
+
     public static IKey keyFromBytes(ByteBuf buffer)
     {
         byte type = buffer.readByte();
@@ -107,6 +125,117 @@ public class KeyParser
         {
             /* Just some random value */
             buffer.writeByte(100);
+        }
+    }
+
+    public static IKey fromJson(String json)
+    {
+        IKey key = JSON_PARSER.fromJson(json, IKey.class);
+
+        if (key == null)
+        {
+            key = IKey.EMPTY;
+        }
+
+        return key;
+    }
+
+    public static String toJson(IKey key)
+    {
+        if (key == null || IKey.EMPTY.equals(key))
+        {
+            return "";
+        }
+
+        return JSON_PARSER.toJson(key);
+    }
+
+    public static class KeyJsonAdapter implements JsonDeserializer<IKey>, JsonSerializer<IKey>
+    {
+        @Override
+        public JsonElement serialize(IKey src, Type typeOfSrc, JsonSerializationContext context)
+        {
+            if (src instanceof LangKey)
+            {
+                LangKey lang = (LangKey) src;
+                JsonObject obj = new JsonObject();
+                JsonArray arr = new JsonArray();
+
+                for (Object arg : lang.args)
+                {
+                    arr.add(context.serialize(arg));
+                }
+
+                obj.add(lang.key, arr);
+
+                return obj;
+            }
+            else if (src instanceof CompoundKey)
+            {
+                CompoundKey compound = (CompoundKey) src;
+                JsonArray arr = new JsonArray();
+
+                for (IKey key : compound.keys)
+                {
+                    arr.add(context.serialize(key, IKey.class));
+                }
+
+                return arr;
+            }
+            else
+            {
+                return new JsonPrimitive(String.valueOf(src));
+            }
+        }
+
+        @Override
+        public IKey deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+        {
+            if (json.isJsonObject())
+            {
+                JsonObject obj = json.getAsJsonObject();
+
+                String key = obj.entrySet().iterator().next().getKey();
+                LangKey lang = new LangKey(key);
+                JsonElement element = obj.get(key);
+
+                if (element instanceof JsonArray)
+                {
+                    List<Object> args = new ArrayList<Object>();
+
+                    for (JsonElement child : element.getAsJsonArray())
+                    {
+                        args.add(context.deserialize(child, child.isJsonPrimitive() ? Object.class : IKey.class));
+                    }
+
+                    lang.args = args.toArray();
+                }
+
+                return lang;
+            }
+            else if (json.isJsonArray())
+            {
+                JsonArray arr = json.getAsJsonArray();
+                CompoundKey compound = new CompoundKey();
+                List<IKey> keys = new ArrayList<IKey>();
+
+                for (JsonElement key : arr)
+                {
+                    keys.add(context.deserialize(key, IKey.class));
+                }
+
+                compound.keys = keys.toArray(new IKey[0]);
+
+                return compound;
+            }
+            else if (json.isJsonNull())
+            {
+                return IKey.EMPTY;
+            }
+            else
+            {
+                return new StringKey(json.toString());
+            }
         }
     }
 }

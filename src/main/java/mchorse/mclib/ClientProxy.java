@@ -2,6 +2,7 @@ package mchorse.mclib;
 
 import mchorse.mclib.client.KeyboardHandler;
 import mchorse.mclib.client.InputRenderer;
+import mchorse.mclib.client.gui.utils.KeybindConfig;
 import mchorse.mclib.client.gui.utils.keys.LangKey;
 import mchorse.mclib.utils.ReflectionUtils;
 import mchorse.mclib.utils.resources.MultiResourceLocation;
@@ -22,6 +23,8 @@ import java.util.Map;
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy
 {
+    public static KeybindConfig keybinds;
+
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
@@ -29,6 +32,8 @@ public class ClientProxy extends CommonProxy
 
         MinecraftForge.EVENT_BUS.register(new KeyboardHandler());
         MinecraftForge.EVENT_BUS.register(new InputRenderer());
+
+        keybinds = new KeybindConfig();
     }
 
     @Override
@@ -53,6 +58,8 @@ public class ClientProxy extends CommonProxy
                 mc.addScheduledTask(this::clearMultiTextures);
             }
         });
+
+        this.configs.modules.put(keybinds.id, keybinds);
     }
 
     private void clearMultiTextures()

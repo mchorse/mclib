@@ -153,6 +153,12 @@ op_access.config.mclib.tooltip=McLib OP 访问权限选项
 op_access.config.mclib.drop_items=获取物品到背包
 op_access.config.comments.mclib.drop_items=非 OP 玩家是否可以使用物品槽控件中的“获取该物品到背包”选项？
 
+# Keybinds config
+keybinds.config.title=快捷键配置
+
+keybinds.config.unknown_mod=未知 Mod
+keybinds.config.no_category=未分类快捷键
+
 # Interpolations
 mclib.interpolations.linear=线性
 mclib.interpolations.quad_in=二次方缓入

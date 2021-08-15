@@ -3,6 +3,8 @@ package mchorse.mclib.client.gui.utils;
 import mchorse.mclib.client.gui.framework.elements.input.GuiKeybinds;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.utils.ModHelper;
+import net.minecraftforge.fml.common.ModContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +19,27 @@ public class KeybindManager
 
     public Keybind register(IKey label, int key, Runnable callback)
     {
-        Keybind keybind = new Keybind(label, key, callback);
+        ModContainer mod = ModHelper.getCallerMod();
+        String modid = mod == null ? "" : mod.getModId();
 
-        this.keybinds.add(keybind);
-
-        return keybind;
+        return this.register(modid, label, key, callback);
     }
 
     public Keybind registerInside(IKey label, int key, Runnable callback)
     {
-        return this.register(label, key, callback).inside();
+        ModContainer mod = ModHelper.getCallerMod();
+        String modid = mod == null ? "" : mod.getModId();
+
+        return this.register(modid, label, key, callback).inside();
+    }
+
+    private Keybind register(String modid, IKey label, int key, Runnable callback)
+    {
+        Keybind keybind = new Keybind(modid, label, key, callback);
+
+        this.keybinds.add(keybind);
+
+        return keybind;
     }
 
     public KeybindManager ignoreFocus()

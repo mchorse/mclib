@@ -2,6 +2,7 @@ package mchorse.mclib.config;
 
 import com.google.common.base.Predicates;
 import io.netty.buffer.ByteBuf;
+import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.json.ConfigParser;
 import mchorse.mclib.config.values.Value;
 import mchorse.mclib.network.IByteBufSerializable;
