@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.input;
 import com.google.common.base.Predicate;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.client.gui.framework.elements.utils.ITextColoring;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueString;
 import mchorse.mclib.utils.Patterns;
@@ -22,7 +23,7 @@ import java.util.regex.Pattern;
  * This element is a wrapper for the text field class
  */
 @SideOnly(Side.CLIENT)
-public class GuiTextElement extends GuiBaseTextElement implements GuiResponder
+public class GuiTextElement extends GuiBaseTextElement implements GuiResponder, ITextColoring
 {
     public static final Predicate<String> FILENAME_PREDICATE = (s) -> Patterns.FILENAME.matcher(s).find();
 
@@ -98,6 +99,12 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder
         {
             this.callback.accept(value);
         }
+    }
+
+    @Override
+    public void setColor(int color, boolean shadow)
+    {
+        this.field.setTextColor(color);
     }
 
     @Override
