@@ -19,6 +19,7 @@ public class GuiButtonElement extends GuiClickElement<GuiButtonElement> implemen
 
     public boolean custom;
     public int customColor;
+    public boolean background = true;
 
     public GuiButtonElement(Minecraft mc, IKey label, Consumer<GuiButtonElement> callback)
     {
@@ -40,6 +41,13 @@ public class GuiButtonElement extends GuiClickElement<GuiButtonElement> implemen
     {
         this.textColor = color;
         this.textShadow = shadow;
+
+        return this;
+    }
+
+    public GuiButtonElement background(boolean background)
+    {
+        this.background = background;
 
         return this;
     }
@@ -67,7 +75,10 @@ public class GuiButtonElement extends GuiClickElement<GuiButtonElement> implemen
             color = ColorUtils.multiplyColor(color, 0.85F);
         }
 
-        GuiDraw.drawBorder(this.area, color);
+        if (this.background)
+        {
+            GuiDraw.drawBorder(this.area, color);
+        }
 
         String label = this.label.get();
         int x = this.area.mx(this.font.getStringWidth(label));

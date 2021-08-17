@@ -73,6 +73,14 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder, 
         return this;
     }
 
+    public GuiTextElement background(boolean background)
+    {
+        this.field.setEnableBackgroundDrawing(background);
+        this.resize();
+
+        return this;
+    }
+
     public void setText(String text)
     {
         if (text == null)
@@ -116,6 +124,14 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder, 
         this.field.y = this.area.y + 1;
         this.field.width = this.area.w - 2;
         this.field.height = this.area.h - 2;
+
+        if (!this.field.getEnableBackgroundDrawing())
+        {
+            this.field.x += 4;
+            this.field.y += ((this.area.h - this.font.FONT_HEIGHT) / 2);
+            this.field.width -= 8;
+            this.field.height = this.font.FONT_HEIGHT;
+        }
     }
 
     @Override
