@@ -1,3 +1,18 @@
+## Version 2.3.3
+
+This patch complements release of Mappet `0.1-rc4`. 
+
+* Added background options (to hide background) to `GuiTextElement` and `GuiButtonElement`
+* Added `ITextColoring` support for `GuiTextElement`
+* Added tracking of last picked slot in `GuiSlotElement`
+
+## Version 2.3.2
+
+This patch complements release of Mappet `0.1-rc3`. 
+
+* Added Server-Client confirmation API (developed by Chryfi)
+* Added IconRegistry which allows to query the key set of all possible UI icons
+
 ## Version 2.3.1
 
 This patch complements release of Blockbuster 2.3.1 and Metamorph 1.2.9.
