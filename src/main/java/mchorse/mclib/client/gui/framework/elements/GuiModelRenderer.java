@@ -409,7 +409,7 @@ public abstract class GuiModelRenderer extends GuiElement
 
         if (this.dragging && !this.position)
         {
-            float multiplier = 0.2F;
+            float multiplier = 4F / Math.max(Minecraft.getDebugFPS(), 1);
 
             if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL))
             {
