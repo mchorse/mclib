@@ -85,7 +85,6 @@ public class GuiConfigPanel extends GuiDashboardPanel<GuiAbstractDashboard>
     public void open()
     {
         this.request.setVisible(!Minecraft.getMinecraft().isIntegratedServerRunning() && OpHelper.isPlayerOp());
-        this.refresh();
     }
 
     @Override
