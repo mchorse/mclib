@@ -11,6 +11,11 @@ public class PayloadASM
      */
     public static int getPayloadSize()
     {
+        if (McLib.maxPacketSize == null)
+        {
+            return MIN_SIZE;
+        }
+
         return Math.max(MIN_SIZE, McLib.maxPacketSize.get());
     }
 }
