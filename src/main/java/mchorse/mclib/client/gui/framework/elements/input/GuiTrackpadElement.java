@@ -246,7 +246,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
     private void setValueInternal(double value)
     {
-        value = Math.round(value * 1000F) / 1000F;
+        //value = Math.round(value * 1000F) / 1000F;
         value = MathUtils.clamp(value, this.min, this.max);
 
         if (this.integer)
@@ -278,6 +278,19 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
         /* Reset the value in case it's out of range */
         this.setValue(this.value);
+
+        this.field.setText(this.integer ? String.valueOf((int) this.value) : FORMAT.format(this.value));
+    }
+
+    @Override
+    public void focus(GuiContext context)
+    {
+        super.focus(context);
+
+        int valueint = (int) this.value;
+
+        this.field.setText(this.integer ? String.valueOf(valueint) : (this.value % 1 == 0) ? String.valueOf(valueint) : String.valueOf(this.value));
+        this.field.setCursorPositionZero();
     }
 
     /**
