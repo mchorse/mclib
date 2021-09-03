@@ -684,7 +684,7 @@ public class GuiElement extends Gui implements IGuiElement
             return true;
         }
 
-        if (this.keybinds != null && !context.isFocused() && this.keybinds.check(context.keyCode, this.area.isInside(context)))
+        if (this.keybinds != null && this.keybinds.check(context, this.area.isInside(context)))
         {
             return true;
         }
@@ -703,7 +703,7 @@ public class GuiElement extends Gui implements IGuiElement
     {
         if (this.keybinds != null && this.isEnabled())
         {
-            this.keybinds.add(context.keybinds, this.area.isInside(context));
+            this.keybinds.add(context, this.area.isInside(context));
         }
 
         if (this.tooltip != null && this.area.isInside(context))
