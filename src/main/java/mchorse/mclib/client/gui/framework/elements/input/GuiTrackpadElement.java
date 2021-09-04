@@ -29,18 +29,20 @@ import java.util.function.Consumer;
 public class GuiTrackpadElement extends GuiBaseTextElement
 {
     public static final DecimalFormat FORMAT;
+    public static final DecimalFormat ROUNDING;
+    public static final int DECIMALPLACES = 6;
 
     public Consumer<Double> callback;
 
     public double value;
 
     /* Trackpad options */
-    public double strong = 1F;
-    public double normal = 0.25F;
-    public double weak = 0.05F;
+    public double strong = 1D;
+    public double normal = 0.25D;
+    public double weak = 0.05D;
     public double increment = 1;
-    public double min = Float.NEGATIVE_INFINITY;
-    public double max = Float.POSITIVE_INFINITY;
+    public double min = Double.NEGATIVE_INFINITY;
+    public double max = Double.POSITIVE_INFINITY;
     public boolean integer;
 
     /* Value dragging fields */
@@ -58,7 +60,17 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
     static
     {
+        String decimals = "";
+
+        for(int i = 0; i<DECIMALPLACES; i++)
+        {
+            decimals += "#";
+        }
+
         FORMAT = new DecimalFormat("#.###");
+        ROUNDING = new DecimalFormat("#."+decimals);
+
+        ROUNDING.setRoundingMode(RoundingMode.HALF_EVEN);
         FORMAT.setRoundingMode(RoundingMode.HALF_EVEN);
     }
 
@@ -125,8 +137,8 @@ public class GuiTrackpadElement extends GuiBaseTextElement
             value.set(v);
             callback.accept(v);
         });
-        this.limit((float) value.getMin(), (float) value.getMax());
-        this.setValue((float) value.get());
+        this.limit(value.getMin(), value.getMax());
+        this.setValue(value.get());
         this.tooltip(IKey.lang(value.getCommentKey()));
     }
 
@@ -188,8 +200,8 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     public GuiTrackpadElement values(double normal)
     {
         this.normal = normal;
-        this.weak = normal / 5F;
-        this.strong = normal * 5F;
+        this.weak = normal / 5D;
+        this.strong = normal * 5D;
 
         return this;
     }
@@ -207,7 +219,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
     public GuiTrackpadElement degrees()
     {
-        return this.increment(15D).values(1D, 0.1D, 5D  );
+        return this.increment(15D).values(1D, 0.1D, 5D);
     }
 
     public GuiTrackpadElement block()
@@ -246,7 +258,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
     private void setValueInternal(double value)
     {
-        //value = Math.round(value * 1000F) / 1000F;
+        value = Double.valueOf(ROUNDING.format(value));
         value = MathUtils.clamp(value, this.min, this.max);
 
         if (this.integer)
@@ -547,7 +559,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                         double diff = (Math.abs(dx) - 3) * value;
                         double newValue = this.lastValue + (dx < 0 ? -diff : diff);
 
-                        newValue = diff < 0 ? this.lastValue : Math.round(newValue * 1000F) / 1000F;
+                        newValue = diff < 0 ? this.lastValue : Double.valueOf(ROUNDING.format(newValue));;
 
                         if (this.value != newValue)
                         {
