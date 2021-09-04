@@ -13,7 +13,7 @@ import java.util.List;
 public class KeybindManager
 {
     public List<Keybind> keybinds = new ArrayList<Keybind>();
-    public boolean focus;
+    public boolean focus = true;
 
     public Keybind register(IKey label, int key, Runnable callback)
     {
