@@ -172,6 +172,19 @@ mclib.interpolations.bounce_in=Bounce In
 mclib.interpolations.bounce_out=Bounce Out
 mclib.interpolations.bounce_inout=Bounce In/out
 
+mclib.interpolations.sine_in=Sine In
+mclib.interpolations.sine_out=Sine Out
+mclib.interpolations.sine_inout=Sine In/out
+mclib.interpolations.quart_in=Quartic In
+mclib.interpolations.quart_out=Quartic Out
+mclib.interpolations.quart_inout=Quartic In/out
+mclib.interpolations.quint_in=Quintic In
+mclib.interpolations.quint_out=Quintic Out
+mclib.interpolations.quint_inout=Quintic In/out
+mclib.interpolations.circle_in=Circle In
+mclib.interpolations.circle_out=Circle Out
+mclib.interpolations.circle_inout=Circle In/out
+
 mclib.interpolations.const=Constant
 mclib.interpolations.quad=Quadratic
 mclib.interpolations.cubic=Cubic
@@ -181,6 +194,10 @@ mclib.interpolations.bezier=Bezier
 mclib.interpolations.back=Back
 mclib.interpolations.elastic=Elastic
 mclib.interpolations.bounce=Bounce
+mclib.interpolations.sine=Sine
+mclib.interpolations.quart=Quartic
+mclib.interpolations.quint=Quintic
+mclib.interpolations.circle=Circle
 
 # Interpolation tooltips
 #
@@ -207,6 +224,19 @@ mclib.interpolations.tooltips.elastic_inout=
 mclib.interpolations.tooltips.bounce_in=
 mclib.interpolations.tooltips.bounce_out=It's useful for creating an animation of something falling on the ground and bouncing a couple of times.
 mclib.interpolations.tooltips.bounce_inout=
+
+mclib.interpolations.tooltips.sine_in=
+mclib.interpolations.tooltips.sine_out=
+mclib.interpolations.tooltips.sine_inout=
+mclib.interpolations.tooltips.quart_in=
+mclib.interpolations.tooltips.quart_out=
+mclib.interpolations.tooltips.quart_inout=
+mclib.interpolations.tooltips.quint_in=
+mclib.interpolations.tooltips.quint_out=
+mclib.interpolations.tooltips.quint_inout=
+mclib.interpolations.tooltips.circle_in=
+mclib.interpolations.tooltips.circle_out=
+mclib.interpolations.tooltips.circle_inout=
 
 mclib.interpolations.tooltips.const=This interpolation doesn't interpolate, but rather keeps the initial value till the end. It's useful for creating sharp steps using multiple keyframes.
 mclib.interpolations.tooltips.hermite=This interpolation that can smooth animation across multiple keyframes. Make sure that you have same distance between keyframes, as its smoothness breaks with variable distance.

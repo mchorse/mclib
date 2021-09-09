@@ -141,6 +141,50 @@ public enum KeyframeInterpolation
 
             return Interpolation.BOUNCE_INOUT;
         }
+    },
+    SINE("sine")
+    {
+        @Override
+        public IInterpolation from(KeyframeEasing easing)
+        {
+            if (easing == KeyframeEasing.IN) return Interpolation.SINE_IN;
+            if (easing == KeyframeEasing.OUT) return Interpolation.SINE_OUT;
+
+            return Interpolation.SINE_INOUT;
+        }
+    },
+    QUART("quart")
+    {
+        @Override
+        public IInterpolation from(KeyframeEasing easing)
+        {
+            if (easing == KeyframeEasing.IN) return Interpolation.QUART_IN;
+            if (easing == KeyframeEasing.OUT) return Interpolation.QUART_OUT;
+
+            return Interpolation.QUART_INOUT;
+        }
+    },
+    QUINT("quint")
+    {
+        @Override
+        public IInterpolation from(KeyframeEasing easing)
+        {
+            if (easing == KeyframeEasing.IN) return Interpolation.QUINT_IN;
+            if (easing == KeyframeEasing.OUT) return Interpolation.QUINT_OUT;
+
+            return Interpolation.QUINT_INOUT;
+        }
+    },
+    CIRCLE("circle")
+    {
+        @Override
+        public IInterpolation from(KeyframeEasing easing)
+        {
+            if (easing == KeyframeEasing.IN) return Interpolation.CIRCLE_IN;
+            if (easing == KeyframeEasing.OUT) return Interpolation.CIRCLE_OUT;
+
+            return Interpolation.CIRCLE_INOUT;
+        }
     };
 
     public final String key;
