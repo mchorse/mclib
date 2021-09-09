@@ -1,3 +1,16 @@
+## Version 2.3.5
+
+This patch is for Chameleon `1.1` release.
+
+* Added MoLang parsing and execution code from Blockbuster mod
+* Added Sine, Quartic, Quintic and Circle interpolations
+
+## Version 2.3.4
+
+This quick patch fix for a crash with BuildCraft.
+
+* Fix NPE when payload size is checked from other mods (BuildCraft) before bootstarping process is finished
+
 ## Version 2.3.3
 
 This patch complements release of Mappet `0.1-rc4`. 
