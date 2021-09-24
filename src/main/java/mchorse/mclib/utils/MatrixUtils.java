@@ -1,5 +1,6 @@
 package mchorse.mclib.utils;
 
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.BufferUtils;
@@ -311,7 +312,17 @@ public class MatrixUtils
         
         public Vector3f getRotation(RotationOrder order)
         {
-            return this.getRotation(order, 0);
+            return this.getRotation(order, null);
+        }
+        
+        public Vector3f getRotation(RotationOrder order, Vector3f ref)
+        {
+            return this.getRotation(order, ref, 0);
+        }
+        
+        public Vector3f getRotation(RotationOrder order, int invAxis)
+        {
+            return this.getRotation(order, null, invAxis);
         }
         
         /**
@@ -319,13 +330,21 @@ public class MatrixUtils
          * <b>It must be called first to determine if the value can be obtained properly</b>
          * 
          * @param order Rotation Order
+         * @param ref The vector used for reference. Null if nothing to refer. Make sure that the incoming matrix is not affected by negative scaling.
          * @param invAxis The axis to be inverted when the matrix is a left-handed coordinate system. 012 equals xyz
-         * @return A vector includes rotation values with specific order, null if matrix is a illegal rotation matrix.
+         * @return A vector includes rotation values with specific order, null if matrix is a illegal rotation matrix.<br>
+         * The returned vector will be as close to the reference vector as possible
          */
-        public Vector3f getRotation(RotationOrder order, int invAxis)
+        public Vector3f getRotation(RotationOrder order, Vector3f ref, int invAxis)
         {
             Matrix3f mat = this.getRotation3f();
             float[] rotation = new float[3];
+            float[] refFloats = null;
+            if (ref != null)
+            {
+                refFloats = new float[3];
+                ref.get(refFloats);
+            }
 
             // DirectX -> OpenGL
             // If the scaling value has an odd number of negative values, this will cause it to become a left-handed coordinate system.
@@ -346,8 +365,17 @@ public class MatrixUtils
             // if the second rotation value is +/-90, here will be null.
             if (angle != null)
             {
+                if (refFloats != null)
+                {
+                    angle = refFloats[order.thirdIndex] + MathHelper.wrapDegrees(2F * (angle - refFloats[order.thirdIndex])) / 2F;
+                }
                 rotation[order.thirdIndex] = angle;
                 // Remove the obtained rotation from the matrix
+                mat.mul(getRotationMatrix(order.thirdIndex, -angle), mat);
+            }
+            else if (refFloats != null)
+            {
+                rotation[order.thirdIndex] = angle = refFloats[order.thirdIndex];
                 mat.mul(getRotationMatrix(order.thirdIndex, -angle), mat);
             }
             
@@ -357,10 +385,20 @@ public class MatrixUtils
                 // Illegal: Scale is zero, no rotation information here.
                 return null;
             }
+
+            if (refFloats != null)
+            {
+                angle = refFloats[order.secondIndex] + MathHelper.wrapDegrees(angle - refFloats[order.secondIndex]);
+            }
             rotation[order.secondIndex] = angle;
             mat.mul(getRotationMatrix(order.secondIndex, -angle), mat);
             
-            rotation[order.firstIndex] = order.doTest(order.firstIndex, mat);
+            angle = order.doTest(order.firstIndex, mat);
+            if (refFloats != null)
+            {
+                angle = refFloats[order.firstIndex] + MathHelper.wrapDegrees(angle - refFloats[order.firstIndex]);
+            }
+            rotation[order.firstIndex] = angle;
             
             return new Vector3f(rotation);
         }
