@@ -34,9 +34,11 @@ public class GuiSlotElement extends GuiClickElement<ItemStack>
 
     public GuiInventoryElement inventory;
     public final int slot;
+
     private ItemStack stack = ItemStack.EMPTY;
 
     public boolean drawDisabled = true;
+    public int lastSlot;
 
     public GuiSlotElement(Minecraft mc, int slot, Consumer<ItemStack> callback)
     {
@@ -55,6 +57,7 @@ public class GuiSlotElement extends GuiClickElement<ItemStack>
 
     public void setStack(ItemStack stack)
     {
+        this.lastSlot = -1;
         this.stack = stack.copy();
 
         if (this.inventory.hasParent())
@@ -63,8 +66,9 @@ public class GuiSlotElement extends GuiClickElement<ItemStack>
         }
     }
 
-    public void acceptStack(ItemStack stack)
+    public void acceptStack(ItemStack stack, int slot)
     {
+        this.lastSlot = slot;
         this.stack = stack.copy();
 
         if (this.callback != null)
@@ -115,7 +119,7 @@ public class GuiSlotElement extends GuiClickElement<ItemStack>
 
     private void pasteItem(ItemStack stack)
     {
-        this.acceptStack(stack);
+        this.acceptStack(stack, -1);
     }
 
     private void dropItem()
@@ -128,7 +132,7 @@ public class GuiSlotElement extends GuiClickElement<ItemStack>
 
     private void clearItem()
     {
-        this.acceptStack(ItemStack.EMPTY);
+        this.acceptStack(ItemStack.EMPTY, -1);
     }
 
     @Override

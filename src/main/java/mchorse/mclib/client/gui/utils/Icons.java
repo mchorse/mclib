@@ -78,7 +78,77 @@ public class Icons
     public static final Icon SOUND = new Icon(ICONS, 144, 48);
     public static final Icon SEARCH = new Icon(ICONS, 160, 48);
 
-    public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240, 16, 16);
-    public static final Icon DISABLED = new Icon(ICONS, 16, 240, 16, 16);
-    public static final Icon CURSOR = new Icon(ICONS, 32, 240, 16, 16);
+    public static final Icon CHECKBOARD = new Icon(ICONS, 0, 240);
+    public static final Icon DISABLED = new Icon(ICONS, 16, 240);
+    public static final Icon CURSOR = new Icon(ICONS, 32, 240);
+
+    public static void register()
+    {
+        IconRegistry.register("gear", GEAR);
+        IconRegistry.register("more", MORE);
+        IconRegistry.register("saved", SAVED);
+        IconRegistry.register("save", SAVE);
+        IconRegistry.register("add", ADD);
+        IconRegistry.register("dupe", DUPE);
+        IconRegistry.register("remove", REMOVE);
+        IconRegistry.register("pose", POSE);
+        IconRegistry.register("filter", FILTER);
+        IconRegistry.register("move_up", MOVE_UP);
+        IconRegistry.register("move_down", MOVE_DOWN);
+        IconRegistry.register("locked", LOCKED);
+        IconRegistry.register("unlocked", UNLOCKED);
+        IconRegistry.register("copy", COPY);
+        IconRegistry.register("paste", PASTE);
+        IconRegistry.register("cut", CUT);
+        IconRegistry.register("refresh", REFRESH);
+        
+        IconRegistry.register("download", DOWNLOAD);
+        IconRegistry.register("upload", UPLOAD);
+        IconRegistry.register("server", SERVER);
+        IconRegistry.register("folder", FOLDER);
+        IconRegistry.register("image", IMAGE);
+        IconRegistry.register("edit", EDIT);
+        IconRegistry.register("material", MATERIAL);
+        IconRegistry.register("close", CLOSE);
+        IconRegistry.register("limb", LIMB);
+        IconRegistry.register("code", CODE);
+        IconRegistry.register("move_left", MOVE_LEFT);
+        IconRegistry.register("move_right", MOVE_RIGHT);
+        IconRegistry.register("help", HELP);
+        IconRegistry.register("left_handle", LEFT_HANDLE);
+        IconRegistry.register("main_handle", MAIN_HANDLE);
+        IconRegistry.register("right_handle", RIGHT_HANDLE);
+        IconRegistry.register("reverse", REVERSE);
+        IconRegistry.register("block", BLOCK);
+        IconRegistry.register("favorite", FAVORITE);
+        IconRegistry.register("visible", VISIBLE);
+        IconRegistry.register("invisible", INVISIBLE);
+        IconRegistry.register("play", PLAY);
+        IconRegistry.register("pause", PAUSE);
+        IconRegistry.register("maximize", MAXIMIZE);
+        IconRegistry.register("minimize", MINIMIZE);
+        IconRegistry.register("stop", STOP);
+        IconRegistry.register("fullscreen", FULLSCREEN);
+        IconRegistry.register("all_directions", ALL_DIRECTIONS);
+        IconRegistry.register("sphere", SPHERE);
+        IconRegistry.register("shift_to", SHIFT_TO);
+        IconRegistry.register("shift_forward", SHIFT_FORWARD);
+        IconRegistry.register("shift_backward", SHIFT_BACKWARD);
+        IconRegistry.register("move_to", MOVE_TO);
+        IconRegistry.register("graph", GRAPH);
+        IconRegistry.register("wrench", WRENCH);
+        IconRegistry.register("exclamation", EXCLAMATION);
+        IconRegistry.register("leftload", LEFTLOAD);
+        IconRegistry.register("rightload", RIGHTLOAD);
+        IconRegistry.register("bubble", BUBBLE);
+        IconRegistry.register("file", FILE);
+        IconRegistry.register("processor", PROCESSOR);
+        IconRegistry.register("maze", MAZE);
+        IconRegistry.register("bookmark", BOOKMARK);
+        IconRegistry.register("sound", SOUND);
+        IconRegistry.register("search", SEARCH);
+        IconRegistry.register("checkboard", CHECKBOARD);
+        IconRegistry.register("disabled", DISABLED);
+        IconRegistry.register("cursor", CURSOR);
+    }
 }

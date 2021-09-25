@@ -129,7 +129,7 @@ public class GuiInventoryElement extends GuiElement
         ItemStack stack = this.slot.getStack().copy();
 
         stack.setCount(count);
-        this.slot.acceptStack(stack);
+        this.slot.acceptStack(stack, this.slot.lastSlot);
     }
 
     private void toggleList(GuiIconElement element)
@@ -161,9 +161,9 @@ public class GuiInventoryElement extends GuiElement
         this.inventory.scrollSize = (int) (Math.ceil(container.size() / 9D) * this.inventory.scrollItemSize);
     }
 
-    private void setStack(ItemStack stack)
+    private void setStack(ItemStack stack, int slot)
     {
-        this.slot.acceptStack(stack);
+        this.slot.acceptStack(stack, slot);
 
         this.updateElements();
         this.fillStack(this.slot.getStack());
@@ -251,7 +251,7 @@ public class GuiInventoryElement extends GuiElement
 
                 if (index < items.size())
                 {
-                    this.setStack(items.get(index));
+                    this.setStack(items.get(index), this.searching ? -1 : index);
                     this.removeFromParent();
                 }
 

@@ -18,6 +18,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implemen
 {
     public IKey label;
     public int color = 0xffffff;
+    public boolean textShadow = true;
     private boolean state;
 
     public GuiToggleElement(Minecraft mc, ValueBoolean value)
@@ -50,9 +51,9 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implemen
     }
 
     @Override
-    public void setColor(int color)
+    public void setColor(int color, boolean shadow)
     {
-        this.color(color);
+        this.color(color, shadow);
     }
 
     public GuiToggleElement label(IKey label)
@@ -71,7 +72,13 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implemen
 
     public GuiToggleElement color(int color)
     {
+        return this.color(color, true);
+    }
+
+    public GuiToggleElement color(int color, boolean textShadow)
+    {
         this.color = color;
+        this.textShadow = textShadow;
 
         return this;
     }
@@ -111,10 +118,10 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implemen
 
             if (this.state)
             {
-                this.font.drawStringWithShadow("x", this.area.x + 3, y - 2, 0xffffff);
+                this.font.drawString("x", this.area.x + 3, y - 2, 0xffffff, this.textShadow);
             }
 
-            this.font.drawStringWithShadow(this.label.get(), this.area.x + 14, y, this.color);
+            this.font.drawString(this.label.get(), this.area.x + 14, y, this.color, this.textShadow);
 
             if (!this.isEnabled())
             {
@@ -124,7 +131,7 @@ public class GuiToggleElement extends GuiClickElement<GuiToggleElement> implemen
         }
         else
         {
-            this.font.drawStringWithShadow(this.label.get(), this.area.x, this.area.my(this.font.FONT_HEIGHT - 1), this.color);
+            this.font.drawString(this.label.get(), this.area.x, this.area.my(this.font.FONT_HEIGHT - 1), this.color, this.textShadow);
 
             /* Draw toggle switch */
             int w = 16;

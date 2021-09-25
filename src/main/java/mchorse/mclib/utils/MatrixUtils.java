@@ -1,5 +1,6 @@
 package mchorse.mclib.utils;
 
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.BufferUtils;
@@ -307,6 +308,233 @@ public class MatrixUtils
         public Exception getCreationException()
         {
             return this.creationException;
+        }
+
+        public Vector3f getRotation(RotationOrder order)
+        {
+            return this.getRotation(order, null);
+        }
+
+        public Vector3f getRotation(RotationOrder order, Vector3f ref)
+        {
+            return this.getRotation(order, ref, 0);
+        }
+
+        public Vector3f getRotation(RotationOrder order, int invAxis)
+        {
+            return this.getRotation(order, null, invAxis);
+        }
+
+        /**
+         * Get rotation values from matrix<br>
+         * <b>It must be called first to determine if the value can be obtained
+         * properly</b>
+         * 
+         * @param order   Rotation Order
+         * @param ref     The vector used for reference. Null if nothing to refer. Make
+         *                sure that the incoming matrix is not affected by negative
+         *                scaling.
+         * @param invAxis The axis to be inverted when the matrix is a left-handed
+         *                coordinate system. 012 equals xyz
+         * @return A vector includes rotation values with specific order, null if matrix
+         *         is a illegal rotation matrix.<br>
+         *         The returned vector will be as close to the reference vector as
+         *         possible
+         */
+        public Vector3f getRotation(RotationOrder order, Vector3f ref, int invAxis)
+        {
+            Matrix3f mat = this.getRotation3f();
+            float[] rotation = new float[3];
+            float[] refFloats = null;
+
+            if (ref != null)
+            {
+                refFloats = new float[3];
+                ref.get(refFloats);
+            }
+
+            // DirectX -> OpenGL
+            // If the scaling value has an odd number of negative values, this will cause it
+            // to become a left-handed coordinate system.
+            Vector3f x = new Vector3f(mat.m00, mat.m10, mat.m20);
+            Vector3f y = new Vector3f(mat.m01, mat.m11, mat.m21);
+            Vector3f z = new Vector3f(mat.m02, mat.m12, mat.m22);
+            Vector3f crossY = new Vector3f();
+            Vector3f originalY = new Vector3f();
+            originalY.normalize(y);
+            crossY.cross(z, x);
+            crossY.normalize();
+
+            if (crossY.dot(originalY) < 0)
+            {
+                mat.mul(getInvertAxisMatrix(invAxis));
+            }
+
+            Float angle = order.doTest(order.thirdIndex, mat);
+
+            /* if the second rotation value is +/-90, here will be null. */
+            if (angle != null)
+            {
+                if (refFloats != null)
+                {
+                    angle = refFloats[order.thirdIndex] + MathHelper.wrapDegrees(2F * (angle - refFloats[order.thirdIndex])) / 2F;
+                }
+
+                rotation[order.thirdIndex] = angle;
+                mat.mul(getRotationMatrix(order.thirdIndex, -angle), mat);
+            }
+            else if (refFloats != null)
+            {
+                rotation[order.thirdIndex] = angle = refFloats[order.thirdIndex];
+                mat.mul(getRotationMatrix(order.thirdIndex, -angle), mat);
+            }
+
+            angle = order.doTest(order.secondIndex, mat);
+
+            if (angle == null)
+            {
+                // Illegal: Scale is zero, no rotation information here.
+                return null;
+            }
+
+            if (refFloats != null)
+            {
+                angle = refFloats[order.secondIndex] + MathHelper.wrapDegrees(angle - refFloats[order.secondIndex]);
+            }
+
+            rotation[order.secondIndex] = angle;
+            mat.mul(getRotationMatrix(order.secondIndex, -angle), mat);
+
+            angle = order.doTest(order.firstIndex, mat);
+
+            if (angle == null)
+            {
+                return null;
+            }
+            else if (refFloats != null)
+            {
+                angle = refFloats[order.firstIndex] + MathHelper.wrapDegrees(angle - refFloats[order.firstIndex]);
+            }
+
+            rotation[order.firstIndex] = angle;
+
+            return new Vector3f(rotation);
+        }
+
+        public Vector3f getScale()
+        {
+            return this.getScale(0);
+        }
+
+        public Vector3f getScale(int invAxis)
+        {
+            Vector3f scale = new Vector3f(this.scale.m00, this.scale.m11, this.scale.m22);
+            Vector3f x = new Vector3f(this.rotation.m00, this.rotation.m10, this.rotation.m20);
+            Vector3f y = new Vector3f(this.rotation.m01, this.rotation.m11, this.rotation.m21);
+            Vector3f z = new Vector3f(this.rotation.m02, this.rotation.m12, this.rotation.m22);
+            Vector3f crossY = new Vector3f();
+            Vector3f originalY = new Vector3f();
+
+            originalY.normalize(y);
+            crossY.cross(z, x);
+            crossY.normalize();
+
+            if (crossY.dot(originalY) < 0)
+            {
+                getInvertAxisMatrix(invAxis).transform(scale);
+            }
+
+            return scale;
+        }
+
+        public static Matrix3f getRotationMatrix(int axis, double degrees)
+        {
+            Matrix3f mat = new Matrix3f();
+
+            switch (axis)
+            {
+                case 0:
+                    mat.rotX((float) Math.toRadians(degrees));
+                    break;
+                case 1:
+                    mat.rotY((float) Math.toRadians(degrees));
+                    break;
+                case 2:
+                    mat.rotZ((float) Math.toRadians(degrees));
+                    break;
+            }
+
+            return mat;
+        }
+
+        public static Matrix3f getInvertAxisMatrix(int axis)
+        {
+            Matrix3f mat = new Matrix3f();
+
+            mat.setIdentity();
+
+            switch (axis)
+            {
+                case 0:
+                    mat.m00 = -1;
+                    break;
+                case 1:
+                    mat.m11 = -1;
+                    break;
+                case 2:
+                    mat.m22 = -1;
+                    break;
+            }
+
+            return mat;
+        }
+
+        public static enum RotationOrder
+        {
+            XYZ, XZY, YXZ, YZX, ZXY, ZYX;
+
+            public final int firstIndex;
+            public final int secondIndex;
+            public final int thirdIndex;
+
+            private RotationOrder()
+            {
+                String order = this.name().toUpperCase();
+                firstIndex = order.charAt(0) - 'X';
+                secondIndex = order.charAt(1) - 'X';
+                thirdIndex = order.charAt(2) - 'X';
+            }
+
+            public Float doTest(int index, Matrix3f test)
+            {
+                float[] buffer = new float[3];
+
+                buffer[index == firstIndex ? secondIndex : firstIndex] = 1;
+
+                Vector3f in = new Vector3f(buffer);
+                Vector3f out = new Vector3f();
+
+                test.transform(in, out);
+                out.get(buffer);
+                buffer[index] = 0;
+                out.set(buffer);
+
+                if (out.length() < 1E-07)
+                {
+                    return null;
+                }
+
+                out.normalize();
+
+                float cos = in.dot(out);
+
+                out.cross(in, out);
+                out.get(buffer);
+
+                float sin = out.length() * Math.signum(buffer[index]);
+
+                return (float) Math.toDegrees(Math.atan2(sin, cos));
+            }
         }
     }
 }

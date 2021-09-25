@@ -1,6 +1,7 @@
 package mchorse.mclib.client.gui.utils;
 
 import mchorse.mclib.client.gui.framework.elements.input.GuiKeybinds;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 public class KeybindManager
 {
     public List<Keybind> keybinds = new ArrayList<Keybind>();
+    public boolean focus = true;
 
     public Keybind register(IKey label, int key, Runnable callback)
     {
@@ -27,8 +29,22 @@ public class KeybindManager
         return this.register(label, key, callback).inside();
     }
 
-    public void add(GuiKeybinds keybinds, boolean inside)
+    public KeybindManager ignoreFocus()
     {
+        this.focus = false;
+
+        return this;
+    }
+
+    public void add(GuiContext context, boolean inside)
+    {
+        if (this.focus && context.isFocused())
+        {
+            return;
+        }
+
+        GuiKeybinds keybinds = context.keybinds;
+
         if (!keybinds.isVisible())
         {
             return;
@@ -43,8 +59,15 @@ public class KeybindManager
         }
     }
 
-    public boolean check(int keyCode, boolean inside)
+    public boolean check(GuiContext context, boolean inside)
     {
+        if (this.focus && context.isFocused())
+        {
+            return false;
+        }
+
+        int keyCode = context.keyCode;
+
         for (Keybind keybind : this.keybinds)
         {
             if (keybind.isActive() && keybind.check(keyCode, inside) && keybind.callback != null)

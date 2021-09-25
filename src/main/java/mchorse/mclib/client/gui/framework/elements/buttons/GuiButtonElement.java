@@ -3,18 +3,23 @@ package mchorse.mclib.client.gui.framework.elements.buttons;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
+import mchorse.mclib.client.gui.framework.elements.utils.ITextColoring;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.ColorUtils;
 import net.minecraft.client.Minecraft;
 
 import java.util.function.Consumer;
 
-public class GuiButtonElement extends GuiClickElement<GuiButtonElement>
+public class GuiButtonElement extends GuiClickElement<GuiButtonElement> implements ITextColoring
 {
     public IKey label;
 
+    public int textColor = 0xffffff;
+    public boolean textShadow = true;
+
     public boolean custom;
     public int customColor;
+    public boolean background = true;
 
     public GuiButtonElement(Minecraft mc, IKey label, Consumer<GuiButtonElement> callback)
     {
@@ -30,6 +35,28 @@ public class GuiButtonElement extends GuiClickElement<GuiButtonElement>
         this.customColor = color & 0xffffff;
 
         return this;
+    }
+
+    public GuiButtonElement textColor(int color, boolean shadow)
+    {
+        this.textColor = color;
+        this.textShadow = shadow;
+
+        return this;
+    }
+
+    public GuiButtonElement background(boolean background)
+    {
+        this.background = background;
+
+        return this;
+    }
+
+    @Override
+    public void setColor(int color, boolean shadow)
+    {
+        this.textColor = color;
+        this.textShadow = shadow;
     }
 
     @Override
@@ -48,13 +75,16 @@ public class GuiButtonElement extends GuiClickElement<GuiButtonElement>
             color = ColorUtils.multiplyColor(color, 0.85F);
         }
 
-        GuiDraw.drawBorder(this.area, color);
+        if (this.background)
+        {
+            GuiDraw.drawBorder(this.area, color);
+        }
 
         String label = this.label.get();
         int x = this.area.mx(this.font.getStringWidth(label));
         int y = this.area.my(this.font.FONT_HEIGHT - 1);
 
-        this.font.drawStringWithShadow(label, x, y, this.hover ? 16777120 : 0xffffff);
+        this.font.drawString(label, x, y, ColorUtils.multiplyColor(this.textColor, this.hover ? 0.9F : 1F), this.textShadow);
 
         GuiDraw.drawLockedArea(this);
     }

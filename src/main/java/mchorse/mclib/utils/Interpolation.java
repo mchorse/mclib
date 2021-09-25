@@ -1,6 +1,5 @@
 package mchorse.mclib.utils;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -425,6 +424,238 @@ public enum Interpolation implements IInterpolation
             double factor = x < 0.5
                 ? (1 - BOUNCE_OUT.interpolate(0, 1, 1 - 2 * x)) / 2
                 : (1 + BOUNCE_OUT.interpolate(0, 1, 2 * x - 1)) / 2;
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    SINE_IN("sine_in")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            float factor = 1 - (float) Math.cos((x * Math.PI) / 2);
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            double factor = 1 - (float) Math.cos((x * Math.PI) / 2);
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    SINE_OUT("sine_out")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            float factor = (float) Math.sin((x * Math.PI) / 2);
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            double factor = Math.sin((x * Math.PI) / 2);
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    SINE_INOUT("sine_inout")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            float factor = (float) (-(Math.cos(Math.PI * x) - 1) / 2);
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            double factor = -(Math.cos(Math.PI * x) - 1) / 2;
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    QUART_IN("quart_in")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            float factor = x * x * x * x;
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            double factor = x * x * x * x;
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    QUART_OUT("quart_out")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            float factor = 1 - (float) Math.pow(1 - x, 4);
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            double factor = 1 - Math.pow(1 - x, 4);
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    QUART_INOUT("quart_inout")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            float factor = x < 0.5 ? 8 * x * x * x * x : 1 - (float) Math.pow(-2 * x + 2, 4) / 2;
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            double factor = x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2;
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    QUINT_IN("quint_in")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            float factor = x * x * x * x * x;
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            double factor = x * x * x * x * x;
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    QUINT_OUT("quint_out")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            float factor = 1 - (float) Math.pow(1 - x, 5);
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            double factor = 1 - Math.pow(1 - x, 5);
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    QUINT_INOUT("quint_inout")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            float factor = x < 0.5 ? 16 * x * x * x * x * x : 1 - (float) Math.pow(-2 * x + 2, 5) / 2;
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            double factor = x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2;
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    CIRCLE_IN("circle_in")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            x = MathUtils.clamp(x, 0, 1);
+
+            float factor = 1 - (float) Math.sqrt(1 - Math.pow(x, 2));
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            x = MathUtils.clamp(x, 0, 1);
+
+            double factor = 1 - (float) Math.sqrt(1 - Math.pow(x, 2));
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    CIRCLE_OUT("circle_out")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            x = MathUtils.clamp(x, 0, 1);
+
+            float factor = (float) Math.sqrt(1 - Math.pow(x - 1, 2));
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            x = MathUtils.clamp(x, 0, 1);
+
+            double factor = Math.sqrt(1 - Math.pow(x - 1, 2));
+
+            return Interpolations.lerp(a, b, factor);
+        }
+    },
+    CIRCLE_INOUT("circle_inout")
+    {
+        @Override
+        public float interpolate(float a, float b, float x)
+        {
+            x = MathUtils.clamp(x, 0, 1);
+
+            float factor = x < 0.5
+                ? (float) (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2
+                : (float) (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
+
+            return Interpolations.lerp(a, b, factor);
+        }
+
+        @Override
+        public double interpolate(double a, double b, double x)
+        {
+            x = MathUtils.clamp(x, 0, 1);
+
+            double factor = x < 0.5
+                ? (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2
+                : (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
 
             return Interpolations.lerp(a, b, factor);
         }

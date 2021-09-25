@@ -1,6 +1,10 @@
 {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/mchorses-mclib/",
     "1.12.2": {
+        "2.3.5": "This patch is for Chameleon 1.1 release.",
+        "2.3.4": "This quick patch fix for a crash with BuildCraft.",
+        "2.3.3": "This patch complements release of Mappet 0.1-rc4.",
+        "2.3.2": "This patch complements release of Mappet 0.1-rc3.",
         "2.3.1": "This patch complements release of Blockbuster 2.3.1 and Metamorph 1.2.9.",
         "2.3": "This update complements release of Blockbuster 2.3, Aperture 1.6, Metamorph 1.2.7, Emoticons 1.0, Chameleon 1.0.3, Commander 1.1 and Extended Reach 1.1.",
         "2.2.2": "This patch updated needed for Blockbuster 2.2.2.",
@@ -35,8 +39,8 @@
     },
     
     "promos": {
-        "1.12.2-latest": "2.3.1",
-        "1.12.2-recommended": "2.3.1",
+        "1.12.2-latest": "2.3.5",
+        "1.12.2-recommended": "2.3.5",
         "1.10.2-latest": "1.0.4",
         "1.10.2-recommended": "1.0.4",
         "1.11.2-latest": "1.0.4",

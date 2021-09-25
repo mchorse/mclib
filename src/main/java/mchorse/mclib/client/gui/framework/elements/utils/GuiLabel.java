@@ -11,6 +11,7 @@ public class GuiLabel extends GuiElement implements ITextColoring
 {
     public IKey label;
     public int color;
+    public boolean textShadow = true;
     public float anchorX;
     public float anchorY;
     public int background;
@@ -30,13 +31,19 @@ public class GuiLabel extends GuiElement implements ITextColoring
     }
 
     @Override
-    public void setColor(int color)
+    public void setColor(int color, boolean shadow)
     {
-        this.color(color);
+        this.color(color, shadow);
     }
 
     public GuiLabel color(int color)
     {
+        return this.color(color, true);
+    }
+
+    public GuiLabel color(int color, boolean textShadow)
+    {
+        this.textShadow = textShadow;
         this.color = color;
 
         return this;
@@ -81,7 +88,7 @@ public class GuiLabel extends GuiElement implements ITextColoring
         int x = this.area.x(this.anchorX, this.font.getStringWidth(label));
         int y = this.area.y(this.anchorY, this.font.FONT_HEIGHT);
 
-        GuiDraw.drawTextBackground(this.font, label, x, y, this.color, this.getColor());
+        GuiDraw.drawTextBackground(this.font, label, x, y, this.color, this.getColor(), 3, this.textShadow);
 
         super.draw(context);
     }
