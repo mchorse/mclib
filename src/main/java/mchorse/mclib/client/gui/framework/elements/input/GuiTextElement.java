@@ -8,14 +8,12 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.values.ValueString;
 import mchorse.mclib.utils.Patterns;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiPageButtonList.GuiResponder;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 /**
  * GUI text element
@@ -23,7 +21,7 @@ import java.util.regex.Pattern;
  * This element is a wrapper for the text field class
  */
 @SideOnly(Side.CLIENT)
-public class GuiTextElement extends GuiBaseTextElement implements GuiResponder, ITextColoring
+public class GuiTextElement extends GuiBaseTextElement implements ITextColoring
 {
     public static final Predicate<String> FILENAME_PREDICATE = (s) -> Patterns.FILENAME.matcher(s).find();
 
@@ -48,14 +46,22 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder, 
     public GuiTextElement(Minecraft mc, int maxLength, Consumer<String> callback)
     {
         this(mc, callback);
-        this.field.setMaxStringLength(maxLength);
+        this.field.setLength(maxLength);
+    }
+
+    @Override
+    protected void userText(String text)
+    {
+        if (this.callback != null)
+        {
+            this.callback.accept(text);
+        }
     }
 
     public GuiTextElement(Minecraft mc, Consumer<String> callback)
     {
         super(mc);
 
-        this.field.setGuiResponder(this);
         this.callback = callback;
 
         this.flex().h(20);
@@ -68,14 +74,14 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder, 
 
     public GuiTextElement validator(Predicate<String> validator)
     {
-        this.field.setValidator(validator);
+        this.field.setValidator(validator::test);
 
         return this;
     }
 
     public GuiTextElement background(boolean background)
     {
-        this.field.setEnableBackgroundDrawing(background);
+        this.field.setBackground(background);
         this.resize();
 
         return this;
@@ -89,30 +95,13 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder, 
         }
 
         this.field.setText(text);
-        this.field.setCursorPositionZero();
-    }
-
-    @Override
-    public void setEntryValue(int id, boolean value)
-    {}
-
-    @Override
-    public void setEntryValue(int id, float value)
-    {}
-
-    @Override
-    public void setEntryValue(int id, String value)
-    {
-        if (this.callback != null)
-        {
-            this.callback.accept(value);
-        }
+        this.field.moveCursorToStart();
     }
 
     @Override
     public void setColor(int color, boolean shadow)
     {
-        this.field.setTextColor(color);
+        this.field.setColor(color);
     }
 
     @Override
@@ -120,17 +109,17 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder, 
     {
         super.resize();
 
-        this.field.x = this.area.x + 1;
-        this.field.y = this.area.y + 1;
-        this.field.width = this.area.w - 2;
-        this.field.height = this.area.h - 2;
+        this.field.area.x = this.area.x + 1;
+        this.field.area.y = this.area.y + 1;
+        this.field.area.w = this.area.w - 2;
+        this.field.area.h = this.area.h - 2;
 
-        if (!this.field.getEnableBackgroundDrawing())
+        if (!this.field.hasBackground())
         {
-            this.field.x += 4;
-            this.field.y += ((this.area.h - this.font.FONT_HEIGHT) / 2);
-            this.field.width -= 8;
-            this.field.height = this.font.FONT_HEIGHT;
+            this.field.area.x += 4;
+            this.field.area.y += ((this.area.h - this.font.FONT_HEIGHT) / 2);
+            this.field.area.w -= 8;
+            this.field.area.h = this.font.FONT_HEIGHT;
         }
     }
 
@@ -155,6 +144,14 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder, 
     }
 
     @Override
+    public void mouseReleased(GuiContext context)
+    {
+        super.mouseReleased(context);
+
+        this.field.mouseReleased(context.mouseX, context.mouseY, context.mouseButton);
+    }
+
+    @Override
     public boolean keyTyped(GuiContext context)
     {
         if (this.isFocused())
@@ -173,13 +170,13 @@ public class GuiTextElement extends GuiBaseTextElement implements GuiResponder, 
             }
         }
 
-        return this.field.textboxKeyTyped(context.typedChar, context.keyCode) || super.keyTyped(context);
+        return this.field.keyTyped(context.typedChar, context.keyCode) || super.keyTyped(context);
     }
 
     @Override
     public void draw(GuiContext context)
     {
-        this.field.drawTextBox();
+        this.field.draw(context.mouseX, context.mouseY);
 
         GuiDraw.drawLockedArea(this);
 

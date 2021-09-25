@@ -4,6 +4,7 @@ import mchorse.mclib.client.gui.framework.elements.buttons.GuiButtonElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiSlotElement;
 import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTextElement;
+import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiDopeSheet;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiGraphView;
 import mchorse.mclib.client.gui.framework.elements.keyframes.GuiKeyframesEditor;
@@ -19,6 +20,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import java.util.function.Consumer;
+
 public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
 {
     public GuiKeyframesEditor<GuiDopeSheet> dopesheet;
@@ -27,6 +30,7 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
     public GuiButtonElement play;
     public GuiSlotElement slot;
     public GuiTextElement text;
+    public GuiTrackpadElement trackpad;
 
     public GuiDebugPanel(Minecraft mc, GuiAbstractDashboard dashboard)
     {
@@ -82,11 +86,15 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
         this.play = new GuiButtonElement(mc, IKey.str("Play me!"), null).background(false);
         this.play.flex().relative(this).xy(10, 10).w(80);
 
-        this.text = new GuiTextElement(mc, 1000, null).background(false);
-        this.text.flex().relative(this).xy(10, 40).w(80);
+        this.text = new GuiTextElement(mc, 1000, null).background(true);
+        this.text.flex().relative(this).xy(10, 40).w(140);
+        this.text.setText("Aloha");
 
-        this.add(this.graph, this.dopesheet);
-        this.add(this.slot, this.play, this.text);
+        this.trackpad = new GuiTrackpadElement(mc, (Consumer<Double>) null);
+        this.trackpad.flex().relative(this).xy(10, 65).w(140);
+
+        // this.add(this.graph, this.dopesheet);
+        this.add(/* this.slot, this.play, */this.text, this.trackpad);
 
         this.context(() ->
         {
@@ -118,6 +126,6 @@ public class GuiDebugPanel extends GuiDashboardPanel<GuiAbstractDashboard>
     {
         super.draw(context);
 
-        this.text.background(System.currentTimeMillis() % 2000 < 1000);
+        // this.text.background(System.currentTimeMillis() % 2000 < 1000);
     }
 }
