@@ -455,6 +455,7 @@ public class TextField
             if (!clipboard.isEmpty())
             {
                 this.insert(clipboard);
+                this.acceptText();
             }
 
             return true;
