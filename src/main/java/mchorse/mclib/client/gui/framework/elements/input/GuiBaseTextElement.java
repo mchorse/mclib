@@ -3,20 +3,23 @@ package mchorse.mclib.client.gui.framework.elements.input;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.utils.TextField;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Keyboard;
 
 public abstract class GuiBaseTextElement extends GuiElement implements IFocusedGuiElement
 {
-    public GuiTextField field;
+    public TextField field;
 
     public GuiBaseTextElement(Minecraft mc)
     {
         super(mc);
 
-        this.field = new GuiTextField(0, this.font, 0, 0, 0, 0);
+        this.field = new TextField(this.font, this::userText);
     }
+
+    protected void userText(String text)
+    {}
 
     @Override
     public void setEnabled(boolean enabled)
@@ -55,13 +58,13 @@ public abstract class GuiBaseTextElement extends GuiElement implements IFocusedG
     @Override
     public void selectAll(GuiContext context)
     {
-        this.field.setCursorPosition(0);
-        this.field.setSelectionPos(this.field.getText().length());
+        this.field.moveCursorToStart();
+        this.field.setSelection(this.field.getText().length());
     }
 
     @Override
     public void unselect(GuiContext context)
     {
-        this.field.setSelectionPos(this.field.getCursorPosition());
+        this.field.clearSelection();
     }
 }
