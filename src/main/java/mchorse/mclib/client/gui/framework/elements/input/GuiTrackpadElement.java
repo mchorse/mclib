@@ -302,7 +302,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         int valueint = (int) this.value;
 
         this.field.setText(this.integer ? String.valueOf(valueint) : (this.value % 1 == 0) ? String.valueOf(valueint) : String.valueOf(this.value));
-        this.field.moveCursorToStart();
+        this.field.setCursorPositionZero();
     }
 
     /**
