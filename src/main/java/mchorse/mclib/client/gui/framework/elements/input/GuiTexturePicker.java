@@ -289,7 +289,7 @@ public class GuiTexturePicker extends GuiElement
         this.current = rl;
         this.picker.rl = rl;
         this.text.setText(rl == null ? "" : rl.toString());
-        this.text.field.moveCursorToStart();
+        this.text.field.setCursorPositionZero();
 
         if (this.tree != null)
         {

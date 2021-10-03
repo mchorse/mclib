@@ -143,7 +143,7 @@ public class GuiColorPicker extends GuiElement
     public GuiColorPicker editAlpha()
     {
         this.editAlpha = true;
-        this.input.field.setLength(9);
+        this.input.field.setMaxStringLength(9);
 
         return this;
     }

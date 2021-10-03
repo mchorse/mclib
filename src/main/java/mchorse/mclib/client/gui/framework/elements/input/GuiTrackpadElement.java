@@ -148,7 +148,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
         this.callback = callback;
 
-        this.field.setBackground(false);
+        this.field.setEnableBackgroundDrawing(false);
         this.setValue(0);
 
         this.flex().h(20);
@@ -253,7 +253,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     {
         this.setValueInternal(value);
         this.field.setText(this.integer ? String.valueOf((int) value) : FORMAT.format(value));
-        this.field.moveCursorToStart();
+        this.field.setCursorPositionZero();
     }
 
     private void setValueInternal(double value)
@@ -389,8 +389,6 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         this.shiftX = 0;
 
         super.mouseReleased(context);
-
-        this.field.mouseReleased(context.mouseX, context.mouseY, context.mouseButton);
     }
 
     @Override
@@ -441,7 +439,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         }
 
         String old = this.field.getText();
-        boolean result = this.field.keyTyped(context.typedChar, context.keyCode);
+        boolean result = this.field.textboxKeyTyped(context.typedChar, context.keyCode);
         String text = this.field.getText();
 
         if (this.field.isFocused() && !text.equals(old))
@@ -509,11 +507,11 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
         int width = MathUtils.clamp(this.font.getStringWidth(this.field.getText()), 0, w - 16);
 
-        this.field.area.x = this.area.mx(width);
-        this.field.area.y = this.area.my() - 4;
-        this.field.area.w = width + 6;
-        this.field.area.h = 9;
-        this.field.draw(context.mouseX, context.mouseY);
+        this.field.x = this.area.mx(width);
+        this.field.y = this.area.my() - 4;
+        this.field.width = width + 6;
+        this.field.height = 9;
+        this.field.drawTextBox();
 
         if (dragging)
         {
