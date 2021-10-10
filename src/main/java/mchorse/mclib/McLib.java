@@ -64,6 +64,7 @@ public class McLib
     public static ValueBoolean enableGridRendering;
     public static ValueInt userIntefaceScale;
     public static ValueInt tooltipStyle;
+    public static ValueInt trackpadDecimalPlaces;
 
     public static ValueBoolean enableCursorRendering;
     public static ValueBoolean enableMouseButtonRendering;
@@ -91,12 +92,14 @@ public class McLib
         /* McLib's options */
         ConfigBuilder builder = event.createBuilder(MOD_ID);
 
+        /* Appearance category */
         debugPanel = builder.category("appearance").getBoolean("debug_panel", false);
         debugPanel.invisible();
         primaryColor = builder.getInt("primary_color", 0x0088ff).color();
         enableBorders = builder.getBoolean("enable_borders", false);
         enableCheckboxRendering = builder.getBoolean("enable_checkbox_rendering", false);
         enableTrackpadIncrements = builder.getBoolean("enable_trackpad_increments", true);
+        trackpadDecimalPlaces = builder.getInt("trackpad_decimal_places", 6, 3, 31);
         enableGridRendering = builder.getBoolean("enable_grid_rendering", true);
         userIntefaceScale = builder.getInt("user_interface_scale", 2, 0, 4);
         tooltipStyle = builder.getInt("tooltip_style", 1).modes(
@@ -109,6 +112,7 @@ public class McLib
 
         builder.getCategory().markClientSide();
 
+        /* Tutorials category */
         enableCursorRendering = builder.category("tutorials").getBoolean("enable_mouse_rendering", false);
         enableMouseButtonRendering = builder.getBoolean("enable_mouse_buttons_rendering", false);
         enableKeystrokeRendering = builder.getBoolean("enable_keystrokes_rendering", false);
@@ -123,22 +127,26 @@ public class McLib
 
         builder.getCategory().markClientSide();
 
+        /* Background category */
         backgroundImage = builder.category("background").getRL("image",  null);
         backgroundColor = builder.getInt("color",  0xcc000000).colorAlpha();
 
         builder.getCategory().markClientSide();
 
+        /* Scrollbars category */
         scrollbarFlat = builder.category("scrollbars").getBoolean("flat", false);
         scrollbarShadow = builder.getInt("shadow", ColorUtils.HALF_BLACK).colorAlpha();
         scrollbarWidth = builder.getInt("width", 4, 2, 10);
 
         builder.getCategory().markClientSide();
 
+        /* Multiskin category */
         multiskinMultiThreaded = builder.category("multiskin").getBoolean("multithreaded", true);
         multiskinClear = builder.getBoolean("clear", true);
 
         builder.getCategory().markClientSide();
 
+        /* Vanilla category */
         maxPacketSize = builder.category("vanilla").getInt("max_packet_size", PayloadASM.MIN_SIZE, PayloadASM.MIN_SIZE, Integer.MAX_VALUE);
         maxPacketSize.syncable();
     }

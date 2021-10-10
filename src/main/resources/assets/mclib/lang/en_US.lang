@@ -93,7 +93,9 @@ mclib.config.comments.appearance.enable_grid_rendering=Enable grid rendering ins
 mclib.config.appearance.user_interface_scale=GUI scale
 mclib.config.comments.appearance.user_interface_scale=GUI scale for McHorse's mods instead of Video Settings' GUI scale. If set to 0, it will use Minecraft's GUI scale setting
 mclib.config.appearance.tooltip_style=Tooltip style
-mclib.config.comments.appearance.tooltip_style=This option allows to change GUI tooltip style 
+mclib.config.comments.appearance.tooltip_style=This option allows to change GUI tooltip style
+mclib.config.appearance.trackpad_decimal_places=Trackpad decimal places
+mclib.config.comments.appearance.trackpad_decimal_places=Set how many decimal places should not be rounded
 
 mclib.config.tutorials.title=Tutorials options
 mclib.config.tutorials.tooltip=This category provides options which are useful for making tutorial videos

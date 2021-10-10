@@ -29,8 +29,6 @@ import java.util.function.Consumer;
 public class GuiTrackpadElement extends GuiBaseTextElement
 {
     public static final DecimalFormat FORMAT;
-    public static final DecimalFormat ROUNDING;
-    public static final int DECIMALPLACES = 6;
 
     public Consumer<Double> callback;
 
@@ -57,21 +55,19 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     private long time;
     private Area plusOne = new Area();
     private Area minusOne = new Area();
+    private int decimalPlaces;
+    private DecimalFormat rounding;
 
     static
     {
-        String decimals = "";
-
-        for(int i = 0; i<DECIMALPLACES; i++)
-        {
-            decimals += "#";
-        }
-
         FORMAT = new DecimalFormat("#.###");
-        ROUNDING = new DecimalFormat("#."+decimals);
-
-        ROUNDING.setRoundingMode(RoundingMode.HALF_EVEN);
         FORMAT.setRoundingMode(RoundingMode.HALF_EVEN);
+    }
+
+    {
+        this.decimalPlaces = McLib.trackpadDecimalPlaces.get();
+
+        this.getRoundingFormat(true);
     }
 
     public GuiTrackpadElement(Minecraft mc, ValueInt value)
@@ -258,7 +254,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
 
     private void setValueInternal(double value)
     {
-        value = Double.valueOf(ROUNDING.format(value));
+        value = Double.valueOf(this.getRoundingFormat().format(value));
         value = MathUtils.clamp(value, this.min, this.max);
 
         if (this.integer)
@@ -559,7 +555,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                         double diff = (Math.abs(dx) - 3) * value;
                         double newValue = this.lastValue + (dx < 0 ? -diff : diff);
 
-                        newValue = diff < 0 ? this.lastValue : Double.valueOf(ROUNDING.format(newValue));;
+                        newValue = diff < 0 ? this.lastValue : Double.valueOf(this.getRoundingFormat().format(newValue));;
 
                         if (this.value != newValue)
                         {
@@ -596,5 +592,34 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         }
 
         return value;
+    }
+
+    public DecimalFormat getRoundingFormat()
+    {
+        return this.getRoundingFormat(false);
+    }
+
+    /**
+     * Get the rounding format according to McLib's configuration of trackpadDecimalPlaces
+     * @param force true to recalculate the rounding format forcefully
+     * @return the rounding format
+     */
+    private DecimalFormat getRoundingFormat(boolean force)
+    {
+        if (this.decimalPlaces != McLib.trackpadDecimalPlaces.get() || force) //to save performance
+        {
+            String decimals = "";
+
+            for(int i = 0; i < McLib.trackpadDecimalPlaces.get(); i++)
+            {
+                decimals += "#";
+            }
+
+            this.rounding = new DecimalFormat("#."+decimals);
+
+            this.rounding.setRoundingMode(RoundingMode.HALF_EVEN);
+        }
+
+        return this.rounding;
     }
 }
