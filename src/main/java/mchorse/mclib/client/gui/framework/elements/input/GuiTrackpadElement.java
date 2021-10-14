@@ -616,6 +616,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
             }
 
             this.rounding = new DecimalFormat("#."+decimals);
+            this.decimalPlaces = McLib.trackpadDecimalPlaces.get();
 
             this.rounding.setRoundingMode(RoundingMode.HALF_EVEN);
         }
