@@ -219,7 +219,7 @@ public class VertexBuilder
         {
             byteBuf.put(baseIndex + vertexSize * i + normalOffset + 0, (byte) ((int) (x * 0x7F) & 0xFF));
             byteBuf.put(baseIndex + vertexSize * i + normalOffset + 1, (byte) ((int) (y * 0x7F) & 0xFF));
-            byteBuf.put(baseIndex + vertexSize * i + normalOffset + 1, (byte) ((int) (z * 0x7F) & 0xFF));
+            byteBuf.put(baseIndex + vertexSize * i + normalOffset + 2, (byte) ((int) (z * 0x7F) & 0xFF));
         }
 
         byteBuf.position(pos);
