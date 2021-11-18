@@ -44,13 +44,13 @@ public class TextureProcessor
         for (int i = 0; i < multi.children.size(); i++)
         {
             FilteredResourceLocation child = multi.children.get(i);
+            BufferedImage image = null;
 
             try
             {
                 IResource resource = manager.getResource(child.path);
-                BufferedImage image = ImageIO.read(resource.getInputStream());
 
-                images.add(image);
+                image = ImageIO.read(resource.getInputStream());
 
                 w = Math.max(w, child.getWidth(image.getWidth()));
                 h = Math.max(h, child.getHeight(image.getHeight()));
@@ -59,6 +59,8 @@ public class TextureProcessor
             {
                 e.printStackTrace();
             }
+
+            images.add(image);
         }
 
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
@@ -67,6 +69,12 @@ public class TextureProcessor
         for (int i = 0; i < multi.children.size(); i++)
         {
             BufferedImage child = images.get(i);
+
+            if (child == null)
+            {
+                continue;
+            }
+
             FilteredResourceLocation filter = multi.children.get(i);
             int iw = child.getWidth();
             int ih = child.getHeight();
