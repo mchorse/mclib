@@ -1,3 +1,13 @@
+## Version 2.3.6
+
+This update was made by Chryfi. Exceptions are mentioned at the respective items.
+
+* Added trackpad decimal places option to set how many decimal places should be displayed in trackpad fields
+* Added `GuiPopUpModal`
+* Added `GuiConfirmationScreen`
+* Added Server-Client Confirmation API
+* Added Delta Rotation (by NyaNLI)
+
 ## Version 2.3.5
 
 This patch is for Chameleon `1.1` release.
