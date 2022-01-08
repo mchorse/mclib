@@ -336,33 +336,27 @@ public class VertexBuilder
 
         float scale = duv1.y * duv2.x - duv1.x * duv2.y;
 
-        if (Math.abs(scale) > 0.0001F)
+        if (Math.abs(scale) <= 0.0001F)
         {
-            tangent.scale(duv1.y, e2);
-            tangent.scaleAdd(-duv2.y, e1, tangent);
-            tangent.scale(scale);
-
-            binormal.scale(duv2.x, e1);
-            binormal.scaleAdd(-duv1.x, e2, binormal);
-            binormal.scale(scale);
+            scale = 1.0f;
         }
+
+        tangent.scale(duv1.y, e2);
+        tangent.scaleAdd(-duv2.y, e1, tangent);
+        tangent.scale(1.0f / scale);
+
+        binormal.scale(duv2.x, e1);
+        binormal.scaleAdd(-duv1.x, e2, binormal);
+        binormal.scale(1.0f / scale);
 
         if (tangent.lengthSquared() > 0.0001F)
         {
             tangent.normalize();
         }
-        else
-        {
-            tangent.set(e1);
-        }
 
         if (binormal.lengthSquared() > 0.0001F)
         {
             binormal.normalize();
-        }
-        else
-        {
-            binormal.set(e2);
         }
 
         int packedNormal = intBuf.get(baseIndex + vertexSize * 0 + normalOffset);
@@ -372,16 +366,14 @@ public class VertexBuilder
         normal.y = (byte) (packedNormal >> 8);
         normal.z = (byte) (packedNormal >> 16);
 
-        if (normal.lengthSquared() > 0.0001F)
-        {
-            normal.normalize();
-        }
-        else
+        if (normal.lengthSquared() <= 0.0001F)
         {
             normal.cross(e1, e2);
         }
 
-        Vector3f binormalCheck = new Vector3f(normal);
+        normal.normalize();
+
+        Vector3f binormalCheck = new Vector3f();
 
         binormalCheck.cross(normal, tangent);
 
@@ -392,10 +384,6 @@ public class VertexBuilder
         if (tangent.lengthSquared() > 0.0001F)
         {
             tangent.normalize();
-        }
-        else
-        {
-            tangent.set(e1);
         }
 
         int p1 = ((int) (tangent.y * 0x7FFF) & 0xFFFF) << 16 | (int) (tangent.x * 0x7FFF) & 0xFFFF;
