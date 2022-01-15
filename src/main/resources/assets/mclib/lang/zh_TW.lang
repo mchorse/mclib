@@ -19,7 +19,7 @@ mclib.gui.dashboard.category=儀表盤
 mclib.gui.dashboard.open_panel=打開 
 
 mclib.gui.graph.tooltip=圖形計算器
-mclib.gui.graph.help=點擊該按鈕會進入一個網頁，其中詳細列出了該圖形計算器的功能。\n\n此處使用的表達式，也可以在 Aperture 的“數學”調整器以及 Commander 的數學表達式計算命令中使用。\n\n該圖形計算器只提供一個變量 "x"，它是你可以插入 y=x（又稱 f(x)）圖形函數的水平坐標。
+mclib.gui.graph.help=點擊該按鈕會進入一個網頁，其中詳細列出了該圖形計算器的功能。\n\n此處使用的表達式，也可以在 Aperture 的“數學”調整器以及 Commander 的數學表達式計算命令中使用。\n\n該圖形計算器只提供一個變量 "x"，它是你可以插入 y=x（又稱 f(x)）圖形函數的水平座標。
 mclib.gui.config.title=選項
 mclib.gui.config.tooltip=模組選項
 mclib.gui.config.reload_tooltip=從文件重載選項...
@@ -71,7 +71,7 @@ mclib.gui.color.context.favorites.remove=移出收藏
 
 mclib.gui.item_slot.context.copy=拷貝物品 NBT 數據
 mclib.gui.item_slot.context.paste=粘貼物品 NBT 數據
-mclib.gui.item_slot.context.drop=獲取該物品到背包
+mclib.gui.item_slot.context.drop=獲取該物品到揹包
 mclib.gui.item_slot.context.clear=清除物品
 
 # Config
@@ -84,8 +84,8 @@ mclib.config.appearance.primary_color=主色調
 mclib.config.comments.appearance.primary_color=GUI 系統中最常見的顏色
 mclib.config.appearance.enable_borders=按鈕邊框
 mclib.config.comments.appearance.enable_borders=按鈕與其他控件是否顯示邊框？
-mclib.config.appearance.enable_checkbox_rendering=覆選框
-mclib.config.comments.appearance.enable_checkbox_rendering=啟用覆選框呈現而不是開關元件（憑個人喜好）
+mclib.config.appearance.enable_checkbox_rendering=複選框
+mclib.config.comments.appearance.enable_checkbox_rendering=啟用複選框呈現而不是開關元件（憑個人喜好）
 mclib.config.appearance.enable_trackpad_increments=觸控板增量
 mclib.config.comments.appearance.enable_trackpad_increments=啟用觸控板控件上的 < 和 > 按鈕（用於觸控板值的遞增）
 mclib.config.appearance.enable_grid_rendering=模型網絡
@@ -94,14 +94,16 @@ mclib.config.appearance.user_interface_scale=GUI 尺寸
 mclib.config.comments.appearance.user_interface_scale=McHorse 的模組的 GUI 尺寸，代替視頻設置中的界面尺寸。若設為 0，則會使用 Minecraft 的界面尺寸設置
 mclib.config.appearance.tooltip_style=工具提示樣式
 mclib.config.comments.appearance.tooltip_style=該選項用於更改 GUI 工具提示的樣式
+mclib.config.appearance.trackpad_decimal_places=滑動參數框小數點精度
+mclib.config.comments.appearance.trackpad_decimal_places=設置小數點多少位後不被四捨五入
 
 mclib.config.tutorials.title=教學選項
-mclib.config.tutorials.tooltip=該分類提供了利於制作教程視頻的選項
+mclib.config.tutorials.tooltip=該分類提供了利於製作教程視頻的選項
 
 mclib.config.tutorials.enable_mouse_rendering=鼠標光標
-mclib.config.comments.tutorials.enable_mouse_rendering=啟用鼠標光標的顯示。在使用 Minema mod 錄制教程並且沒有光標顯示時十分有用
+mclib.config.comments.tutorials.enable_mouse_rendering=啟用鼠標光標的顯示。在使用 Minema mod 錄製教程並且沒有光標顯示時十分有用
 mclib.config.tutorials.enable_mouse_buttons_rendering=鼠標按鍵
-mclib.config.comments.tutorials.enable_mouse_buttons_rendering=啟用鼠標按鍵和鼠標滾輪滾動的顯示。在使用 Minema mod 錄制教程，並且鼠標按鍵或滾輪滾動不可見時非常有用
+mclib.config.comments.tutorials.enable_mouse_buttons_rendering=啟用鼠標按鍵和鼠標滾輪滾動的顯示。在使用 Minema mod 錄製教程，並且鼠標按鍵或滾輪滾動不可見時非常有用
 mclib.config.tutorials.enable_keystrokes_rendering=按鍵顯示
 mclib.config.comments.tutorials.enable_keystrokes_rendering=啟用按鍵顯示。在需要展示按了哪些按鍵的教程中十分有用
 mclib.config.tutorials.keystroke_offset=按鍵顯示偏移
@@ -147,8 +149,8 @@ op_access.config.title=OP 訪問權限
 op_access.config.mclib.title=McLib
 op_access.config.mclib.tooltip=McLib OP 訪問權限選項
 
-op_access.config.mclib.drop_items=獲取物品到背包
-op_access.config.comments.mclib.drop_items=非 OP 玩家是否可以使用物品槽控件中的“獲取該物品到背包”選項？
+op_access.config.mclib.drop_items=獲取物品到揹包
+op_access.config.comments.mclib.drop_items=非 OP 玩家是否可以使用物品槽控件中的“獲取該物品到揹包”選項？
 
 # Interpolations
 mclib.interpolations.linear=線性
@@ -172,6 +174,19 @@ mclib.interpolations.bounce_in=彈跳緩入
 mclib.interpolations.bounce_out=彈跳緩出
 mclib.interpolations.bounce_inout=彈跳緩入/緩出
 
+mclib.interpolations.sine_in=正弦緩入
+mclib.interpolations.sine_out=正弦緩出
+mclib.interpolations.sine_inout=正弦緩入/緩出
+mclib.interpolations.quart_in=四次方緩入
+mclib.interpolations.quart_out=四次方緩出
+mclib.interpolations.quart_inout=四次方緩入/緩出
+mclib.interpolations.quint_in=五次方緩入
+mclib.interpolations.quint_out=五次方緩出
+mclib.interpolations.quint_inout=五次方緩入/緩出
+mclib.interpolations.circle_in=圓弧緩入
+mclib.interpolations.circle_out=圓弧緩出
+mclib.interpolations.circle_inout=圓弧緩入/緩出
+
 mclib.interpolations.const=連續的
 mclib.interpolations.quad=二次方
 mclib.interpolations.cubic=三次曲線
@@ -181,13 +196,17 @@ mclib.interpolations.bezier=貝塞爾曲線
 mclib.interpolations.back=回彈
 mclib.interpolations.elastic=彈性
 mclib.interpolations.bounce=彈跳
+mclib.interpolations.sine=正弦
+mclib.interpolations.quart=四次方
+mclib.interpolations.quint=五次方
+mclib.interpolations.circle=圓弧
 
 # Interpolation tooltips
 #
 # Feel free to add your own tips. If there is no tip, then leave it empty.
 # DO NOT REMOVE THESE LINES!
 
-mclib.interpolations.tooltips.linear=該插值會以恒定的速度從 A 過渡到 B。它適用於無縫旋轉和緩慢移動的使用場景。
+mclib.interpolations.tooltips.linear=該插值會以恆定的速度從 A 過渡到 B。它適用於無縫旋轉和緩慢移動的使用場景。
 mclib.interpolations.tooltips.quad_in=
 mclib.interpolations.tooltips.quad_out=
 mclib.interpolations.tooltips.quad_inout=該插值適用於姿勢動畫，用於表現比指數或三次曲線緩入/緩出的程度更平緩的運動。
@@ -208,6 +227,19 @@ mclib.interpolations.tooltips.bounce_in=
 mclib.interpolations.tooltips.bounce_out=適用於創建一個東西掉在地上並彈跳幾下的動畫。
 mclib.interpolations.tooltips.bounce_inout=
 
+mclib.interpolations.tooltips.sine_in=
+mclib.interpolations.tooltips.sine_out=
+mclib.interpolations.tooltips.sine_inout=
+mclib.interpolations.tooltips.quart_in=
+mclib.interpolations.tooltips.quart_out=
+mclib.interpolations.tooltips.quart_inout=
+mclib.interpolations.tooltips.quint_in=
+mclib.interpolations.tooltips.quint_out=
+mclib.interpolations.tooltips.quint_inout=
+mclib.interpolations.tooltips.circle_in=
+mclib.interpolations.tooltips.circle_out=
+mclib.interpolations.tooltips.circle_inout=
+
 mclib.interpolations.tooltips.const=該插值並不算是真正意義上的插值，而是將初始值保持到最後。適用於通過多個關鍵幀來創建變化強烈的的階梯式運動曲線。
 mclib.interpolations.tooltips.hermite=該插值可以使動畫在多個關鍵幀之間平滑地進行過渡。請確保關鍵幀之間擁有相同的距離，因為這一平滑的特性會在不同距離的情況下被打破。
 mclib.interpolations.tooltips.bezier=該插值能夠適用控制點來調整曲線，進而能通過它模仿出其他大多數插值的的效果。適用於在多個關鍵幀之間創建更平滑的過渡。
@@ -222,7 +254,7 @@ mclib.commands.mclib.help=McLib 命令，提供了在服務器端編輯配置的
 mclib.commands.mclib.config.help=McLib 子命令，用於管理 McHorse 系列模組的選項。
 mclib.commands.mclib.config.print=§f該命令會輸出當前給定模組選項（選項 ID 為 §7<mod.category.option>§f）的值。
 mclib.commands.mclib.config.set=§f該命令用於將模組選項 ID 為 §7<mod.category.option>§f 的值設置為 §7<值...>§f。
-mclib.commands.cheats=作弊命令可以在單人遊戲世界中開關作弊命令。\n\n該命令既可用於在一個開啟了命令的創造模式存檔中禁用作弊，例如你打算發布一張冒險地圖；也可用於在一個禁用了作弊命令的存檔中啟用命令，因為你需要在制作視頻時使用命令。
+mclib.commands.cheats=作弊命令可以在單人遊戲世界中開關作弊命令。\n\n該命令既可用於在一個開啟了命令的創造模式存檔中禁用作弊，例如你打算髮布一張冒險地圖；也可用於在一個禁用了作弊命令的存檔中啟用命令，因為你需要在製作視頻時使用命令。
 
 mclib.error.config.invalid_id=§f給定的模組選項標識符 %s§f 不存在！
 mclib.error.config.invalid_format=§f給定的值 %s§f 對於模組選項標識符 %s§f 而言，無法進行解析！

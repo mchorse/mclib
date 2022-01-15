@@ -94,6 +94,8 @@ mclib.config.appearance.user_interface_scale=GUI 尺寸
 mclib.config.comments.appearance.user_interface_scale=McHorse 的模组的 GUI 尺寸，代替视频设置中的界面尺寸。若设为 0，则会使用 Minecraft 的界面尺寸设置
 mclib.config.appearance.tooltip_style=工具提示样式
 mclib.config.comments.appearance.tooltip_style=该选项用于更改 GUI 工具提示的样式
+mclib.config.appearance.trackpad_decimal_places=滑动参数框小数点精度
+mclib.config.comments.appearance.trackpad_decimal_places=设置小数点多少位后不被四舍五入
 
 mclib.config.tutorials.title=教学选项
 mclib.config.tutorials.tooltip=该分类提供了利于制作教程视频的选项
@@ -172,6 +174,19 @@ mclib.interpolations.bounce_in=弹跳缓入
 mclib.interpolations.bounce_out=弹跳缓出
 mclib.interpolations.bounce_inout=弹跳缓入/缓出
 
+mclib.interpolations.sine_in=正弦缓入
+mclib.interpolations.sine_out=正弦缓出
+mclib.interpolations.sine_inout=正弦缓入/缓出
+mclib.interpolations.quart_in=四次方缓入
+mclib.interpolations.quart_out=四次方缓出
+mclib.interpolations.quart_inout=四次方缓入/缓出
+mclib.interpolations.quint_in=五次方缓入
+mclib.interpolations.quint_out=五次方缓出
+mclib.interpolations.quint_inout=五次方缓入/缓出
+mclib.interpolations.circle_in=圆弧缓入
+mclib.interpolations.circle_out=圆弧缓出
+mclib.interpolations.circle_inout=圆弧缓入/缓出
+
 mclib.interpolations.const=连续的
 mclib.interpolations.quad=二次方
 mclib.interpolations.cubic=三次曲线
@@ -181,6 +196,10 @@ mclib.interpolations.bezier=贝塞尔曲线
 mclib.interpolations.back=回弹
 mclib.interpolations.elastic=弹性
 mclib.interpolations.bounce=弹跳
+mclib.interpolations.sine=正弦
+mclib.interpolations.quart=四次方
+mclib.interpolations.quint=五次方
+mclib.interpolations.circle=圆弧
 
 # Interpolation tooltips
 #
@@ -207,6 +226,19 @@ mclib.interpolations.tooltips.elastic_inout=
 mclib.interpolations.tooltips.bounce_in=
 mclib.interpolations.tooltips.bounce_out=适用于创建一个东西掉在地上并弹跳几下的动画。
 mclib.interpolations.tooltips.bounce_inout=
+
+mclib.interpolations.tooltips.sine_in=
+mclib.interpolations.tooltips.sine_out=
+mclib.interpolations.tooltips.sine_inout=
+mclib.interpolations.tooltips.quart_in=
+mclib.interpolations.tooltips.quart_out=
+mclib.interpolations.tooltips.quart_inout=
+mclib.interpolations.tooltips.quint_in=
+mclib.interpolations.tooltips.quint_out=
+mclib.interpolations.tooltips.quint_inout=
+mclib.interpolations.tooltips.circle_in=
+mclib.interpolations.tooltips.circle_out=
+mclib.interpolations.tooltips.circle_inout=
 
 mclib.interpolations.tooltips.const=该插值并不算是真正意义上的插值，而是将初始值保持到最后。适用于通过多个关键帧来创建变化强烈的的阶梯式运动曲线。
 mclib.interpolations.tooltips.hermite=该插值可以使动画在多个关键帧之间平滑地进行过渡。请确保关键帧之间拥有相同的距离，因为这一平滑的特性会在不同距离的情况下被打破。
