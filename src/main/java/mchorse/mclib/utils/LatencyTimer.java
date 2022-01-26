@@ -13,7 +13,7 @@ public class LatencyTimer
 {
     private long startTime;
     private long endTime;
-    private long clientServerDifference;
+    private long clientServerDifferenceCache;
 
     /**
      * Saves the system time it has been created
@@ -21,7 +21,7 @@ public class LatencyTimer
     public LatencyTimer()
     {
         this.startTime = System.currentTimeMillis();
-        this.clientServerDifference = ClientHandlerTimeSync.getClientServerDifference();
+        this.clientServerDifferenceCache = ClientHandlerTimeSync.getClientServerDifference();
     }
 
     /**
@@ -53,7 +53,24 @@ public class LatencyTimer
      */
     public long getElapsedTime(boolean raw)
     {
-        long clientServerDifference = (raw) ? 0 : ClientHandlerTimeSync.getClientServerDifference();
+        long clientServerDifference = 0;
+
+        if (!raw)
+        {
+            /*
+             * if this latencyTimer is now on the client side, the ClientHandlerTimeSync will be set
+             * Assuming that the latencyTimer is used after the server and client have stored their times on the client side
+             */
+            if (ClientHandlerTimeSync.isSet())
+            {
+                clientServerDifference = ClientHandlerTimeSync.getClientServerDifference();
+            }
+            else
+            {
+                /* it means we are now on the server side, so use the cached value from the client side */
+                clientServerDifference = this.clientServerDifferenceCache;
+            }
+        }
 
         long elapsed = Math.abs((this.endTime != 0) ? (this.endTime - this.startTime) : (System.currentTimeMillis() - this.startTime));
 
@@ -66,6 +83,7 @@ public class LatencyTimer
 
         timer.startTime = buf.readLong();
         timer.endTime = buf.readLong();
+        timer.clientServerDifferenceCache = buf.readLong();
 
         return timer;
     }
@@ -74,5 +92,6 @@ public class LatencyTimer
     {
         buf.writeLong(this.startTime);
         buf.writeLong(this.endTime);
+        buf.writeLong(this.clientServerDifferenceCache);
     }
 }

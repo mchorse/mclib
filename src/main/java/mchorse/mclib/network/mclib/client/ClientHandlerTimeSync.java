@@ -42,6 +42,15 @@ public class ClientHandlerTimeSync extends ClientMessageHandler<PacketTime>
         return Math.abs(ClientHandlerTimeSync.getClientTime() - ClientHandlerTimeSync.getServerTime());
     }
 
+    /**
+     * Checks if the serverTime and clientTimer are set
+     * @return true if serverTime and clientTimer are not 0
+     */
+    public static boolean isSet()
+    {
+        return serverTime != 0 && clientTime != 0;
+    }
+
     public static void resetTimes()
     {
         serverTime = 0;
