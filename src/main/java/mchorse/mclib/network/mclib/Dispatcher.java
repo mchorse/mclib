@@ -4,10 +4,12 @@ import mchorse.mclib.McLib;
 import mchorse.mclib.network.AbstractDispatcher;
 import mchorse.mclib.network.mclib.client.ClientHandlerConfig;
 import mchorse.mclib.network.mclib.client.ClientHandlerConfirm;
+import mchorse.mclib.network.mclib.client.ClientHandlerTimeSync;
 import mchorse.mclib.network.mclib.common.PacketConfig;
 import mchorse.mclib.network.mclib.common.PacketConfirm;
 import mchorse.mclib.network.mclib.common.PacketDropItem;
 import mchorse.mclib.network.mclib.common.PacketRequestConfigs;
+import mchorse.mclib.network.mclib.common.PacketTime;
 import mchorse.mclib.network.mclib.server.ServerHandlerConfig;
 import mchorse.mclib.network.mclib.server.ServerHandlerConfirm;
 import mchorse.mclib.network.mclib.server.ServerHandlerDropItem;
@@ -34,6 +36,9 @@ public class Dispatcher
             /* Confirm related packets */
             register(PacketConfirm.class, ClientHandlerConfirm.class, Side.CLIENT);
             register(PacketConfirm.class, ServerHandlerConfirm.class, Side.SERVER);
+
+            /* to let the client know what time the server has */
+            register(PacketTime.class, ClientHandlerTimeSync.class, Side.CLIENT);
         }
     };
 
