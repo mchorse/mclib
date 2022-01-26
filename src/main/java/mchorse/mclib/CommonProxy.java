@@ -3,6 +3,7 @@ package mchorse.mclib;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.config.ConfigHandler;
 import mchorse.mclib.config.ConfigManager;
+import mchorse.mclib.events.EventHandler;
 import mchorse.mclib.network.mclib.Dispatcher;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -29,5 +30,7 @@ public class CommonProxy
         this.configs.register(this.configFolder);
 
         Icons.register();
+
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 }
