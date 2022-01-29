@@ -82,6 +82,11 @@ public class WavePlayer
         return AL10.alGetSourcef(this.source, AL11.AL_SEC_OFFSET);
     }
 
+    /**
+     * This method sets the playback position to the provided seconds.
+     * It clamps the seconds between 0 and the duration of the audio file.
+     * @param seconds seconds to set the playback position to
+     */
     public void setPlaybackPosition(float seconds)
     {
         seconds = MathUtils.clamp(seconds, 0, this.duration);
