@@ -9,6 +9,7 @@ import javax.vecmath.Point2f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 import org.lwjgl.opengl.GL11;
 
@@ -394,6 +395,82 @@ public class VertexBuilder
             intBuf.put(baseIndex + vertexSize * i + tangentOffset + 0, p1);
             intBuf.put(baseIndex + vertexSize * i + tangentOffset + 1, p2);
         }
+    }
+
+    /**
+     * Used for Emoticons
+     */
+    public static Vector4f calcTangent(Point3f[] vertices, Point2f[] uvs, Vector3f normal)
+    {
+        Point3f v0 = vertices[0];
+        Point3f v1 = vertices[1];
+        Point3f v2 = vertices[2];
+
+        Vector3f e1 = new Vector3f();
+        Vector3f e2 = new Vector3f();
+
+        e1.sub(v1, v0);
+        e2.sub(v2, v0);
+
+        Point2f uv0 = uvs[0];
+        Point2f uv1 = uvs[1];
+        Point2f uv2 = uvs[2];
+
+        Vector2f duv1 = new Vector2f();
+        Vector2f duv2 = new Vector2f();
+
+        duv1.sub(uv1, uv0);
+        duv2.sub(uv2, uv0);
+
+        Vector3f tangent = new Vector3f();
+        Vector3f binormal = new Vector3f();
+
+        float scale = duv1.y * duv2.x - duv1.x * duv2.y;
+
+        if (Math.abs(scale) <= 0.0001F)
+        {
+            scale = 1.0f;
+        }
+
+        tangent.scale(duv1.y, e2);
+        tangent.scaleAdd(-duv2.y, e1, tangent);
+        tangent.scale(1.0f / scale);
+
+        binormal.scale(duv2.x, e1);
+        binormal.scaleAdd(-duv1.x, e2, binormal);
+        binormal.scale(1.0f / scale);
+
+        if (tangent.lengthSquared() > 0.0001F)
+        {
+            tangent.normalize();
+        }
+
+        if (binormal.lengthSquared() > 0.0001F)
+        {
+            binormal.normalize();
+        }
+
+        if (normal.lengthSquared() <= 0.0001F)
+        {
+            normal.cross(e1, e2);
+        }
+
+        normal.normalize();
+
+        Vector3f binormalCheck = new Vector3f();
+
+        binormalCheck.cross(normal, tangent);
+
+        float w = binormalCheck.dot(binormal) < 0 ? -1F : 1F;
+
+        tangent.scaleAdd(-normal.dot(tangent), normal, tangent);
+
+        if (tangent.lengthSquared() > 0.0001F)
+        {
+            tangent.normalize();
+        }
+
+        return new Vector4f(tangent.x, tangent.y, tangent.z, w);
     }
 
     /**
