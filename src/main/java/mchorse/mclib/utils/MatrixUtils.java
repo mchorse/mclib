@@ -43,6 +43,11 @@ public class MatrixUtils
         return matrix4f;
     }
 
+    public static Matrix4f readModelView()
+    {
+        return readModelView(new Matrix4f());
+    }
+
     /**
      * Replace model view matrix with given matrix
      */
@@ -195,6 +200,11 @@ public class MatrixUtils
      */
     public static Transformation extractTransformations(@Nullable Matrix4f cameraMatrix, Matrix4f modelView)
     {
+        return extractTransformations(cameraMatrix, modelView, MatrixMajor.ROW);
+    }
+
+    public static Transformation extractTransformations(@Nullable Matrix4f cameraMatrix, Matrix4f modelView, MatrixMajor major)
+    {
         Matrix4f parent = new Matrix4f(modelView);
 
         if (cameraMatrix != null)
@@ -232,6 +242,13 @@ public class MatrixUtils
         Vector4f ay = new Vector4f(parent.m10, parent.m11, parent.m12, 0);
         Vector4f az = new Vector4f(parent.m20, parent.m21, parent.m22, 0);
 
+        if (major == MatrixMajor.COLUMN)
+        {
+            ax = new Vector4f(parent.m00, parent.m10, parent.m20, 0.0F);
+            ay = new Vector4f(parent.m01, parent.m11, parent.m21, 0.0F);
+            az = new Vector4f(parent.m02, parent.m12, parent.m22, 0.0F);
+        }
+
         ax.normalize();
         ay.normalize();
         az.normalize();
@@ -239,9 +256,21 @@ public class MatrixUtils
         rotation.setRow(1, ay);
         rotation.setRow(2, az);
 
+        if (major == MatrixMajor.COLUMN)
+        {
+            rotation.transpose();
+        }
+
         scale.m00 = (float) Math.sqrt(parent.m00 * parent.m00 + parent.m01 * parent.m01 + parent.m02 * parent.m02);
         scale.m11 = (float) Math.sqrt(parent.m10 * parent.m10 + parent.m11 * parent.m11 + parent.m12 * parent.m12);
         scale.m22 = (float) Math.sqrt(parent.m20 * parent.m20 + parent.m21 * parent.m21 + parent.m22 * parent.m22);
+
+        if (major == MatrixMajor.COLUMN)
+        {
+            scale.m00 = (float) Math.sqrt(parent.m00 * parent.m00 + parent.m10 * parent.m10 + parent.m20 * parent.m20);
+            scale.m11 = (float) Math.sqrt(parent.m01 * parent.m01 + parent.m11 * parent.m11 + parent.m21 * parent.m21);
+            scale.m22 = (float) Math.sqrt(parent.m02 * parent.m02 + parent.m12 * parent.m12 + parent.m22 * parent.m22);
+        }
 
         return new Transformation(translation, rotation, scale);
     }
@@ -536,5 +565,11 @@ public class MatrixUtils
                 return (float) Math.toDegrees(Math.atan2(sin, cos));
             }
         }
+    }
+
+    public enum MatrixMajor
+    {
+        ROW,
+        COLUMN
     }
 }
