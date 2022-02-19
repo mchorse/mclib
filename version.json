@@ -1,6 +1,7 @@
 {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/mchorses-mclib/",
     "1.12.2": {
+        "2.3.7": "This update was made by Chryfi, it adds important utility for Blockbuster 2.4.1 release.",
         "2.3.6": "This update was made by Chryfi. Exceptions are mentioned at the respective items.",
         "2.3.5": "This patch is for Chameleon 1.1 release.",
         "2.3.4": "This quick patch fix for a crash with BuildCraft.",
@@ -40,8 +41,8 @@
     },
     
     "promos": {
-        "1.12.2-latest": "2.3.6",
-        "1.12.2-recommended": "2.3.6",
+        "1.12.2-latest": "2.3.7",
+        "1.12.2-recommended": "2.3.7",
         "1.10.2-latest": "1.0.4",
         "1.10.2-recommended": "1.0.4",
         "1.11.2-latest": "1.0.4",
