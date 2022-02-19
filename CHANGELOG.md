@@ -1,3 +1,10 @@
+## Version 2.3.7
+
+This update was made by Chryfi. It is for the Blockbuster `2.4.1` release.
+
+* Added API to measure the latency between server and client when sending packets
+* Added extractTransformation with column and row major parameter
+
 ## Version 2.3.6
 
 This update was made by Chryfi. Exceptions are mentioned at the respective items.
