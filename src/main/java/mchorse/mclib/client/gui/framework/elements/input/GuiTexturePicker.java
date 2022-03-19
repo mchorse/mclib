@@ -216,7 +216,7 @@ public class GuiTexturePicker extends GuiElement
     {
         if (this.picker.parent != null && this.picker.parent.file != null)
         {
-            mchorse.mclib.client.gui.utils.GuiUtils.openWebLink(this.picker.parent.file.toURI());
+            mchorse.mclib.client.gui.utils.GuiUtils.openFolder(this.picker.parent.file.getAbsolutePath());
         }
     }
 
