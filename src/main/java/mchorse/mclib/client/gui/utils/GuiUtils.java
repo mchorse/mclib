@@ -15,7 +15,11 @@ import net.minecraft.init.SoundEvents;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+
+import org.lwjgl.Sys;
 
 /**
  * GUI utilities
@@ -234,5 +238,68 @@ public class GuiUtils
     public static void playClick()
     {
         Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    }
+
+    /**
+     * Open a Folder
+     * Referenced from OptiFine
+     */
+    public static void openFolder(String url)
+    {
+        File file = new File(url);
+
+        switch (OSUtils.getOSType())
+        {
+            case OSUtils.EnumOS_WINDOWS:
+                String s = String.format("cmd.exe /C start \"Open file\" \"%s\"", file.getAbsolutePath());
+
+                try
+                {
+                    Runtime.getRuntime().exec(s);
+
+                    return;
+                }
+                catch (IOException ioexception)
+                {
+                    ioexception.printStackTrace();
+
+                    break;
+                }
+
+            case OSUtils.EnumOS_OSX:
+                try
+                {
+                    Runtime.getRuntime().exec(new String[]
+                    {
+                            "/usr/bin/open", file.getAbsolutePath()
+                    });
+
+                    return;
+                }
+                catch (IOException ioexception1)
+                {
+                    ioexception1.printStackTrace();
+                }
+        }
+
+        boolean failed = false;
+
+        try
+        {
+            Class<?> clazz = Class.forName("java.awt.Desktop");
+            Object object = clazz.getMethod("getDesktop", new Class[0]).invoke(null);
+
+            clazz.getMethod("browse", new Class[] {URI.class}).invoke(object, new Object[] {file.toURI()});
+        }
+        catch (Throwable throwable1)
+        {
+            throwable1.printStackTrace();
+            failed = true;
+        }
+
+        if (failed)
+        {
+            Sys.openURL("file://" + file.getAbsolutePath());
+        }
     }
 }
