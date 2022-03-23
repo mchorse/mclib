@@ -251,11 +251,12 @@ public class GuiUtils
         switch (OSUtils.getOSType())
         {
             case OSUtils.EnumOS_WINDOWS:
-                String s = String.format("cmd.exe /C start \"Open file\" \"%s\"", file.getAbsolutePath());
-
                 try
                 {
-                    Runtime.getRuntime().exec(s);
+                    Runtime.getRuntime().exec(new String[]
+                    {
+                        "cmd.exe", "/C", "start", "\"Open file\"", String.format("\"%s\"", file.getAbsolutePath())
+                    });
 
                     return;
                 }
