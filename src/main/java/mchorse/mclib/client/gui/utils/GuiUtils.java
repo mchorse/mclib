@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.Util;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -241,21 +242,21 @@ public class GuiUtils
     }
 
     /**
-     * Open a Folder
-     * Referenced from OptiFine
+     * Open a Folder<br>
+     * Referenced from {@link net.minecraft.client.renderer.OpenGlHelper.openFile(File)}
      */
     public static void openFolder(String url)
     {
         File file = new File(url);
 
-        switch (OSUtils.getOSType())
+        switch (Util.getOSType())
         {
-            case OSUtils.EnumOS_WINDOWS:
+            case WINDOWS:
                 try
                 {
                     Runtime.getRuntime().exec(new String[]
                     {
-                        "cmd.exe", "/C", "start", "\"Open file\"", String.format("\"%s\"", file.getAbsolutePath())
+                        "cmd.exe", "/C", "start", "\"Open file\"", file.getAbsolutePath()
                     });
 
                     return;
@@ -267,7 +268,7 @@ public class GuiUtils
                     break;
                 }
 
-            case OSUtils.EnumOS_OSX:
+            case OSX:
                 try
                 {
                     Runtime.getRuntime().exec(new String[]
@@ -281,6 +282,9 @@ public class GuiUtils
                 {
                     ioexception1.printStackTrace();
                 }
+
+            default:
+                break;
         }
 
         boolean failed = false;
