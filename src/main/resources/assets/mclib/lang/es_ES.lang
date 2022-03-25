@@ -19,12 +19,12 @@ mclib.gui.dashboard.category=Tablero
 mclib.gui.dashboard.open_panel=Abrir 
 
 mclib.gui.graph.tooltip=Graphing calculator
-mclib.gui.graph.help=Click on this button to go to a web page which documents features of following graphing calculator.\n\nExpressions used here, can be also used in Aperture's math modifier and Commander's math expression evaluation within commands.\n\nThis graphing calculator provides only one variable "x" which is horizontal coordinate you can plug in into y=x (aka f(x)) graph functions.
-mclib.gui.config.title=Configuraci�n
-mclib.gui.config.tooltip=Configuraci�n de los mods
-mclib.gui.config.reload_tooltip=Recargar configuraci�n desde el archivo...
-mclib.gui.config.request_tooltip=Switch between server and client side configuration...
-mclib.gui.keys.list=Lista de combinaci�n de teclas
+mclib.gui.graph.help=Clic en este botón para ir a una página web que documenta las características de la siguiente calculadora gráfica.\n\nExpressions used here, también puede ser usada en el modificador matemático de Aperture en la evaluación de expresiones matemáticas de Commander dentro de los comandos.\n\nEsta calculadora gráfica proporciona solo una variable "x" que es una coordenada horizontal en la que puedes conectarte y=x (aka f(x))funciones gráficas.
+mclib.gui.config.title=Configuración
+mclib.gui.config.tooltip=Configuración de los mods
+mclib.gui.config.reload_tooltip=Actualizar configuración desde el archivo...
+mclib.gui.config.request_tooltip=Cambiar entre la configuración del lado del servidor y del cliente...
+mclib.gui.keys.list=Lista de combinación de teclas
 
 mclib.gui.transforms.x=X
 mclib.gui.transforms.y=Y
@@ -32,47 +32,47 @@ mclib.gui.transforms.z=Z
 mclib.gui.transforms.translate=Trasladar
 mclib.gui.transforms.scale=Escala
 mclib.gui.transforms.rotate=Rotar
-mclib.gui.transforms.context.copy=Copy transformations
-mclib.gui.transforms.context.paste=Paste transformations
-mclib.gui.transforms.context.paste_translation=Paste translation
-mclib.gui.transforms.context.paste_scale=Paste scale
-mclib.gui.transforms.context.paste_rotation=Paste rotation
-mclib.gui.transforms.context.reset=Reset transformation
+mclib.gui.transforms.context.copy=Copiar transformaciones
+mclib.gui.transforms.context.paste=Pegar transformaciones
+mclib.gui.transforms.context.paste_translation=Pegar traslación
+mclib.gui.transforms.context.paste_scale=Pegar escala
+mclib.gui.transforms.context.paste_rotation=Pegar rotación
+mclib.gui.transforms.context.reset=Reiniciar transformación
 
 mclib.gui.keyframes.tick=Tick
 mclib.gui.keyframes.value=Valor
-mclib.gui.keyframes.context.maximize=View all keyframes
-mclib.gui.keyframes.context.select_all=Select all
+mclib.gui.keyframes.context.maximize=Ver todos los fotogramas claves
+mclib.gui.keyframes.context.select_all=Seleccionar todos
 mclib.gui.keyframes.context.remove=Remover fotograma clave (s)
-mclib.gui.keyframes.context.copy=Copy keyframes
-mclib.gui.keyframes.context.paste=Paste copied keyframes
+mclib.gui.keyframes.context.copy=Copiar fotogramas claves
+mclib.gui.keyframes.context.paste=Pegar fotogramas claves
 mclib.gui.keyframes.context.to_left=Cambiar a palancas izquierdas
 mclib.gui.keyframes.context.to_main=Cambiar a palancas principales
 mclib.gui.keyframes.context.to_right=Cambiar a palancas derechas
 
-mclib.gui.multiskin.color=With this color element, you can adjust color (RGB) channels. It works best with white/grayscale images.
-mclib.gui.multiskin.scale=Scale
-mclib.gui.multiskin.scale_to_largest=Scale to largest
-mclib.gui.multiskin.shift=Shift
-mclib.gui.multiskin.pixelate=Pixelate
-mclib.gui.multiskin.erase=Erase
-mclib.gui.multiskin.erase_tooltip=This feature allows to using current skin as difference mask, meaning, any opaque pixels will erase pixels of all skins underneath it.
-mclib.gui.multiskin.custom_size=Custom size
-mclib.gui.multiskin.auto_size=Auto size
-mclib.gui.multiskin.auto_size_tooltip=When enabled, it will use texture's original size, otherwise custom size provided below. 
-mclib.gui.multiskin.size_w=Custom width
-mclib.gui.multiskin.size_h=Custom height
+mclib.gui.multiskin.color=Con este elemento de color, puede ajustar los canales de color (RGB). Funciona mejor con imágenes en blanco/escala de grises.
+mclib.gui.multiskin.scale=Escala
+mclib.gui.multiskin.scale_to_largest=Escalar al más grande
+mclib.gui.multiskin.shift=Cambio
+mclib.gui.multiskin.pixelate=Pixelar
+mclib.gui.multiskin.erase=Borrar
+mclib.gui.multiskin.erase_tooltip=Esta función permite usar la máscara actual como máscara de diferencia, lo que significa que cualquier píxel opaco borrará los píxeles de todas las máscaras que se encuentran debajo.
+mclib.gui.multiskin.custom_size=Tamaño personalizado
+mclib.gui.multiskin.auto_size=Tamaño automático
+mclib.gui.multiskin.auto_size_tooltip=Cuando está habilitado, utilizará el tamaño original de la textura; de lo contrario, el tamaño personalizado se proporciona a continuación. 
+mclib.gui.multiskin.size_w=Ancho personalizado
+mclib.gui.multiskin.size_h=Altura personalizada
 
-mclib.gui.color.favorite=Favorite colors
-mclib.gui.color.recent=Recent colors
+mclib.gui.color.favorite=Colores favoritos
+mclib.gui.color.recent=Colores recientes
 
-mclib.gui.color.context.favorites.add=Add to favorites
-mclib.gui.color.context.favorites.remove=Remove from favorites
+mclib.gui.color.context.favorites.add=Agregar a fovaritos
+mclib.gui.color.context.favorites.remove=Eliminar de favoritos
 
-mclib.gui.item_slot.context.copy=Copy item's NBT
-mclib.gui.item_slot.context.paste=Paste item NBT
-mclib.gui.item_slot.context.drop=Drop the item down
-mclib.gui.item_slot.context.clear=Clear the item
+mclib.gui.item_slot.context.copy=Copiar NBT del artículo
+mclib.gui.item_slot.context.paste=Pegar elemento NBT
+mclib.gui.item_slot.context.drop=Soltar el ítem
+mclib.gui.item_slot.context.clear=Borrar el ítem
 
 # Config
 mclib.config.title=McLib
@@ -83,29 +83,29 @@ mclib.config.appearance.tooltip=Opciones generales con respecto a la apariencia 
 mclib.config.appearance.primary_color=Color principal
 mclib.config.comments.appearance.primary_color=El color que es usado en todo el sistema de la GUI
 mclib.config.appearance.enable_borders=Activar los bordes de los botones
-mclib.config.comments.appearance.enable_borders=�Los botones y otros elementos deber�an tener bordes?
-mclib.config.appearance.enable_checkbox_rendering=Activar Casillas de verificaci�n
-mclib.config.comments.appearance.enable_checkbox_rendering=Activa la representaci�n de Casillas de verificaci�n en lugar de Alternar el elemento (seg�n el gusto de cada usuario)
+mclib.config.comments.appearance.enable_borders=¿Los botones y otros elementos deberían tener bordes?
+mclib.config.appearance.enable_checkbox_rendering=Activar Casillas de verificación
+mclib.config.comments.appearance.enable_checkbox_rendering=Activa la visualización de Casillas de verificación en lugar de Alternar el elemento (según el gusto de cada usuario)
 mclib.config.appearance.enable_trackpad_increments=Trackpad increments
 mclib.config.comments.appearance.enable_trackpad_increments=Enable < and > buttons on the trackpad field (which increment the trackpad value)
-mclib.config.appearance.enable_grid_rendering=Activar Piso de cuadr�cula
-mclib.config.comments.appearance.enable_grid_rendering=Activa la representaci�n de Cuadr�culas en lugar del Bloque de c�sped
+mclib.config.appearance.enable_grid_rendering=Activar Piso de cuadrículas
+mclib.config.comments.appearance.enable_grid_rendering=Activa la visualización de cuadrículas en lugar de un bloque de césped
 mclib.config.appearance.user_interface_scale=Escala de la GUI
-mclib.config.comments.appearance.user_interface_scale=Escala de la GUI para los mods de McHorse en lugar de la escala de la GUI de la Configuraci�n de video. Si se establece en 0, utilizar� la configuraci�n de escala de la GUI de Minecraft
-mclib.config.appearance.tooltip_style=Tooltip style
-mclib.config.comments.appearance.tooltip_style=This option allows to change GUI tooltip style 
+mclib.config.comments.appearance.user_interface_scale=Escala de la GUI para los mods de McHorse en lugar de la escala de la GUI de la Configuración de video. Si se establece en 0, utilizará la configuración de escala de la GUI de Minecraft
+mclib.config.appearance.tooltip_style=Estilo de información sobre herramientas
+mclib.config.comments.appearance.tooltip_style=Esta opción permite cambiar el estilo de información sobre herramientas de la GUI
 
 mclib.config.tutorials.title=Opciones para los tutoriales
-mclib.config.tutorials.tooltip=Esta categor�a proporciona opciones que son �tiles para hacer videos tutoriales
+mclib.config.tutorials.tooltip=Esta categoría proporciona opciones que son útiles para hacer videos tutoriales
 
-mclib.config.tutorials.enable_mouse_rendering=Activar representaci�n del cursor del mouse
-mclib.config.comments.tutorials.enable_mouse_rendering=Activa la representaci�n del cursor del mouse. Es muy �til cuando no aparece el cursor del mouse mientras se graban tutoriales con el mod Minema
-mclib.config.tutorials.enable_mouse_buttons_rendering=Mouse buttons
-mclib.config.comments.tutorials.enable_mouse_buttons_rendering=Enable rendering of the mouse button presses and mouse wheel scrolling. It's very useful for tutorials when they're recorded with Minema mod and mouse button presses or wheel scrolling are not visible
+mclib.config.tutorials.enable_mouse_rendering=Activar visualización del cursor del mouse
+mclib.config.comments.tutorials.enable_mouse_rendering=Activa la representación del cursor del mouse. Es muy útil cuando no aparece el cursor del mouse mientras se graban tutoriales con el mod Minema
+mclib.config.tutorials.enable_mouse_buttons_rendering=Botones del mouse
+mclib.config.comments.tutorials.enable_mouse_buttons_rendering=Habilita la visualización de los clics del del mouse y el desplazamiento de la rueda. Es muy útil para los tutoriales cuando se graban con Minema mod.
 mclib.config.tutorials.enable_keystrokes_rendering=Activar Pulsaciones de teclas
-mclib.config.comments.tutorials.enable_keystrokes_rendering=Activa la representaci�n de Pulsaciones de teclas. Es muy �til cuando se quiere mostrar en un tutorial las teclas que se est�n usando
+mclib.config.comments.tutorials.enable_keystrokes_rendering=Activa la visualización de las pulsaciones de las teclas. Es muy útil cuando se quiere mostrar en un tutorial las teclas que se estén usando
 mclib.config.tutorials.keystroke_offset=Desplazamiento de Pulsaciones de teclas
-mclib.config.comments.tutorials.keystroke_offset=Permite configurar a cu�ntos p�xeles de la esquina se dibujar� la l�nea de pulsaci�n
+mclib.config.comments.tutorials.keystroke_offset=Permite configurar a cuántos píxeles de la esquina se dibujará la línea de pulsación
 mclib.config.tutorials.keystroke_position=Posici�n de Pulsaciones de teclas
 mclib.config.comments.tutorials.keystroke_position= Permite cambiar la esquina de la l�nea de Pulsaciones de teclas
 
