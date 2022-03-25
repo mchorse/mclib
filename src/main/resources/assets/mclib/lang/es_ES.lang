@@ -6,12 +6,12 @@ key.mclib.dashboard=Tablero
 mclib.gui.ok=Ok
 mclib.gui.cancel=Cancelar
 mclib.gui.none=(ninguno)
-mclib.gui.multi_skin=Skin m�ltilpe
+mclib.gui.multi_skin=Skin múltilpe
 mclib.gui.no_data=Datos no disponibles...
 mclib.gui.open_folder=Abrir carpeta
 mclib.gui.pick_texture=Seleccionar textura
 
-mclib.gui.context.multi_skin.copy=Copy texture location
+mclib.gui.context.multi_skin.copy=Copiar ubicación de textura
 mclib.gui.context.multi_skin.paste=Paste copied texture location
 
 # Don't remove space on the end!
