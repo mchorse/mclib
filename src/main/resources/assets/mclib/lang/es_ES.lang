@@ -87,7 +87,7 @@ mclib.config.comments.appearance.enable_borders=¿Los botones y otros elementos 
 mclib.config.appearance.enable_checkbox_rendering=Activar Casillas de verificación
 mclib.config.comments.appearance.enable_checkbox_rendering=Activa la visualización de Casillas de verificación en lugar de Alternar el elemento (según el gusto de cada usuario)
 mclib.config.appearance.enable_trackpad_increments=Incrementa el trackpad
-mclib.config.comments.appearance.enable_trackpad_increments=Activa < and > los botones en el campo trackpad (que incrementa el valor del trackpad)
+mclib.config.comments.appearance.enable_trackpad_increments=Activa < and > los botones en el campo trackpad (lo cual incrementa el valor del trackpad)
 mclib.config.appearance.enable_grid_rendering=Activar Piso de cuadrículas
 mclib.config.comments.appearance.enable_grid_rendering=Activa la visualización de cuadrículas en lugar de un bloque de césped
 mclib.config.appearance.user_interface_scale=Escala de la GUI
@@ -187,7 +187,7 @@ mclib.interpolations.bounce=Rebotar
 # Feel free to add your own tips. If there is no tip, then leave it empty.
 # DO NOT REMOVE THESE LINES!
 
-mclib.interpolations.tooltips.linearEsta interpolación va a una velocidad constante de A a B. Es útil para rotaciones continuas y movimientos lentos.
+mclib.interpolations.tooltips.linear=Esta interpolación va a una velocidad constante de A a B. Es útil para rotaciones continuas y movimientos lentos.
 mclib.interpolations.tooltips.quad_in=
 mclib.interpolations.tooltips.quad_out=
 mclib.interpolations.tooltips.quad_inout=Es más útil para la animación de poses que denota un grado de movimiento aún más perezoso que Exponencial o Cúbico Adentro/afuera.
@@ -202,7 +202,7 @@ mclib.interpolations.tooltips.back_in=
 mclib.interpolations.tooltips.back_out=
 mclib.interpolations.tooltips.back_inout=Se puede utilizar para balanceo y movimiento de animación de pose natural.
 mclib.interpolations.tooltips.elastic_in=
-mclib.interpolations.tooltips.elastic_outEs útil para movimientos de dibujos animados nerviosos.
+mclib.interpolations.tooltips.elastic_out=Es útil para movimientos de dibujos animados nerviosos.
 mclib.interpolations.tooltips.elastic_inout=
 mclib.interpolations.tooltips.bounce_in=
 mclib.interpolations.tooltips.bounce_out=Es útil para crear una animación de algo que cae al suelo y rebota un par de veces.
