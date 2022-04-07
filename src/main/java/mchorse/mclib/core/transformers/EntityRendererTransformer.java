@@ -1,27 +1,62 @@
 package mchorse.mclib.core.transformers;
 
 import mchorse.mclib.utils.coremod.ClassMethodTransformer;
+import mchorse.mclib.utils.coremod.ClassTransformer;
 import mchorse.mclib.utils.coremod.CoreClassTransformer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 
-public class EntityRendererTransformer extends ClassMethodTransformer
+public class EntityRendererTransformer extends ClassTransformer
 {
-    public EntityRendererTransformer()
+    @Override
+    public void process(String name, ClassNode node)
     {
-        this.mcp = "updateCameraAndRender";
-        this.mcpSign = "(FJ)V";
-        this.notch = "a";
-        this.notchSign = "(FJ)V";
+        for (MethodNode methodNode : node.methods)
+        {
+            if (methodNode.name.equals(this.checkName(methodNode, "a", "(FJ)V", "updateCameraAndRender", "(FJ)V")))
+            {
+                this.processUpdateCameraAndRender(methodNode);
+            }
+            else if(methodNode.name.equals(this.checkName(methodNode, "a", "(IFJ)V", "renderWorldPass", "(IFJ)V")))
+            {
+                this.processRenderWorldPass(methodNode);
+            }
+        }
     }
 
-    @Override
-    public void processMethod(String name, MethodNode method)
+    public void processRenderWorldPass(MethodNode method)
+    {
+        ListIterator<AbstractInsnNode> iterator = method.instructions.iterator();
+
+        while (iterator.hasNext())
+        {
+            AbstractInsnNode currentNode = iterator.next();
+
+            if (currentNode instanceof MethodInsnNode)
+            {
+                /* credit goes to MiaoNLI for discovering this possibility and implementing it in Minema */
+
+                MethodInsnNode mnode = (MethodInsnNode) currentNode;
+                if ((mnode.name.equals("a") || mnode.name.equals("setupCameraTransform")) && mnode.desc.equals("(FI)V"))
+                {
+                    iterator.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "mchorse/mclib/utils/MatrixUtils", "ASMAfterCamera", "()V", false));
+
+                    System.out.println("McLib: successfully patched renderWorldPass!");
+
+                    break;
+                }
+            }
+        }
+    }
+
+    public void processUpdateCameraAndRender(MethodNode method)
     {
         Iterator<AbstractInsnNode> it = method.instructions.iterator();
         AbstractInsnNode pre = null;

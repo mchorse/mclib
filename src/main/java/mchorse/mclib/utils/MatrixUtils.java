@@ -1,5 +1,7 @@
 package mchorse.mclib.utils;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -8,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import javax.vecmath.*;
+import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 
 @SideOnly(Side.CLIENT)
@@ -28,6 +31,15 @@ public class MatrixUtils
      */
     public static Matrix4f matrix;
 
+    private static final DoubleBuffer doubleBuffer = BufferUtils.createDoubleBuffer(16);
+    private static final double[] doubles = new double[16];
+    private static final Matrix4d camera = new Matrix4d();
+
+    public Matrix4d getCameraMatrix()
+    {
+        return new Matrix4d(camera);
+    }
+
     /**
      * Read OpenGL's model view matrix
      */
@@ -43,9 +55,37 @@ public class MatrixUtils
         return matrix4f;
     }
 
+    /**
+     * This method is called by the ASMAfterCamera method. It saves the camera modelview matrix after the camera is set up.
+     * The camera matrix will be used to calculate global transformations of models.
+     * Thank you to MiaoNLI for discovering this possibility.
+     */
+    private static void readCamera()
+    {
+        doubleBuffer.clear();
+        GL11.glGetDouble(GL11.GL_MODELVIEW_MATRIX, doubleBuffer);
+        doubleBuffer.get(doubles);
+        camera.set(doubles);
+        camera.transpose();
+    }
+
     public static Matrix4f readModelView()
     {
         return readModelView(new Matrix4f());
+    }
+
+    public static Matrix4d readModelViewDouble()
+    {
+        doubleBuffer.clear();
+        GL11.glGetDouble(GL11.GL_MODELVIEW_MATRIX, doubleBuffer);
+        doubleBuffer.get(doubles);
+
+        Matrix4d matrix4d = new Matrix4d();
+
+        matrix4d.set(doubles);
+        matrix4d.transpose();
+
+        return matrix4d;
     }
 
     /**
@@ -94,6 +134,11 @@ public class MatrixUtils
         }
 
         return false;
+    }
+
+    public static void ASMAfterCamera()
+    {
+        readCamera();
     }
 
     public static void releaseMatrix()
@@ -188,6 +233,64 @@ public class MatrixUtils
         rotation.mul(rot);
 
         return rotation;
+    }
+
+    /**
+     * Calculates the current global transformations
+     * @return Matrix4d array {translation, rotation, scale} or null if occurred was an exception during inverting the camera matrix.
+     */
+    public static Matrix4d[] getTransformation()
+    {
+        Matrix4d parent = new Matrix4d(camera);
+        Matrix4d translation = new Matrix4d();
+        Matrix4d rotation = new Matrix4d();
+        Matrix4d scale = new Matrix4d();
+
+        translation.setIdentity();
+        rotation.setIdentity();
+        scale.setIdentity();
+
+        try
+        {
+            parent.invert();
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+
+        parent.mul(parent, readModelViewDouble());
+
+        Entity renderViewEntity = Minecraft.getMinecraft().getRenderViewEntity();
+        double renderViewX = Interpolations.lerp(renderViewEntity.lastTickPosX, renderViewEntity.posX, Minecraft.getMinecraft().getRenderPartialTicks());
+        double renderViewY = Interpolations.lerp(renderViewEntity.lastTickPosY, renderViewEntity.posY, Minecraft.getMinecraft().getRenderPartialTicks());
+        double renderViewZ = Interpolations.lerp(renderViewEntity.lastTickPosZ, renderViewEntity.posZ, Minecraft.getMinecraft().getRenderPartialTicks());
+
+        Matrix4d cameraTrans = new Matrix4d();
+
+        cameraTrans.setIdentity();
+        cameraTrans.setTranslation(new Vector3d(renderViewX, renderViewY, renderViewZ));
+
+        parent.mul(cameraTrans, parent);
+
+        Vector4d rx = new Vector4d(parent.m00, parent.m10, parent.m20, 0);
+        Vector4d ry = new Vector4d(parent.m01, parent.m11, parent.m21, 0);
+        Vector4d rz = new Vector4d(parent.m02, parent.m12, parent.m22, 0);
+
+        rx.normalize();
+        ry.normalize();
+        rz.normalize();
+        rotation.setRow(0, rx);
+        rotation.setRow(1, ry);
+        rotation.setRow(2, rz);
+
+        translation.setTranslation(new Vector3d(parent.m03, parent.m13, parent.m23));
+
+        scale.m00 = Math.sqrt(parent.m00 * parent.m00 + parent.m10 * parent.m10 + parent.m20 * parent.m20);
+        scale.m11 = Math.sqrt(parent.m01 * parent.m01 + parent.m11 * parent.m11 + parent.m21 * parent.m21);
+        scale.m22 = Math.sqrt(parent.m02 * parent.m02 + parent.m12 * parent.m12 + parent.m22 * parent.m22);
+
+        return new Matrix4d[]{translation, rotation, scale};
     }
 
 
