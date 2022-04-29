@@ -527,7 +527,7 @@ public class MathBuilder
         /* Handle inversion of the value */
         if (first.equals("-"))
         {
-            return new Negative(this.parseSymbols(args));
+            return new Negative(new Group(this.parseSymbols(args)));
         }
 
         if (first.startsWith("-") && first.length() > 1)
