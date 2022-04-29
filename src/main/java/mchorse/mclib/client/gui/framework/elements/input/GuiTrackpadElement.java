@@ -248,7 +248,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     public void setValue(double value)
     {
         this.setValueInternal(value);
-        this.field.setText(this.integer ? String.valueOf((int) value) : FORMAT.format(value));
+        this.field.setText(this.integer ? String.valueOf((int) this.value) : FORMAT.format(this.value));
         this.field.setCursorPositionZero();
     }
 
