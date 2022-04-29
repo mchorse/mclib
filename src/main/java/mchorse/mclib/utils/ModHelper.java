@@ -19,9 +19,16 @@ public class ModHelper
             return null;
         }
 
-        String jar = caller.getProtectionDomain().getCodeSource().getLocation().getPath().substring(5);
+        String jar = caller.getProtectionDomain().getCodeSource().getLocation().getPath();
 
-        jar = jar.substring(0, jar.lastIndexOf('!'));
+        if (jar.endsWith(".class"))
+        {
+            jar = jar.substring(0, jar.lastIndexOf("/bin/") + 4);
+        }
+        else
+        {
+            jar = jar.substring(5, jar.lastIndexOf('!'));
+        }
 
         try
         {
