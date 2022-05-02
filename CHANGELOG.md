@@ -1,3 +1,23 @@
+## Version 2.4
+
+This update was made by MiaoNLI, exceptions are mentioned at the respective items.
+
+* Keyframe panel
+    * Tracking cursor when zooming
+* Transformations
+    * Add delta rotation (not recommanded for animation)
+* Model Renderer
+    * Add flight mode
+    * Add fields to support the Immersive Editor of Blockbuster
+* Config
+    * Add config of keybinds
+* Rendering
+    * Provide a class to make other mods compatible with Optifine
+* File Encoding
+    * UTF-8 file encoding is used by default
+* Capture the modelview matrix after the camera has been build (by Chryfi)
+* Added a new transformations method that uses the captured camera matrix to dynamically calculate the transformations (by Chryfi)
+
 ## Version 2.3.7
 
 This update was made by Chryfi. It is for the Blockbuster `2.4.1` release.
