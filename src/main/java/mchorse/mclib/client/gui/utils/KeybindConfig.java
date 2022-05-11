@@ -77,8 +77,11 @@ public class KeybindConfig extends Config
 
             this.values.put(mod.id, mod);
         }
+        ModKeybinds modKeybinds = new ModKeybinds(null);
 
-        this.values.put("", new ModKeybinds(null));
+        modKeybinds.setConfig(this);
+
+        this.values.put("", modKeybinds);
 
         ConfigParser.fromJson(this, this.file);
     }
