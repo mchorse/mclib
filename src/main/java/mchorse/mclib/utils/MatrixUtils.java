@@ -35,7 +35,7 @@ public class MatrixUtils
     private static final double[] doubles = new double[16];
     private static final Matrix4d camera = new Matrix4d();
 
-    public Matrix4d getCameraMatrix()
+    public static Matrix4d getCameraMatrix()
     {
         return new Matrix4d(camera);
     }
@@ -102,7 +102,7 @@ public class MatrixUtils
     }
 
     /**
-     * Private method to fill the float array with values from the matrix
+     * method to fill the float array with values from the matrix
      */
     public static void matrixToFloat(float[] floats, Matrix4f matrix4f)
     {
@@ -123,6 +123,29 @@ public class MatrixUtils
         floats[14] = matrix4f.m32;
         floats[15] = matrix4f.m33;
     }
+
+    public static void matrixToFloatBuffer(FloatBuffer floatBuffer, Matrix4f matrix)
+    {
+        floatBuffer.put(matrix.m00);
+        floatBuffer.put(matrix.m01);
+        floatBuffer.put(matrix.m02);
+        floatBuffer.put(matrix.m03);
+        floatBuffer.put(matrix.m10);
+        floatBuffer.put(matrix.m11);
+        floatBuffer.put(matrix.m12);
+        floatBuffer.put(matrix.m13);
+        floatBuffer.put(matrix.m20);
+        floatBuffer.put(matrix.m21);
+        floatBuffer.put(matrix.m22);
+        floatBuffer.put(matrix.m23);
+        floatBuffer.put(matrix.m30);
+        floatBuffer.put(matrix.m31);
+        floatBuffer.put(matrix.m32);
+        floatBuffer.put(matrix.m33);
+
+        floatBuffer.flip();
+    }
+
 
     public static boolean captureMatrix()
     {
@@ -237,7 +260,7 @@ public class MatrixUtils
 
     /**
      * Calculates the current global transformations
-     * @return Matrix4d array {translation, rotation, scale} or null if occurred was an exception during inverting the camera matrix.
+     * @return Matrix4d array {translation, rotation, scale} or null if singular matrix exception occured during inverting the camera matrix.
      */
     public static Matrix4d[] getTransformation()
     {
@@ -254,7 +277,7 @@ public class MatrixUtils
         {
             parent.invert();
         }
-        catch (Exception e)
+        catch (SingularMatrixException e)
         {
             return null;
         }
@@ -262,14 +285,13 @@ public class MatrixUtils
         parent.mul(parent, readModelViewDouble());
 
         Entity renderViewEntity = Minecraft.getMinecraft().getRenderViewEntity();
-        double renderViewX = Interpolations.lerp(renderViewEntity.lastTickPosX, renderViewEntity.posX, Minecraft.getMinecraft().getRenderPartialTicks());
-        double renderViewY = Interpolations.lerp(renderViewEntity.lastTickPosY, renderViewEntity.posY, Minecraft.getMinecraft().getRenderPartialTicks());
-        double renderViewZ = Interpolations.lerp(renderViewEntity.lastTickPosZ, renderViewEntity.posZ, Minecraft.getMinecraft().getRenderPartialTicks());
 
         Matrix4d cameraTrans = new Matrix4d();
 
         cameraTrans.setIdentity();
-        cameraTrans.setTranslation(new Vector3d(renderViewX, renderViewY, renderViewZ));
+        cameraTrans.m03 = Interpolations.lerp(renderViewEntity.lastTickPosX, renderViewEntity.posX, Minecraft.getMinecraft().getRenderPartialTicks());
+        cameraTrans.m13 = Interpolations.lerp(renderViewEntity.lastTickPosY, renderViewEntity.posY, Minecraft.getMinecraft().getRenderPartialTicks());
+        cameraTrans.m23 = Interpolations.lerp(renderViewEntity.lastTickPosZ, renderViewEntity.posZ, Minecraft.getMinecraft().getRenderPartialTicks());
 
         parent.mul(cameraTrans, parent);
 
