@@ -7,6 +7,11 @@ public class MathUtils
         return x < min ? min : (x > max ? max : x);
     }
 
+    public static<T extends Comparable<T>> T clamp(T x, T min, T max)
+    {
+        return x.compareTo(min) < 0 ? min : (x.compareTo(max) > 0 ? max : x);
+    }
+
     public static float clamp(float x, float min, float max)
     {
         return x < min ? min : (x > max ? max : x);
