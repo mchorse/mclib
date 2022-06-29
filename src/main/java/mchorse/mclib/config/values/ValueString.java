@@ -30,21 +30,6 @@ public class ValueString extends GenericValue<String> implements IServerValue, I
     }
 
     @Override
-    public Object getValue()
-    {
-        return this.get();
-    }
-
-    @Override
-    public void setValue(Object value)
-    {
-        if (value instanceof String)
-        {
-            this.set((String) value);
-        }
-    }
-
-    @Override
     public void resetServer()
     {
         this.serverValue = null;

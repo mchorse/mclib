@@ -35,21 +35,6 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
     }
 
     @Override
-    public Object getValue()
-    {
-        return this.get();
-    }
-
-    @Override
-    public void setValue(Object value)
-    {
-        if (value instanceof Long)
-        {
-            this.set((Long) value);
-        }
-    }
-
-    @Override
     public void resetServer()
     {
         this.serverValue = null;
@@ -77,12 +62,6 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
     public void valueFromJSON(JsonElement element)
     {
         this.set(element.getAsLong());
-    }
-
-    @Override
-    public JsonElement valueToJSON()
-    {
-        return new JsonPrimitive(this.value);
     }
 
     @Override

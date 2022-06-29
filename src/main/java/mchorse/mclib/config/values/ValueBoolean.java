@@ -26,21 +26,6 @@ public class ValueBoolean extends GenericValue<Boolean> implements IServerValue,
     }
 
     @Override
-    public Object getValue()
-    {
-        return this.get();
-    }
-
-    @Override
-    public void setValue(Object value)
-    {
-        if (value instanceof Boolean)
-        {
-            this.set((Boolean) value);
-        }
-    }
-
-    @Override
     protected Boolean getNullValue()
     {
         return false;
