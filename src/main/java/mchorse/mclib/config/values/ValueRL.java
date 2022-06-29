@@ -45,21 +45,6 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
         return !this.useServer ? this.value : this.serverValue;
     }
 
-    @Override
-    public Object getValue()
-    {
-        return this.get();
-    }
-
-    @Override
-    public void setValue(Object value)
-    {
-        if (value instanceof ResourceLocation)
-        {
-            this.set((ResourceLocation) value);
-        }
-    }
-
     public void set(String value)
     {
         this.set(RLUtils.create(value));

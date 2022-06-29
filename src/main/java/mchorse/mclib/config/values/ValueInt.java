@@ -44,27 +44,6 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
         super(id, defaultValue, min, max);
     }
 
-    @Override
-    public Object getValue()
-    {
-        return this.get();
-    }
-
-    @Override
-    public void setValue(Object value)
-    {
-        if (value instanceof Integer)
-        {
-            this.set((Integer) value);
-        }
-    }
-
-    @Override
-    protected Integer defaultValueType()
-    {
-        return 0;
-    }
-
     public void setColorValue(String value)
     {
         this.set(ColorUtils.parseColor(value));
@@ -169,12 +148,6 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     public void valueFromJSON(JsonElement element)
     {
         this.set(element.getAsInt());
-    }
-
-    @Override
-    public JsonElement valueToJSON()
-    {
-        return new JsonPrimitive(this.value);
     }
 
     @Override

@@ -34,21 +34,6 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
     }
 
     @Override
-    public Object getValue()
-    {
-        return this.get();
-    }
-
-    @Override
-    public void setValue(Object value)
-    {
-        if (value instanceof Double)
-        {
-            this.set((Double) value);
-        }
-    }
-
-    @Override
     public void resetServer()
     {
         this.serverValue = null;
@@ -74,12 +59,6 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
     public void valueFromJSON(JsonElement element)
     {
         this.set(element.getAsDouble());
-    }
-
-    @Override
-    public JsonElement valueToJSON()
-    {
-        return new JsonPrimitive(this.value);
     }
 
     @Override

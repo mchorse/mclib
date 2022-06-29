@@ -35,21 +35,6 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     }
 
     @Override
-    public Object getValue()
-    {
-        return this.get();
-    }
-
-    @Override
-    public void setValue(Object value)
-    {
-        if (value instanceof Float)
-        {
-            this.set((Float) value);
-        }
-    }
-
-    @Override
     public void resetServer()
     {
         this.serverValue = null;
@@ -75,12 +60,6 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     public void valueFromJSON(JsonElement element)
     {
         this.set(element.getAsFloat());
-    }
-
-    @Override
-    public JsonElement valueToJSON()
-    {
-        return new JsonPrimitive(this.value);
     }
 
     @Override

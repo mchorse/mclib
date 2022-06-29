@@ -1,5 +1,7 @@
 package mchorse.mclib.config.values;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import mchorse.mclib.utils.MathUtils;
 
 import javax.annotation.Nonnull;
@@ -38,5 +40,11 @@ public abstract class GenericNumberValue<T extends Number & Comparable<T>> exten
     public T getMax()
     {
         return this.max;
+    }
+
+    @Override
+    public JsonElement valueToJSON()
+    {
+        return new JsonPrimitive(this.value);
     }
 }
