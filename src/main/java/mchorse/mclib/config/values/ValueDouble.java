@@ -9,7 +9,6 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfigPanel;
-import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,59 +16,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueDouble extends Value implements IServerValue, IConfigGuiProvider
+public class ValueDouble extends GenericNumberValue<Double> implements IServerValue, IConfigGuiProvider
 {
-    private double value;
-    private double defaultValue;
-    private double min = Double.NEGATIVE_INFINITY;
-    private double max = Double.POSITIVE_INFINITY;
-
-    private Double serverValue;
-
     public ValueDouble(String id)
     {
-        super(id);
+        super(id, 0D, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 
     public ValueDouble(String id, double defaultValue)
     {
-        super(id);
-
-        this.defaultValue = defaultValue;
-
-        this.reset();
+        super(id, defaultValue, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 
     public ValueDouble(String id, double defaultValue, double min, double max)
     {
-        super(id);
-
-        this.defaultValue = defaultValue;
-        this.min = min;
-        this.max = max;
-
-        this.reset();
-    }
-
-    public double getMin()
-    {
-        return this.min;
-    }
-
-    public double getMax()
-    {
-        return this.max;
-    }
-
-    public double get()
-    {
-        return this.serverValue == null ? this.value : this.serverValue;
-    }
-
-    public void set(double value)
-    {
-        this.value = MathUtils.clamp(value, this.min, this.max);
-        this.saveLater();
+        super(id, defaultValue, min, max);
     }
 
     @Override
@@ -85,12 +46,6 @@ public class ValueDouble extends Value implements IServerValue, IConfigGuiProvid
         {
             this.set((Double) value);
         }
-    }
-
-    @Override
-    public void reset()
-    {
-        this.set(this.defaultValue);
     }
 
     @Override

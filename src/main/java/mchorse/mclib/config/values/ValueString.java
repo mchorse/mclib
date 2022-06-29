@@ -17,36 +17,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueString extends Value implements IServerValue, IConfigGuiProvider
+public class ValueString extends GenericValue<String> implements IServerValue, IConfigGuiProvider
 {
-    private String value = "";
-    private String defaultValue = "";
-
-    private String serverValue;
-
     public ValueString(String id)
     {
-        super(id);
+        super(id, "");
     }
 
     public ValueString(String id, String defaultValue)
     {
-        super(id);
-
-        this.defaultValue = defaultValue;
-
-        this.reset();
-    }
-
-    public String get()
-    {
-        return this.serverValue == null ? this.value : this.serverValue;
-    }
-
-    public void set(String value)
-    {
-        this.value = value;
-        this.saveLater();
+        super(id, defaultValue);
     }
 
     @Override
@@ -62,12 +42,6 @@ public class ValueString extends Value implements IServerValue, IConfigGuiProvid
         {
             this.set((String) value);
         }
-    }
-
-    @Override
-    public void reset()
-    {
-        this.set(this.defaultValue);
     }
 
     @Override

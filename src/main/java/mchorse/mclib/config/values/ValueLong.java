@@ -17,59 +17,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueLong extends Value implements IServerValue, IConfigGuiProvider
+public class ValueLong extends GenericNumberValue<Long> implements IServerValue, IConfigGuiProvider
 {
-    private long value;
-    private long defaultValue;
-    private long min = Long.MIN_VALUE;
-    private long max = Long.MAX_VALUE;
-
-    private Long serverValue;
-
     public ValueLong(String id)
     {
-        super(id);
+        super(id, 0L, Long.MIN_VALUE, Long.MAX_VALUE);
     }
 
     public ValueLong(String id, long defaultValue)
     {
-        super(id);
-
-        this.defaultValue = defaultValue;
-
-        this.reset();
+        super(id, defaultValue, Long.MIN_VALUE, Long.MAX_VALUE);
     }
 
     public ValueLong(String id, long defaultValue, long min, long max)
     {
-        super(id);
-
-        this.defaultValue = defaultValue;
-        this.min = min;
-        this.max = max;
-
-        this.reset();
-    }
-
-    public long getMin()
-    {
-        return this.min;
-    }
-
-    public long getMax()
-    {
-        return this.max;
-    }
-
-    public long get()
-    {
-        return this.serverValue == null ? this.value : this.serverValue;
-    }
-
-    public void set(long value)
-    {
-        this.value = MathUtils.clamp(value, this.min, this.max);
-        this.saveLater();
+        super(id, defaultValue, min, max);
     }
 
     @Override
@@ -85,12 +47,6 @@ public class ValueLong extends Value implements IServerValue, IConfigGuiProvider
         {
             this.set((Long) value);
         }
-    }
-
-    @Override
-    public void reset()
-    {
-        this.set(this.defaultValue);
     }
 
     @Override
@@ -120,7 +76,7 @@ public class ValueLong extends Value implements IServerValue, IConfigGuiProvider
     @Override
     public void valueFromJSON(JsonElement element)
     {
-        this.set(element.getAsInt());
+        this.set(element.getAsLong());
     }
 
     @Override
@@ -134,7 +90,7 @@ public class ValueLong extends Value implements IServerValue, IConfigGuiProvider
     {
         try
         {
-            this.set(Integer.parseInt(value));
+            this.set(Long.parseLong(value));
 
             return true;
         }

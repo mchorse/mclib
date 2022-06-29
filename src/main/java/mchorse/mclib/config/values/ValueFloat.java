@@ -17,59 +17,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueFloat extends Value implements IServerValue, IConfigGuiProvider
+public class ValueFloat extends GenericNumberValue<Float> implements IServerValue, IConfigGuiProvider
 {
-    private float value;
-    private float defaultValue;
-    private float min = Float.NEGATIVE_INFINITY;
-    private float max = Float.POSITIVE_INFINITY;
-
-    private Float serverValue;
-
     public ValueFloat(String id)
     {
-        super(id);
+        super(id, 0F, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
     }
 
     public ValueFloat(String id, float defaultValue)
     {
-        super(id);
-
-        this.defaultValue = defaultValue;
-
-        this.reset();
+        super(id, defaultValue, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
     }
 
     public ValueFloat(String id, float defaultValue, float min, float max)
     {
-        super(id);
-
-        this.defaultValue = defaultValue;
-        this.min = min;
-        this.max = max;
-
-        this.reset();
-    }
-
-    public float getMin()
-    {
-        return this.min;
-    }
-
-    public float getMax()
-    {
-        return this.max;
-    }
-
-    public float get()
-    {
-        return this.serverValue == null ? this.value : this.serverValue;
-    }
-
-    public void set(float value)
-    {
-        this.value = MathUtils.clamp(value, this.min, this.max);
-        this.saveLater();
+        super(id, defaultValue, min, max);
     }
 
     @Override
@@ -85,12 +47,6 @@ public class ValueFloat extends Value implements IServerValue, IConfigGuiProvide
         {
             this.set((Float) value);
         }
-    }
-
-    @Override
-    public void reset()
-    {
-        this.set(this.defaultValue);
     }
 
     @Override
