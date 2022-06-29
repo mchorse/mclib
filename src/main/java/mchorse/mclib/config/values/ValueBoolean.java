@@ -13,36 +13,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueBoolean extends Value implements IServerValue, IConfigGuiProvider
+public class ValueBoolean extends GenericValue<Boolean> implements IServerValue, IConfigGuiProvider
 {
-    private boolean value;
-    private boolean defaultValue;
-
-    private Boolean serverValue;
-
     public ValueBoolean(String id)
     {
-        super(id);
+        super(id, false);
     }
 
     public ValueBoolean(String id, boolean defaultValue)
     {
-        super(id);
-
-        this.defaultValue = defaultValue;
-
-        this.reset();
-    }
-
-    public boolean get()
-    {
-        return this.serverValue == null ? this.value : this.serverValue;
-    }
-
-    public void set(boolean value)
-    {
-        this.value = value;
-        this.saveLater();
+        super(id, defaultValue);
     }
 
     @Override
@@ -61,9 +41,9 @@ public class ValueBoolean extends Value implements IServerValue, IConfigGuiProvi
     }
 
     @Override
-    public void reset()
+    protected Boolean getNullValue()
     {
-        this.set(this.defaultValue);
+        return false;
     }
 
     @Override

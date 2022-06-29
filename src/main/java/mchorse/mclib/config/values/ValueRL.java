@@ -20,16 +20,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueRL extends Value implements IServerValue, IConfigGuiProvider
+public class ValueRL extends GenericValue<ResourceLocation> implements IServerValue, IConfigGuiProvider
 {
     @SideOnly(Side.CLIENT)
     public static GuiTexturePicker picker;
 
-    private ResourceLocation value;
-    private ResourceLocation defaultValue;
-
     private boolean useServer;
-    private ResourceLocation serverValue;
 
     public ValueRL(String id)
     {
@@ -43,15 +39,10 @@ public class ValueRL extends Value implements IServerValue, IConfigGuiProvider
         this.defaultValue = defaultValue;
     }
 
+    @Override
     public ResourceLocation get()
     {
         return !this.useServer ? this.value : this.serverValue;
-    }
-
-    public void set(ResourceLocation value)
-    {
-        this.value = value;
-        this.saveLater();
     }
 
     @Override
@@ -72,12 +63,6 @@ public class ValueRL extends Value implements IServerValue, IConfigGuiProvider
     public void set(String value)
     {
         this.set(RLUtils.create(value));
-    }
-
-    @Override
-    public void reset()
-    {
-        this.set(this.defaultValue);
     }
 
     @Override

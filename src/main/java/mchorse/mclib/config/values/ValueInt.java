@@ -24,61 +24,24 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ValueInt extends Value implements IServerValue, IConfigGuiProvider
+public class ValueInt extends GenericNumberValue<Integer> implements IServerValue, IConfigGuiProvider
 {
-    private int value;
-    private int defaultValue;
-    private int min = Integer.MIN_VALUE;
-    private int max = Integer.MAX_VALUE;
     private Subtype subtype = Subtype.INTEGER;
     private List<IKey> labels;
 
-    private Integer serverValue;
-
     public ValueInt(String id)
     {
-        super(id);
+        super(id, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     public ValueInt(String id, int defaultValue)
     {
-        super(id);
-
-        this.defaultValue = defaultValue;
-
-        this.reset();
+        super(id, defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     public ValueInt(String id, int defaultValue, int min, int max)
     {
-        super(id);
-
-        this.defaultValue = defaultValue;
-        this.min = min;
-        this.max = max;
-
-        this.reset();
-    }
-
-    public int getMin()
-    {
-        return this.min;
-    }
-
-    public int getMax()
-    {
-        return this.max;
-    }
-
-    public int get()
-    {
-        return this.serverValue == null ? this.value : this.serverValue;
-    }
-
-    public void set(int value)
-    {
-        this.value = MathUtils.clamp(value, this.min, this.max);
-        this.saveLater();
+        super(id, defaultValue, min, max);
     }
 
     @Override
@@ -94,6 +57,12 @@ public class ValueInt extends Value implements IServerValue, IConfigGuiProvider
         {
             this.set((Integer) value);
         }
+    }
+
+    @Override
+    protected Integer defaultValueType()
+    {
+        return 0;
     }
 
     public void setColorValue(String value)
@@ -139,17 +108,6 @@ public class ValueInt extends Value implements IServerValue, IConfigGuiProvider
         Collections.addAll(this.labels, labels);
 
         return this.subtype(Subtype.MODES);
-    }
-
-    public boolean hasChanged()
-    {
-        return this.value != this.defaultValue;
-    }
-
-    @Override
-    public void reset()
-    {
-        this.set(this.defaultValue);
     }
 
     @Override

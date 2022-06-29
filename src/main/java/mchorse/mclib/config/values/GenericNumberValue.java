@@ -1,0 +1,42 @@
+package mchorse.mclib.config.values;
+
+import mchorse.mclib.utils.MathUtils;
+
+import javax.annotation.Nonnull;
+
+public abstract class GenericNumberValue<T extends Number & Comparable<T>> extends GenericValue<T>
+{
+    protected T min;
+    protected T max;
+
+    public GenericNumberValue(String id, @Nonnull T defaultValue, @Nonnull T min, @Nonnull T max)
+    {
+        super(id, defaultValue);
+
+        this.min = min;
+        this.max = max;
+    }
+
+    @Override
+    public void set(T value)
+    {
+        this.value = MathUtils.clamp((value == null) ? this.getNullValue() : value, this.min, this.max);
+        this.saveLater();
+    }
+
+    @Override
+    protected T getNullValue()
+    {
+        return (T) new Byte((byte) 0);
+    }
+
+    public T getMin()
+    {
+        return this.min;
+    }
+
+    public T getMax()
+    {
+        return this.max;
+    }
+}
