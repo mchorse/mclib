@@ -2,10 +2,24 @@ package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import mchorse.mclib.utils.ICloneable;
 import mchorse.mclib.utils.MathUtils;
 
 import javax.annotation.Nonnull;
 
+/**
+ * GenericNumberValue can be used for the primitive datatype wrappers
+ * that extend the {@link Number} class and implement {@link Comparable}.
+ *
+ * <br><br>
+ * Subclasses need to override {@link #getNullValue()} to ensure
+ * that the internal values do not take the null state!
+ * <br>
+ * This means {@link #value}, {@link #defaultValue}, {@link #min} and {@link #max} shall never be null!
+ * <br>
+ * The variable {@link #serverValue} can be null.
+ * @param <T>
+ */
 public abstract class GenericNumberValue<T extends Number & Comparable<T>> extends GenericValue<T>
 {
     protected T min;
@@ -30,6 +44,10 @@ public abstract class GenericNumberValue<T extends Number & Comparable<T>> exten
         this.reset();
     }
 
+    /**
+     * The value will be clamped between {@link #min} and {@link #max}
+     * @param value
+     */
     @Override
     public void set(T value)
     {
