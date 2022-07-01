@@ -11,12 +11,14 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.utils.resources.RLUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,6 +57,12 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
     {
         this.useServer = false;
         this.serverValue = null;
+    }
+
+    @Override
+    public void reset()
+    {
+        this.set(RLUtils.clone(this.defaultValue));
     }
 
     @Override
@@ -104,6 +112,19 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
     }
 
     @Override
+    public void valueFromNBT(NBTBase tag)
+    {
+        this.set(RLUtils.create(tag));
+    }
+
+    @Override
+    @Nullable
+    public NBTBase valueToNBT()
+    {
+        return RLUtils.writeNbt(this.value);
+    }
+
+    @Override
     public boolean parseFromCommand(String value)
     {
         this.set(RLUtils.create(value));
@@ -133,7 +154,7 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
     @Override
     public void fromBytes(ByteBuf buffer)
     {
-        super.fromBytes(buffer);
+        superFromBytes(buffer);
 
         this.value = this.readRL(buffer);
         this.defaultValue = this.readRL(buffer);
@@ -154,7 +175,7 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
     @Override
     public void toBytes(ByteBuf buffer)
     {
-        super.toBytes(buffer);
+        superToBytes(buffer);
 
         this.writeRL(buffer, this.value);
         this.writeRL(buffer, this.defaultValue);
@@ -177,5 +198,17 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
     public String toString()
     {
         return this.value == null ? "" : this.value.toString();
+    }
+
+    @Override
+    public ValueRL clone()
+    {
+        ValueRL clone = new ValueRL(this.id);
+        clone.value = RLUtils.clone(this.value);
+        clone.defaultValue = RLUtils.clone(this.defaultValue);
+        clone.serverValue = RLUtils.clone(this.serverValue);
+        clone.useServer = this.useServer;
+
+        return clone;
     }
 }

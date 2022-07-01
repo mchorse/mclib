@@ -2,7 +2,7 @@ package mchorse.mclib.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class Color
+public class Color implements ICloneable<Color>
 {
     public float r;
     public float g;
@@ -82,6 +82,7 @@ public class Color
         return this;
     }
 
+    @Deprecated
     public Color copy()
     {
         return new Color().copy(this);
@@ -135,5 +136,11 @@ public class Color
         }
 
         return super.equals(obj);
+    }
+
+    @Override
+    public Color clone()
+    {
+        return new Color().copy(this);
     }
 }

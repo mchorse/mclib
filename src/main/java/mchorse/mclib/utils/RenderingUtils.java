@@ -1,28 +1,19 @@
 package mchorse.mclib.utils;
 
-import mchorse.mclib.client.render.VertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
-import javax.vecmath.Matrix3f;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.SingularMatrixException;
 import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
 import java.nio.FloatBuffer;
 
 public class RenderingUtils
 {
-    private static Matrix4f transformation;
     private static final FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
     /**

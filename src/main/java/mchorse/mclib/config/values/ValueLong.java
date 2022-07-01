@@ -11,6 +11,10 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTPrimitive;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagLong;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -41,6 +45,12 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
     }
 
     @Override
+    protected Long getNullValue()
+    {
+        return 0L;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
@@ -62,6 +72,21 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
     public void valueFromJSON(JsonElement element)
     {
         this.set(element.getAsLong());
+    }
+
+    @Override
+    public void valueFromNBT(NBTBase tag)
+    {
+        if (tag instanceof NBTPrimitive)
+        {
+            this.set(((NBTPrimitive) tag).getLong());
+        }
+    }
+
+    @Override
+    public NBTBase valueToNBT()
+    {
+        return new NBTTagLong(this.value);
     }
 
     @Override
@@ -100,7 +125,7 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
     @Override
     public void fromBytes(ByteBuf buffer)
     {
-        super.fromBytes(buffer);
+        superFromBytes(buffer);
 
         this.value = buffer.readLong();
         this.defaultValue = buffer.readLong();
@@ -111,12 +136,21 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
     @Override
     public void toBytes(ByteBuf buffer)
     {
-        super.toBytes(buffer);
+        superToBytes(buffer);
 
         buffer.writeLong(this.value);
         buffer.writeLong(this.defaultValue);
         buffer.writeLong(this.min);
         buffer.writeLong(this.max);
+    }
+
+    @Override
+    public ValueLong clone()
+    {
+        ValueLong clone = new ValueLong(this.id, this.defaultValue, this.min, this.max);
+        clone.value = this.value;
+
+        return clone;
     }
 
     @Override

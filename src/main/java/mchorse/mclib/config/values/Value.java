@@ -323,6 +323,15 @@ public class Value implements IByteBufSerializable
     @Override
     public void fromBytes(ByteBuf buffer)
     {
+        this.superFromBytes(buffer);
+    }
+
+    /**
+     * For internal usage in subclasses of {@link GenericValue}.
+     * @param buffer
+     */
+    protected final void superFromBytes(ByteBuf buffer)
+    {
         this.visible = buffer.readBoolean();
         this.clientSide = buffer.readBoolean();
 
@@ -343,6 +352,15 @@ public class Value implements IByteBufSerializable
 
     @Override
     public void toBytes(ByteBuf buffer)
+    {
+        this.superToBytes(buffer);
+    }
+
+    /**
+     * For internal usage in subclasses of {@link GenericValue}.
+     * @param buffer
+     */
+    protected final void superToBytes(ByteBuf buffer)
     {
         buffer.writeBoolean(this.visible);
         buffer.writeBoolean(this.clientSide);

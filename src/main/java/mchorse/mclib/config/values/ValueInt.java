@@ -1,7 +1,6 @@
 package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiCirculateElement;
@@ -14,8 +13,10 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.client.gui.utils.keys.KeyParser;
 import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.utils.ColorUtils;
-import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTPrimitive;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -96,6 +97,12 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     }
 
     @Override
+    protected Integer getNullValue()
+    {
+        return 0;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
@@ -151,6 +158,21 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     }
 
     @Override
+    public void valueFromNBT(NBTBase tag)
+    {
+        if (tag instanceof NBTPrimitive)
+        {
+            this.value = ((NBTPrimitive) tag).getInt();
+        }
+    }
+
+    @Override
+    public NBTBase valueToNBT()
+    {
+        return new NBTTagInt(this.value);
+    }
+
+    @Override
     public boolean parseFromCommand(String value)
     {
         try
@@ -193,7 +215,7 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     @Override
     public void fromBytes(ByteBuf buffer)
     {
-        super.fromBytes(buffer);
+        superFromBytes(buffer);
 
         this.value = buffer.readInt();
         this.defaultValue = buffer.readInt();
@@ -221,7 +243,7 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     @Override
     public void toBytes(ByteBuf buffer)
     {
-        super.toBytes(buffer);
+        superToBytes(buffer);
 
         buffer.writeInt(this.value);
         buffer.writeInt(this.defaultValue);
@@ -251,6 +273,15 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
         }
 
         return Integer.toString(this.value);
+    }
+
+    @Override
+    public ValueInt clone()
+    {
+        ValueInt clone = new ValueInt(this.id, this.defaultValue, this.min, this.max);
+        clone.value = this.value;
+
+        return clone;
     }
 
     public static enum Subtype

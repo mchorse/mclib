@@ -1,7 +1,6 @@
 package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
@@ -10,6 +9,9 @@ import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfigPanel;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTPrimitive;
+import net.minecraft.nbt.NBTTagDouble;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,6 +39,12 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
     public void resetServer()
     {
         this.serverValue = null;
+    }
+
+    @Override
+    protected Double getNullValue()
+    {
+        return 0D;
     }
 
     @Override
@@ -95,7 +103,7 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
     @Override
     public void fromBytes(ByteBuf buffer)
     {
-        super.fromBytes(buffer);
+        superFromBytes(buffer);
 
         this.value = buffer.readDouble();
         this.defaultValue = buffer.readDouble();
@@ -106,7 +114,7 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
     @Override
     public void toBytes(ByteBuf buffer)
     {
-        super.toBytes(buffer);
+        superToBytes(buffer);
 
         buffer.writeDouble(this.value);
         buffer.writeDouble(this.defaultValue);
@@ -118,5 +126,29 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
     public String toString()
     {
         return Double.toString(this.value);
+    }
+
+    @Override
+    public void valueFromNBT(NBTBase tag)
+    {
+        if (tag instanceof NBTPrimitive)
+        {
+            this.set(((NBTPrimitive) tag).getDouble());
+        }
+    }
+
+    @Override
+    public NBTBase valueToNBT()
+    {
+        return new NBTTagDouble(this.value);
+    }
+
+    @Override
+    public ValueDouble clone()
+    {
+        ValueDouble clone = new ValueDouble(this.id, this.defaultValue, this.min, this.max);
+        clone.value = this.value;
+
+        return clone;
     }
 }

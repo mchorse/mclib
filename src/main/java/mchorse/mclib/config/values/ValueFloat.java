@@ -1,7 +1,6 @@
 package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.input.GuiTrackpadElement;
@@ -9,8 +8,10 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfigPanel;
-import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTPrimitive;
+import net.minecraft.nbt.NBTTagFloat;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -41,6 +42,12 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     }
 
     @Override
+    protected Float getNullValue()
+    {
+        return 0F;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)
     {
@@ -60,6 +67,21 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     public void valueFromJSON(JsonElement element)
     {
         this.set(element.getAsFloat());
+    }
+
+    @Override
+    public void valueFromNBT(NBTBase tag)
+    {
+        if (tag instanceof NBTPrimitive)
+        {
+            this.value = ((NBTPrimitive) tag).getFloat();
+        }
+    }
+
+    @Override
+    public NBTBase valueToNBT()
+    {
+        return new NBTTagFloat(this.value);
     }
 
     @Override
@@ -96,7 +118,7 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     @Override
     public void fromBytes(ByteBuf buffer)
     {
-        super.fromBytes(buffer);
+        superFromBytes(buffer);
 
         this.value = buffer.readFloat();
         this.defaultValue = buffer.readFloat();
@@ -107,7 +129,7 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     @Override
     public void toBytes(ByteBuf buffer)
     {
-        super.toBytes(buffer);
+        superToBytes(buffer);
 
         buffer.writeFloat(this.value);
         buffer.writeFloat(this.defaultValue);
@@ -119,5 +141,14 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     public String toString()
     {
         return Float.toString(this.value);
+    }
+
+    @Override
+    public ValueFloat clone()
+    {
+        ValueFloat clone = new ValueFloat(this.id, this.defaultValue, this.min, this.max);
+        clone.value = this.value;
+
+        return clone;
     }
 }
