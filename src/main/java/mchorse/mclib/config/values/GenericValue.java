@@ -20,6 +20,7 @@ public abstract class GenericValue<T> extends Value implements ICloneable<Generi
 
     /**
      * Sets defaultValue to the provided defaultValue.
+     * If defaultValue is null, the value of {@link #getNullValue()} will be set.
      * After defaultValue has been set the method {@link #reset()} will be called
      * @param id
      * @param defaultValue
@@ -28,7 +29,7 @@ public abstract class GenericValue<T> extends Value implements ICloneable<Generi
     {
         super(id);
 
-        this.defaultValue = defaultValue;
+        this.defaultValue = (defaultValue == null) ? this.getNullValue() : defaultValue;
 
         this.reset();
     }

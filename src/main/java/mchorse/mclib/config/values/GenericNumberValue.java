@@ -11,12 +11,23 @@ public abstract class GenericNumberValue<T extends Number & Comparable<T>> exten
     protected T min;
     protected T max;
 
+    /**
+     * If defaultValue, min or max are null, the value of {@link #getNullValue()} will be set for the variable with null.
+     * @param id
+     * @param defaultValue
+     * @param min
+     * @param max
+     */
     public GenericNumberValue(String id, @Nonnull T defaultValue, @Nonnull T min, @Nonnull T max)
     {
-        super(id, defaultValue);
+        super(id);
 
-        this.min = min;
-        this.max = max;
+        this.min = (min == null) ? this.getNullValue() : min;
+        this.max = (max == null) ? this.getNullValue() : max;
+
+        this.defaultValue = (defaultValue == null) ? this.getNullValue() : defaultValue;
+
+        this.reset();
     }
 
     @Override
