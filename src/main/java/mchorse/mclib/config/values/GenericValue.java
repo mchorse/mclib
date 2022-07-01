@@ -7,6 +7,27 @@ import net.minecraft.nbt.NBTBase;
 
 import javax.annotation.Nullable;
 
+/**
+ * A Value container, providing an interface for dealing with
+ * the {@link #value}, {@link #defaultValue} and {@link #serverValue}.
+ * Using the {@link #serverValue}, it can be used for server side syncing, for example, in configs.
+ * If a subclass extending this should be used in configs with server side syncing visit {@link IServerValue}.
+ *
+ * <br><br>
+ *
+ * <h2>Important when extending:</h2>
+ * When extending from this class and if the generic datatype is a class,
+ * then the class should implement {@link ICloneable}.
+ * The class should also override {@link #equals(Object)} to ensure a safe usage with this value container.
+ *
+ * <br><br>
+ * The GenericValue subclasses can be used together with the {@link mchorse.mclib.utils.ValueSerializer}
+ * to automate all of the toNBT, fromNBT, toBytes, fromBytes, fromJson and toJson serialization processes.
+ * GenericValue subclasses can also be used for an undo / redo system, as it is already in place in Aperture mod.
+ *
+ * @param <T> the datatype of the values in this value container
+ * @author Christian F (Chryfi)
+ */
 public abstract class GenericValue<T> extends Value implements ICloneable<GenericValue<T>>
 {
     protected T value;
