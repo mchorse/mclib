@@ -10,6 +10,10 @@ import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfigPanel;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTPrimitive;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -64,6 +68,21 @@ public class ValueString extends GenericValue<String> implements IServerValue, I
     }
 
     @Override
+    public void valueFromNBT(NBTBase tag)
+    {
+        if (tag instanceof NBTTagString)
+        {
+            this.set(((NBTTagString) tag).getString());
+        }
+    }
+
+    @Override
+    public NBTBase valueToNBT()
+    {
+        return new NBTTagString(this.value == null ? "" : this.value);
+    }
+
+    @Override
     public boolean parseFromCommand(String value)
     {
         this.set(value);
@@ -92,7 +111,7 @@ public class ValueString extends GenericValue<String> implements IServerValue, I
     @Override
     public void fromBytes(ByteBuf buffer)
     {
-        super.fromBytes(buffer);
+        superFromBytes(buffer);
 
         this.value = ByteBufUtils.readUTF8String(buffer);
         this.defaultValue = ByteBufUtils.readUTF8String(buffer);
@@ -101,7 +120,7 @@ public class ValueString extends GenericValue<String> implements IServerValue, I
     @Override
     public void toBytes(ByteBuf buffer)
     {
-        super.toBytes(buffer);
+        superToBytes(buffer);
 
         ByteBufUtils.writeUTF8String(buffer, this.value == null ? "" : this.value);
         ByteBufUtils.writeUTF8String(buffer, this.defaultValue == null ? "" : this.defaultValue);
@@ -111,5 +130,16 @@ public class ValueString extends GenericValue<String> implements IServerValue, I
     public String toString()
     {
         return this.value;
+    }
+
+    @Override
+    public ValueString clone()
+    {
+        ValueString clone = new ValueString(this.id);
+        clone.defaultValue = this.defaultValue;
+        clone.value = this.value;
+        clone.serverValue = this.serverValue;
+
+        return clone;
     }
 }

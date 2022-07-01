@@ -7,6 +7,10 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
 import mchorse.mclib.config.gui.GuiConfigPanel;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTPrimitive;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -61,6 +65,28 @@ public class ValueBoolean extends GenericValue<Boolean> implements IServerValue,
     }
 
     @Override
+    public void valueFromNBT(NBTBase tag)
+    {
+        if (tag instanceof NBTPrimitive)
+        {
+            if (((NBTPrimitive) tag).getDouble() == 1)
+            {
+                this.set(true);
+            }
+            else if (((NBTPrimitive) tag).getDouble() == 0)
+            {
+                this.set(false);
+            }
+        }
+    }
+
+    @Override
+    public NBTBase valueToNBT()
+    {
+        return new NBTTagInt(this.value ? 1 : 0);
+    }
+
+    @Override
     public boolean parseFromCommand(String value)
     {
         if (value.equals("1"))
@@ -104,7 +130,7 @@ public class ValueBoolean extends GenericValue<Boolean> implements IServerValue,
     @Override
     public void fromBytes(ByteBuf buffer)
     {
-        super.fromBytes(buffer);
+        superFromBytes(buffer);
 
         this.value = buffer.readBoolean();
         this.defaultValue = buffer.readBoolean();
@@ -113,7 +139,7 @@ public class ValueBoolean extends GenericValue<Boolean> implements IServerValue,
     @Override
     public void toBytes(ByteBuf buffer)
     {
-        super.toBytes(buffer);
+        superToBytes(buffer);
 
         buffer.writeBoolean(this.value);
         buffer.writeBoolean(this.defaultValue);
@@ -123,5 +149,16 @@ public class ValueBoolean extends GenericValue<Boolean> implements IServerValue,
     public String toString()
     {
         return Boolean.toString(this.value);
+    }
+
+    @Override
+    public ValueBoolean clone()
+    {
+        ValueBoolean clone = new ValueBoolean(this.id);
+        clone.defaultValue = this.defaultValue;
+        clone.value = this.value;
+        clone.serverValue = this.serverValue;
+
+        return clone;
     }
 }

@@ -1,0 +1,15 @@
+package mchorse.mclib.utils;
+
+/**
+ * The Java Cloneable interface is only a marker interface to enforce
+ * a convention to override the protected Object.clone() method with a public method.
+ * This does not allow for dynamic validation whether an object actually has a public clone() method.
+ *
+ * This interface should provide better knowledge at compile time whether a generic object
+ * has a public copy method.
+ * @param <T> by convention this should be the type of the class that inherits this interface
+ */
+public interface ICloneable<T>
+{
+    T clone();
+}

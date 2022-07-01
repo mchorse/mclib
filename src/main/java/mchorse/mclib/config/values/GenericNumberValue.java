@@ -23,13 +23,8 @@ public abstract class GenericNumberValue<T extends Number & Comparable<T>> exten
     public void set(T value)
     {
         this.value = MathUtils.clamp((value == null) ? this.getNullValue() : value, this.min, this.max);
-        this.saveLater();
-    }
 
-    @Override
-    protected T getNullValue()
-    {
-        return (T) new Byte((byte) 0);
+        this.saveLater();
     }
 
     public T getMin()
@@ -41,6 +36,9 @@ public abstract class GenericNumberValue<T extends Number & Comparable<T>> exten
     {
         return this.max;
     }
+
+    @Override
+    protected abstract T getNullValue();
 
     @Override
     public JsonElement valueToJSON()
