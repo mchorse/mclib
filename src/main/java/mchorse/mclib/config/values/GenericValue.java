@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
  * <br><br>
  *
  * <h2>Important when extending:</h2>
- * When extending from this class and if the generic datatype is a class,
+ * When extending from GenericValue and if the generic datatype is a class,
  * then the class should implement {@link ICloneable}.
  * The class should also override {@link #equals(Object)} to ensure a safe usage with this value container.
  *
