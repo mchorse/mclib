@@ -3,6 +3,7 @@ package mchorse.mclib.config.values;
 import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.utils.ICloneable;
+import mchorse.mclib.utils.ValueSerializer;
 import net.minecraft.nbt.NBTBase;
 
 import javax.annotation.Nullable;
@@ -161,9 +162,9 @@ public abstract class GenericValue<T> extends Value implements ICloneable<Generi
     }
 
     /**
-     * Compare the objects based on their values. Ignores defaultValues etc.
+     * Compare the objects based on their {@link #value} variables. Ignores the other variables.
      * @param obj
-     * @return true if this object's value equals the specified object's value, using the equals method of Object class.
+     * @return true if this object's {@link #value} equals the specified object's {@link #value}, using {@link #equals(Object)}.
      *         Or if the specified object or its value and this.value are both null.
      */
     @Override
