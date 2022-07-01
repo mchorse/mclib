@@ -3,7 +3,6 @@ package mchorse.mclib.config.values;
 import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.utils.ICloneable;
-import mchorse.mclib.utils.ValueSerializer;
 import net.minecraft.nbt.NBTBase;
 
 import javax.annotation.Nullable;
@@ -20,6 +19,8 @@ import javax.annotation.Nullable;
  * When extending from GenericValue and if the generic datatype is a class,
  * then the class should implement {@link ICloneable}.
  * The class should also override {@link #equals(Object)} to ensure a safe usage with this value container.
+ * <br>
+ * If the class of the generic datatype cannot implement {@link ICloneable}, the method {@link #reset()} needs to be overridden!
  *
  * <br><br>
  * The GenericValue subclasses can be used together with the {@link mchorse.mclib.utils.ValueSerializer}
