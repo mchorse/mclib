@@ -133,8 +133,8 @@ public class GuiPopUpModal extends GuiModal
         this.backgroundAlpha = this.alphaDefault;
 
         this.shadowColor = new Color(McLib.primaryColor.get());
-        this.backgroundColor = this.backgroundColorDefault.copy();
-        this.textColor = this.textColorDefault.copy();
+        this.backgroundColor = this.backgroundColorDefault.clone();
+        this.textColor = this.textColorDefault.clone();
     }
 
     private float fadeAlpha(float a, float b, float x)

@@ -257,7 +257,7 @@ public class GuiColorPicker extends GuiElement
 
         if (i == -1)
         {
-            colors.add(color.copy());
+            colors.add(color.clone());
         }
         else
         {
