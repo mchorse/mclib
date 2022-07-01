@@ -2,7 +2,6 @@ package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import mchorse.mclib.utils.ICloneable;
 import mchorse.mclib.utils.MathUtils;
 
 import javax.annotation.Nonnull;
@@ -13,7 +12,7 @@ import javax.annotation.Nonnull;
  *
  * <br><br>
  * Subclasses need to override {@link #getNullValue()} to ensure
- * that the internal values do not take the null state!
+ * that the internal values never take the null state!
  * <br>
  * This means {@link #value}, {@link #defaultValue}, {@link #min} and {@link #max} shall never be null!
  * <br>
