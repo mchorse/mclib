@@ -11,5 +11,5 @@ package mchorse.mclib.utils;
  */
 public interface ICloneable<T>
 {
-    T clone();
+    T copy();
 }
