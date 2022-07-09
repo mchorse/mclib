@@ -164,9 +164,15 @@ public class RLUtils
     {
         if (location instanceof IWritableLocation)
         {
-            return ((IWritableLocation) location).clone();
+            Object copy = ((IWritableLocation) location).copy();
+
+            if (copy instanceof ResourceLocation)
+            {
+                return (ResourceLocation) copy;
+            }
         }
-        else if (location != null)
+
+        if (location != null)
         {
             return create(location.toString());
         }

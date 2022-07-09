@@ -257,7 +257,7 @@ public class GuiColorPicker extends GuiElement
 
         if (i == -1)
         {
-            colors.add(color.clone());
+            colors.add(color.copy());
         }
         else
         {
@@ -373,25 +373,34 @@ public class GuiColorPicker extends GuiElement
         Color color = new Color();
 
         /* Draw red slider */
-        color.copy(this.color).r = 0;
+        color.copy(this.color);
+        color.r = 0;
         int left = color.getRGBAColor();
-        color.copy(this.color).r = 1;
+
+        color.copy(this.color);
+        color.r = 1;
         int right = color.getRGBAColor();
 
         GuiDraw.drawHorizontalGradientRect(this.red.x, this.red.y, this.red.ex(), this.red.ey(), left, right);
 
         /* Draw green slider */
-        color.copy(this.color).g = 0;
+        color.copy(this.color);
+        color.g = 0;
         left = color.getRGBAColor();
-        color.copy(this.color).g = 1;
+
+        color.copy(this.color);
+        color.g = 1;
         right = color.getRGBAColor();
 
         GuiDraw.drawHorizontalGradientRect(this.green.x, this.green.y, this.green.ex(), this.green.ey(), left, right);
 
         /* Draw blue slider */
-        color.copy(this.color).b = 0;
+        color.copy(this.color);
+        color.b = 0;
         left = color.getRGBAColor();
-        color.copy(this.color).b = 1;
+
+        color.copy(this.color);
+        color.b = 1;
         right = color.getRGBAColor();
 
         GuiDraw.drawHorizontalGradientRect(this.blue.x, this.blue.y, this.blue.ex(), this.blue.ey(), left, right);
@@ -399,9 +408,12 @@ public class GuiColorPicker extends GuiElement
         if (this.editAlpha)
         {
             /* Draw alpha slider */
-            color.copy(this.color).a = 0;
+            color.copy(this.color);
+            color.a = 0;
             left = color.getRGBAColor();
-            color.copy(this.color).a = 1;
+
+            color.copy(this.color);
+            color.a = 1;
             right = color.getRGBAColor();
 
             GuiDraw.drawHorizontalGradientRect(this.alpha.x, this.alpha.y, this.alpha.ex(), this.alpha.ey(), left, right);

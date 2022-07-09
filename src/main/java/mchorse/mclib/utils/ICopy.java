@@ -9,7 +9,10 @@ package mchorse.mclib.utils;
  * has a public copy method.
  * @param <T> by convention this should be the type of the class that inherits this interface
  */
-public interface ICloneable<T>
+public interface ICopy<T>
 {
     T copy();
+
+    default void copy(T origin)
+    { }
 }
