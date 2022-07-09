@@ -181,6 +181,18 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
         this.writeRL(buffer, this.defaultValue);
     }
 
+    @Override
+    public void valueFromBytes(ByteBuf buffer)
+    {
+        this.value = this.readRL(buffer);
+    }
+
+    @Override
+    public void valueToBytes(ByteBuf buffer)
+    {
+        this.writeRL(buffer, this.value);
+    }
+
     private void writeRL(ByteBuf buffer, ResourceLocation rl)
     {
         buffer.writeBoolean(rl != null);
@@ -201,7 +213,7 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
     }
 
     @Override
-    public ValueRL clone()
+    public ValueRL copy()
     {
         ValueRL clone = new ValueRL(this.id);
         clone.value = RLUtils.clone(this.value);

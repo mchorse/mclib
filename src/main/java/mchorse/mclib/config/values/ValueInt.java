@@ -265,6 +265,18 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     }
 
     @Override
+    public void valueFromBytes(ByteBuf buffer)
+    {
+        this.value = buffer.readInt();
+    }
+
+    @Override
+    public void valueToBytes(ByteBuf buffer)
+    {
+        buffer.writeInt(this.value);
+    }
+
+    @Override
     public String toString()
     {
         if (this.subtype == Subtype.COLOR || this.subtype == Subtype.COLOR_ALPHA)
@@ -276,7 +288,7 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     }
 
     @Override
-    public ValueInt clone()
+    public ValueInt copy()
     {
         ValueInt clone = new ValueInt(this.id, this.defaultValue, this.min, this.max);
         clone.value = this.value;

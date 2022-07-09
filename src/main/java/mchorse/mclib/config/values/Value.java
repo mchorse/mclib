@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import mchorse.mclib.config.Config;
 import mchorse.mclib.config.ConfigManager;
 import mchorse.mclib.network.IByteBufSerializable;
+import mchorse.mclib.utils.ICopy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -16,7 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Value implements IByteBufSerializable
+public class Value implements IByteBufSerializable, ICopy<Value>
 {
     public final String id;
     private boolean visible = true;
@@ -299,7 +300,33 @@ public class Value implements IByteBufSerializable
         return JsonNull.INSTANCE;
     }
 
+    /**
+     * @return a Value instance with the same {@link #id} and containing copies of the {@link #children} values
+     */
+    @Override
+    public Value copy()
+    {
+        Value copy = new Value(this.id);
+
+        for (Map.Entry<String, Value> entry : this.children.entrySet())
+        {
+            copy.children.put(entry.getKey(), entry.getValue().copy());
+        }
+
+        return copy;
+    }
+
+    @Override
     public void copy(Value category)
+    {
+        this.superCopy(category);
+    }
+
+    /**
+     * For internal usage in subclasses of {@link GenericValue}.
+     * @param category
+     */
+    protected final void superCopy(Value category)
     {
         for (Map.Entry<String, Value> entry : category.children.entrySet())
         {
