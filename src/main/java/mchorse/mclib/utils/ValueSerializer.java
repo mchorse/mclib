@@ -6,10 +6,12 @@ import io.netty.buffer.ByteBuf;
 import mchorse.mclib.config.values.GenericValue;
 import mchorse.mclib.network.IByteBufSerializable;
 import mchorse.mclib.network.INBTSerializable;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,14 +31,14 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
      * The key is a UUID String.
      * This HashMap will not include duplicate GenericValue references.
      */
-    private final HashMap<String, GenericValue<?>> pool = new HashMap<>();
+    private final Map<String, GenericValue<?>> pool = new LinkedHashMap<>();
 
     /**
      * Key is the name that is used for serialization/deserialization
      * Value is the UUID String pointing to the key of {@link #pool}
      */
-    private final HashMap<String, String> nbtMap = new HashMap<>();
-    private final HashMap<String, String> jsonMap = new HashMap<>();
+    private final Map<String, String> nbtMap = new HashMap<>();
+    private final Map<String, String> jsonMap = new HashMap<>();
 
     /**
      * Register the provided GenericValue object reference
@@ -136,24 +138,33 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
         return null;
     }
 
+    /**
+     * Calls {@link GenericValue#valueFromBytes(ByteBuf)}
+     */
     @Override
     public void fromBytes(ByteBuf buffer)
     {
         for (GenericValue<?> value : this.pool.values())
         {
-            value.fromBytes(buffer);
+            value.valueFromBytes(buffer);
         }
     }
 
+    /**
+     * Calls {@link GenericValue#valueToBytes(ByteBuf)}
+     */
     @Override
     public void toBytes(ByteBuf buffer)
     {
         for (GenericValue<?> value : this.pool.values())
         {
-            value.toBytes(buffer);
+            value.valueToBytes(buffer);
         }
     }
 
+    /**
+     * Calls {@link GenericValue#valueFromNBT(NBTBase)}
+     */
     @Override
     public void fromNBT(NBTTagCompound tag)
     {
@@ -169,6 +180,9 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
         }
     }
 
+    /**
+     * Calls {@link GenericValue#valueToNBT()}
+     */
     @Override
     public NBTTagCompound toNBT(NBTTagCompound tag)
     {
@@ -186,6 +200,9 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
         return tag;
     }
 
+    /**
+     * Calls {@link GenericValue#valueToJSON()}
+     */
     public JsonElement toJSON()
     {
         JsonObject jsonRoot = new JsonObject();
@@ -204,6 +221,10 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
         return jsonRoot;
     }
 
+    /**
+     * Calls {@link GenericValue#valueFromJSON(JsonElement)}
+     * @param element
+     */
     public void fromJSON(JsonElement element)
     {
         if (!element.isJsonObject())
@@ -220,7 +241,7 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
 
             if (jsonObject.has(key))
             {
-                value.fromJSON(jsonObject.get(key));
+                value.valueFromJSON(jsonObject.get(key));
             }
         }
     }
