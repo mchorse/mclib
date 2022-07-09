@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
  *
  * <h2>Important when extending:</h2>
  * If the generic datatype is a class, then that class should implement {@link ICopy}.
- * If the class of the generic datatype cannot implement {@link ICopy}, the method {@link #reset()} needs to be overridden!
+ * If the class of the generic datatype cannot implement {@link ICopy}, the method {@link #reset()}, {@link #set(Object)} needs to be overridden!
  * <br>
  * The class of the generic datatype should also override {@link Object#equals(Object)} to ensure a safe usage.
  * If it cannot override {@link Object#equals(Object)}, the methods {@link #hasChanged()} and {@link #equals(Object)} need to be overridden!
@@ -58,7 +58,8 @@ public abstract class GenericValue<T> extends Value
     }
 
     /**
-     * @return the value of this instance, or if the serverValue is not null it returns the serverValue
+     * @return the reference of {@link #value}, or if the {@link #serverValue} is not null
+     *         it returns the reference to {@link #serverValue}
      */
     public T get()
     {
@@ -66,14 +67,28 @@ public abstract class GenericValue<T> extends Value
     }
 
     /**
-     * Set the value of this instance to the provided value.
+     * Set the value of this instance to the provided value. If the value is instanceOf {@link ICopy}, it will be copied.
      * If the value is null, the result of {@link #getNullValue()} will be assigned.
      * This method calls {@link #saveLater()}
      * @param value
      */
     public void set(T value)
     {
-        this.value = (value == null) ? this.getNullValue() : value;
+        if (value == null)
+        {
+            this.value = this.getNullValue();
+        }
+        else
+        {
+            if (value instanceof ICopy)
+            {
+                this.value = ((ICopy<T>) value).copy();
+            }
+            else
+            {
+                this.value = value;
+            }
+        }
 
         this.saveLater();
     }
