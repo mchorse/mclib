@@ -39,7 +39,7 @@ public class MultiResourceLocationManager
 
         int newId = id;
 
-        pairs.add(new Pair(newId, (MultiResourceLocation) location.clone()));
+        pairs.add(new Pair(newId, location.copy()));
         id += 1;
 
         return newId;

@@ -17,11 +17,23 @@ import java.util.List;
  * {@link ResourceLocation}s. It doesn't really make sense for other 
  * types of resources beside pictures.
  */
-public class MultiResourceLocation extends ResourceLocation implements IWritableLocation
+public class MultiResourceLocation extends ResourceLocation implements IWritableLocation<MultiResourceLocation>
 {
     public List<FilteredResourceLocation> children = new ArrayList<FilteredResourceLocation>();
 
     private int id = -1;
+
+    public MultiResourceLocation(String resourceName)
+    {
+        this();
+        this.children.add(new FilteredResourceLocation(RLUtils.create(resourceName)));
+    }
+
+    public MultiResourceLocation(String resourceDomainIn, String resourcePathIn)
+    {
+        this();
+        this.children.add(new FilteredResourceLocation(RLUtils.create(resourceDomainIn, resourcePathIn)));
+    }
 
     public static MultiResourceLocation from(NBTBase nbt)
     {
@@ -67,18 +79,6 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
         {}
 
         return null;
-    }
-
-    public MultiResourceLocation(String resourceName)
-    {
-        this();
-        this.children.add(new FilteredResourceLocation(RLUtils.create(resourceName)));
-    }
-
-    public MultiResourceLocation(String resourceDomainIn, String resourcePathIn)
-    {
-        this();
-        this.children.add(new FilteredResourceLocation(RLUtils.create(resourceDomainIn, resourcePathIn)));
     }
 
     public MultiResourceLocation()
@@ -208,7 +208,7 @@ public class MultiResourceLocation extends ResourceLocation implements IWritable
     }
 
     @Override
-    public ResourceLocation clone()
+    public MultiResourceLocation copy()
     {
         MultiResourceLocation newMulti = new MultiResourceLocation();
 

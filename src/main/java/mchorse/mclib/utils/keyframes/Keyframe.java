@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.network.IByteBufSerializable;
 import mchorse.mclib.network.INBTSerializable;
-import mchorse.mclib.utils.ICloneable;
+import mchorse.mclib.utils.ICopy;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * This class is responsible for storing individual keyframe properties such
  * as tick at which its located, value, interpolation, easing type, etc.
  */
-public class Keyframe implements IByteBufSerializable, INBTSerializable, ICloneable<Keyframe>
+public class Keyframe implements IByteBufSerializable, INBTSerializable, ICopy<Keyframe>
 {
     public Keyframe prev;
     public Keyframe next;
@@ -88,7 +88,7 @@ public class Keyframe implements IByteBufSerializable, INBTSerializable, IClonea
         return this.interp.interpolate(this, frame, x);
     }
 
-    @Deprecated
+    @Override
     public Keyframe copy()
     {
         Keyframe frame = new Keyframe(this.tick, this.value);
@@ -99,15 +99,6 @@ public class Keyframe implements IByteBufSerializable, INBTSerializable, IClonea
     }
 
     @Override
-    public Keyframe clone()
-    {
-        Keyframe frame = new Keyframe(this.tick, this.value);
-
-        frame.copy(this);
-
-        return frame;
-    }
-
     public void copy(Keyframe keyframe)
     {
         this.tick = keyframe.tick;

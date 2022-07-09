@@ -637,59 +637,59 @@ public class MatrixUtils
 
             return mat;
         }
-
-        public static enum RotationOrder
-        {
-            XYZ, XZY, YXZ, YZX, ZXY, ZYX;
-
-            public final int firstIndex;
-            public final int secondIndex;
-            public final int thirdIndex;
-
-            private RotationOrder()
-            {
-                String order = this.name().toUpperCase();
-                firstIndex = order.charAt(0) - 'X';
-                secondIndex = order.charAt(1) - 'X';
-                thirdIndex = order.charAt(2) - 'X';
-            }
-
-            public Float doTest(int index, Matrix3f test)
-            {
-                float[] buffer = new float[3];
-
-                buffer[index == firstIndex ? secondIndex : firstIndex] = 1;
-
-                Vector3f in = new Vector3f(buffer);
-                Vector3f out = new Vector3f();
-
-                test.transform(in, out);
-                out.get(buffer);
-                buffer[index] = 0;
-                out.set(buffer);
-
-                if (out.length() < 1E-07)
-                {
-                    return null;
-                }
-
-                out.normalize();
-
-                float cos = in.dot(out);
-
-                out.cross(in, out);
-                out.get(buffer);
-
-                float sin = out.length() * Math.signum(buffer[index]);
-
-                return (float) Math.toDegrees(Math.atan2(sin, cos));
-            }
-        }
     }
 
     public enum MatrixMajor
     {
         ROW,
         COLUMN
+    }
+
+    public enum RotationOrder
+    {
+        XYZ, XZY, YXZ, YZX, ZXY, ZYX;
+
+        public final int firstIndex;
+        public final int secondIndex;
+        public final int thirdIndex;
+
+        private RotationOrder()
+        {
+            String order = this.name().toUpperCase();
+            firstIndex = order.charAt(0) - 'X';
+            secondIndex = order.charAt(1) - 'X';
+            thirdIndex = order.charAt(2) - 'X';
+        }
+
+        public Float doTest(int index, Matrix3f test)
+        {
+            float[] buffer = new float[3];
+
+            buffer[index == firstIndex ? secondIndex : firstIndex] = 1;
+
+            Vector3f in = new Vector3f(buffer);
+            Vector3f out = new Vector3f();
+
+            test.transform(in, out);
+            out.get(buffer);
+            buffer[index] = 0;
+            out.set(buffer);
+
+            if (out.length() < 1E-07)
+            {
+                return null;
+            }
+
+            out.normalize();
+
+            float cos = in.dot(out);
+
+            out.cross(in, out);
+            out.get(buffer);
+
+            float sin = out.length() * Math.signum(buffer[index]);
+
+            return (float) Math.toDegrees(Math.atan2(sin, cos));
+        }
     }
 }

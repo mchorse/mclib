@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.Objects;
 
-public class FilteredResourceLocation implements IWritableLocation
+public class FilteredResourceLocation implements IWritableLocation<FilteredResourceLocation>
 {
     public static final int DEFAULT_COLOR = 0xffffffff;
 
@@ -326,6 +326,7 @@ public class FilteredResourceLocation implements IWritableLocation
         return RLUtils.clone(this.path);
     }
 
+    @Override
     public FilteredResourceLocation copy()
     {
         return FilteredResourceLocation.from(this.writeNbt());

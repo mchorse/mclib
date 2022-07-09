@@ -381,7 +381,7 @@ public class GuiTexturePicker extends GuiElement
 
         if (show)
         {
-            this.multiRL = (MultiResourceLocation) ((MultiResourceLocation) skin).clone();
+            this.multiRL = (MultiResourceLocation) ((MultiResourceLocation) skin).copy();
             this.setFRL(this.multiRL.children.get(0));
 
             this.multiList.setIndex(this.multiRL.children.isEmpty() ? -1 : 0);;

@@ -190,7 +190,7 @@ public class KeyframeChannel implements IByteBufSerializable
 
         for (Keyframe frame : channel.keyframes)
         {
-            this.keyframes.add(frame.clone());
+            this.keyframes.add(frame.copy());
         }
 
         this.sort();

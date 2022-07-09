@@ -15,7 +15,7 @@ import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.MatrixUtils;
 import mchorse.mclib.utils.MatrixUtils.Transformation;
-import mchorse.mclib.utils.MatrixUtils.Transformation.RotationOrder;
+import mchorse.mclib.utils.MatrixUtils.RotationOrder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
