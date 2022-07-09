@@ -138,13 +138,25 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     }
 
     @Override
+    public void valueFromBytes(ByteBuf buffer)
+    {
+        this.value = buffer.readFloat();
+    }
+
+    @Override
+    public void valueToBytes(ByteBuf buffer)
+    {
+        buffer.writeFloat(this.value);
+    }
+
+    @Override
     public String toString()
     {
         return Float.toString(this.value);
     }
 
     @Override
-    public ValueFloat clone()
+    public ValueFloat copy()
     {
         ValueFloat clone = new ValueFloat(this.id, this.defaultValue, this.min, this.max);
         clone.value = this.value;

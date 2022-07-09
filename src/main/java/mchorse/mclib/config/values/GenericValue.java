@@ -2,7 +2,7 @@ package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
-import mchorse.mclib.utils.ICloneable;
+import mchorse.mclib.utils.ICopy;
 import net.minecraft.nbt.NBTBase;
 
 import javax.annotation.Nullable;
@@ -16,11 +16,11 @@ import javax.annotation.Nullable;
  * <br><br>
  *
  * <h2>Important when extending:</h2>
- * When extending from GenericValue and if the generic datatype is a class,
- * then the class should implement {@link ICloneable}.
- * The class should also override {@link #equals(Object)} to ensure a safe usage with this value container.
+ * If the generic datatype is a class, then that class should implement {@link ICopy}.
+ * If the class of the generic datatype cannot implement {@link ICopy}, the method {@link #reset()} needs to be overridden!
  * <br>
- * If the class of the generic datatype cannot implement {@link ICloneable}, the method {@link #reset()} needs to be overridden!
+ * The class of the generic datatype should also override {@link Object#equals(Object)} to ensure a safe usage.
+ * If it cannot override {@link Object#equals(Object)}, the methods {@link #hasChanged()} and {@link #equals(Object)} need to be overridden!
  *
  * <br><br>
  * The GenericValue subclasses can be used together with the {@link mchorse.mclib.utils.ValueSerializer}
@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
  * @param <T> the datatype of the values in this value container
  * @author Christian F (Chryfi)
  */
-public abstract class GenericValue<T> extends Value implements ICloneable<GenericValue<T>>
+public abstract class GenericValue<T> extends Value
 {
     protected T value;
     protected T defaultValue;
@@ -45,7 +45,7 @@ public abstract class GenericValue<T> extends Value implements ICloneable<Generi
      * Sets defaultValue to the provided defaultValue.
      * If defaultValue is null, the value of {@link #getNullValue()} will be set.
      * After defaultValue has been set the method {@link #reset()} will be called
-     * @param id
+     * @param id the id name of this value container
      * @param defaultValue
      */
     public GenericValue(String id, T defaultValue)
@@ -68,6 +68,7 @@ public abstract class GenericValue<T> extends Value implements ICloneable<Generi
     /**
      * Set the value of this instance to the provided value.
      * If the value is null, the result of {@link #getNullValue()} will be assigned.
+     * This method calls {@link #saveLater()}
      * @param value
      */
     public void set(T value)
@@ -78,9 +79,26 @@ public abstract class GenericValue<T> extends Value implements ICloneable<Generi
     }
 
     /**
+     * Reset this value to defaultValue. If defaultValue inherits {@link ICopy},
+     * the defaultValue will be cloned so value and defaultValue don't share the same references.
+     */
+    @Override
+    public void reset()
+    {
+        if (this.defaultValue instanceof ICopy)
+        {
+            this.set(((ICopy<T>) this.defaultValue).copy());
+        }
+        else
+        {
+            this.set(this.defaultValue);
+        }
+    }
+
+    /**
      * Only used in Aperture undo/redo system
      * @param value if the specified object is not null and assignable to the generic type T,
-     *             the value be set
+     *             the value be set, using the {@link #set(Object)} method.
      */
     @Override
     public void setValue(Object value)
@@ -117,50 +135,18 @@ public abstract class GenericValue<T> extends Value implements ICloneable<Generi
         return null;
     }
 
-    @Override
-    public abstract void fromBytes(ByteBuf buffer);
-
-    @Override
-    public abstract void toBytes(ByteBuf buffer);
-
-    @Override
-    public abstract void valueFromJSON(JsonElement element);
-
-    @Override
-    public abstract JsonElement valueToJSON();
-
     /**
-     * set the value based on the specified tag
-     * @param tag the tag should be the value without the necessity to search for a key
-     */
-    public abstract void valueFromNBT(NBTBase tag);
-
-    /**
-     * @return the value as instance of a subclass of {@link net.minecraft.nbt.NBTBase}.
-     *         It can also return null, depending on the implementation in the subclasses.
-     */
-    @Nullable
-    public abstract NBTBase valueToNBT();
-
-    @Override
-    public abstract GenericValue<T> clone();
-
-    /**
-     * Reset this value to defaultValue. If defaultValue inherits {@link mchorse.mclib.utils.ICloneable},
-     * the defaultValue will be cloned so value and defaultValue don't share the same references.
+     * @return a deep copy of this object
      */
     @Override
-    public void reset()
-    {
-        if (this.defaultValue instanceof ICloneable)
-        {
-            this.set(((ICloneable<T>) this.defaultValue).clone());
-        }
-        else
-        {
-            this.set(this.defaultValue);
-        }
-    }
+    public abstract GenericValue<T> copy();
+
+    /**
+     * Copy the {@link #value} from the specified object to this object.
+     * @param origin the origin that should be copied from
+     */
+    @Override
+    public abstract void copy(Value origin);
 
     /**
      * Compare the objects based on their {@link #value} variables. Ignores the other variables.
@@ -194,7 +180,7 @@ public abstract class GenericValue<T> extends Value implements ICloneable<Generi
             return true;
         }
 
-        return super.equals(obj);
+        return this == obj;
     }
 
     /**
@@ -214,4 +200,50 @@ public abstract class GenericValue<T> extends Value implements ICloneable<Generi
 
         return !this.value.equals(this.defaultValue);
     }
+
+
+    /**
+     * Read all contents from this object from the ByteBuffer and call {@link #superFromBytes(ByteBuf)}
+     * @param buffer
+     */
+    @Override
+    public abstract void fromBytes(ByteBuf buffer);
+
+    /**
+     * Write all contents from this object to the ByteBuffer and call {@link #superToBytes(ByteBuf)}
+     * @param buffer
+     */
+    @Override
+    public abstract void toBytes(ByteBuf buffer);
+
+    /**
+     * Only read the {@link #value} from the ByteBuffer
+     * @param buffer
+     */
+    public abstract void valueFromBytes(ByteBuf buffer);
+
+    /**
+     * Only write the {@link #value} into the ByteBuffer
+     * @param buffer
+     */
+    public abstract void valueToBytes(ByteBuf buffer);
+
+    @Override
+    public abstract void valueFromJSON(JsonElement element);
+
+    @Override
+    public abstract JsonElement valueToJSON();
+
+    /**
+     * set the value based on the specified tag
+     * @param tag the tag should be the value without the necessity to search for a key
+     */
+    public abstract void valueFromNBT(NBTBase tag);
+
+    /**
+     * @return the value as instance of a subclass of {@link net.minecraft.nbt.NBTBase}.
+     *         It can also return null, depending on the implementation in the subclasses.
+     */
+    @Nullable
+    public abstract NBTBase valueToNBT();
 }

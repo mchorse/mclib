@@ -107,7 +107,7 @@ public class ValueBoolean extends GenericValue<Boolean> implements IServerValue,
     @Override
     public void copy(Value value)
     {
-        super.copy(value);
+        superCopy(value);
 
         if (value instanceof ValueBoolean)
         {
@@ -145,13 +145,25 @@ public class ValueBoolean extends GenericValue<Boolean> implements IServerValue,
     }
 
     @Override
+    public void valueFromBytes(ByteBuf buffer)
+    {
+        this.value = buffer.readBoolean();
+    }
+
+    @Override
+    public void valueToBytes(ByteBuf buffer)
+    {
+        buffer.writeBoolean(this.value);
+    }
+
+    @Override
     public String toString()
     {
         return Boolean.toString(this.value);
     }
 
     @Override
-    public ValueBoolean clone()
+    public ValueBoolean copy()
     {
         ValueBoolean clone = new ValueBoolean(this.id);
         clone.defaultValue = this.defaultValue;

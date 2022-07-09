@@ -145,7 +145,19 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
     }
 
     @Override
-    public ValueLong clone()
+    public void valueFromBytes(ByteBuf buffer)
+    {
+        this.value = buffer.readLong();
+    }
+
+    @Override
+    public void valueToBytes(ByteBuf buffer)
+    {
+        buffer.writeLong(this.value);
+    }
+
+    @Override
+    public ValueLong copy()
     {
         ValueLong clone = new ValueLong(this.id, this.defaultValue, this.min, this.max);
         clone.value = this.value;

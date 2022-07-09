@@ -123,6 +123,18 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
     }
 
     @Override
+    public void valueFromBytes(ByteBuf buffer)
+    {
+        this.value = buffer.readDouble();
+    }
+
+    @Override
+    public void valueToBytes(ByteBuf buffer)
+    {
+        buffer.writeDouble(this.value);
+    }
+
+    @Override
     public String toString()
     {
         return Double.toString(this.value);
@@ -144,7 +156,7 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
     }
 
     @Override
-    public ValueDouble clone()
+    public ValueDouble copy()
     {
         ValueDouble clone = new ValueDouble(this.id, this.defaultValue, this.min, this.max);
         clone.value = this.value;

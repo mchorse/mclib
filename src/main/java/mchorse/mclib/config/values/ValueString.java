@@ -9,6 +9,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfigPanel;
+import mchorse.mclib.utils.MatrixUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTPrimitive;
@@ -127,13 +128,25 @@ public class ValueString extends GenericValue<String> implements IServerValue, I
     }
 
     @Override
+    public void valueFromBytes(ByteBuf buffer)
+    {
+        this.value = ByteBufUtils.readUTF8String(buffer);
+    }
+
+    @Override
+    public void valueToBytes(ByteBuf buffer)
+    {
+        ByteBufUtils.writeUTF8String(buffer, this.value == null ? "" : this.value);
+    }
+
+    @Override
     public String toString()
     {
         return this.value;
     }
 
     @Override
-    public ValueString clone()
+    public ValueString copy()
     {
         ValueString clone = new ValueString(this.id);
         clone.defaultValue = this.defaultValue;
