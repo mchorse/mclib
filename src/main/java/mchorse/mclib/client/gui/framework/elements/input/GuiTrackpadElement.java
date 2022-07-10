@@ -49,6 +49,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
     private int initialX;
     private int initialY;
     private double lastValue;
+    private double valueBeforeDrag;
 
     private Timer changed = new Timer(30);
 
@@ -352,12 +353,26 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                     context.focus(this);
                 }
 
+                if (!this.dragging)
+                {
+                    valueBeforeDrag = this.value;
+                }
+
                 this.dragging = true;
                 this.initialX = context.mouseX;
                 this.initialY = context.mouseY;
                 this.lastValue = this.value;
                 this.time = System.currentTimeMillis();
             }
+        }
+
+        /* release dragging and reset to what was before dragging, when right clicking */
+        if (context.mouseButton == 1 && this.dragging)
+        {
+            this.setValueAndNotify(this.valueBeforeDrag);
+
+            this.dragging = false;
+            this.shiftX = 0;
         }
 
         return context.mouseButton == 0 && this.area.isInside(context);
