@@ -15,8 +15,6 @@ import java.util.function.Consumer;
 
 public class GuiCirculateElement extends GuiClickElement<GuiCirculateElement>
 {
-    public IKey label;
-
     public boolean custom;
     public int customColor;
 
@@ -46,11 +44,6 @@ public class GuiCirculateElement extends GuiClickElement<GuiCirculateElement>
 
     public void addLabel(IKey label)
     {
-        if (this.labels.isEmpty())
-        {
-            this.label = label;
-        }
-
         this.labels.add(label);
     }
 
@@ -97,8 +90,6 @@ public class GuiCirculateElement extends GuiClickElement<GuiCirculateElement>
         {
             this.value = this.labels.size() - 1;
         }
-
-        this.label = this.labels.get(this.value);
     }
 
     @Override
@@ -135,7 +126,7 @@ public class GuiCirculateElement extends GuiClickElement<GuiCirculateElement>
 
         GuiDraw.drawBorder(this.area, color);
 
-        String label = this.label.get();
+        String label = this.getLabel();
         int x = this.area.mx(this.font.getStringWidth(label));
         int y = this.area.my(this.font.FONT_HEIGHT - 1);
 
