@@ -6,13 +6,17 @@ import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
+import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.client.gui.framework.elements.buttons.GuiCirculateElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
 import mchorse.mclib.client.gui.framework.elements.context.GuiContextMenu;
 import mchorse.mclib.client.gui.framework.elements.context.GuiSimpleContextMenu;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MatrixUtils;
 import mchorse.mclib.utils.MatrixUtils.Transformation;
 import mchorse.mclib.utils.MatrixUtils.RotationOrder;
@@ -35,6 +39,9 @@ public class GuiTransformations extends GuiElement
     public GuiTrackpadElement tx;
     public GuiTrackpadElement ty;
     public GuiTrackpadElement tz;
+    public GuiTrackpadElement localtx;
+    public GuiTrackpadElement localty;
+    public GuiTrackpadElement localtz;
     public GuiTrackpadElement sx;
     public GuiTrackpadElement sy;
     public GuiTrackpadElement sz;
@@ -47,6 +54,10 @@ public class GuiTransformations extends GuiElement
     public GuiTrackpadElement dry;
     public GuiTrackpadElement drz;
     public GuiToggleElement origin;
+    public GuiCirculateElement orientation;
+    protected GuiElement first;
+    protected GuiElement second;
+    protected GuiElement third;
 
     public GuiTransformations(Minecraft mc)
     {
@@ -98,21 +109,58 @@ public class GuiTransformations extends GuiElement
         this.origin = new GuiToggleElement(mc, IKey.EMPTY, false, null);
         this.origin.flex().relative(this.drx).x(1F).y(-13).wh(11, 11).anchorX(1F);
         this.origin.tooltip(IKey.lang("mclib.gui.transforms.delta.origin"));
+
+        this.localtx = new GuiRelativeTrackpadElement(mc, (value) -> this.localTranslate(value, 0, 0), IKey.str("X")).block();
+        this.localty = new GuiRelativeTrackpadElement(mc, (value) -> this.localTranslate(0, value, 0), IKey.str("Y")).block();
+        this.localtz = new GuiRelativeTrackpadElement(mc, (value) -> this.localTranslate(0, 0, value), IKey.str("Z")).block();
+        this.orientation = new GuiStaticTransformOrientation(mc, (value) ->
+        {
+            this.updateFields();
+        });
+        this.orientation.addLabel(IKey.lang("mclib.gui.transforms.orientation.global"));
+        this.orientation.addLabel(IKey.lang("mclib.gui.transforms.orientation.local"));
+        this.orientation.tooltip(IKey.lang("mclib.gui.transforms.orientation.tooltip"));
+        this.orientation.flex().relative(this.tx).set(0, -44, 60, 20);
         
-        GuiElement first = new GuiElement(mc);
-        GuiElement second = new GuiElement(mc);
-        GuiElement third = new GuiElement(mc);
+        this.first = new GuiElement(mc);
+        this.second = new GuiElement(mc);
+        this.third = new GuiElement(mc);
 
-        first.flex().relative(this).w(1F).h(20).row(5).height(20);
-        first.add(this.tx, sx, rx, drx);
+        this.first.flex().relative(this).w(1.25F).h(20).row(5).height(20);
+        this.first.add(this.tx, sx, rx, drx);
 
-        second.flex().relative(this).y(0.5F, -10).w(1F).h(20).row(5).height(20);
-        second.add(this.ty, sy, ry, dry);
+        this.second.flex().relative(this).y(0.5F, -10).w(1.25F).h(20).row(5).height(20);
+        this.second.add(this.ty, sy, ry, dry);
 
-        third.flex().relative(this).y(1F, -20).w(1F).h(20).row(5).height(20);
-        third.add(this.tz, sz, rz, drz);
+        this.third.flex().relative(this).y(1F, -20).w(1.25F).h(20).row(5).height(20);
+        this.third.add(this.tz, sz, rz, drz);
 
-        this.add(first, second, third, this.one, this.origin);
+        this.add(this.first, this.second, this.third, this.orientation, this.one, this.origin);
+    }
+
+    protected void updateFields()
+    {
+        this.tx.removeFromParent();
+        this.ty.removeFromParent();
+        this.tz.removeFromParent();
+        this.localtx.removeFromParent();
+        this.localty.removeFromParent();
+        this.localtz.removeFromParent();
+
+        if (GuiStaticTransformOrientation.getOrientation() == TransformOrientation.GLOBAL)
+        {
+            this.first.addBefore(this.sx, this.tx);
+            this.second.addBefore(this.sy, this.ty);
+            this.third.addBefore(this.sz, this.tz);
+        }
+        else if (GuiStaticTransformOrientation.getOrientation() == TransformOrientation.LOCAL)
+        {
+            this.first.addBefore(this.sx, this.localtx);
+            this.second.addBefore(this.sy, this.localty);
+            this.third.addBefore(this.sz, this.localtz);
+        }
+
+        this.parent.resize();
     }
 
     public void resetScale()
@@ -337,6 +385,9 @@ public class GuiTransformations extends GuiElement
         this.rz.setValueAndNotify(result.z);
     }
 
+    protected void localTranslate(double x, double y, double z)
+    { }
+
     protected void deltaRotate(double x, double y, double z)
     {
         Matrix4f mat = new Matrix4f();
@@ -411,5 +462,77 @@ public class GuiTransformations extends GuiElement
                 this.lastValue = this.value;
             }
         }
+    }
+
+    /**
+     * A GuiCirculateElement that has a static value
+     */
+    public static class GuiStaticTransformOrientation extends GuiCirculateElement
+    {
+        protected static int value = 0;
+
+        public GuiStaticTransformOrientation(Minecraft mc, Consumer<GuiCirculateElement> callback)
+        {
+            super(mc, callback);
+        }
+
+        public static TransformOrientation getOrientation()
+        {
+            return TransformOrientation.values()[value];
+        }
+
+        @Override
+        public int getValue()
+        {
+            return value;
+        }
+
+        @Override
+        public String getLabel()
+        {
+            return this.labels.get(value).get();
+        }
+
+        @Override
+        public void setValue(int newValue, int direction)
+        {
+            value = newValue;
+
+            if (this.disabled.contains(newValue))
+            {
+                this.setValue(newValue + direction, direction);
+
+                return;
+            }
+
+            if (value > this.labels.size() - 1)
+            {
+                value = 0;
+            }
+
+            if (value < 0)
+            {
+                value = this.labels.size() - 1;
+            }
+        }
+
+        @Override
+        protected void click(int mouseButton)
+        {
+            int direction = mouseButton == 0 ? 1 : -1;
+
+            this.setValue(value + direction, direction);
+
+            if (this.callback != null)
+            {
+                this.callback.accept(this.get());
+            }
+        }
+    }
+
+    public enum TransformOrientation
+    {
+        GLOBAL,
+        LOCAL
     }
 }
