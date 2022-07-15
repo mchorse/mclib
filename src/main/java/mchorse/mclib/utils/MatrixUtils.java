@@ -124,6 +124,10 @@ public class MatrixUtils
         floats[15] = matrix4f.m33;
     }
 
+    /**
+     * @param floatBuffer with the minimum size of 16
+     * @param matrix
+     */
     public static void matrixToFloatBuffer(FloatBuffer floatBuffer, Matrix4f matrix)
     {
         floatBuffer.put(matrix.m00);
@@ -242,20 +246,80 @@ public class MatrixUtils
         return angularV;
     }
 
-    public static Matrix3f getZYXrotationMatrix(float x, float y, float z)
+    /**
+     * Calculate an intrinsic rotation matrix based on the given order and the angles.
+     * @param x angle in radians
+     * @param y angle in radians
+     * @param z angle in radians
+     * @param order order of the rotation matrix
+     * @return intrinsic rotation matrix
+     */
+    public static Matrix4f getRotationMatrix(float x, float y, float z, RotationOrder order)
     {
-        Matrix3f rotation = new Matrix3f();
-        Matrix3f rot = new Matrix3f();
+        Matrix4f mat = new Matrix4f();
+        Matrix4f rot = new Matrix4f();
 
-        rotation.setIdentity();
-        rot.rotZ(z);
-        rotation.mul(rot);
-        rot.rotY(y);
-        rotation.mul(rot);
-        rot.rotX(x);
-        rotation.mul(rot);
+        mat.setIdentity();
 
-        return rotation;
+        switch (order)
+        {
+            case XYZ:
+                rot.rotZ(z);
+                mat.mul(rot);
+                rot.rotY(y);
+                mat.mul(rot);
+                rot.rotX(x);
+                mat.mul(rot);
+
+                break;
+            case ZYX:
+                rot.rotX(x);
+                mat.mul(rot);
+                rot.rotY(y);
+                mat.mul(rot);
+                rot.rotZ(z);
+                mat.mul(rot);
+
+                break;
+            case XZY:
+                rot.rotY(y);
+                mat.mul(rot);
+                rot.rotZ(z);
+                mat.mul(rot);
+                rot.rotX(x);
+                mat.mul(rot);
+
+                break;
+            case YZX:
+                rot.rotX(x);
+                mat.mul(rot);
+                rot.rotZ(z);
+                mat.mul(rot);
+                rot.rotY(y);
+                mat.mul(rot);
+
+                break;
+            case YXZ:
+                rot.rotZ(z);
+                mat.mul(rot);
+                rot.rotX(x);
+                mat.mul(rot);
+                rot.rotY(y);
+                mat.mul(rot);
+
+                break;
+            case ZXY:
+                rot.rotY(y);
+                mat.mul(rot);
+                rot.rotX(x);
+                mat.mul(rot);
+                rot.rotZ(z);
+                mat.mul(rot);
+
+                break;
+        }
+
+        return mat;
     }
 
     /**
