@@ -1,6 +1,7 @@
 package mchorse.mclib.utils;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.BufferUtils;
@@ -9,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.SingularMatrixException;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 import java.nio.FloatBuffer;
 
@@ -51,6 +53,68 @@ public class RenderingUtils
         invertRotScale.mul(transformation[1], invertRotScale);
 
         return new Matrix4f(invertRotScale);
+    }
+
+
+    /**
+     * This method inverts the scale and rotation using the provided parameters
+     * and multiplies the OpenGL matrix stack with it.
+     * @param scale
+     * @param rotation angles in radians
+     * @param rotationOrder the order of the rotation
+     */
+    public static void glRevertRotationScale(Vector3d rotation, Vector3d scale, MatrixUtils.RotationOrder rotationOrder)
+    {
+        double invSx = (scale.x != 0) ? 1 / scale.x : 0;
+        double invSy = (scale.y != 0) ? 1 / scale.y : 0;
+        double invSz = (scale.z != 0) ? 1 / scale.z : 0;
+
+        GlStateManager.scale(invSx, invSy, invSz);
+
+        float rotx = (float) -Math.toDegrees(rotation.x);
+        float roty = (float) -Math.toDegrees(rotation.y);
+        float rotz = (float) -Math.toDegrees(rotation.z);
+
+        switch (rotationOrder)
+        {
+            case ZYX:
+                GlStateManager.rotate(rotz, 0, 0, 1);
+                GlStateManager.rotate(roty, 0, 1, 0);
+                GlStateManager.rotate(rotx, 1, 0, 0);
+
+                break;
+            case XYZ:
+                GlStateManager.rotate(rotx, 1, 0, 0);
+                GlStateManager.rotate(roty, 0, 1, 0);
+                GlStateManager.rotate(rotz, 0, 0, 1);
+
+                break;
+            case XZY:
+                GlStateManager.rotate(rotx, 1, 0, 0);
+                GlStateManager.rotate(rotz, 0, 0, 1);
+                GlStateManager.rotate(roty, 0, 1, 0);
+
+                break;
+            case YZX:
+                GlStateManager.rotate(roty, 0, 1, 0);
+                GlStateManager.rotate(rotz, 0, 0, 1);
+                GlStateManager.rotate(rotx, 1, 0, 0);
+
+                break;
+            case YXZ:
+                GlStateManager.rotate(roty, 0, 1, 0);
+                GlStateManager.rotate(rotx, 1, 0, 0);
+                GlStateManager.rotate(rotz, 0, 0, 1);
+
+                break;
+            case ZXY:
+                GlStateManager.rotate(rotz, 0, 0, 1);
+                GlStateManager.rotate(rotx, 1, 0, 0);
+                GlStateManager.rotate(roty, 0, 1, 0);
+
+                break;
+        }
+
     }
 
     public static Matrix4f getFacingRotation(Facing facing, Vector3f position)
