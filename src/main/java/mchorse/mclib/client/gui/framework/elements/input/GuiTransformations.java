@@ -16,6 +16,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.utils.Color;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.MatrixUtils;
 import mchorse.mclib.utils.MatrixUtils.Transformation;
@@ -435,6 +436,27 @@ public class GuiTransformations extends GuiElement
         }
 
         this.orientationCache = GuiStaticTransformOrientation.getOrientation();
+
+        if (McLib.renderTranslateTextColors.get())
+        {
+            this.tx.setTextColor(new Color(1,0,0));
+            this.ty.setTextColor(new Color(0,1,0));
+            this.tz.setTextColor(new Color(0,0,1));
+
+            this.localtx.setTextColor(new Color(1,0,0));
+            this.localty.setTextColor(new Color(0,1,0));
+            this.localtz.setTextColor(new Color(0,0,1));
+        }
+        else
+        {
+            this.tx.setTextColor(new Color(1,1,1));
+            this.ty.setTextColor(new Color(1,1,1));
+            this.tz.setTextColor(new Color(1,1,1));
+
+            this.localtx.setTextColor(new Color(1,1,1));
+            this.localty.setTextColor(new Color(1,1,1));
+            this.localtz.setTextColor(new Color(1,1,1));
+        }
 
         super.draw(context);
     }
