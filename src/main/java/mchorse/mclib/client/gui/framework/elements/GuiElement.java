@@ -106,6 +106,19 @@ public class GuiElement extends Gui implements IGuiElement
     protected FontRenderer font;
 
     /**
+     * used in {@link #mouseClicked(GuiContext)} to determine whether
+     * a context menu should be prevented
+     */
+    protected boolean allowContextMenu = true;
+    /**
+     * used in {@link #mouseClicked(GuiContext)} to determine whether
+     * a context menu is allowed. This static field will determine whether any context menu can appear.
+     * Example use case: when dragging a trackpad and right clicking, it should only abort the process
+     * and not add a context menu as this can be annoying
+     */
+    protected static boolean globalAllowContextMenu = true;
+
+    /**
      * Initiate GUI element with Minecraft's instance 
      */
     public GuiElement(Minecraft mc)
@@ -613,7 +626,7 @@ public class GuiElement extends Gui implements IGuiElement
             return true;
         }
 
-        if (this.area.isInside(context) && context.mouseButton == 1)
+        if (globalAllowContextMenu && this.allowContextMenu && this.area.isInside(context) && context.mouseButton == 1)
         {
             if (!context.hasContextMenu())
             {
