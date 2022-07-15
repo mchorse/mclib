@@ -41,6 +41,9 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
         this.defaultValue = defaultValue;
     }
 
+    /**
+     * @return the reference to {@link #value} or {@link #serverValue}.
+     */
     @Override
     public ResourceLocation get()
     {

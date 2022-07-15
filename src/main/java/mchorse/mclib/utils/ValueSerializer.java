@@ -191,7 +191,7 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
             GenericValue value = this.pool.get(entry.getValue());
             String key = entry.getKey();
 
-            if (value.hasChanged() && value.get() != null && value.valueToNBT() != null)
+            if (value.hasChanged() && value.get() != null)
             {
                 tag.setTag(key, value.valueToNBT());
             }
