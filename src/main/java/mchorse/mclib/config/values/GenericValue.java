@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
  *
  * <h2>Important when extending:</h2>
  * If the generic datatype is a class, then that class should implement {@link ICopy}.
- * If the class of the generic datatype cannot implement {@link ICopy}, the method {@link #reset()}, {@link #set(Object)} needs to be overridden!
+ * If the class of the generic datatype cannot implement {@link ICopy}, the methods {@link #set(Object)} and {@link #get()} need to be overridden!
  * <br>
  * The class of the generic datatype should also override {@link Object#equals(Object)} to ensure a safe usage.
  * If it cannot override {@link Object#equals(Object)}, the methods {@link #hasChanged()} and {@link #equals(Object)} need to be overridden!
@@ -58,12 +58,33 @@ public abstract class GenericValue<T> extends Value
     }
 
     /**
-     * @return the reference of {@link #value}, or if the {@link #serverValue} is not null
-     *         it returns the reference to {@link #serverValue}
+     * @return reference to {@link #value}, or if the {@link #serverValue} != null return {@link #serverValue}.
+     *         If the generic datatype is instance of {@link ICopy}, the return value will be copied.
      */
     public T get()
     {
-        return this.serverValue == null ? this.value : this.serverValue;
+        if (this.serverValue == null)
+        {
+            if (this.value instanceof ICopy)
+            {
+                return ((ICopy<T>) this.value).copy();
+            }
+            else
+            {
+                return this.value;
+            }
+        }
+        else
+        {
+            if (this.serverValue instanceof ICopy)
+            {
+                return ((ICopy<T>) this.serverValue).copy();
+            }
+            else
+            {
+                return this.serverValue;
+            }
+        }
     }
 
     /**
@@ -94,20 +115,12 @@ public abstract class GenericValue<T> extends Value
     }
 
     /**
-     * Reset this value to defaultValue. If defaultValue inherits {@link ICopy},
-     * the defaultValue will be cloned so value and defaultValue don't share the same references.
+     * Reset this value to defaultValue. Calls {@link #set(Object)}
      */
     @Override
     public void reset()
     {
-        if (this.defaultValue instanceof ICopy)
-        {
-            this.set(((ICopy<T>) this.defaultValue).copy());
-        }
-        else
-        {
-            this.set(this.defaultValue);
-        }
+        this.set(this.defaultValue);
     }
 
     /**
