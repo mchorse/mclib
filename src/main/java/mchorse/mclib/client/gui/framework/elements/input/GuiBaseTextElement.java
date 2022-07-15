@@ -38,6 +38,16 @@ public abstract class GuiBaseTextElement extends GuiElement implements IFocusedG
         this.field.setTextColor(color.getRGBAColor());
     }
 
+    public void setTextColor(int color)
+    {
+        this.field.setTextColor(color);
+    }
+
+    public void setText(String textIn)
+    {
+        this.field.setText(textIn);
+    }
+
     @Override
     public boolean isFocused()
     {

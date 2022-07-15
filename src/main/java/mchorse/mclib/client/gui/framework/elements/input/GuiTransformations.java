@@ -109,9 +109,9 @@ public class GuiTransformations extends GuiElement
 
         this.one.flex().relative(this.sx).x(1F).y(-13).wh(11, 11).anchorX(1F);
         
-        this.drx = new GuiRelativeTrackpadElement(mc, (value) -> this.deltaRotate(value, 0, 0), IKey.str("Rx"));
-        this.dry = new GuiRelativeTrackpadElement(mc, (value) -> this.deltaRotate(0, value, 0), IKey.str("Ry"));
-        this.drz = new GuiRelativeTrackpadElement(mc, (value) -> this.deltaRotate(0, 0, value), IKey.str("Rz"));
+        this.drx = new GuiRelativeTrackpadElement(mc, (value) -> this.deltaRotate(value, 0, 0), IKey.str("Rx")).degrees();
+        this.dry = new GuiRelativeTrackpadElement(mc, (value) -> this.deltaRotate(0, value, 0), IKey.str("Ry")).degrees();
+        this.drz = new GuiRelativeTrackpadElement(mc, (value) -> this.deltaRotate(0, 0, value), IKey.str("Rz")).degrees();
         this.origin = new GuiToggleElement(mc, IKey.EMPTY, false, null);
         this.origin.flex().relative(this.drx).x(1F).y(-13).wh(11, 11).anchorX(1F);
         this.origin.tooltip(IKey.lang("mclib.gui.transforms.delta.origin"));
@@ -439,23 +439,24 @@ public class GuiTransformations extends GuiElement
 
         if (McLib.renderTranslateTextColors.get())
         {
-            this.tx.setTextColor(new Color(1,0,0));
-            this.ty.setTextColor(new Color(0,1,0));
-            this.tz.setTextColor(new Color(0,0,1));
+            this.tx.setTextColor(new Color(1,0.5F,0.5F));
+            this.ty.setTextColor(new Color(0.5F,1,0.5F));
+            this.tz.setTextColor(new Color(0.5F,0.5F,1));
 
-            this.localtx.setTextColor(new Color(1,0,0));
-            this.localty.setTextColor(new Color(0,1,0));
-            this.localtz.setTextColor(new Color(0,0,1));
+            this.localtx.setTextColor(new Color(1,0.5F,0.5F));
+            this.localty.setTextColor(new Color(0.5F,1,0.5F));
+            this.localtz.setTextColor(new Color(0.5F,0.5F,1));
         }
         else
         {
-            this.tx.setTextColor(new Color(1,1,1));
-            this.ty.setTextColor(new Color(1,1,1));
-            this.tz.setTextColor(new Color(1,1,1));
+            Color color = new Color(14737632);
 
-            this.localtx.setTextColor(new Color(1,1,1));
-            this.localty.setTextColor(new Color(1,1,1));
-            this.localtz.setTextColor(new Color(1,1,1));
+            this.tx.setTextColor(color);
+            this.ty.setTextColor(color);
+            this.tz.setTextColor(color);
+            this.localtx.setTextColor(color);
+            this.localty.setTextColor(color);
+            this.localtz.setTextColor(color);
         }
 
         super.draw(context);
@@ -470,10 +471,8 @@ public class GuiTransformations extends GuiElement
         {
             super(mc, callback);
             this.label = label;
-            this.field.setText(label.get());
-            this.field.setEnabled(false);
-            this.field.setDisabledTextColour(0xE0E0E0);
-            this.degrees();
+            this.setText(label.get());
+            this.setTextColor(0xE0E0E0);
         }
 
         @Override
@@ -482,7 +481,7 @@ public class GuiTransformations extends GuiElement
             super.mouseReleased(context);
             this.lastValue = 0;
             this.setValue(0);
-            this.field.setText(this.label.get());
+            this.setText(this.label.get());
         }
 
         @Override
@@ -499,7 +498,7 @@ public class GuiTransformations extends GuiElement
     }
 
     /**
-     * A GuiCirculateElement that has a static value
+     * A GuiCirculateElement that has a static value. This class overrides the methods that access the value attribute
      */
     public static class GuiStaticTransformOrientation extends GuiCirculateElement
     {
