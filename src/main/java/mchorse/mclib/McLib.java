@@ -65,6 +65,7 @@ public class McLib
     public static ValueInt userIntefaceScale;
     public static ValueInt tooltipStyle;
     public static ValueInt trackpadDecimalPlaces;
+    public static ValueBoolean renderTranslateTextColors;
 
     public static ValueBoolean enableCursorRendering;
     public static ValueBoolean enableMouseButtonRendering;
@@ -106,6 +107,7 @@ public class McLib
             IKey.lang("mclib.tooltip_style.light"),
             IKey.lang("mclib.tooltip_style.dark")
         );
+        renderTranslateTextColors = builder.getBoolean("render_translation_text_colours", false);
 
         favoriteColors = new ValueColors("favorite_colors");
         builder.register(favoriteColors);

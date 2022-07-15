@@ -3,6 +3,7 @@ package mchorse.mclib.client.gui.framework.elements.input;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.IFocusedGuiElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.utils.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Keyboard;
@@ -30,6 +31,11 @@ public abstract class GuiBaseTextElement extends GuiElement implements IFocusedG
     {
         super.setVisible(visible);
         this.field.setVisible(visible);
+    }
+
+    public void setTextColor(Color color)
+    {
+        this.field.setTextColor(color.getRGBAColor());
     }
 
     @Override
