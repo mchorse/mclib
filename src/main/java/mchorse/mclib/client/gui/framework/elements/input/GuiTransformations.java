@@ -55,6 +55,11 @@ public class GuiTransformations extends GuiElement
     public GuiTrackpadElement drz;
     public GuiToggleElement origin;
     public GuiCirculateElement orientation;
+
+    /**
+     * Used to update the fields when the static orientation changes.
+     */
+    protected TransformOrientation orientationCache;
     protected GuiElement first;
     protected GuiElement second;
     protected GuiElement third;
@@ -423,6 +428,13 @@ public class GuiTransformations extends GuiElement
         this.font.drawStringWithShadow(I18n.format("mclib.gui.transforms.translate"), this.tx.area.x, this.tx.area.y - 12, 0xffffff);
         this.font.drawStringWithShadow(I18n.format("mclib.gui.transforms.scale"), this.sx.area.x, this.sx.area.y - 12, 0xffffff);
         this.font.drawStringWithShadow(I18n.format("mclib.gui.transforms.rotate"), this.rx.area.x, this.rx.area.y - 12, 0xffffff);
+
+        if (this.orientationCache != GuiStaticTransformOrientation.getOrientation())
+        {
+            this.updateFields();
+        }
+
+        this.orientationCache = GuiStaticTransformOrientation.getOrientation();
 
         super.draw(context);
     }
