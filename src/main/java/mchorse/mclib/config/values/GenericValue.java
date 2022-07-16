@@ -213,7 +213,7 @@ public abstract class GenericValue<T> extends Value
 
     /**
      * @return true if value is null and defaultValue is not null or
-     *         if the result of value.equals(defaultValue) is false.
+     *         if the result of value {@link Object#equals(Object)} is false.
      */
     public boolean hasChanged()
     {

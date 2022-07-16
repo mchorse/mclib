@@ -86,7 +86,6 @@ public class ValueRotationOrder extends GenericValue<RotationOrder>
     public ValueRotationOrder copy()
     {
         ValueRotationOrder clone = new ValueRotationOrder(this.id, this.defaultValue);
-        clone.defaultValue = this.defaultValue;
         clone.value = this.value;
         clone.serverValue = this.serverValue;
 
