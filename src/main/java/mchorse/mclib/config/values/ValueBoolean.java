@@ -68,11 +68,11 @@ public class ValueBoolean extends GenericValue<Boolean> implements IServerValue,
     {
         if (tag instanceof NBTPrimitive)
         {
-            if (((NBTPrimitive) tag).getDouble() == 1)
+            if (((NBTPrimitive) tag).getInt() == 1)
             {
                 this.set(true);
             }
-            else if (((NBTPrimitive) tag).getDouble() == 0)
+            else if (((NBTPrimitive) tag).getInt() == 0)
             {
                 this.set(false);
             }

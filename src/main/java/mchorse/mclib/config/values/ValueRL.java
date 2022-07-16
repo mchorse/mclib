@@ -50,6 +50,20 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
         return !this.useServer ? this.value : this.serverValue;
     }
 
+    /**
+     * Set this {@link #value} to the reference of the provided value.
+     * <br>Note: This is how it was implemented before Chryfi did rewrites
+     * and it has been used throughout McLib etc., so to avoid any problems, the old implementation is kept
+     * @param value
+     */
+    @Override
+    public void set(ResourceLocation value)
+    {
+        this.value = value;
+
+        this.saveLater();
+    }
+
     public void set(String value)
     {
         this.set(RLUtils.create(value));
