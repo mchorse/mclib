@@ -1,5 +1,6 @@
 package mchorse.mclib.client.gui.framework;
 
+import jline.internal.Nullable;
 import mchorse.mclib.client.gui.framework.elements.IViewport;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
@@ -14,6 +15,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Base class for GUI screens using this framework
@@ -46,6 +48,25 @@ public class GuiBase extends GuiScreen
         this.context.keybinds.flex().relative(this.viewport).wh(0.5F, 1F);
 
         Keyboard.enableRepeatEvents(false);
+    }
+
+    /**
+     *
+     * @param clazz the class to search for in the children of this screen.root
+     * @param <T>
+     * @return null if GuiBase.screen or GuiBase.screen.root is null or if the children List is empty.
+     */
+    @Nullable
+    public static <T> List<T> getCurrentChildren(Class<T> clazz)
+    {
+        if (GuiBase.getCurrent() != null && GuiBase.getCurrent().screen != null && GuiBase.getCurrent().screen.root != null)
+        {
+            List<T> childList = GuiBase.getCurrent().screen.root.getChildren(clazz);
+
+            return (childList.isEmpty()) ? null : childList;
+        }
+
+        return null;
     }
 
     @Override
