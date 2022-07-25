@@ -1,37 +1,21 @@
 package mchorse.mclib.events;
 
-import mchorse.mclib.network.mclib.Dispatcher;
 import mchorse.mclib.network.mclib.client.ClientHandlerTimeSync;
-import mchorse.mclib.network.mclib.common.PacketTime;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class EventHandler
 {
-
-    /**
-     * Player login event from the server side
-     * @param event
-     */
     @SubscribeEvent
-    public void playerLogsIn(PlayerLoggedInEvent event)
+    public void playerTickEvent(PlayerTickEvent event)
     {
-        EntityPlayerMP player = (EntityPlayerMP) event.player;
-
-        Dispatcher.sendTo(new PacketTime(System.currentTimeMillis()), player);
-    }
-
-    /**
-     * Client logs into server from client side
-     * @param event
-     */
-    @SubscribeEvent
-    public void clientLogsIn(ClientConnectedToServerEvent event)
-    {
-        ClientHandlerTimeSync.clockClientTime();
+        if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.START && !ClientHandlerTimeSync.isSet() && ClientHandlerTimeSync.canPing())
+        {
+            ClientHandlerTimeSync.requestServerTime();
+        }
     }
 
     @SubscribeEvent
