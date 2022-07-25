@@ -14,6 +14,7 @@ import mchorse.mclib.network.mclib.server.ServerHandlerConfig;
 import mchorse.mclib.network.mclib.server.ServerHandlerConfirm;
 import mchorse.mclib.network.mclib.server.ServerHandlerDropItem;
 import mchorse.mclib.network.mclib.server.ServerHandlerRequestConfigs;
+import mchorse.mclib.network.mclib.server.ServerHandlerTimeSync;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -39,6 +40,7 @@ public class Dispatcher
 
             /* to let the client know what time the server has */
             register(PacketTime.class, ClientHandlerTimeSync.class, Side.CLIENT);
+            register(PacketTime.class, ServerHandlerTimeSync.class, Side.SERVER);
         }
     };
 

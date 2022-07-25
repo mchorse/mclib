@@ -5,12 +5,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class PacketTime implements IMessage
 {
-    private long time;
-
-    public long getTime()
-    {
-        return this.time;
-    }
+    private long time = -1;
 
     public PacketTime()
     { }
@@ -18,6 +13,11 @@ public class PacketTime implements IMessage
     public PacketTime(long time)
     {
         this.time = time;
+    }
+
+    public long getTime()
+    {
+        return this.time;
     }
 
     @Override

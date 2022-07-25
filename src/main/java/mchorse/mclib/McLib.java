@@ -26,6 +26,8 @@ import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
@@ -49,6 +51,8 @@ public class McLib
     public static CommonProxy proxy;
 
     public static final EventBus EVENT_BUS = new EventBus();
+
+    public static final Logger LOGGER = LogManager.getLogger(McLib.MOD_ID);
 
     public static L10n l10n = new L10n(MOD_ID);
 

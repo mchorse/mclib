@@ -1,6 +1,7 @@
 package mchorse.mclib.utils;
 
 import io.netty.buffer.ByteBuf;
+import mchorse.mclib.network.IByteBufSerializable;
 import mchorse.mclib.network.mclib.client.ClientHandlerTimeSync;
 
 /**
@@ -9,7 +10,7 @@ import mchorse.mclib.network.mclib.client.ClientHandlerTimeSync;
  *
  * @author Christian F. (known as Chryfi)
  */
-public class LatencyTimer
+public class LatencyTimer implements IByteBufSerializable
 {
     private long startTime;
     private long endTime;
@@ -36,9 +37,10 @@ public class LatencyTimer
     }
 
     /**
-     * This method calculates the elapsed time and takes into account the difference between server and client time from ClientHandlerTimeSync class.
+     * This method calculates the elapsed time and takes into account the difference
+     * between server and client time from {@link ClientHandlerTimeSync} class.
      * @return the elapsed time in milliseconds since the creation of this object
-     * or if this timer has finished, the elapsed time from start to end.
+     *         or if this timer has finished, the elapsed time from start to end.
      */
     public long getElapsedTime()
     {
@@ -77,17 +79,17 @@ public class LatencyTimer
         return Math.abs(elapsed - clientServerDifference);
     }
 
-    public static LatencyTimer fromBytes(ByteBuf buf)
+    @Override
+    public void fromBytes(ByteBuf buf)
     {
         LatencyTimer timer = new LatencyTimer();
 
         timer.startTime = buf.readLong();
         timer.endTime = buf.readLong();
         timer.clientServerDifferenceCache = buf.readLong();
-
-        return timer;
     }
 
+    @Override
     public void toBytes(ByteBuf buf)
     {
         buf.writeLong(this.startTime);
