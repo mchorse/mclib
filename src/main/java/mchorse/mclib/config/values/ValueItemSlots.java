@@ -172,8 +172,7 @@ public class ValueItemSlots extends GenericValue<ItemStack[]>
 
         for (int i = 0; i < this.value.length; i++)
         {
-            if (!( this.value[i].isItemEqual(valueObj.value[i])
-                    || (this.value[i].isEmpty() && valueObj.value[i].isEmpty()) ))
+            if (!ItemStack.areItemStacksEqual(this.value[i], this.defaultValue[i]))
             {
                 return false;
             }
@@ -190,8 +189,7 @@ public class ValueItemSlots extends GenericValue<ItemStack[]>
     {
         for (int i = 0; i < this.value.length; i++)
         {
-            if (!( this.value[i].isItemEqual(this.defaultValue[i])
-                    || (this.value[i].isEmpty() && this.defaultValue[i].isEmpty()) ))
+            if (!ItemStack.areItemStacksEqual(this.value[i], this.defaultValue[i]))
             {
                 return true;
             }
