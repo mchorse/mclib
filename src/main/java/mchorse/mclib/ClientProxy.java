@@ -4,6 +4,7 @@ import mchorse.mclib.client.KeyboardHandler;
 import mchorse.mclib.client.InputRenderer;
 import mchorse.mclib.client.gui.utils.KeybindConfig;
 import mchorse.mclib.client.gui.utils.keys.LangKey;
+import mchorse.mclib.events.RenderingHandler;
 import mchorse.mclib.utils.ReflectionUtils;
 import mchorse.mclib.utils.resources.MultiResourceLocation;
 import net.minecraft.client.Minecraft;
@@ -32,6 +33,7 @@ public class ClientProxy extends CommonProxy
 
         MinecraftForge.EVENT_BUS.register(new KeyboardHandler());
         MinecraftForge.EVENT_BUS.register(new InputRenderer());
+        MinecraftForge.EVENT_BUS.register(new RenderingHandler());
 
         keybinds = new KeybindConfig();
     }
