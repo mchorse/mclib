@@ -118,9 +118,9 @@ public class ReflectionUtils
     }
 
     /**
-     * Checks whether Optifine is currently rendering shadow map. Thanks to
-     * NyaNLI for suggesting how to do it!
+     * Use {@link OptifineHelper} class!
      */
+    @Deprecated
     public static boolean isOptifineShadowPass()
     {
         if (!SHADOW_PASS_CHECK)
