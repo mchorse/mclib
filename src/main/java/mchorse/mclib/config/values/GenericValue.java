@@ -1,11 +1,6 @@
 package mchorse.mclib.config.values;
 
-import com.google.gson.JsonElement;
-import io.netty.buffer.ByteBuf;
 import mchorse.mclib.utils.ICopy;
-import net.minecraft.nbt.NBTBase;
-
-import javax.annotation.Nullable;
 
 /**
  * A Value container, providing an interface for dealing with
