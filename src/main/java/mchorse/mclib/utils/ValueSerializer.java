@@ -174,7 +174,7 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
     {
         if (value == null) return null;
 
-        String uuid = this.getValueReference(value);
+        String uuid = this.getValueUUID(value);
 
         if (uuid == null)
         {
@@ -193,7 +193,7 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
      *         Returns null if the reference has not been found.
      */
     @Nullable
-    protected String getValueReference(GenericBaseValue<?> value)
+    protected String getValueUUID(GenericBaseValue<?> value)
     {
         if (value == null) return null;
 

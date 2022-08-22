@@ -23,9 +23,9 @@ import javax.annotation.Nullable;
  * If it cannot override {@link Object#equals(Object)}, the method {@link #equals(Object)} need to be overridden!
  *
  * <br><br>
- * The GenericValue subclasses can be used together with the {@link mchorse.mclib.utils.ValueSerializer}
+ * The GenericBaseValue subclasses can be used together with the {@link mchorse.mclib.utils.ValueSerializer}
  * to automate all of the toNBT, fromNBT, toBytes, fromBytes, fromJson and toJson serialization processes.
- * GenericValue subclasses can also be used for an undo / redo system, as it is already in place in Aperture mod.
+ * GenericBaseValue subclasses can also be used for an undo / redo system, as it is already in place in Aperture mod.
  *
  * @param <T> the datatype of the values in this value container
  * @author Christian F (Chryfi)
@@ -151,7 +151,7 @@ public abstract class GenericBaseValue<T> extends Value
      * @return a deep copy of this object
      */
     @Override
-    public abstract GenericValue<T> copy();
+    public abstract GenericBaseValue<T> copy();
 
     /**
      * Copy the {@link #value} from the specified object to this object.
@@ -169,7 +169,7 @@ public abstract class GenericBaseValue<T> extends Value
     @Override
     public boolean equals(Object obj)
     {
-        if (!(obj instanceof GenericValue))
+        if (!(obj instanceof GenericBaseValue))
         {
             /*
              * if this.value == null and obj is null return true because both values are null
@@ -177,7 +177,7 @@ public abstract class GenericBaseValue<T> extends Value
             return (obj == null && this.value == null);
         }
 
-        GenericValue valueObj = (GenericValue) obj;
+        GenericBaseValue valueObj = (GenericBaseValue) obj;
 
         if (valueObj.value == null && this.value == null)
         {
