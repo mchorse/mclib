@@ -55,14 +55,29 @@ public class Elements
         return label(label, Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT);
     }
 
+    public static GuiLabel label(IKey label, Icon leftIcon, Icon rightIcon)
+    {
+        return label(label, Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT, leftIcon, rightIcon);
+    }
+
     public static GuiLabel label(IKey label, int height)
     {
         return label(label, height, 0xffffff);
     }
 
+    public static GuiLabel label(IKey label, int height, Icon leftIcon, Icon rightIcon)
+    {
+        return label(label, height, 0xffffff, leftIcon, rightIcon);
+    }
+
     public static GuiLabel label(IKey label, int height, int color)
     {
-        GuiLabel element = new GuiLabel(Minecraft.getMinecraft(), label, color);
+        return label(label, height, color, null, null);
+    }
+
+    public static GuiLabel label(IKey label, int height, int color, Icon leftIcon, Icon rightIcon)
+    {
+        GuiLabel element = new GuiLabel(Minecraft.getMinecraft(), label, color, leftIcon, rightIcon);
 
         element.flex().h(height);
 
