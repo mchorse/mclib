@@ -1,0 +1,129 @@
+package mchorse.mclib.client.gui.framework.elements;
+
+import mchorse.mclib.McLib;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
+import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
+import mchorse.mclib.client.gui.framework.elements.utils.IconRenderer;
+import mchorse.mclib.client.gui.utils.Elements;
+import mchorse.mclib.client.gui.utils.Icon;
+import mchorse.mclib.client.gui.utils.Icons;
+import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.utils.ColorUtils;
+import net.minecraft.client.Minecraft;
+
+import java.util.function.Supplier;
+
+public class GuiCollapseSection extends GuiElement
+{
+    protected GuiLabel title;
+    protected GuiElement fields;
+    protected boolean collapsed;
+    protected IconRenderer collapsedIcon = new IconRenderer(Icons.MOVE_RIGHT, 10, 10, 0.5F, 0.5F, 0, -2);
+    protected IconRenderer openedIcon = new IconRenderer(Icons.MOVE_DOWN, 10, 10, 0.5F, 0.5F);
+
+    /**
+     * @param mc
+     * @param title
+     * @param titleBackground the background color of the title as Supplier to allow changes of the color through configurations.
+     * @param collapsed true if it should be collapsed by default, false if it should display its fields.
+     */
+    public GuiCollapseSection(Minecraft mc, IKey title, Supplier<Integer> titleBackground, boolean collapsed)
+    {
+        super(mc);
+
+        this.title = Elements.label(title).background(titleBackground);
+        this.title.setLeftIconRenderer(this.collapsedIcon);
+        this.fields = new GuiElement(mc);
+        this.fields.flex().column(5).stretch().vertical().height(20);
+
+        this.flex().column(5).stretch().vertical();
+        this.add(this.title);
+
+        if (!collapsed)
+        {
+            this.add(this.fields);
+            this.title.setLeftIconRenderer(this.openedIcon);
+        }
+
+        this.collapsed = collapsed;
+    }
+
+    public GuiCollapseSection(Minecraft mc, IKey title, Supplier<Integer> titleBackground)
+    {
+        this(mc, title, titleBackground, false);
+    }
+
+    public GuiCollapseSection(Minecraft mc, IKey title)
+    {
+        this(mc, title, () -> ColorUtils.HALF_BLACK + McLib.primaryColor.get());
+    }
+
+    public void setCollapsed(boolean collapsed)
+    {
+        if (this.collapsed != collapsed)
+        {
+            this.updateCollapse();
+        }
+    }
+
+    public boolean isCollapsed()
+    {
+        return this.collapsed;
+    }
+
+    public void addField(GuiElement element)
+    {
+        this.fields.add(element);
+    }
+
+    public void addFields(GuiElement... element)
+    {
+        this.fields.add(element);
+    }
+
+    public GuiLabel getTitle()
+    {
+        return this.title;
+    }
+
+    protected void updateCollapse()
+    {
+        if (!this.collapsed)
+        {
+            this.fields.removeFromParent();
+            this.title.setLeftIconRenderer(this.collapsedIcon);
+
+            this.collapsed = true;
+        }
+        else
+        {
+            this.add(this.fields);
+            this.title.setLeftIconRenderer(this.openedIcon);
+
+            this.collapsed = false;
+        }
+    }
+
+    /**
+     * Toggle visibility of the field section
+     */
+    @Override
+    public boolean mouseClicked(GuiContext context)
+    {
+        if (super.mouseClicked(context))
+        {
+            return true;
+        }
+
+        if (this.title.area.isInside(context))
+        {
+            this.updateCollapse();
+
+            this.getParent().resize();
+
+            return true;
+        }
+
+        return false;
+    }
+}
