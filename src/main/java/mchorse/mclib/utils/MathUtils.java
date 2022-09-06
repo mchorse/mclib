@@ -56,4 +56,24 @@ public class MathUtils
 
         return count <= 0 ? 1 : (int) Math.ceil(x);
     }
+
+    /**
+     * Remove 360 degrees of flips between previous and current angle.
+     * A difference greater or equal than 180 degrees will be treated as a flip.
+     * @param prev previous angle in radians
+     * @param current current angle in radians
+     * @return cleaned current in radians
+     */
+    public static float filterFlips(float prev, float current)
+    {
+        final float sign = (prev > current) ? 1 : -1;
+        final float add = sign * 2.0F * (float) Math.PI;
+
+        while (Math.abs(prev - current) >= Math.PI)
+        {
+            current += add;
+        }
+
+        return current;
+    }
 }
