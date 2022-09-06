@@ -22,6 +22,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.function.Consumer;
@@ -76,7 +77,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         this(mc, value, null);
     }
 
-    public GuiTrackpadElement(Minecraft mc, ValueInt value, Consumer<Double> callback)
+    public GuiTrackpadElement(Minecraft mc, ValueInt value, @Nullable Consumer<Double> callback)
     {
         this(mc, callback == null ? (v) -> value.set(v.intValue()) : (v) ->
         {
@@ -93,7 +94,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         this(mc, value, null);
     }
 
-    public GuiTrackpadElement(Minecraft mc, ValueLong value, Consumer<Double> callback)
+    public GuiTrackpadElement(Minecraft mc, ValueLong value, @Nullable Consumer<Double> callback)
     {
         this(mc, callback == null ? (v) -> value.set(v.longValue()) : (v) ->
         {
@@ -110,7 +111,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         this(mc, value, null);
     }
 
-    public GuiTrackpadElement(Minecraft mc, ValueFloat value, Consumer<Double> callback)
+    public GuiTrackpadElement(Minecraft mc, ValueFloat value, @Nullable Consumer<Double> callback)
     {
         this(mc, callback == null ? (v) -> value.set(v.floatValue()) : (v) ->
         {
@@ -127,7 +128,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         this(mc, value, null);
     }
 
-    public GuiTrackpadElement(Minecraft mc, ValueDouble value, Consumer<Double> callback)
+    public GuiTrackpadElement(Minecraft mc, ValueDouble value, @Nullable Consumer<Double> callback)
     {
         this(mc, callback == null ? value::set : (v) ->
         {
@@ -139,7 +140,7 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         this.tooltip(IKey.lang(value.getCommentKey()));
     }
 
-    public GuiTrackpadElement(Minecraft mc, Consumer<Double> callback)
+    public GuiTrackpadElement(Minecraft mc, @Nullable Consumer<Double> callback)
     {
         super(mc);
 
