@@ -3,6 +3,10 @@ package mchorse.mclib.client.gui.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class connects Icons with Strings.
+ * It is used in Mappet's UI API
+ */
 public class IconRegistry
 {
     public static final Map<String, Icon> icons = new HashMap<String, Icon>();
