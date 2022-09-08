@@ -20,8 +20,8 @@ public class GuiLabel extends GuiElement implements ITextColoring
     public float anchorY;
     public int background;
     public Supplier<Integer> backgroundColor;
-    private IconRenderer leftIcon;
-    private IconRenderer rightIcon;
+    private IconContainer leftIcon;
+    private IconContainer rightIcon;
 
     public GuiLabel(Minecraft mc, IKey label)
     {
@@ -30,7 +30,7 @@ public class GuiLabel extends GuiElement implements ITextColoring
 
     public GuiLabel(Minecraft mc, IKey label, int color)
     {
-        this(mc, label, 0xffffff, (IconRenderer) null, null);
+        this(mc, label, 0xffffff, (IconContainer) null, null);
     }
 
     public GuiLabel(Minecraft mc, IKey label, int color, @Nullable Icon leftIcon, @Nullable Icon rightIcon)
@@ -39,11 +39,11 @@ public class GuiLabel extends GuiElement implements ITextColoring
 
         this.label = label;
         this.color = color;
-        this.leftIcon = leftIcon != null ? new IconRenderer(leftIcon) : null;
-        this.rightIcon = rightIcon != null ? new IconRenderer(rightIcon) : null;
+        this.leftIcon = leftIcon != null ? new IconContainer(leftIcon) : null;
+        this.rightIcon = rightIcon != null ? new IconContainer(rightIcon) : null;
     }
 
-    public GuiLabel(Minecraft mc, IKey label, int color, @Nullable IconRenderer leftIcon, @Nullable IconRenderer rightIcon)
+    public GuiLabel(Minecraft mc, IKey label, int color, @Nullable IconContainer leftIcon, @Nullable IconContainer rightIcon)
     {
         super(mc);
 
@@ -58,7 +58,7 @@ public class GuiLabel extends GuiElement implements ITextColoring
         this(mc, label, 0xffffff, leftIcon, rightIcon);
     }
 
-    public IconRenderer getLeftIcon()
+    public IconContainer getLeftIcon()
     {
         return this.leftIcon;
     }
@@ -71,11 +71,11 @@ public class GuiLabel extends GuiElement implements ITextColoring
         }
         else
         {
-            this.leftIcon = new IconRenderer(leftIcon);
+            this.leftIcon = new IconContainer(leftIcon);
         }
     }
 
-    public IconRenderer getRightIcon()
+    public IconContainer getRightIcon()
     {
         return this.rightIcon;
     }
@@ -88,16 +88,16 @@ public class GuiLabel extends GuiElement implements ITextColoring
         }
         else
         {
-            this.rightIcon = new IconRenderer(rightIcon);
+            this.rightIcon = new IconContainer(rightIcon);
         }
     }
 
-    public void setRightIconRenderer(IconRenderer rightIcon)
+    public void setRightIconRenderer(IconContainer rightIcon)
     {
         this.rightIcon = rightIcon;
     }
 
-    public void setLeftIconRenderer(IconRenderer leftIcon)
+    public void setLeftIconRenderer(IconContainer leftIcon)
     {
         this.leftIcon = leftIcon;
     }
