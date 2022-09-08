@@ -2,7 +2,7 @@ package mchorse.mclib.client.gui.framework.elements.utils;
 
 import mchorse.mclib.client.gui.utils.Icon;
 
-public class IconRenderer
+public class IconContainer
 {
     private Icon icon;
     private int w;
@@ -22,7 +22,7 @@ public class IconRenderer
      * @param ax the anchor point of the icon to render inside the wrapper
      * @param ay the anchor point of the icon to render inside the wrapper
      */
-    public IconRenderer(Icon icon, int w, int h, float ax, float ay, int offsetX, int offsetY)
+    public IconContainer(Icon icon, int w, int h, float ax, float ay, int offsetX, int offsetY)
     {
         this.icon = icon;
         this.w = w;
@@ -40,7 +40,7 @@ public class IconRenderer
      * @param ax the anchor point of the icon to render inside the wrapper
      * @param ay the anchor point of the icon to render inside the wrapper
      */
-    public IconRenderer(Icon icon, int w, int h, float ax, float ay)
+    public IconContainer(Icon icon, int w, int h, float ax, float ay)
     {
         this.icon = icon;
         this.w = w;
@@ -49,12 +49,12 @@ public class IconRenderer
         this.ay = ay;
     }
 
-    public IconRenderer(Icon icon, int w, int h)
+    public IconContainer(Icon icon, int w, int h)
     {
         this(icon, w, h, 0, 0);
     }
 
-    public IconRenderer(Icon icon)
+    public IconContainer(Icon icon)
     {
         this(icon, icon.w, icon.h);
     }
@@ -64,7 +64,7 @@ public class IconRenderer
         return this.icon;
     }
 
-    public IconRenderer setIcon(Icon icon)
+    public IconContainer setIcon(Icon icon)
     {
         this.icon = icon;
 
@@ -76,7 +76,7 @@ public class IconRenderer
         return this.w;
     }
 
-    public IconRenderer setW(int w)
+    public IconContainer setW(int w)
     {
         this.w = w;
 
@@ -98,21 +98,21 @@ public class IconRenderer
         return this.offsetY;
     }
 
-    public IconRenderer setOffsetX(int offsetX)
+    public IconContainer setOffsetX(int offsetX)
     {
         this.offsetX = offsetX;
 
         return this;
     }
 
-    public IconRenderer setOffsetY(int offsetY)
+    public IconContainer setOffsetY(int offsetY)
     {
         this.offsetY = offsetY;
 
         return this;
     }
 
-    public IconRenderer setH(int h)
+    public IconContainer setH(int h)
     {
         this.h = h;
 
@@ -124,7 +124,7 @@ public class IconRenderer
         return this.ax;
     }
 
-    public IconRenderer setAnchor(float ax, float ay)
+    public IconContainer setAnchor(float ax, float ay)
     {
         this.ax = ax;
         this.ay = ay;

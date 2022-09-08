@@ -3,9 +3,8 @@ package mchorse.mclib.client.gui.framework.elements;
 import mchorse.mclib.McLib;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
-import mchorse.mclib.client.gui.framework.elements.utils.IconRenderer;
+import mchorse.mclib.client.gui.framework.elements.utils.IconContainer;
 import mchorse.mclib.client.gui.utils.Elements;
-import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.utils.ColorUtils;
@@ -18,8 +17,8 @@ public class GuiCollapseSection extends GuiElement
     protected GuiLabel title;
     protected GuiElement fields;
     protected boolean collapsed;
-    protected IconRenderer collapsedIcon = new IconRenderer(Icons.MOVE_RIGHT, 10, 10, 0.5F, 0.5F, 0, -2);
-    protected IconRenderer openedIcon = new IconRenderer(Icons.MOVE_DOWN, 10, 10, 0.5F, 0.5F);
+    protected IconContainer collapsedIcon = new IconContainer(Icons.MOVE_RIGHT, 10, 10, 0.5F, 0.5F, 0, -2);
+    protected IconContainer openedIcon = new IconContainer(Icons.MOVE_DOWN, 10, 10, 0.5F, 0.5F);
 
     /**
      * @param mc
