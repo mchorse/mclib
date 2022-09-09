@@ -58,6 +58,25 @@ public abstract class AbstractDispatcher
     }
 
     /**
+     * Send message to all players
+     * @param message
+     */
+    public void sendToAll(IMessage message)
+    {
+        this.dispatcher.sendToAll(message);
+    }
+
+    /**
+     * Send message to all players around the given point
+     * @param message
+     * @param point The {@link NetworkRegistry.TargetPoint} around which to send
+     */
+    public void sendToAllAround(IMessage message, NetworkRegistry.TargetPoint point)
+    {
+        this.dispatcher.sendToAllAround(message, point);
+    }
+
+    /**
      * Send message to the server
      */
     public void sendToServer(IMessage message)
