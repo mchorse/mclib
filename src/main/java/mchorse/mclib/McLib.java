@@ -184,10 +184,8 @@ public class McLib
         {
             event.registerServerCommand(new CommandCheats());
         }
-        else
-        {
-            event.registerServerCommand(new CommandMcLib());
-        }
+
+        event.registerServerCommand(new CommandMcLib());
     }
 
     public static void main(String[] args) throws Exception
