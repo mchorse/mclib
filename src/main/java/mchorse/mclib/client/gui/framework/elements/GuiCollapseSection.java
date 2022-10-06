@@ -31,7 +31,7 @@ public class GuiCollapseSection extends GuiElement
         super(mc);
 
         this.title = Elements.label(title).background(titleBackground);
-        this.title.setLeftIconRenderer(this.collapsedIcon);
+        this.title.setLeftIconContainer(this.collapsedIcon);
         this.fields = new GuiElement(mc);
         this.fields.flex().column(5).stretch().vertical().height(20);
 
@@ -41,7 +41,7 @@ public class GuiCollapseSection extends GuiElement
         if (!collapsed)
         {
             this.add(this.fields);
-            this.title.setLeftIconRenderer(this.openedIcon);
+            this.title.setLeftIconContainer(this.openedIcon);
         }
 
         this.collapsed = collapsed;
@@ -90,14 +90,14 @@ public class GuiCollapseSection extends GuiElement
         if (!this.collapsed)
         {
             this.fields.removeFromParent();
-            this.title.setLeftIconRenderer(this.collapsedIcon);
+            this.title.setLeftIconContainer(this.collapsedIcon);
 
             this.collapsed = true;
         }
         else
         {
             this.add(this.fields);
-            this.title.setLeftIconRenderer(this.openedIcon);
+            this.title.setLeftIconContainer(this.openedIcon);
 
             this.collapsed = false;
         }

@@ -92,12 +92,12 @@ public class GuiLabel extends GuiElement implements ITextColoring
         }
     }
 
-    public void setRightIconRenderer(IconContainer rightIcon)
+    public void setRightIconContainer(IconContainer rightIcon)
     {
         this.rightIcon = rightIcon;
     }
 
-    public void setLeftIconRenderer(IconContainer leftIcon)
+    public void setLeftIconContainer(IconContainer leftIcon)
     {
         this.leftIcon = leftIcon;
     }
