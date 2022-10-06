@@ -10,6 +10,8 @@ import mchorse.mclib.utils.MathUtils;
 import mchorse.mclib.utils.Timer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
@@ -37,7 +39,7 @@ public class GuiPopUpModal extends GuiModal
     /**
      * fade duration in milliseconds
      */
-    private int duration = 350;
+    private int duration = 300;
 
     public GuiPopUpModal(Minecraft mc, IKey label)
     {
@@ -66,6 +68,19 @@ public class GuiPopUpModal extends GuiModal
         {
             this.x0 = context.mouseX() - this.area.w / 4;
             this.y0 = context.mouseY() - this.area.h / 2;
+
+            this.x0 = this.x0 < 0 ? 0 : this.x0;
+            this.y0 = this.y0 < 0 ? 0 : this.y0;
+
+            if (Minecraft.getMinecraft().currentScreen.width < this.x0 + this.area.w)
+            {
+                this.x0 = Minecraft.getMinecraft().currentScreen.width - this.area.w;
+            }
+
+            if (Minecraft.getMinecraft().currentScreen.height < this.y0 + this.area.h)
+            {
+                this.y0 = Minecraft.getMinecraft().currentScreen.height - this.area.h;
+            }
 
             this.init = true;
         }
@@ -106,7 +121,7 @@ public class GuiPopUpModal extends GuiModal
 
             this.backgroundAlpha = this.fadeAlpha(this.alphaDefault, 0F, x);
             this.textAlpha = this.fadeAlpha(this.alphaDefault, 0F, x);
-            this.shadowAlpha =this.fadeAlpha(this.shadowAlphaDefault, 0F,  MathUtils.clamp(x * 1.7F, 0, 1));
+            this.shadowAlpha = this.fadeAlpha(this.shadowAlphaDefault, 0F,  MathUtils.clamp(x * 1.7F, 0, 1));
 
             if(this.timer.check())
             {
