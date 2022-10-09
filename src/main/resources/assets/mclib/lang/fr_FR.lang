@@ -1,0 +1,283 @@
+#PARSE_ESCAPES
+
+key.mclib.category=McLib
+key.mclib.dashboard=Tableau de bord
+
+mclib.gui.ok=Ok
+mclib.gui.cancel=Annuler
+mclib.gui.none=(nul)
+mclib.gui.multi_skin=Multi-skin
+mclib.gui.no_data=Aucune donnée disponible...
+mclib.gui.open_folder=Ouvrir le dossier
+mclib.gui.pick_texture=Choisir les textures
+
+mclib.gui.context.multi_skin.copy=Copier le chemin de la texture
+mclib.gui.context.multi_skin.paste=Coller le chemin de la texture copiée
+
+# Don't remove space on the end!
+mclib.gui.dashboard.category=Tableau de bord
+mclib.gui.dashboard.open_panel=Ouvrir 
+
+mclib.gui.graph.tooltip=Calculatrice graphique
+mclib.gui.graph.help=Cliquez sur ce bouton pour accéder à une page Web qui documente les caractéristiques de la calculatrice graphique suivante.\n\nLes expressions utilisées ici peuvent également être utilisées dans le modifieur mathématique d’Aperture et dans l’évaluation de l’expression mathématique de Commander dans les commandes.\n\nCette calculatrice graphique ne fournit qu’une seule variable "x" qui est une coordonnée horizontale que vous pouvez insérer dans les fonctions graphiques y=x (aka f(x)).
+mclib.gui.config.title=Configuration
+mclib.gui.config.tooltip=Configuration des mods
+mclib.gui.config.reload_tooltip=Recharger les configurations depuis le fichier...
+mclib.gui.config.request_tooltip=Changer entre les configurations côté client et serveur...
+mclib.gui.keys.list=Liste des raccourcis clavier
+
+mclib.gui.transforms.x=X
+mclib.gui.transforms.y=Y
+mclib.gui.transforms.z=Z
+mclib.gui.transforms.translate=Translater
+mclib.gui.transforms.scale=Redimensionner
+mclib.gui.transforms.rotate=Pivoter
+mclib.gui.transforms.context.copy=Copier les transformations
+mclib.gui.transforms.context.paste=Coller les transformations
+mclib.gui.transforms.context.paste_translation=Coller la translation
+mclib.gui.transforms.context.paste_scale=Coller la taille
+mclib.gui.transforms.context.paste_rotation=Coller la rotation
+mclib.gui.transforms.context.reset=Réinitialiser les transformations
+mclib.gui.transforms.delta.origin=Autour de l'origine
+
+mclib.gui.keyframes.tick=Tick
+mclib.gui.keyframes.value=Valeur
+mclib.gui.keyframes.context.maximize=Voir toutes les keyframes
+mclib.gui.keyframes.context.select_all=Sélectionner tout
+mclib.gui.keyframes.context.remove=Retirer la/les keyframe(s)
+mclib.gui.keyframes.context.copy=Copier les keyframes
+mclib.gui.keyframes.context.paste=Coller les keyframes copiées
+#Not sure for the next three
+mclib.gui.keyframes.context.to_left=Passer aux commandes de gauche
+mclib.gui.keyframes.context.to_main=Passer aux commandes principales
+mclib.gui.keyframes.context.to_right=Passer aux commandes de droite
+
+mclib.gui.multiskin.color=Avec cet élément de couleur, vous pouvez ajuster les canaux de couleur (RVB). Cela fonctionne mieux avec des images blanches ou de teintes de gris.
+mclib.gui.multiskin.scale=Redimensionner
+mclib.gui.multiskin.scale_to_largest=Redimensionner vers le plus grand
+mclib.gui.multiskin.shift=Décaler
+mclib.gui.multiskin.pixelate=Pixeliser
+mclib.gui.multiskin.erase=Effacer
+mclib.gui.multiskin.erase_tooltip=Cette fonctionnalité vous permet d'utiliser le skin actuel comme masque de différence, c'est-à-dire que tous les pixels opaques vont effacer les pixels de tous les skins en-dessous.
+mclib.gui.multiskin.custom_size=Taille personnalisée
+mclib.gui.multiskin.auto_size=Taille automatique
+mclib.gui.multiskin.auto_size_tooltip=Lorsque cette fonctionnalité est activée, la taille originale de la texture sera utilisée, sinon ce taille personnalisée fournie ci-dessous qui sera utilisée. 
+mclib.gui.multiskin.size_w=Largeur personnalisée
+mclib.gui.multiskin.size_h=Hauteur personnalisée
+
+mclib.gui.color.favorite=Couleurs favorites
+mclib.gui.color.recent=Couleurs récentes
+
+mclib.gui.color.context.favorites.add=Aujouter aux favoris
+mclib.gui.color.context.favorites.remove=Retirer des favoris
+
+mclib.gui.item_slot.context.copy=Copier le NBT de l'item
+mclib.gui.item_slot.context.paste=Coller le NBT de l'item
+mclib.gui.item_slot.context.drop=Lâcher l'item
+mclib.gui.item_slot.context.clear=Retirer l'item
+
+# Config
+mclib.config.title=McLib
+
+mclib.config.appearance.title=Apparence
+mclib.config.appearance.tooltip=Les options générales en rapport avec l'apparence de l'interface et du cadre
+
+mclib.config.appearance.primary_color=Couleur primaire
+mclib.config.comments.appearance.primary_color=La couleur utilisée partout pour le système d'interface
+mclib.config.appearance.enable_borders=Bordure des boutons
+mclib.config.comments.appearance.enable_borders=Est-ce que les boutons et les autres éléments doivent avoir des bordures ?
+mclib.config.appearance.enable_checkbox_rendering=Cases à cocher
+mclib.config.comments.appearance.enable_checkbox_rendering=Active le rendu de cases à cocher au lieu d'interrupteurs (dépend du goût)
+mclib.config.appearance.enable_trackpad_increments=Incréments des champs de valeurs
+mclib.config.comments.appearance.enable_trackpad_increments=Active les boutons < et > des champs de valeurs (qui incrémentent la valeur)
+mclib.config.appearance.enable_grid_rendering=Grille de modèle
+mclib.config.comments.appearance.enable_grid_rendering=Active le rendu d'une grille au lieu des blocks d'herbe
+mclib.config.appearance.user_interface_scale=Taille de l'interface
+mclib.config.comments.appearance.user_interface_scale=Taille de l'interface pour les mods de McHorse au lieu de la taille de l'interface dans les paramètres graphiques. Si mis à 0, la taille de l'interface de Minecraft sera utilisée
+mclib.config.appearance.tooltip_style=Style des infobulles
+mclib.config.comments.appearance.tooltip_style=Cette option permet de changer le syle des infobulles de l'interface
+mclib.config.appearance.trackpad_decimal_places=Place des décimales dans les champs de valeurs
+mclib.config.comments.appearance.trackpad_decimal_places=Sélectionne combien de nombres après la virgule ne devraient pas être arrondis (précision)
+
+mclib.config.tutorials.title=Options pour les tutoriels
+mclib.config.tutorials.tooltip=Cette catégorie présente des option utiles pour la réalisation de tutoriels vidéo
+
+mclib.config.tutorials.enable_mouse_rendering=Curseur de souris
+mclib.config.comments.tutorials.enable_mouse_rendering=Active le rendu du curseur de la souris. C'est très utile pour les tutoriels quand ils sont enregistrés avec le mod Minema et que le curseur n'est pas visible
+mclib.config.tutorials.enable_mouse_buttons_rendering=Boutons de souris
+mclib.config.comments.tutorials.enable_mouse_buttons_rendering=Active le rendu des boutons de la souris pressés et de la molette. C'est très utile pour les tutoriels quand ils sont enregistrés avec le mod Minema et que les appuis sur les boutons ou que le défilement avec la molette ne sont pas visibles
+mclib.config.tutorials.enable_keystrokes_rendering=Frappes au clavier
+mclib.config.comments.tutorials.enable_keystrokes_rendering=Active le rendu des frappes au clavier. C'est très utile pour les tutoriels pour montrer quelles touches sont pressées
+mclib.config.tutorials.keystroke_offset=Décalage des frappes au clavier
+mclib.config.comments.tutorials.keystroke_offset=Permet de configurer à combien de pixels du coin de l'écran les frappes au clavier devraient s'afficher
+mclib.config.tutorials.keystroke_position=Position des frappes au clavier
+mclib.config.comments.tutorials.keystroke_position=Permet de changer le coin d'affichage des frappes au clavier 
+
+mclib.config.background.title=Fond d'écran
+mclib.config.background.tooltip=Les options de fond d'écran comme la couleur et les textures à utiliser
+
+mclib.config.background.image=Image
+mclib.config.comments.background.image=Image de fond utilisée dans tous les menus
+mclib.config.background.color=Couleur
+mclib.config.comments.background.color=Couleur de fond utilisée dans tous les menus. Si une image est spécifiée, alors la couleur sera utilisée comme couleur de teinte pour le fond d'écran
+
+mclib.config.scrollbars.title=Barres de défilement
+mclib.config.scrollbars.tooltip=Les options de fond comme la couleur et les textures à utiliser
+
+mclib.config.scrollbars.flat=Barres de défilement unie
+mclib.config.comments.scrollbars.flat=Donne une couleur unie pour les barres de défilement
+mclib.config.scrollbars.shadow=Couleur de l'ombre
+mclib.config.comments.scrollbars.shadow=Permet de modifier la couleur de l'ombre des barres de défilement
+mclib.config.scrollbars.width=Épaisseur
+mclib.config.comments.scrollbars.width=Permet de modifier l'épaisseur (largeur des barres de défilement)
+
+mclib.config.multiskin.title=Multi-skin
+mclib.config.multiskin.tooltip=Options par rapport aux fonctionnalités du Multi-skin
+
+mclib.config.multiskin.multithreaded=Traitement multi-threadé
+mclib.config.comments.multiskin.multithreaded=Permet d'activer ou de désactiver le traitement multi-threadé des multi-skins, qui devrait fixer le lag au prix d'un traitement plus long
+mclib.config.multiskin.clear=Autoriser le rechargement des packs de ressources
+mclib.config.comments.multiskin.clear=Vous permet d'activer ou désactiver la supression de toutes les textures des multi-skins lors d'un rechargement du pack de ressources
+
+mclib.config.vanilla.title=Retouches de Minecraft Vanilla
+mclib.config.vanilla.tooltip=Options par rapport aux retouches faites au code de Minecraft
+
+mclib.config.vanilla.max_packet_size=Taille maximale des paquets
+mclib.config.comments.vanilla.max_packet_size=Vous permet de configurer la taille maximale (en octets) d'un paquet moddé. Attention : ne changez pas cette valeur pour les serveurs publics, puisque cela rend le DDoS du serveur bien plus simple. Cette option est pensée pour le solo !
+
+# OP access
+op_access.config.title=Accès OP
+
+op_access.config.mclib.title=McLib
+op_access.config.mclib.tooltip=Options d'accès OP de McLib
+
+op_access.config.mclib.drop_items=Lâcher des items
+#Not sure for the one bellow
+op_access.config.comments.mclib.drop_items=Est-ce que les joueurs non-OP peuvent utiliser l'option de jetter des items stackés dans un slot ?
+
+# Keybinds config
+keybinds.config.title=Raccourcis clavier
+
+keybinds.config.unknown_mod=Mod inconnu
+keybinds.config.no_category=Aucune catégorie
+
+# Interpolations
+mclib.interpolations.linear=Linéaire
+mclib.interpolations.quad_in=Quadratique
+mclib.interpolations.quad_out=Quadratique Out
+mclib.interpolations.quad_inout=Quadratique In/out
+mclib.interpolations.cubic_in=Cubique In
+mclib.interpolations.cubic_out=Cubique Out
+mclib.interpolations.cubic_inout=Cubique In/out
+mclib.interpolations.exp_in=Exponentiel In
+mclib.interpolations.exp_out=Exponentiel Out
+mclib.interpolations.exp_inout=Exponentiel In/out
+
+mclib.interpolations.back_in=Retour In
+mclib.interpolations.back_out=Retour Out
+mclib.interpolations.back_inout=Retour In/out
+mclib.interpolations.elastic_in=Élastique In
+mclib.interpolations.elastic_out=Élastique Out
+mclib.interpolations.elastic_inout=Élastique In/out
+mclib.interpolations.bounce_in=Rebond In
+mclib.interpolations.bounce_out=Rebond Out
+mclib.interpolations.bounce_inout=Rebond In/out
+
+mclib.interpolations.sine_in=Sinusoïdal In
+mclib.interpolations.sine_out=Sinusoïdal Out
+mclib.interpolations.sine_inout=Sinusoïdal In/out
+mclib.interpolations.quart_in=Quartique In
+mclib.interpolations.quart_out=Quartique Out
+mclib.interpolations.quart_inout=Quartique In/out
+mclib.interpolations.quint_in=Quintique In
+mclib.interpolations.quint_out=Quintique Out
+mclib.interpolations.quint_inout=Quintique In/out
+mclib.interpolations.circle_in=Circulaire In
+mclib.interpolations.circle_out=Circulaire Out
+mclib.interpolations.circle_inout=Circulaire In/out
+
+mclib.interpolations.const=Constant
+mclib.interpolations.quad=Quadratique
+mclib.interpolations.cubic=Cubique
+mclib.interpolations.hermite=Hermite
+mclib.interpolations.exp=Exponentiel
+mclib.interpolations.bezier=Bézier
+mclib.interpolations.back=Retour
+mclib.interpolations.elastic=Élastique
+mclib.interpolations.bounce=Rebond
+mclib.interpolations.sine=Sinusoïdal
+mclib.interpolations.quart=Quartique
+mclib.interpolations.quint=Quintique
+mclib.interpolations.circle=Circulaire
+
+# Interpolation tooltips
+#
+# Feel free to add your own tips. If there is no tip, then leave it empty.
+# DO NOT REMOVE THESE LINES!
+
+mclib.interpolations.tooltips.linear=Cette interpolation va de A à B à une vitesse constante. C'est utile pour les rotations fluides et les mouvements lents.
+mclib.interpolations.tooltips.quad_in=
+mclib.interpolations.tooltips.quad_out=
+mclib.interpolations.tooltips.quad_inout=C'est principalement utile pour les animations de poses en prenant en compte un degré de mouvement plus paresseux que Exponentiel ou Cubique In/out.
+mclib.interpolations.tooltips.cubic_in=
+mclib.interpolations.tooltips.cubic_out=
+mclib.interpolations.tooltips.cubic_inout=C'est principalement utile pour les animations de poses en prenant en compte un degré plus paresseux que Exponentiel In/out.
+mclib.interpolations.tooltips.exp_in=C'est utile pour les caméras en le combinant avec Exponentiel Out, puisque vous pouvez créer des transitions nerveuses entre deux plans de caméra.
+mclib.interpolations.tooltips.exp_out=C'est utile pour créer des mouvements rapides.
+mclib.interpolations.tooltips.exp_inout=C'est principalement utile pour les animations de poses ou les emphases de caméra.
+
+mclib.interpolations.tooltips.back_in=
+mclib.interpolations.tooltips.back_out=
+mclib.interpolations.tooltips.back_inout=Il peut être utilisé pour les animations de mouvement de poses naturelles et se balançant.
+mclib.interpolations.tooltips.elastic_in=
+mclib.interpolations.tooltips.elastic_out=C'est utile pour les mouvements de cartoon nerveux.
+mclib.interpolations.tooltips.elastic_inout=
+mclib.interpolations.tooltips.bounce_in=
+mclib.interpolations.tooltips.bounce_out=C'est utile pour créer une animation de quelque chose qui tombe sur le sol et qui rebondit un certain nombre de fois.
+mclib.interpolations.tooltips.bounce_inout=
+
+mclib.interpolations.tooltips.sine_in=
+mclib.interpolations.tooltips.sine_out=
+mclib.interpolations.tooltips.sine_inout=
+mclib.interpolations.tooltips.quart_in=
+mclib.interpolations.tooltips.quart_out=
+mclib.interpolations.tooltips.quart_inout=
+mclib.interpolations.tooltips.quint_in=
+mclib.interpolations.tooltips.quint_out=
+mclib.interpolations.tooltips.quint_inout=
+mclib.interpolations.tooltips.circle_in=
+mclib.interpolations.tooltips.circle_out=
+mclib.interpolations.tooltips.circle_inout=
+
+mclib.interpolations.tooltips.const=Cette interpolation n'interpole pas, mais garde plutôt la valeur initiale jusqu'à la fin. C'est utile pour créer des à-coups avec plusieurs keyframes.
+mclib.interpolations.tooltips.hermite=Cette interpolation peut être fluide entre plusieurs keyframes d'animation. Soyez sûr que vous avez la même distance entre chaque keyframes, puisque sa fluidité ne fonctionne plus avec des distances variables.
+mclib.interpolations.tooltips.bezier=Cette interpolation permet de personnaliser la courbe en utilisant des points de contrôle, qui permet aussi d'imiter la majorité des autres interpolations. C'est utile pour créer des transitions plus fluides entre plusieurs keyframes.
+
+mclib.easing.in=Assouplissement in
+mclib.easing.out=Assouplissement out
+mclib.easing.inout=Assouplissement in/out
+
+# Commands
+mclib.commands.wrapper=%s
+mclib.commands.mclib.help=Commande McLib qui présente une possibilité d'éditer la configuration côté serveur.
+mclib.commands.mclib.config.help=Les sous-commandes de configuration McLib permet de gérer les options de mod des mods de McHorse.
+mclib.commands.mclib.config.print=§fCette commande renvoie la valeur actuelle de l'option de mod donnée par l'ID §7<mod.category.option>§f.
+mclib.commands.mclib.config.set=§fCette commande modifie la valeur actuelle de l'option de mod donnée par l'ID §7<mod.category.option>§f à §7<value...>§f.
+mclib.commands.cheats=La commande cheat permet d'activer/désactiver les cheats dans un monde solo.\n\nElle peut être utilisée aussi bien pour désactiver les cheats dans un monde créatif avec les commandes d'activées, par exemple si vous publiez une map aventure, que pour activer les commandes dans un monde téléchargé dans lequel les commandes cheats sont désactivées, parce que vous avez besoin d'utiliser des commandes pour une vidéo.
+
+mclib.error.config.invalid_id=§fL'identifiant de l'option de mod donné %s§f est invalide !
+mclib.error.config.invalid_format=§fLa valeur donnée %s§f pour l'option de mid d'identifiant %s§f ne peut être interprétée !
+mclib.info.config.set=§fLa nouvelle valeur de l'option de mod %s§f est : %s§f
+mclib.info.config.print=§fLa valeur de l'option de mod %s§f est : %s§f
+mclib.info.config.client_side=§fL'option de mod donnée %s§f est uniquement côté client...
+
+# Keystroke modes
+mclib.keystrokes_position.auto=Auto
+mclib.keystrokes_position.bottom_left=Bas gauche
+mclib.keystrokes_position.bottom_right=Bas droit
+mclib.keystrokes_position.top_right=Haut droit
+mclib.keystrokes_position.top_left=Haut gauche
+
+# Tootlip styles
+mclib.tooltip_style.light=Clair
+mclib.tooltip_style.dark=Sombre
