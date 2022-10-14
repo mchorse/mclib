@@ -1,3 +1,23 @@
+## Version 2.4.1
+
+This update was made by Chryfi, exceptions are mentioned at the respective items.
+
+* Added right click to abort dragging of trackpad element
+* Added French translation (thanks to COOL TNT)
+* Added config option to render the respective colours of the translation fields
+* Added ValueSerializer class for automated serialization using Value classes
+* Added GuiCollapseSection
+* Added IconContainer to nest icons into a fixed sized container
+* Added MathUtils method to filter flips of 360 degrees in a rotation
+* Added OptifineHelper class
+* Added ForgeUtils class
+* Added RenderingUtils class
+* Change McLib command to work with singleplayer too
+* Added rendering code for inverting rotation and scale to a utility method
+* Rollback mclib ModHelper to fix issues
+* Fixed NPE crash in keybinds editor (by MiaoNLI)
+* Rewrite Value classes to use generics and improve design (compatibility breaking)
+
 ## Version 2.4
 
 This update was made by MiaoNLI, exceptions are mentioned at the respective items.
