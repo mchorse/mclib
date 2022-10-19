@@ -29,6 +29,9 @@ mclib.gui.keys.list=快捷鍵列表
 mclib.gui.transforms.x=X
 mclib.gui.transforms.y=Y
 mclib.gui.transforms.z=Z
+mclib.gui.transforms.orientation.global=全局
+mclib.gui.transforms.orientation.local=相對
+mclib.gui.transforms.orientation.tooltip=切換平移變換的座標系。
 mclib.gui.transforms.translate=平移
 mclib.gui.transforms.scale=縮放
 mclib.gui.transforms.rotate=旋轉
@@ -93,6 +96,8 @@ mclib.config.appearance.enable_grid_rendering=模型網絡
 mclib.config.comments.appearance.enable_grid_rendering=啟用網絡地面呈現而非草方塊地面
 mclib.config.appearance.user_interface_scale=GUI 尺寸
 mclib.config.comments.appearance.user_interface_scale=McHorse 的模組的 GUI 尺寸，代替視頻設置中的界面尺寸。若設為 0，則會使用 Minecraft 的界面尺寸設置
+mclib.config.appearance.render_translation_text_colours=顯示平移提示文本顏色
+mclib.config.comments.appearance.render_translation_text_colours=為平移參數欄顯示各個座標軸的顏色，例如 X 是紅色，Y 是綠色，Z 是藍色。
 mclib.config.appearance.tooltip_style=工具提示樣式
 mclib.config.comments.appearance.tooltip_style=該選項用於更改 GUI 工具提示的樣式
 mclib.config.appearance.trackpad_decimal_places=滑動參數框小數點精度
@@ -154,10 +159,10 @@ op_access.config.mclib.drop_items=獲取物品到揹包
 op_access.config.comments.mclib.drop_items=非 OP 玩家是否可以使用物品槽控件中的“獲取該物品到揹包”選項？
 
 # Keybinds config
-keybinds.config.title=快速鍵配寘
+keybinds.config.title=快捷鍵配置
 
 keybinds.config.unknown_mod=未知 Mod
-keybinds.config.no_category=未分類快速鍵
+keybinds.config.no_category=未分類快捷鍵
 
 # Interpolations
 mclib.interpolations.linear=線性
