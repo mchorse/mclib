@@ -17,8 +17,8 @@ public class GuiCollapseSection extends GuiElement
     protected GuiLabel title;
     protected GuiElement fields;
     protected boolean collapsed;
-    protected IconContainer collapsedIcon = new IconContainer(Icons.MOVE_RIGHT, 10, 10, 0.5F, 0.5F, 0, -2);
-    protected IconContainer openedIcon = new IconContainer(Icons.MOVE_DOWN, 10, 10, 0.5F, 0.5F);
+    protected IconContainer collapsedIcon = new IconContainer(Icons.MOVE_RIGHT, 14, 10, 0.5F, 0.5F, -2, -2);
+    protected IconContainer openedIcon = new IconContainer(Icons.MOVE_DOWN, 14, 10, 0.5F, 0.5F, -2, 0);
 
     /**
      * @param mc
