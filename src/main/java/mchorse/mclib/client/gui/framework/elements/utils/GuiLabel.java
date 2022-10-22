@@ -157,32 +157,36 @@ public class GuiLabel extends GuiElement implements ITextColoring
     public void draw(GuiContext context)
     {
         int offset = 3;
-        int iconLeftOffset = this.leftIcon != null ? this.leftIcon.getW() + offset : 0;
-        int iconRightOffset = this.rightIcon != null ? this.rightIcon.getH() + offset : 0;
-        int width = this.font.getStringWidth(this.label.get()) + 2 * offset + iconRightOffset + iconLeftOffset;
+        int leftIconW = this.leftIcon != null ? this.leftIcon.getW() : 0;
+        int rightIconW = this.rightIcon != null ? this.rightIcon.getW() : 0;
+        int textWidth = this.font.getStringWidth(this.label.get());
+        int width = textWidth + rightIconW + leftIconW;
         int x0 = this.area.x(this.anchorX, width);
         int x1 = x0 + width;
         int y = this.area.y(this.anchorY, this.font.FONT_HEIGHT);
 
-        int xText = x0 + offset + iconLeftOffset;
+        int xText = x0 + leftIconW;
 
         int a = this.getColor() >> 24 & 0xff;
 
         if (a != 0)
         {
-            Gui.drawRect(x0, y - offset, x1, y + font.FONT_HEIGHT, this.getColor());
+            Gui.drawRect(x0, y - offset, x1 + 2 * offset, y + font.FONT_HEIGHT, this.getColor());
+
+            x0 += offset;
+            xText += offset;
         }
 
         GlStateManager.color(1,1,1,1);
 
         if (this.leftIcon != null)
         {
-            this.leftIcon.render(x0 + offset, y, 0.5F, 0.5F);
+            this.leftIcon.render(x0, y, 0.5F, 0.5F);
         }
 
         if (this.rightIcon != null)
         {
-            this.rightIcon.render(xText + offset + this.font.getStringWidth(this.label.get()), y, 0.5F, 0.5F);
+            this.rightIcon.render(xText + textWidth, y, 0.5F, 0.5F);
         }
 
         this.font.drawString(this.label.get(), xText, y, this.color, this.textShadow);
