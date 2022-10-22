@@ -14,12 +14,12 @@ public class ModHelper
     {
         Class<?> caller = getCallerClass(2);
 
-        if (caller == null)
-        {
-            return null;
-        }
+        if (caller == null) return null;
 
         String jar = caller.getProtectionDomain().getCodeSource().getLocation().getPath().substring(5);
+
+        //TODO this needs to be rewritten... getting the mod through the stacktrace is very hacky and unstable
+        if (jar.lastIndexOf('!') == -1) return null;
 
         jar = jar.substring(0, jar.lastIndexOf('!'));
 
