@@ -5,6 +5,7 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.commands.CommandMcLib;
 import mchorse.mclib.commands.CommandCheats;
 import mchorse.mclib.commands.utils.L10n;
+import mchorse.mclib.permissions.McLibPermissionsRegistry;
 import mchorse.mclib.config.ConfigBuilder;
 import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueInt;
@@ -26,6 +27,7 @@ import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.server.permission.PermissionAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -88,6 +90,8 @@ public class McLib
     public static ValueBoolean multiskinClear;
 
     public static ValueInt maxPacketSize;
+
+    public static final McLibPermissionsRegistry permissions = new McLibPermissionsRegistry(MOD_ID);
 
     @SubscribeEvent
     public void onConfigRegister(RegisterConfigEvent event)
@@ -169,6 +173,8 @@ public class McLib
     public void init(FMLInitializationEvent event)
     {
         proxy.init(event);
+
+        permissions.registerPermissions();
     }
 
     @NetworkCheckHandler
