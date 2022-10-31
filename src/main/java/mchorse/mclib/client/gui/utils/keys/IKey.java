@@ -1,6 +1,8 @@
 package mchorse.mclib.client.gui.utils.keys;
 
-public interface IKey
+import java.io.Serializable;
+
+public interface IKey extends Serializable
 {
     public static final IKey EMPTY = new StringKey("");
 

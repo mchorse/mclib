@@ -1,20 +1,21 @@
 package mchorse.mclib.network.mclib.common;
 
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+
+import java.io.Serializable;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
-public interface IAnswerRequest
+public interface IAnswerRequest<T extends Serializable> extends IMessage
 {
+    void setCallbackID(int callbackID);
+    Optional<Integer> getCallbackID();
     /**
-     * Call this before calling {@link #getAnswer(Object[])}
-     * @return true if this packet requires an answer to be sent back
-     */
-    boolean requiresAnswer();
-
-    /**
-     * Get an answer packet with the provided values and callbackID
+     * Get an answer packet with the provided values and callbackID.
+     * The generic type of the PacketAnswer needs to equal the type of the provided value.
      * @param value
-     * @return
-     * @throws NoSuchElementException if {@link #requiresAnswer()} returns false.
+     * @return a PacketAnswer containing the value of the type of this request.
+     * @throws NoSuchElementException if {@link #getCallbackID()} value is not present.
      */
-    PacketAnswer getAnswer(Object[] value) throws NoSuchElementException;
+    PacketAnswer<T> getAnswer(T value) throws NoSuchElementException;
 }
