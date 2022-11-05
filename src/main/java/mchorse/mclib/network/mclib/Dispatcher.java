@@ -3,15 +3,17 @@ package mchorse.mclib.network.mclib;
 import mchorse.mclib.McLib;
 import mchorse.mclib.network.AbstractDispatcher;
 import mchorse.mclib.network.mclib.client.ClientHandlerAnswer;
+import mchorse.mclib.network.mclib.client.ClientHandlerBoolean;
 import mchorse.mclib.network.mclib.client.ClientHandlerConfig;
 import mchorse.mclib.network.mclib.client.ClientHandlerConfirm;
 import mchorse.mclib.network.mclib.client.ClientHandlerTimeSync;
 import mchorse.mclib.network.mclib.common.PacketAnswer;
+import mchorse.mclib.network.mclib.common.PacketBoolean;
 import mchorse.mclib.network.mclib.common.PacketConfig;
 import mchorse.mclib.network.mclib.common.PacketConfirm;
 import mchorse.mclib.network.mclib.common.PacketDropItem;
 import mchorse.mclib.network.mclib.common.PacketRequestConfigs;
-import mchorse.mclib.network.mclib.common.PacketRequestPermissions;
+import mchorse.mclib.network.mclib.common.PacketRequestPermission;
 import mchorse.mclib.network.mclib.common.PacketTime;
 import mchorse.mclib.network.mclib.server.ServerHandlerConfig;
 import mchorse.mclib.network.mclib.server.ServerHandlerConfirm;
@@ -38,18 +40,20 @@ public class Dispatcher
             register(PacketConfig.class, ServerHandlerConfig.class, Side.SERVER);
             register(PacketConfig.class, ClientHandlerConfig.class, Side.CLIENT);
 
+            //TODO abstract confirm thing into server to client to server answer thing - see IAnswerRequest etc.
             /* Confirm related packets */
             register(PacketConfirm.class, ClientHandlerConfirm.class, Side.CLIENT);
             register(PacketConfirm.class, ServerHandlerConfirm.class, Side.SERVER);
 
             /* client answer related packets */
             register(PacketAnswer.class, ClientHandlerAnswer.class, Side.CLIENT);
+            register(PacketBoolean.class, ClientHandlerBoolean.class, Side.CLIENT);
 
             /* to let the client know what time the server has */
             register(PacketTime.class, ClientHandlerTimeSync.class, Side.CLIENT);
             register(PacketTime.class, ServerHandlerTimeSync.class, Side.SERVER);
 
-            register(PacketRequestPermissions.class, ServerHandlerPermissionRequest.class, Side.SERVER);
+            register(PacketRequestPermission.class, ServerHandlerPermissionRequest.class, Side.SERVER);
         }
     };
 

@@ -13,13 +13,11 @@ import java.io.Serializable;
 
 public class PacketAnswer<T extends Serializable> implements IMessage
 {
-    private int callBackID;
-    private T answer;
+    protected int callBackID;
+    protected T answer;
 
     public PacketAnswer()
-    {
-
-    }
+    { }
 
     public PacketAnswer(int callBackID, T answer)
     {
