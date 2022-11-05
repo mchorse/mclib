@@ -5,7 +5,8 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.commands.CommandMcLib;
 import mchorse.mclib.commands.CommandCheats;
 import mchorse.mclib.commands.utils.L10n;
-import mchorse.mclib.permissions.McLibPermissionsRegistry;
+import mchorse.mclib.events.RegisterPermissionsEvent;
+import mchorse.mclib.permissions.McLibPermissions;
 import mchorse.mclib.config.ConfigBuilder;
 import mchorse.mclib.config.values.ValueBoolean;
 import mchorse.mclib.config.values.ValueInt;
@@ -16,6 +17,8 @@ import mchorse.mclib.math.MathBuilder;
 import mchorse.mclib.math.Operation;
 import mchorse.mclib.math.Operator;
 import mchorse.mclib.math.Variable;
+import mchorse.mclib.permissions.PermissionCategory;
+import mchorse.mclib.permissions.PermissionFactory;
 import mchorse.mclib.utils.ColorUtils;
 import mchorse.mclib.utils.PayloadASM;
 import net.minecraftforge.fml.common.Mod;
@@ -27,7 +30,7 @@ import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkCheckHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.server.permission.PermissionAPI;
+import net.minecraftforge.server.permission.DefaultPermissionLevel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,6 +60,11 @@ public class McLib
     public static final Logger LOGGER = LogManager.getLogger(McLib.MOD_ID);
 
     public static L10n l10n = new L10n(MOD_ID);
+
+    /**
+     * A factory containing all permissions that have been registered through the {@link RegisterPermissionsEvent}.
+     */
+    public static final PermissionFactory permissionFactory = new PermissionFactory();
 
     /* Configuration */
     public static ValueBoolean opDropItems;
@@ -90,8 +98,6 @@ public class McLib
     public static ValueBoolean multiskinClear;
 
     public static ValueInt maxPacketSize;
-
-    public static final McLibPermissionsRegistry permissions = new McLibPermissionsRegistry(MOD_ID);
 
     @SubscribeEvent
     public void onConfigRegister(RegisterConfigEvent event)
@@ -161,6 +167,19 @@ public class McLib
         maxPacketSize.syncable();
     }
 
+    @SubscribeEvent
+    public void onPermissionRegister(RegisterPermissionsEvent event)
+    {
+        event.registerMod(MOD_ID, DefaultPermissionLevel.OP);
+
+        McLibPermissions.configEdit = event.registerPermission(new PermissionCategory("edit_config"));
+
+        event.registerCategory(new PermissionCategory("gui"));
+        McLibPermissions.accessGui = event.registerPermission(new PermissionCategory("access_gui"));
+
+        event.endCategory();
+    }
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
@@ -173,8 +192,6 @@ public class McLib
     public void init(FMLInitializationEvent event)
     {
         proxy.init(event);
-
-        permissions.registerPermissions();
     }
 
     @NetworkCheckHandler

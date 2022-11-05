@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import mchorse.mclib.McLib;
 import mchorse.mclib.permissions.PermissionCategory;
 
+import javax.annotation.Nullable;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -13,9 +14,7 @@ public class PacketRequestPermission implements IAnswerRequest<Boolean>
     private int callbackID = -1;
 
     public PacketRequestPermission()
-    {
-
-    }
+    { }
 
     public PacketRequestPermission(int callbackID, PermissionCategory permission)
     {
@@ -23,6 +22,7 @@ public class PacketRequestPermission implements IAnswerRequest<Boolean>
         this.request = permission;
     }
 
+    @Nullable
     public PermissionCategory getPermissionRequest()
     {
         return this.request;

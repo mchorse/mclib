@@ -2,8 +2,11 @@ package mchorse.mclib.permissions;
 
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.network.IByteBufSerializable;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.server.permission.DefaultPermissionLevel;
+import net.minecraftforge.server.permission.PermissionAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,11 @@ public class PermissionCategory implements IByteBufSerializable
 
     }
 
+    public boolean playerHasPermission(EntityPlayer player)
+    {
+        return PermissionAPI.hasPermission(player, this.toString());
+    }
+
     public void addChild(PermissionCategory category)
     {
         this.children.add(category);
@@ -51,13 +59,26 @@ public class PermissionCategory implements IByteBufSerializable
     }
 
     /**
+     * @return the parent or null if no parent is present.
+     */
+    public PermissionCategory getParent()
+    {
+        return this.parent;
+    }
+
+    /**
      * Gets the default permission based on this or the parent's default permission level.
      * @return the permission level of this permission or if null of the parent.
-     *         If no parent above has a default permission level, this method will return {@link DefaultPermissionLevel#OP}
+     *         If no parent above has a default permission level, this method will return {@link DefaultPermissionLevel#NONE}
      */
     public DefaultPermissionLevel getDefaultPermission()
     {
-        return (this.parent != null) ? this.parent.getDefaultPermission() : DefaultPermissionLevel.OP;
+        if (this.level == null)
+        {
+            return (this.parent != null) ? this.parent.getDefaultPermission() : DefaultPermissionLevel.NONE;
+        }
+
+        return this.level;
     }
 
     @Override
@@ -82,13 +103,6 @@ public class PermissionCategory implements IByteBufSerializable
 
             this.addChild(child);
         }
-
-        if (buffer.readBoolean())
-        {
-            this.parent = new PermissionCategory();
-
-            this.parent.fromBytes(buffer);
-        }
     }
 
     @Override
@@ -102,13 +116,6 @@ public class PermissionCategory implements IByteBufSerializable
         for (PermissionCategory category : this.children)
         {
             category.toBytes(buffer);
-        }
-
-        buffer.writeBoolean(this.parent != null);
-
-        if (this.parent != null)
-        {
-            this.parent.toBytes(buffer);
         }
     }
 }

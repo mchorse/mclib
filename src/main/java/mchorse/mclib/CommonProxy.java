@@ -4,6 +4,7 @@ import mchorse.mclib.client.gui.utils.Icons;
 import mchorse.mclib.config.ConfigHandler;
 import mchorse.mclib.config.ConfigManager;
 import mchorse.mclib.events.EventHandler;
+import mchorse.mclib.events.RegisterPermissionsEvent;
 import mchorse.mclib.network.mclib.Dispatcher;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -28,6 +29,11 @@ public class CommonProxy
     public void init(FMLInitializationEvent event)
     {
         this.configs.register(this.configFolder);
+
+        RegisterPermissionsEvent permissions = new RegisterPermissionsEvent();
+
+        McLib.EVENT_BUS.post(permissions);
+        permissions.loadPermissions();
 
         Icons.register();
 
