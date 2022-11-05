@@ -51,6 +51,6 @@ public class PermissionFactory
     @Nullable
     public PermissionCategory getPermission(int id)
     {
-        return (id >= this.permissions.size() || id < 0) ? null : this.permissions.get(id);
+        return this.permissions.get(id);
     }
 }
