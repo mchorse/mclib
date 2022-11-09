@@ -32,7 +32,9 @@ public class CommonProxy
 
         RegisterPermissionsEvent permissions = new RegisterPermissionsEvent();
 
+        /* let the mods register their permissions */
         McLib.EVENT_BUS.post(permissions);
+
         permissions.loadPermissions();
 
         Icons.register();

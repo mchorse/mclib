@@ -8,6 +8,11 @@ public class Consumers<C>
 {
     private final TreeMap<Integer, Consumer<C>> callbacks = new TreeMap<>();
 
+    public void remove(int id)
+    {
+        this.callbacks.remove(id);
+    }
+
     /**
      * Executes the Consumer at the given id, if present, and remove after execution.
      * @param id
