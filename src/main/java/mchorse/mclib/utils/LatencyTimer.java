@@ -2,7 +2,6 @@ package mchorse.mclib.utils;
 
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.network.IByteBufSerializable;
-import mchorse.mclib.network.mclib.client.ClientHandlerTimeSync;
 
 /**
  * This class is used to clock the time it takes to
@@ -14,7 +13,6 @@ public class LatencyTimer implements IByteBufSerializable
 {
     private long startTime;
     private long endTime;
-    private long clientServerDifferenceCache;
 
     /**
      * Saves the system time it has been created
@@ -22,7 +20,6 @@ public class LatencyTimer implements IByteBufSerializable
     public LatencyTimer()
     {
         this.startTime = System.currentTimeMillis();
-        this.clientServerDifferenceCache = ClientHandlerTimeSync.getClientServerDifference();
     }
 
     /**
@@ -37,46 +34,14 @@ public class LatencyTimer implements IByteBufSerializable
     }
 
     /**
-     * This method calculates the elapsed time and takes into account the difference
-     * between server and client time from {@link ClientHandlerTimeSync} class.
-     * @return the elapsed time in milliseconds since the creation of this object
-     *         or if this timer has finished, the elapsed time from start to end.
-     */
-    public long getElapsedTime()
-    {
-        return this.getElapsedTime(false);
-    }
-
-    /**
      * @param raw when true it just calculates the elapsed time,
      *            when false it takes into account the difference between server and client time from ClientHandlerTimeSync class.
      * @return the elapsed time in milliseconds since the creation of this object
      * or if this timer has finished, the elapsed time from start to end.
      */
-    public long getElapsedTime(boolean raw)
+    public long getElapsedTime()
     {
-        long clientServerDifference = 0;
-
-        if (!raw)
-        {
-            /*
-             * if this latencyTimer is now on the client side, the ClientHandlerTimeSync will be set
-             * Assuming that the latencyTimer is used after the server and client have stored their times on the client side
-             */
-            if (ClientHandlerTimeSync.isSet())
-            {
-                clientServerDifference = ClientHandlerTimeSync.getClientServerDifference();
-            }
-            else
-            {
-                /* it means we are now on the server side, so use the cached value from the client side */
-                clientServerDifference = this.clientServerDifferenceCache;
-            }
-        }
-
-        long elapsed = Math.abs((this.endTime != 0) ? (this.endTime - this.startTime) : (System.currentTimeMillis() - this.startTime));
-
-        return Math.abs(elapsed - clientServerDifference);
+        return Math.abs((this.endTime != 0) ? (this.endTime - this.startTime) : (System.currentTimeMillis() - this.startTime));
     }
 
     @Override
@@ -86,7 +51,6 @@ public class LatencyTimer implements IByteBufSerializable
 
         timer.startTime = buf.readLong();
         timer.endTime = buf.readLong();
-        timer.clientServerDifferenceCache = buf.readLong();
     }
 
     @Override
@@ -94,6 +58,5 @@ public class LatencyTimer implements IByteBufSerializable
     {
         buf.writeLong(this.startTime);
         buf.writeLong(this.endTime);
-        buf.writeLong(this.clientServerDifferenceCache);
     }
 }
