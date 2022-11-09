@@ -6,7 +6,6 @@ import mchorse.mclib.network.mclib.client.ClientHandlerAnswer;
 import mchorse.mclib.network.mclib.client.ClientHandlerBoolean;
 import mchorse.mclib.network.mclib.client.ClientHandlerConfig;
 import mchorse.mclib.network.mclib.client.ClientHandlerConfirm;
-import mchorse.mclib.network.mclib.client.ClientHandlerTimeSync;
 import mchorse.mclib.network.mclib.common.PacketAnswer;
 import mchorse.mclib.network.mclib.common.PacketBoolean;
 import mchorse.mclib.network.mclib.common.PacketConfig;
@@ -14,13 +13,11 @@ import mchorse.mclib.network.mclib.common.PacketConfirm;
 import mchorse.mclib.network.mclib.common.PacketDropItem;
 import mchorse.mclib.network.mclib.common.PacketRequestConfigs;
 import mchorse.mclib.network.mclib.common.PacketRequestPermission;
-import mchorse.mclib.network.mclib.common.PacketTime;
 import mchorse.mclib.network.mclib.server.ServerHandlerConfig;
 import mchorse.mclib.network.mclib.server.ServerHandlerConfirm;
 import mchorse.mclib.network.mclib.server.ServerHandlerDropItem;
 import mchorse.mclib.network.mclib.server.ServerHandlerPermissionRequest;
 import mchorse.mclib.network.mclib.server.ServerHandlerRequestConfigs;
-import mchorse.mclib.network.mclib.server.ServerHandlerTimeSync;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -48,10 +45,6 @@ public class Dispatcher
             /* client answer related packets */
             register(PacketAnswer.class, ClientHandlerAnswer.class, Side.CLIENT);
             register(PacketBoolean.class, ClientHandlerBoolean.class, Side.CLIENT);
-
-            /* to let the client know what time the server has */
-            register(PacketTime.class, ClientHandlerTimeSync.class, Side.CLIENT);
-            register(PacketTime.class, ServerHandlerTimeSync.class, Side.SERVER);
 
             register(PacketRequestPermission.class, ServerHandlerPermissionRequest.class, Side.SERVER);
         }
