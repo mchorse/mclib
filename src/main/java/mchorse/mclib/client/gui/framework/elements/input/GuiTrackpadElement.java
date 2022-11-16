@@ -360,12 +360,11 @@ public class GuiTrackpadElement extends GuiBaseTextElement
                 }
 
                 this.dragging = true;
+                context.awaitsRightClick = true;
                 this.initialX = context.mouseX;
                 this.initialY = context.mouseY;
                 this.lastValue = this.value;
                 this.time = System.currentTimeMillis();
-                this.allowContextMenu = false;
-                globalAllowContextMenu = false;
             }
         }
 
@@ -374,7 +373,9 @@ public class GuiTrackpadElement extends GuiBaseTextElement
         {
             this.setValueAndNotify(this.valueBeforeDrag);
 
-            this.stopDragging();
+            this.stopDragging(context);
+
+            return true;
         }
 
         return context.mouseButton == 0 && this.area.isInside(context);
@@ -398,24 +399,16 @@ public class GuiTrackpadElement extends GuiBaseTextElement
             }
         }
 
-        /* only allow context menu when right click is released
-        * (which means before this, right click was used to abort the dragging process)
-        * or if this.dragging == true, which means dragging process was not aborted through right click */
-        if (context.mouseButton == 1 || this.dragging)
-        {
-            this.allowContextMenu = true;
-            globalAllowContextMenu = true;
-        }
-
-        this.stopDragging();
+        this.stopDragging(context);
 
         super.mouseReleased(context);
     }
 
-    protected void stopDragging()
+    protected void stopDragging(GuiContext context)
     {
         this.dragging = false;
         this.shiftX = 0;
+        context.awaitsRightClick = false;
     }
 
     @Override

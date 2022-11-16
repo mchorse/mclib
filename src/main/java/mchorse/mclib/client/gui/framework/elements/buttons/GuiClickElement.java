@@ -31,6 +31,11 @@ public abstract class GuiClickElement<T> extends GuiElement
             return true;
         }
 
+        if (context.mouseButton == 1 && context.awaitsRightClick)
+        {
+            return false;
+        }
+
         if (this.isAllowed(context.mouseButton) && this.area.isInside(context))
         {
             this.pressed = true;
