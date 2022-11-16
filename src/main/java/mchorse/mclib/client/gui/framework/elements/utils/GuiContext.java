@@ -32,6 +32,12 @@ public class GuiContext implements IViewportStack
     public int mouseY;
     public int mouseButton;
     public int mouseWheel;
+    /**
+     * If this is true, no other element should be right clicked
+     * Example: dragging something awaits right click to abort the dragging process. In that time
+     * no other Gui element should respond to right click.
+     */
+    public boolean awaitsRightClick;
 
     /* Keyboard states */
     public char typedChar;
