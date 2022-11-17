@@ -5,10 +5,12 @@ import mchorse.mclib.client.gui.framework.GuiBase;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiDraw;
 import mchorse.mclib.client.gui.utils.Keybind;
-import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.events.RegisterDashboardPanels;
+import mchorse.mclib.permissions.PermissionUtils;
 import mchorse.mclib.utils.OpHelper;
 import net.minecraft.client.Minecraft;
+
+import java.util.function.Consumer;
 
 public abstract class GuiAbstractDashboard extends GuiBase
 {
@@ -56,7 +58,7 @@ public abstract class GuiAbstractDashboard extends GuiBase
     @Override
     public void setWorldAndResolution(Minecraft mc, int width, int height)
     {
-        this.updateOPAccess();
+        this.checkPermissions();
 
         if (this.wasClosed)
         {
@@ -68,31 +70,51 @@ public abstract class GuiAbstractDashboard extends GuiBase
         super.setWorldAndResolution(mc, width, height);
     }
 
-    private void updateOPAccess()
+    private void checkPermissions()
     {
         int newOpLevel = OpHelper.getPlayerOpLevel();
 
-        if (newOpLevel != this.opLevel)
+        for (GuiDashboardPanel panel : this.panels.panels)
         {
-            for (GuiDashboardPanel panel : this.panels.panels)
-            {
-                GuiIconElement button = this.panels.getButton(panel);
-                boolean enabled = panel.canBeOpened(newOpLevel);
+            GuiIconElement button = this.panels.getButton(panel);
 
+            Consumer<Boolean> task = (enabled) ->
+            {
                 button.setEnabled(enabled);
 
                 for (Keybind keybind : this.panels.keys().keybinds)
                 {
                     keybind.active(enabled);
                 }
+            };
+
+            if (panel.getRequiredPermission() != null)
+            {
+                PermissionUtils.hasPermission(Minecraft.getMinecraft().player, panel.getRequiredPermission(), task);
+            }
+            else
+            {
+                task.accept(true);
             }
         }
 
         GuiDashboardPanel current = this.panels.view.delegate;
 
-        if (current != null && !current.canBeOpened(newOpLevel))
+        if (current != null && current.getRequiredPermission() != null)
         {
-            this.panels.setPanel(this.defaultPanel);
+            this.panels.setPanel(null);
+
+            PermissionUtils.hasPermission(Minecraft.getMinecraft().player, current.getRequiredPermission(), (allowed) ->
+            {
+                if (allowed)
+                {
+                    this.panels.setPanel(current);
+                }
+                else
+                {
+                    this.panels.setPanel(this.defaultPanel);
+                }
+            });
         }
         else if (current == null)
         {

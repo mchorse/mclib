@@ -40,11 +40,11 @@ public class RegisterPermissionsEvent extends Event
     /**
      * register the provided permission category to the current category.
      * @param category
-     * @throws UnsupportedOperationException if no mod category was registered
+     * @throws UnsupportedOperationException if there is no current category
      */
     public void registerCategory(PermissionCategory category) throws UnsupportedOperationException
     {
-        if (this.currentMod == null) throw new UnsupportedOperationException("No mod permission category has been registered!");
+        if (this.currentCategory == null) throw new UnsupportedOperationException("No current category to add this category to!");
 
         this.currentCategory.addChild(category);
         this.currentCategory = category;
