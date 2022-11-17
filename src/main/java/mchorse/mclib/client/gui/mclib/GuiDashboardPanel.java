@@ -1,6 +1,7 @@
 package mchorse.mclib.client.gui.mclib;
 
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
+import mchorse.mclib.permissions.PermissionCategory;
 import mchorse.mclib.utils.OpHelper;
 import net.minecraft.client.Minecraft;
 
@@ -16,9 +17,15 @@ public class GuiDashboardPanel <T extends GuiAbstractDashboard> extends GuiEleme
         this.markContainer();
     }
 
+    @Deprecated
     public boolean canBeOpened(int opLevel)
     {
         return this.isClientSideOnly() || OpHelper.isOp(opLevel);
+    }
+
+    public PermissionCategory getRequiredPermission()
+    {
+        return null;
     }
 
     public boolean isClientSideOnly()

@@ -178,6 +178,7 @@ public class McLib
         McLibPermissions.accessGui = event.registerPermission(new PermissionCategory("access_gui"));
 
         event.endCategory();
+        event.endCategory();
     }
 
     @Mod.EventHandler

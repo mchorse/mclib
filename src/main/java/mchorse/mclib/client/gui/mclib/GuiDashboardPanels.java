@@ -6,10 +6,13 @@ import mchorse.mclib.client.gui.framework.elements.buttons.GuiIconElement;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.utils.Icon;
 import mchorse.mclib.client.gui.utils.keys.IKey;
+import mchorse.mclib.permissions.PermissionUtils;
 import mchorse.mclib.utils.Direction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import org.lwjgl.input.Keyboard;
+
+import java.util.function.Consumer;
 
 public class GuiDashboardPanels extends GuiPanelBase<GuiDashboardPanel>
 {
@@ -22,7 +25,22 @@ public class GuiDashboardPanels extends GuiPanelBase<GuiDashboardPanel>
     {
         for (GuiDashboardPanel panel : this.panels)
         {
-            panel.open();
+            Consumer<Boolean> task = (enabled) ->
+            {
+                if (enabled)
+                {
+                    panel.open();
+                }
+            };
+
+            if (panel.getRequiredPermission() != null)
+            {
+                PermissionUtils.hasPermission(Minecraft.getMinecraft().player, panel.getRequiredPermission(), task);
+            }
+            else
+            {
+                task.accept(true);
+            }
         }
     }
 
