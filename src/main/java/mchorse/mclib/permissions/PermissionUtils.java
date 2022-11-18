@@ -24,7 +24,15 @@ public class PermissionUtils
         }
         else
         {
-            ClientHandlerAnswer.requestServerAnswer(Dispatcher.DISPATCHER, new PacketRequestPermission(-1, permission), callback);
+            //in singleplayer there is no use in having a permission system
+            if (Minecraft.getMinecraft().isIntegratedServerRunning())
+            {
+                callback.accept(true);
+            }
+            else
+            {
+                ClientHandlerAnswer.requestServerAnswer(Dispatcher.DISPATCHER, new PacketRequestPermission(-1, permission), callback);
+            }
         }
     }
 }
