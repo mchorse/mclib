@@ -31,6 +31,7 @@ public abstract class AbstractClientHandlerAnswer<T extends PacketAnswer> extend
     protected static final Map<Integer, IAnswerRequest<?>> REQUESTS = new HashMap<>();
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void run(EntityPlayerSP player, PacketAnswer message)
     {
         CONSUMERS.consume(message.getCallbackID(), message.getValue());
@@ -39,6 +40,7 @@ public abstract class AbstractClientHandlerAnswer<T extends PacketAnswer> extend
     }
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public static void onClientTick(TickEvent.ClientTickEvent event)
     {
         if (event.phase == TickEvent.Phase.START) return;
