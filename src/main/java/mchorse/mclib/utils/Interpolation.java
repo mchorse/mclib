@@ -134,13 +134,22 @@ public enum Interpolation implements IInterpolation
         @Override
         public float interpolate(float a, float b, float x)
         {
-            return a + (b - a) * (float) Math.pow(2, 10 * (x - 1));
+            return (float) this.interpolate((double) a, b, x);
         }
 
         @Override
         public double interpolate(double a, double b, double x)
         {
-            return a + (b - a) * (float) Math.pow(2, 10 * (x - 1));
+            if (x == 0) return a;
+
+            double pow0 = Math.pow(2, -10);
+
+            /*
+             * The restrictions f(0) = a and f(1) = b will lead to the following formula instead of plain
+             * 2^10*(x-1). This would change the derivative,
+             * but with the plain formula the animation jumps when animating big values.
+             */
+            return (a + (b - a) / (1 - pow0) * (Math.pow(2, 10 * (x - 1))) - pow0);
         }
     },
     EXP_OUT("exp_out")
@@ -148,13 +157,17 @@ public enum Interpolation implements IInterpolation
         @Override
         public float interpolate(float a, float b, float x)
         {
-            return a + (b - a) * (float) (-Math.pow(2, -10 * x) + 1);
+            return (float) this.interpolate((double) a, b, x);
         }
 
         @Override
         public double interpolate(double a, double b, double x)
         {
-            return a + (b - a) * (float) (-Math.pow(2, -10 * x) + 1);
+            if (x == 0) return a;
+
+            double pow0 = Math.pow(2, -10);
+
+            return a + (b - a) * (1 - (Math.pow(2, -10 * x) - pow0) * 1 / (1 - pow0));
         }
     },
     EXP_INOUT("exp_inout")
@@ -162,31 +175,17 @@ public enum Interpolation implements IInterpolation
         @Override
         public float interpolate(float a, float b, float x)
         {
-            if (x == 0) return a;
-            if (x == 1) return b;
-
-            x *= 2;
-
-            if (x < 1F) return a + (b - a) / 2 * (float) Math.pow(2, 10 * (x - 1));
-
-            x -= 1;
-
-            return a + (b - a) / 2 * (float) (-Math.pow(2, -10 * x) + 2);
+            return (float) this.interpolate((double) a, b, x);
         }
 
         @Override
         public double interpolate(double a, double b, double x)
         {
-            if (x == 0) return a;
-            if (x == 1) return b;
+            if (x <= 0.5D) {
+                return Interpolation.EXP_IN.interpolate(a, a + (b - a) / 2, x * 2);
+            }
 
-            x *= 2;
-
-            if (x < 1F) return a + (b - a) / 2 * (float) Math.pow(2, 10 * (x - 1));
-
-            x -= 1;
-
-            return a + (b - a) / 2 * (float) (-Math.pow(2, -10 * x) + 2);
+            return Interpolation.EXP_OUT.interpolate(a + (b - a) / 2, b, x * 2 - 1);
         }
     },
     /* Following interpolations below were copied from: https://easings.net/ */
