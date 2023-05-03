@@ -126,7 +126,7 @@ mclib.config.background.color=颜色
 mclib.config.comments.background.color=应用于所有菜单的背景颜色。若指定了图片，则会作为背景图片的色调
 
 mclib.config.scrollbars.title=滚动条
-mclib.config.scrollbars.tooltip=背景选项，例如使用的颜色和材质
+mclib.config.scrollbars.tooltip=滚动条样式选项
 
 mclib.config.scrollbars.flat=扁平滚动条
 mclib.config.comments.scrollbars.flat=回退至扁平颜色外观的滚动条
