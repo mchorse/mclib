@@ -126,7 +126,7 @@ mclib.config.background.color=Color
 mclib.config.comments.background.color=Background color to be used in every menu. If image is specified, then this will be used as tinting color for background
 
 mclib.config.scrollbars.title=Scrollbars
-mclib.config.scrollbars.tooltip=Background options like color and texture to be used
+mclib.config.scrollbars.tooltip=Style options for scrollbars
 
 mclib.config.scrollbars.flat=Flat scrollbars
 mclib.config.comments.scrollbars.flat=Return the looks of flat colored scrollbars
