@@ -122,7 +122,7 @@ mclib.config.background.color=Couleur
 mclib.config.comments.background.color=Couleur de fond utilisée dans tous les menus. Si une image est spécifiée, alors la couleur sera utilisée comme couleur de teinte pour le fond d'écran
 
 mclib.config.scrollbars.title=Barres de défilement
-mclib.config.scrollbars.tooltip=Les options de fond comme la couleur et les textures à utiliser
+mclib.config.scrollbars.tooltip=Les options de personnalisation de la barre de défilement
 
 mclib.config.scrollbars.flat=Barres de défilement unie
 mclib.config.comments.scrollbars.flat=Donne une couleur unie pour les barres de défilement
