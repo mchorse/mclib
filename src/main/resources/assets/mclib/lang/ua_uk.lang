@@ -1,25 +1,24 @@
 #PARSE_ESCAPES
 
-key.mclib.category=МакЛіб
+key.mclib.category=McLib
 key.mclib.dashboard=Головна панель
 
 mclib.gui.ok=Ок
 mclib.gui.cancel=Відмінити
 mclib.gui.none=(відсутньо)
 mclib.gui.multi_skin=Мультискін
-mclib.gui.no_data=Немає доступнних даних...
+mclib.gui.no_data=Немає доступних даних...
 mclib.gui.open_folder=Відкрити папку
 mclib.gui.pick_texture=Обрати текстуру
-
-mclib.gui.context.multi_skin.copy=Скопіювати розташування текстури
-mclib.gui.context.multi_skin.paste=Вставити розташування скопійованої текстури 
+mclib.gui.context.multi_skin.copy=Скопіювати місцезнаходження текстури
+mclib.gui.context.multi_skin.paste=Вставити скопійоване місцезнаходження текстури
 
 # Don't remove space on the end!
 mclib.gui.dashboard.category=Головна панель
 mclib.gui.dashboard.open_panel=Відкрити 
 
 mclib.gui.graph.tooltip=Калькулятор графіків
-mclib.gui.graph.help=натисніть на цю кнопку аби перейти на інтернет-сторінку, яка містить документацію можливостей цього калькулятора графіків.\n\nВирази, що можуть бути використаними тут, також можна використати у модифікаторі Аперчур "Вираз", та математичній перевірці виразів у командах моду Commander.\n\nЦей калькулятор графіків надає можливість використовувати тільки одну змінну "x", яка є горизонтальною координатою, котру ви можете використовувати у функціях графіків по типу y=x (aka f(x)).
+mclib.gui.graph.help=mclib.gui.graph.help=Клацніть на цю кнопку аби перейти на інтернет-сторінку, що містить документацію можливостей калькулятора графіків.\n\nВирази, які можна використати тут, також можна використати у модифікаторі Аперчур "Вираз", та математичній перевірці виразів у командах моду Commander.\n\nДаний калькулятор графіків надає можливість використовувати тільки одну змінну "x", яка є горизонтальною координатою, котру ви можете використовувати у функціях графіків по типу y=x (aka f(x)).
 mclib.gui.config.title=Налаштування
 mclib.gui.config.tooltip=Налаштування модів
 mclib.gui.config.reload_tooltip=Перезавантажити налаштування з файлу...
@@ -29,37 +28,41 @@ mclib.gui.keys.list=Список клавіш
 mclib.gui.transforms.x=X
 mclib.gui.transforms.y=Y
 mclib.gui.transforms.z=Z
+mclib.gui.transforms.orientation.global=Глобальний
+mclib.gui.transforms.orientation.local=Локальний
+mclib.gui.transforms.orientation.tooltip=Яким чином мають бути розташовані вісі переміщення.
 mclib.gui.transforms.translate=Переміщення
-mclib.gui.transforms.scale=Розмір
+mclib.gui.transforms.scale=Масштабування
 mclib.gui.transforms.rotate=Обертання
 mclib.gui.transforms.context.copy=Скопіювати трансформації
 mclib.gui.transforms.context.paste=Вставити трансформації
 mclib.gui.transforms.context.paste_translation=Вставити переміщення
-mclib.gui.transforms.context.paste_scale=Вставити розмір
+mclib.gui.transforms.context.paste_scale=Вставити масштабування
 mclib.gui.transforms.context.paste_rotation=Вставити обертання
 mclib.gui.transforms.context.reset=Скинути трансформації
+mclib.gui.transforms.delta.origin=Коло кординат
 
 mclib.gui.keyframes.tick=Тік
 mclib.gui.keyframes.value=Значення
-mclib.gui.keyframes.context.maximize=Переглянути усі ключі
+mclib.gui.keyframes.context.maximize=Переглянути усі ключкадри
 mclib.gui.keyframes.context.select_all=Обрати усі
-mclib.gui.keyframes.context.remove=Видалити ключ(і)
-mclib.gui.keyframes.context.copy=Скопіювати ключі
-mclib.gui.keyframes.context.paste=Вставити скопійовані ключі
-mclib.gui.keyframes.context.to_left=Перемикнутися на ліві стрілки
-mclib.gui.keyframes.context.to_main=Перемикнутися на стрілки
-mclib.gui.keyframes.context.to_right=Перемикнутися на праві стрілки
+mclib.gui.keyframes.context.remove=Видалити ключкадр(и)
+mclib.gui.keyframes.context.copy=Скопіювати ключкадри
+mclib.gui.keyframes.context.paste=Вставити скопійовані ключкадри
+mclib.gui.keyframes.context.to_left=Перемкнутися на ліві стрілки
+mclib.gui.keyframes.context.to_main=Перемкнутися на центральні стрілки
+mclib.gui.keyframes.context.to_right=Перемкнутися на праві стрілки
 
-mclib.gui.multiskin.color=З цим елементом кольору, ви можете налаштувати колір каналів за схемою RGB. Найкраще працює із білими або сірими зображеннями.
-mclib.gui.multiskin.scale=Розмір
+mclib.gui.multiskin.color=З цим елементом кольору, ви можете налаштувати колір каналів за схемою RGB. Найкраще працює з білими або сірими світлинами.
+mclib.gui.multiskin.scale=Масштаб
 mclib.gui.multiskin.scale_to_largest=Вирівняти до найбільшого
 mclib.gui.multiskin.shift=Зміщення
 mclib.gui.multiskin.pixelate=Пікселізація
-mclib.gui.multiskin.erase=Ластик
-mclib.gui.multiskin.erase_tooltip=Ця опція дозволяє використовувати обраний скін у якості маски різниці, тобто це означає, що будь-які непрозорі пікселі зітруть пікселі усіх скінів під ними.
-mclib.gui.multiskin.custom_size=Користувацький розмір
-mclib.gui.multiskin.auto_size=Авторозмір
-mclib.gui.multiskin.auto_size_tooltip=Якщо вмикнено, текстура буде зберігати свій оригінальний розмір, для всього іншого є графи користуацького розміру знизу. 
+mclib.gui.multiskin.erase=Стерти
+mclib.gui.multiskin.erase_tooltip=Ця опція надає можливість використовувати обраний скін у якості маски різниці - будь-які непрозорі пікселі маски зітруть пікселі усіх скінів під ними.
+mclib.gui.multiskin.custom_size=Користувацький масштаб
+mclib.gui.multiskin.auto_size=Автомасштаб
+mclib.gui.multiskin.auto_size_tooltip=Якщо вмикнено, текстура зберігатиме свій оригінальний масштаб, в усіх інших випадках є графи користуацького розміру знизу.
 mclib.gui.multiskin.size_w=Користувацька ширина
 mclib.gui.multiskin.size_h=Користувацька висота
 
@@ -69,86 +72,95 @@ mclib.gui.color.recent=Недавні кольори
 mclib.gui.color.context.favorites.add=Додати до обраних
 mclib.gui.color.context.favorites.remove=Видалити з обраних
 
-mclib.gui.item_slot.context.copy=Copy item's NBT
-mclib.gui.item_slot.context.paste=Paste item NBT
+mclib.gui.item_slot.context.copy=Скопіювати NBT предмету
+mclib.gui.item_slot.context.paste=Вставити NBT предмету
 mclib.gui.item_slot.context.drop=Викинути предмет
-mclib.gui.item_slot.context.clear=Видалити предмет
+mclib.gui.item_slot.context.clear=Скинути предмет
 
 # Config
-mclib.config.title=МакЛіб
-
+mclib.config.title=McLib
 mclib.config.appearance.title=Зовнішній вигляд
-mclib.config.appearance.tooltip=Загальні налаштування стосовно зовнішьного вигляду інтерфейсу та фреймворку
+mclib.config.appearance.tooltip=Загальні налаштування зовнішнього вигляду інтерфейсу та фреймворку
 
 mclib.config.appearance.primary_color=Головний колір
-mclib.config.comments.appearance.primary_color=Колір, що використовуватиметься в усьому інтерфейсі
-mclib.config.appearance.enable_borders=Окрайка кнопок
-mclib.config.comments.appearance.enable_borders=Чи повинні кнопки та інші елементи мати окрайку?
-mclib.config.appearance.enable_checkbox_rendering=Прапорець
-mclib.config.comments.appearance.enable_checkbox_rendering=Вмикнути прапорці замість тумблерів (залежить від смаку)
+mclib.config.comments.appearance.primary_color=Колір, що використовуватиметься всюди в інтерфейсі
+mclib.config.appearance.enable_borders=Рамка кнопок
+mclib.config.comments.appearance.enable_borders=Чи мають кнопки та інші елементи мати рамку?
+mclib.config.appearance.enable_checkbox_rendering=Прапорці
+mclib.config.comments.appearance.enable_checkbox_rendering=Вмикнути прапорці замість тумблерів (справа смаку)
 mclib.config.appearance.enable_trackpad_increments=Зміна значення трекпадів
 mclib.config.comments.appearance.enable_trackpad_increments=Вмикає кнопки < та > на полях трекпадів (за допомогою яких можна змінювати значення у трекпадах)
 mclib.config.appearance.enable_grid_rendering=Сітка у моделей
 mclib.config.comments.appearance.enable_grid_rendering=Вмикає відображення сітки замість відображення блоку трави
 mclib.config.appearance.user_interface_scale=Розмір інтерфейсу
-mclib.config.comments.appearance.user_interface_scale=Розмір інтерфейсу для модів від McHorse, який використовується замість розміру інтерфейсу у налаштуваннях відео. Якщо значення цього параметру буде встановлено на 0, то буде використано розмір інтерфейсу Майнкрафту за замовченням.
-mclib.config.appearance.tooltip_style=Tooltip style
-mclib.config.comments.appearance.tooltip_style=This option allows to change GUI tooltip style 
+mclib.config.comments.appearance.user_interface_scale=Розмір інтерфейсу для модів від McHorse, що використовуватиметься замість розміру інтерфейсу Майнкрафту у налаштуваннях відео. У разі якщо значення цього параметру встановлено на 0, використовуватиметься усталений розмір інтерфейсу Майнкрафту
+mclib.config.appearance.render_translation_text_colours=Відображати кольори тексту трансформацій
+mclib.config.comments.appearance.render_translation_text_colours=Відображати відповідний колір вісі для полей трансформацій, себто x - червоний, y - зелений та z - синій.
+mclib.config.appearance.tooltip_style=Стиль підказок
+mclib.config.comments.appearance.tooltip_style=Ця опція надає можливість змінювати стиль інтерфейсу підказок
+mclib.config.appearance.trackpad_decimal_places=Десяткові позиції трекпадів
+mclib.config.comments.appearance.trackpad_decimal_places=Задайте до скількох позицій необхідно НЕ округлювати числа у трекпадах
 
-mclib.config.tutorials.title=Налаштування для відеоуроків
-mclib.config.tutorials.tooltip=Ця категорія містить налаштування, які можуть стати у нагоді під час запису відеоуроків, гайдів або туторіалів
+mclib.config.tutorials.title=Налаштування гайдів
+mclib.config.tutorials.tooltip=Ця категорія містить опції, корисні для створення гайдів та навчальних відео
 
 mclib.config.tutorials.enable_mouse_rendering=Курсор миші
-mclib.config.comments.tutorials.enable_mouse_rendering=Вмикає відображення курсору миші МакЛібу. Дуже корисна опція для відеоуроків, адже при записі Мінемою курсор операційної системи не видно
+mclib.config.comments.tutorials.enable_mouse_rendering=Вмикнути відображення внутрішьного курсору миші. Дуже корисно для гайдів, за умови, що ви записуєте їх з Minema, де не видно стандартний курсор ОС
 mclib.config.tutorials.enable_mouse_buttons_rendering=Кнопки миші
-mclib.config.comments.tutorials.enable_mouse_buttons_rendering=Вмикає відображення натиснення кнопок миші та прокрутки колесика. Дуже корисна опція для відеоуроків, адже при записі Мінемою зовнішніх ефектів натиску кнопок та прокрутки колесика миші немає
-mclib.config.tutorials.enable_keystrokes_rendering=Відображення натискань клавіш
-mclib.config.comments.tutorials.enable_keystrokes_rendering=Вмикнути відображення натискань клавіш. Дуже корисна опція для відеоуроків, адже при записі Мінемою зовнішніх ефектів натискань клавіш немає
-mclib.config.tutorials.keystroke_offset=Зміщення відображення натискань клавіш
-mclib.config.comments.tutorials.keystroke_offset=Дозволяє налаштувати на скільки пікселів відображення натискань клавіш буде віддалятися від куту розташуванняn
-mclib.config.tutorials.keystroke_position=Розташування відображення натискань клавіш
-mclib.config.comments.tutorials.keystroke_position=Дозволяє змінювати кут, у якому з'являються відображення натискань клавіш
+mclib.config.comments.tutorials.enable_mouse_buttons_rendering=Вмикнути відображення натискань кнопок миші та прокрутки колесика. Дуже корисно для гайдів, за умови, що ви записуєте їх з Minema, де не видно натискань кнопок миші та колесика
+mclib.config.tutorials.enable_keystrokes_rendering=Іконки клавіш
+mclib.config.comments.tutorials.enable_keystrokes_rendering=Вмикнути відображення іконок клавіш, які ви натискаєте. Дуже корисно для гайдів, де необхідно демонструвати які саме клавіші ви натискаєте
+mclib.config.tutorials.keystroke_offset=Зміщення іконок клавіш
+mclib.config.comments.tutorials.keystroke_offset=Надає вам можливість налаштувати за скільки пікселів від куту мають відображатися іконки клавіш
+mclib.config.tutorials.keystroke_position=Позиція іконок клавіш
+mclib.config.comments.tutorials.keystroke_position=Надає вам можливість змінити кут, в якому розміщуються іконки клавіш 
 
 mclib.config.background.title=Фон
-mclib.config.background.tooltip=Налаштування фону, таких як колір та текстура
+mclib.config.background.tooltip=Налаштування деталей фону, таких як кольори та світлина
 
-mclib.config.background.image=Зображення
-mclib.config.comments.background.image=Фонове зображення, що використовуватиметься у кожному меню
+mclib.config.background.image=Світлина
+mclib.config.comments.background.image=Фонова світлина, що використовуватиметься у кожному меню
 mclib.config.background.color=Колір
-mclib.config.comments.background.color=Фоновий колір, що використовуватиметься у кожному меню. Якщо було вказано зображення, колір буде використано у якості його відтінку
+mclib.config.comments.background.color=Фоновий колір, що використовуватиметься у кожному меню. У разі, якщо ви також задали світлину, колір буде використано у якості відтінку для світлини
 
-mclib.config.scrollbars.title=Поля прокрутки
-mclib.config.scrollbars.tooltip=Налаштування елементів фону, таких як колір або текстура
+mclib.config.scrollbars.title=Смуги прокрутки
+mclib.config.scrollbars.tooltip=Налаштування деталей смуги прокрутки
 
-mclib.config.scrollbars.flat=Однокольорові поля прокрутки
-mclib.config.comments.scrollbars.flat=Повернути вигляд однокольорових полів прокрутки
+mclib.config.scrollbars.flat=Плоскі смуги прокрутки
+mclib.config.comments.scrollbars.flat=Повертає вигляд плоских, монотонних смуг прокрутки
 mclib.config.scrollbars.shadow=Колір тіні
-mclib.config.comments.scrollbars.shadow=Дозволяє вам встановлювати колір тіней полів прокрутки
+mclib.config.comments.scrollbars.shadow=Надає можливість налаштувати колір тіні смуги прокрутки
 mclib.config.scrollbars.width=Товщина
-mclib.config.comments.scrollbars.width=Дозволяє вам налаштовувати товщину (ширину полів прокрутки)
+mclib.config.comments.scrollbars.width=Надає можливість налаштувати товщину (ширину смуг прокрутки)
 
 mclib.config.multiskin.title=Мультискін
-mclib.config.multiskin.tooltip=Налаштування стосовно опції Мултискіна
+mclib.config.multiskin.tooltip=Налаштування, що стосуються Мультискіну
 
-mclib.config.multiskin.multithreaded=Багатопоточна обробка
-mclib.config.comments.multiskin.multithreaded=Дозволяє вам вмикнути багатопоточну обробку мультискінів, яка повинна полагодити лаги ціною довшої обробки
-mclib.config.multiskin.clear=Видалення після завантаження РП
-mclib.config.comments.multiskin.clear=Дозволяє вам вмикнути усі мультискін-текстури під час перезавантаження ресурспаків
+mclib.config.multiskin.multithreaded=Мультипоточна обробка
+mclib.config.comments.multiskin.multithreaded=Надає можливість вмикнути або вимкнути мультипоточну обробку мультискінів, що має полагодити затримку у провантаженні за рахунок довшої обробки
+mclib.config.multiskin.clear=Скинути після перевантаження РП
+mclib.config.comments.multiskin.clear=Надає можливість вмикнути видалення усіх мультискінових текстур під час перезавантаження ресурс-паку
 
-mclib.config.vanilla.title=Налаштування Ваніли
-mclib.config.vanilla.tooltip=Налаштування різних опцій, що пов'язані з кодом Майнкрафту
+mclib.config.vanilla.title=Рихтування Ваніли
+mclib.config.vanilla.tooltip=Налаштування деяких рихтунків до коду Майнкрафту
 
 mclib.config.vanilla.max_packet_size=Макс. розмір пакетів
-mclib.config.comments.vanilla.max_packet_size=Дозволяє вам вказати максимальний розмір (у байтах) модифікованого пакету. Увага: не змінюйте це значення для публічних серверів, адже таким чином провести DDoS-атаку на ваш сервер буде набагато простіше. Це налаштування було створено для самітної гри!
+mclib.config.comments.vanilla.max_packet_size=Надає вам можливість налаштувати максимальний розмір (у байтах) модифікованого пакету даних. Увага: не змінюйте це значення для публічних серверів, т.я. таким чином провести DDoS-атаку стане набагато легше. Це налаштування існує лише для використання у самітній грі!
 
 # OP access
-op_access.config.title=Доступ ОП
+op_access.config.title=Операторський Допступ
 
-op_access.config.mclib.title=МакЛіб
-op_access.config.mclib.tooltip=Налаштування прав оператора МакЛіб
+op_access.config.mclib.title=McLib
+op_access.config.mclib.tooltip=Налаштування операторського доступу McLib
 
-op_access.config.mclib.drop_items=Залишати по собі предмети
-op_access.config.comments.mclib.drop_items=Чи можут гравці не оператори користуватися можливістю "залишати по собі предмети" зі слоту предметів?
+op_access.config.mclib.drop_items=Викидання предметів
+op_access.config.comments.mclib.drop_items=Чи можуть гравці не-оператори мати можливість викидання предметів у елементі слота стаку предметів?
+
+# Keybinds config
+keybinds.config.title=Клавіші
+
+keybinds.config.unknown_mod=Невідомий мод
+keybinds.config.no_category=Відсутня категорія
 
 # Interpolations
 mclib.interpolations.linear=Лінійна
@@ -158,9 +170,9 @@ mclib.interpolations.quad_inout=Квадратична In/out
 mclib.interpolations.cubic_in=Кубічна In
 mclib.interpolations.cubic_out=Кубічна Out
 mclib.interpolations.cubic_inout=Кубічна In/out
-mclib.interpolations.exp_in=Експоненціальна In
-mclib.interpolations.exp_out=Експоненціальна Out
-mclib.interpolations.exp_inout=Експоненціальна In/out
+mclib.interpolations.exp_in=Експоненційна In
+mclib.interpolations.exp_out=Експоненційна Out
+mclib.interpolations.exp_inout=Експоненційна In/out
 
 mclib.interpolations.back_in=Зворотня In
 mclib.interpolations.back_out=Зворотня Out
@@ -172,45 +184,75 @@ mclib.interpolations.bounce_in=Стрибуча In
 mclib.interpolations.bounce_out=Стрибуча Out
 mclib.interpolations.bounce_inout=Стрибуча In/out
 
+mclib.interpolations.sine_in=Синусоїдна In
+mclib.interpolations.sine_out=Синусоїдна Out
+mclib.interpolations.sine_inout=Синусоїдна In/out
+mclib.interpolations.quart_in=Квартова In
+mclib.interpolations.quart_out=Квартова Out
+mclib.interpolations.quart_inout=Квартова In/out
+mclib.interpolations.quint_in=Квінтова In
+mclib.interpolations.quint_out=Квінтова Out
+mclib.interpolations.quint_inout=Квінтова In/out
+mclib.interpolations.circle_in=Кругова In
+mclib.interpolations.circle_out=Кругова Out
+mclib.interpolations.circle_inout=Кругова In/out
+
 mclib.interpolations.const=Постійна
 mclib.interpolations.quad=Квадратична
 mclib.interpolations.cubic=Кубічна
 mclib.interpolations.hermite=Сплайнова
-mclib.interpolations.exp=Експоненціальна
+mclib.interpolations.exp=Експоненційна
 mclib.interpolations.bezier=Безьє
 mclib.interpolations.back=Зворотня
 mclib.interpolations.elastic=Гнучка
 mclib.interpolations.bounce=Стрибуча
+mclib.interpolations.sine=Синусоїдна
+mclib.interpolations.quart=Квартова
+mclib.interpolations.quint=Квінтова
+mclib.interpolations.circle=Кругова
 
 # Interpolation tooltips
 #
 # Feel free to add your own tips. If there is no tip, then leave it empty.
 # DO NOT REMOVE THESE LINES!
 
-mclib.interpolations.tooltips.linear=Ця інтерполяція має одну постійну швидкість на усе переміщення між точкою А та Б. Корисна для безшовних обертів та повільних рухів.
+mclib.interpolations.tooltips.linear=Ця інтерполяція відбувається зі сталою швидкістю від A до Б. Корисно для плавних обертань та повільного руху.
 mclib.interpolations.tooltips.quad_in=
 mclib.interpolations.tooltips.quad_out=
-mclib.interpolations.tooltips.quad_inout=Найбільш корисна для анімації поз, надає рухам ще більш лінивий характер чим Експоненціальна чи Кубічна In/out.
+mclib.interpolations.tooltips.quad_inout=Найбільш корисна для анімації поз, що мають навіть більш ліниву траекторію рухів, аніж експоненційна чи кубічна In/out.
 mclib.interpolations.tooltips.cubic_in=
 mclib.interpolations.tooltips.cubic_out=
-mclib.interpolations.tooltips.cubic_inout=Найбільш корисна для анімації поз, надає рухам більш лінивіший характер чим Експоненціальна In/out.
-mclib.interpolations.tooltips.exp_in=Корисна для руху камери у поєднанні з Експоненціальною Out, таким чином ви можете створювати стрибучі, піклві переходи між двома ракурсами камери.
-mclib.interpolations.tooltips.exp_out=Корисна для створення різкого руху.
-mclib.interpolations.tooltips.exp_inout=Найбільш корисна для анімації поз або наголошення чогось за допомогою камери.
+mclib.interpolations.tooltips.cubic_inout=Найбільш корисна для анімації поз, які мають навіть більш ліниву траекторію рухів, ніж експоненційна In/out.
+mclib.interpolations.tooltips.exp_in=Корисна для камер у поєднанні з Експоненційною Out - так ви можете створити стрибкоподібні переходи між двома ракурсами камери.
+mclib.interpolations.tooltips.exp_out=Корисна для швидкого руху.
+mclib.interpolations.tooltips.exp_inout=Найбільш корисна для анімації поз чи акцентування камери.
 
 mclib.interpolations.tooltips.back_in=
 mclib.interpolations.tooltips.back_out=
-mclib.interpolations.tooltips.back_inout=Може бути використана для хитання та природнього руху поз.
+mclib.interpolations.tooltips.back_inout=Може використовуватися для похитування та анімації природних рухів у позах.
 mclib.interpolations.tooltips.elastic_in=
-mclib.interpolations.tooltips.elastic_out=Корисна для стрибучих "мультяшних" рухів.
+mclib.interpolations.tooltips.elastic_out=Корисна для стрибкоподібних мультяшних рухів.
 mclib.interpolations.tooltips.elastic_inout=
 mclib.interpolations.tooltips.bounce_in=
-mclib.interpolations.tooltips.bounce_out=Корисна для створення анімації чогось, що падає на землю та відскакує від неї декілька разів.
+mclib.interpolations.tooltips.bounce_out=Корисна для створення анімації, коли щось падає на землю і підстрибує кілька разів.
 mclib.interpolations.tooltips.bounce_inout=
 
-mclib.interpolations.tooltips.const=Ця інтерполяція не те, щоб інтерполює, вона, радше, зберігає початкове значення до кінця. Вона корисна для створення різких рухів протягом багатьох ключів.
-mclib.interpolations.tooltips.hermite=Ця інтерполяція може сгладити анімацію протягом багатьох ключів. Переконайтеся, що дистанція між ключами рівнозначна, адже ефект згладження псується при різній дистанції.
-mclib.interpolations.tooltips.bezier=Ця інтерполяція дозволяє вільно налаштовувати криву використовуючи контрольні точки, які, у свою чергу, дозволяють мімікувати більшість інших інтерполяцій. Доволі корисна для створення більш гладкого переходу між багатьма ключами.
+mclib.interpolations.tooltips.sine_in=
+mclib.interpolations.tooltips.sine_out=
+mclib.interpolations.tooltips.sine_inout=
+mclib.interpolations.tooltips.quart_in=
+mclib.interpolations.tooltips.quart_out=
+mclib.interpolations.tooltips.quart_inout=
+mclib.interpolations.tooltips.quint_in=
+mclib.interpolations.tooltips.quint_out=
+mclib.interpolations.tooltips.quint_inout=
+mclib.interpolations.tooltips.circle_in=
+mclib.interpolations.tooltips.circle_out=
+mclib.interpolations.tooltips.circle_inout=
+
+mclib.interpolations.tooltips.const=Ця інтерполяція не інтерполює, а зберігає початкове значення до кінця. Є корисною для створення різких стрибків у анімації за допомогою декількох ключкадрами.
+mclib.interpolations.tooltips.hermite=Ця інтерполяція може згладити анімацію між кількома ключкадрами. Переконайтеся, що відстань між ключкадрами однакова, оскільки при зміні відстані згладжування порушується.
+mclib.interpolations.tooltips.bezier=Ця інтерполяція дозволяє налаштувати криву за допомогою контрольних точок, що також дозволяє імітувати більшість інших інтерполяцій. Є корисною для створення більш плавного переходу між кількома ключкадрами.
 
 mclib.easing.in=Ease in
 mclib.easing.out=Ease out
@@ -218,25 +260,25 @@ mclib.easing.inout=Ease in/out
 
 # Commands
 mclib.commands.wrapper=%s
-mclib.commands.mclib.help=Команда МакЛіб, яка дозволяє редагування можливостей та прав гравців на стороні сервера.
-mclib.commands.mclib.config.help=Підкоманда МакЛіб, що дозволяє керувати налаштуваннями модів від McHorse.
-mclib.commands.mclib.config.print=§fЦя команда видає поточне значення заданого налаштування моду з ID §7<mod.category.option>§f.
-mclib.commands.mclib.config.set=§fЦя команда задає поточне значення заданого налаштування моду з ID §7<mod.category.option>§f до §7<value...>§f.
-mclib.commands.cheats=Команда-чіт, що дозволяє вмикнути чіт-команди у світі самітньої гри.\n\nМоже бути використана задля вимкнення читів у творчому світі, але зі збереженням виконання команд, скажімо у разі якщо ви публікуєте пригодницьку мапу, або волієте увімкнути команди у завантаженому світі, де чіти було вимкнено, але для відео вам необхідні команди.
+mclib.commands.mclib.help=Команда McLib, що надає можливість редагування конфігурації на стороні сервера.
+mclib.commands.mclib.config.help=Підкоманда конфігу McLib, що надає можливість керувати налаштуваннями модів McHorse.
+mclib.commands.mclib.config.print=§fЦя команда друкує поточне значення заданого налаштування моду з ID §7<mod.category.option>§f.
+mclib.commands.mclib.config.set=§fЦя команда задає поточне значення заданого налаштування моду з ID §7<mod.category.option>§f до значення §7<value...>§f.
+mclib.commands.cheats=Команда-чит, що надає можливість перемикати дозвіл на використання чит-команд у сві самітної гри.\n\nМоже бути використана задля вимкнення змоги викорисання читів у творчому світі, попри змогу використання команд у разі, якщо ви, скажімо, публікуєте пригодницьку мапу, або ж хочете вмикнути змогу використання команда у завантаженому світі, де чит-команди не дозволені, т.я. вам необхідно використання команд для відео.
 
-mclib.error.config.invalid_id=§fЗаданий ідентифікатор налаштування моду %s§f не існує!
-mclib.error.config.invalid_format=§fЗадане значення %s§f налаштування моду з ідентифікатором %s§f неможливо обробити!
-mclib.info.config.set=§fНове значення налаштування моду %s§f становить: %s§f
-mclib.info.config.print=§fЗначення налаштування моду %s§f становить: %s§f
-mclib.info.config.client_side=§fЗадане налаштування моду %s§f працює тільки на стороні клієнта...
+mclib.error.config.invalid_id=§fЗаданий ідентифікатор моду %s§f є некоректним!
+mclib.error.config.invalid_format=§fЗадане значення %s§f для ідентифікатору налаштування моду %s§f неможливо зчитати!
+mclib.info.config.set=§fНове значення заданого налаштування моду %s§f є: %s§f
+mclib.info.config.print=§fЗначення ідентифікатору налаштування моду %s§f є: %s§f
+mclib.info.config.client_side=§fЗадане налаштування моду %s§f працює виключно на стороні клієнту...
 
 # Keystroke modes
-mclib.keystrokes_position.auto=Автоматично
-mclib.keystrokes_position.bottom_left=Зліва знизу
-mclib.keystrokes_position.bottom_right=Справа знизу
-mclib.keystrokes_position.top_right=Справа зверху
-mclib.keystrokes_position.top_left=Зліва зверху
+mclib.keystrokes_position.auto=Авто
+mclib.keystrokes_position.bottom_left=Знизу ліворуч
+mclib.keystrokes_position.bottom_right=Знизу праворуч
+mclib.keystrokes_position.top_right=Зверху праворуч
+mclib.keystrokes_position.top_left=Знизу ліворуч
 
 # Tootlip styles
-mclib.tooltip_style.light=Light
-mclib.tooltip_style.dark=Dark
+mclib.tooltip_style.light=Світлі
+mclib.tooltip_style.dark=Темні
