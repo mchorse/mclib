@@ -1,3 +1,12 @@
+## Version 2.4.2
+
+This update was made by Chryfi, exceptions are mentioned at the respective items.
+
+* Added basic permission system
+* Fixed exponential interpolations not fulfilling the restrictions f(0)=a and f(1)=b
+* Fixed right click abort dragging still affecting other click elements and then applying the trackpad value
+* Major update to Ukranian translation (thanks to @Andruxioid)
+
 ## Version 2.4.1
 
 This update was made by Chryfi, exceptions are mentioned at the respective items.
