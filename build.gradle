@@ -48,6 +48,7 @@ minecraft
 }
 
 
+
 dependencies {
     minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
 }
@@ -78,6 +79,20 @@ processResources
     }
 }
 
+import org.apache.tools.ant.filters.ReplaceTokens
+def copyDir = "$compileJava.temporaryDir/replaced"
+
+task tokenReplace(type:Copy){
+    var test = sourceSets.main.java.sourceDirectories;
+    from(sourceSets.main.java.sourceDirectories)
+    into copyDir
+    filter(ReplaceTokens, tokens: [VERSION: project.version])
+}
+
+compileJava.setSource(copyDir)
+
+compileJava.dependsOn(tokenReplace)
+
 /* Dev build */
 task deobfJar(type: Jar) {
     from sourceSets.main.output
@@ -92,7 +107,7 @@ task deobfJar(type: Jar) {
                 "Specification-Version": "1", // We are version 1 of ourselves
                 "Implementation-Title": project.name,
                 "Implementation-Version": "${version}",
-                "Implementation-Vendor" :"examplemodsareus",
+                "Implementation-Vendor" : project.vendor,
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

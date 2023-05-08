@@ -25,6 +25,6 @@ public class McLibCMInfo extends DummyModContainer
     @Override
     public String getVersion()
     {
-        return "%VERSION%";
+        return "@VERSION@";
     }
 }
