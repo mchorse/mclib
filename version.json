@@ -1,6 +1,7 @@
 {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/mchorses-mclib/",
     "1.12.2": {
+		"2.4.2": "This update was made by Chryfi. It features some fixes and a basic permission system.",
         "2.4.1": "This update was made by Chryfi.",
         "2.4": "This update was made by MiaoNLI.",
         "2.3.7": "This update was made by Chryfi, it adds important utility for Blockbuster 2.4.1 release.",
