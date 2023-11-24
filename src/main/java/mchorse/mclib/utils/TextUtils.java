@@ -22,7 +22,7 @@ public class TextUtils
             }
             else
             {
-                builder.append(character == '[' ? '§' : character);
+                builder.append(character == '[' ? '\u00A7' : character);
             }
         }
 
