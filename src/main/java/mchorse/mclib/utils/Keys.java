@@ -24,6 +24,9 @@ public class Keys
         if (KEYS[key] == null)
         {
             KEYS[key] = getKey(key);
+            if (KEYS[key] == null) {
+                return "Unknown key";
+            }
         }
 
         return KEYS[key];
@@ -88,6 +91,10 @@ public class Keys
         }
 
         String name = Keyboard.getKeyName(key);
+
+	if (name == null) {
+            return null;
+        }
 
         if (name.length() > 1)
         {
