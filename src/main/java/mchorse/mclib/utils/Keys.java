@@ -21,6 +21,7 @@ public class Keys
             return null;
         }
 
+	// Adding this line prevents a null-pointer exception
         if (KEYS[key] == null)
         {
             KEYS[key] = getKey(key);
@@ -92,6 +93,7 @@ public class Keys
 
         String name = Keyboard.getKeyName(key);
 
+	// Adding this line prevents a null-pointer exception
 	if (name == null) {
             return null;
         }
