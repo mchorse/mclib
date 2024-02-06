@@ -3,25 +3,23 @@ buildscript
     repositories 
     {
         jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
+        maven { url = 'https://maven.minecraftforge.net/' }
     }
     
     dependencies 
     {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.minecraftforge.gradle'
 
 if (project.hasProperty("dev")) 
 {
     version += "-dev" + dev
 }
 
+version = project.version
 group = "mchorse.mclib"
 archivesBaseName = "mclib"
 sourceCompatibility = targetCompatibility = "1.8"
@@ -35,14 +33,24 @@ compileJava
 
 minecraft 
 {
-    version = "${mc_version}-${forge_version}"
-    runDir = "run"
-    mappings = snapshot
-    
-    clientJvmArgs = ["-Xmx1G", "-Dfml.coreMods.load=" + coremodPath]
-    serverJvmArgs = ["-Xmx1G"]
-    
-    replace "%VERSION%", project.version
+    mappings channel: 'snapshot', version: project.snapshot
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            jvmArgs(["-Dfml.coreMods.load=" + coremodPath])
+        }
+
+        server {
+
+        }
+    }
+}
+
+
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
 }
 
 jar {
@@ -53,21 +61,37 @@ jar {
 
 processResources
 {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
-	project.version += "-" + project.minecraft.version
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.mc_version
+
+	project.version += "-" + project.mc_version
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+
+        expand 'version':project.version, 'mcversion':project.mc_version
     }
-        
+
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
+
+import org.apache.tools.ant.filters.ReplaceTokens
+def copyDir = "$compileJava.temporaryDir/replaced"
+
+task tokenReplace(type:Copy){
+    var test = sourceSets.main.java.sourceDirectories;
+    from(sourceSets.main.java.sourceDirectories)
+    into copyDir
+    filter(ReplaceTokens, tokens: [VERSION: project.version])
+}
+
+compileJava.setSource(copyDir)
+
+compileJava.dependsOn(tokenReplace)
 
 /* Dev build */
 task deobfJar(type: Jar) {
@@ -75,7 +99,17 @@ task deobfJar(type: Jar) {
     classifier = 'dev'
     
     manifest {
-        attributes 'FMLCorePlugin': coremodPath, 'FMLCorePluginContainsFMLMod': 'true'
+        attributes([
+                'FMLCorePlugin': coremodPath,
+                'FMLCorePluginContainsFMLMod': 'true',
+                "Specification-Title": project.archivesBaseName,
+                "Specification-Vendor": project.vendor,
+                "Specification-Version": "1", // We are version 1 of ourselves
+                "Implementation-Title": project.name,
+                "Implementation-Version": "${version}",
+                "Implementation-Vendor" : project.vendor,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
     }
 }
 

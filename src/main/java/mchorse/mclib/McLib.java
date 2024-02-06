@@ -46,7 +46,7 @@ import java.util.Map;
 public class McLib
 {
     public static final String MOD_ID = "mclib";
-    public static final String VERSION = "%VERSION%";
+    public static final String VERSION = "@VERSION@";
 
     /* Proxies */
     public static final String CLIENT_PROXY = "mchorse.mclib.ClientProxy";

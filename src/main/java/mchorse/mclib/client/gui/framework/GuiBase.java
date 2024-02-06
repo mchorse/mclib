@@ -1,6 +1,5 @@
 package mchorse.mclib.client.gui.framework;
 
-import jline.internal.Nullable;
 import mchorse.mclib.client.gui.framework.elements.IViewport;
 import mchorse.mclib.client.gui.framework.elements.utils.GuiContext;
 import mchorse.mclib.client.gui.framework.elements.GuiElement;
@@ -56,7 +55,6 @@ public class GuiBase extends GuiScreen
      * @param <T>
      * @return null if GuiBase.screen or GuiBase.screen.root is null or if the children List is empty.
      */
-    @Nullable
     public static <T> List<T> getCurrentChildren(Class<T> clazz)
     {
         if (GuiBase.getCurrent() != null && GuiBase.getCurrent().screen != null && GuiBase.getCurrent().screen.root != null)
