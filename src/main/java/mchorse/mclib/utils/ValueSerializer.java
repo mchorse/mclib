@@ -259,15 +259,15 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
     {
         for (Map.Entry<String, String> entry : this.nbtMap.entrySet())
         {
-            GenericBaseValue value = this.pool.get(entry.getValue());
-            String uuid = entry.getKey();
+            String uuid = entry.getValue();
+            GenericBaseValue value = this.pool.get(uuid);
 
             if (!this.nbtAlwaysWrite.contains(uuid) && value instanceof GenericValue && !((GenericValue) value).hasChanged())
             {
                 continue;
             }
 
-            tag.setTag(uuid, value.valueToNBT());
+            tag.setTag(entry.getKey(), value.valueToNBT());
         }
 
         return tag;
@@ -283,15 +283,15 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
 
         for (Map.Entry<String, String> entry : this.jsonMap.entrySet())
         {
-            GenericBaseValue value = this.pool.get(entry.getValue());
-            String uuid = entry.getKey();
+            String uuid = entry.getValue();
+            GenericBaseValue value = this.pool.get(uuid);
 
             if (!this.jsonAlwaysWrite.contains(uuid) && value instanceof GenericValue && !((GenericValue) value).hasChanged())
             {
                 continue;
             }
 
-            jsonRoot.add(uuid, value.valueToJSON());
+            jsonRoot.add(entry.getKey(), value.valueToJSON());
         }
 
         return jsonRoot;
