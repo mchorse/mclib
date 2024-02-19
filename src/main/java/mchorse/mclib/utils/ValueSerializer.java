@@ -10,13 +10,7 @@ import mchorse.mclib.network.INBTSerializable;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * A Serializer for GenericValue instances.
@@ -30,29 +24,54 @@ import java.util.UUID;
  *
  * @author Christian F. (Chryfi)
  */
-public class ValueSerializer implements IByteBufSerializable, INBTSerializable
+public class ValueSerializer implements IByteBufSerializable, INBTSerializable, ICopy<ValueSerializer>
 {
     /**
-     * The key is a UUID String.
-     * This HashMap will not include duplicate GenericValue references.
+     * A pool of values, so we can easily retrieve a value that has been either registered for json or nbt.
+     * The key is the path of the value.
      */
-    private final Map<String, GenericBaseValue<?>> pool = new LinkedHashMap<>();
+    private final Map<String, Value<?>> pool = new LinkedHashMap<>();
 
     /**
      * Key is the name that is used for serialization/deserialization
-     * Value is the UUID String pointing to the key of {@link #pool}
+     * Value is the value's path -> Key in {@link #pool}.
      */
     private final Map<String, String> nbtMap = new HashMap<>();
     /**
-     * Contains the UUID to a value if it should always be written, no matter if it changed or not
+     * Key is the name that is used for serialization/deserialization
+     * Value is the value's path -> Key in {@link #pool}.
      */
-    private final List<String> nbtAlwaysWrite = new ArrayList<>();
-
     private final Map<String, String> jsonMap = new HashMap<>();
+
     /**
-     * Contains the UUID to a value if it should always be written, no matter if it changed or not
+     * Register a value.
+     * @param value
+     * @returns a helper object where you can configure serialization.
+     * @throws IllegalArgumentException when the path of the value is already registered with a different value.
      */
-    private final List<String> jsonAlwaysWrite = new ArrayList<>();
+    public <T> Value<T> registerValue(GenericBaseValue<T> value)
+    {
+        return this.poolValue(value);
+    }
+
+    public Optional<GenericBaseValue<?>> getValue(String path)
+    {
+        return this.pool.containsKey(path) ? Optional.of(this.pool.get(path).value) : Optional.empty();
+    }
+
+    /**
+     * @return a list of all the registered values.
+     */
+    public List<GenericBaseValue<?>> getValues()
+    {
+        List<GenericBaseValue<?>> values = new ArrayList<>();
+        for (Value<?> value : this.pool.values())
+        {
+            values.add(value.value);
+        }
+
+        return values;
+    }
 
     /**
      * Register the provided GenericValue object reference
@@ -62,7 +81,10 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
      * @param nbt name that should be used for serialization/deserialization.
      *            If it is empty, the value will not be registered for NBT serialization/deserialization
      * @param value the reference to the value that should be serialization/deserialization
+     * @throws IllegalArgumentException when the path of the value is already registered.
+     * @deprecated use {@link #registerValue(GenericBaseValue)} and the methods of {@link Value}
      */
+    @Deprecated
     public void registerNBTValue(String nbt, GenericBaseValue<?> value)
     {
         this.registerValue(nbt, "", value, false, false);
@@ -77,7 +99,10 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
      *            If it is empty, the value will not be registered for NBT serialization/deserialization
      * @param value the reference to the value that should be serialization/deserialization
      * @param alwaysWrite when true, the value will always be serialized to NBT, no matter if it changed or not.
+     * @throws IllegalArgumentException when the path of the value is already registered.
+     * @deprecated use {@link #registerValue(GenericBaseValue)} and the methods of {@link Value}
      */
+    @Deprecated
     public void registerNBTValue(String nbt, GenericBaseValue<?> value, boolean alwaysWrite)
     {
         this.registerValue(nbt, "", value, alwaysWrite, false);
@@ -91,7 +116,10 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
      * @param json name that should be used for serialization/deserialization.
      *                If it is empty, the value will not be registered for JSON serialization/deserialization
      * @param value the reference to the value that should be serialization/deserialization
+     * @throws IllegalArgumentException when the path of the value is already registered.
+     * @deprecated use {@link #registerValue(GenericBaseValue)} and the methods of {@link Value}
      */
+    @Deprecated
     public void registerJSONValue(String json, GenericBaseValue<?> value)
     {
         this.registerValue("", json, value, false, false);
@@ -106,7 +134,10 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
      *                If it is empty, the value will not be registered for JSON serialization/deserialization
      * @param value the reference to the value that should be serialization/deserialization
      * @param alwaysWrite when true, the value will always be serialized to JSON, no matter if it changed or not.
+     * @throws IllegalArgumentException when the path of the value is already registered.
+     * @deprecated use {@link #registerValue(GenericBaseValue)} and the methods of {@link Value}
      */
+    @Deprecated
     public void registerJSONValue(String json, GenericBaseValue<?> value, boolean alwaysWrite)
     {
         this.registerValue("", json, value, false, alwaysWrite);
@@ -122,7 +153,10 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
      * @param json name that should be used for serialization/deserialization
      *                If it is empty, the value will not be registered for JSON serialization/deserialization
      * @param value the reference to the value that should be serialization/deserialization
+     * @throws IllegalArgumentException when the path of the value is already registered.
+     * @deprecated use {@link #registerValue(GenericBaseValue)} and the methods of {@link Value}
      */
+    @Deprecated
     public void registerValue(String nbt, String json, GenericBaseValue<?> value)
     {
         this.registerValue(nbt, json, value, false, false);
@@ -140,72 +174,90 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
      * @param value the reference to the value that should be serialization/deserialization
      * @param alwaysWriteJSON when true, the value will always be serialized to JSON, no matter if it changed or not.
      * @param alwaysWriteNBT when true, the value will always be serialized to NBT, no matter if it changed or not.
+     * @throws IllegalArgumentException when the path of the value is already registered.
+     * @deprecated use {@link #registerValue(GenericBaseValue)} and the methods of {@link Value}
      */
+    @Deprecated
     public void registerValue(String nbt, String json, GenericBaseValue<?> value, boolean alwaysWriteNBT, boolean alwaysWriteJSON)
     {
-        if (value == null) return;
-
         if (!nbt.isEmpty() && !this.nbtMap.containsKey(nbt))
         {
-            String uuid = this.poolValue(value);
-
-            this.nbtMap.put(nbt, uuid);
-
-            if (alwaysWriteNBT) this.nbtAlwaysWrite.add(uuid);
+            Value<?> packet = this.poolValue(value);
+            packet.serializeNBT(nbt, alwaysWriteNBT);
         }
 
         if (!json.isEmpty() && !this.jsonMap.containsKey(json))
         {
-            String uuid = this.poolValue(value);
-
-            this.jsonMap.put(json, uuid);
-
-            if (alwaysWriteJSON) this.jsonAlwaysWrite.add(uuid);
+            Value<?> packet = this.poolValue(value);
+            packet.serializeJSON(json, alwaysWriteJSON);
         }
     }
 
     /**
-     * Only pool the value if the object is not pooled yet. Null is not going to be added to the pool.
-     * @param value
-     * @return the new uuid string of the pooled value, or if the value already existed return the uuid of it.
-     *         If the provided value was null, null will be returned.
+     * @throws IllegalArgumentException when the path of the value is already registered.
      */
-    protected String poolValue(GenericBaseValue<?> value)
+    protected <T> Value<T> poolValue(GenericBaseValue<T> value)
     {
-        if (value == null) return null;
-
-        String uuid = this.getValueUUID(value);
-
-        if (uuid == null)
+        String key = value.getPath();
+        if (this.pool.containsKey(key) && this.pool.get(key).value != value)
         {
-            uuid = UUID.randomUUID().toString();
-
-            this.pool.put(uuid, value);
+            throw new IllegalArgumentException("The provided value's path is already registered with a different value reference.");
         }
 
-        return uuid;
+        Value<T> packet;
+        if (this.pool.containsKey(key))
+        {
+            packet = (Value<T>) this.pool.get(key);
+        }
+        else
+        {
+            packet = new Value<>(value, this);
+            this.pool.put(key, packet);
+        }
+
+        return packet;
     }
 
     /**
-     * This method searches for the same object reference in the pool of registered values
-     * @param value
-     * @return the UUID String if the reference to the specified value has been found.
-     *         Returns null if the reference has not been found.
+     * Registers the NBT value for serialization for quick access.
+     * Has some safety checks to ensure that pooled values and serialization maps are consistent.
+     * @throws IllegalArgumentException when the name is already registered with a different value reference.
      */
-    @Nullable
-    protected String getValueUUID(GenericBaseValue<?> value)
+    protected void putNBTValue(String name, Value<?> value)
     {
-        if (value == null) return null;
-
-        for (Map.Entry<String, GenericBaseValue<?>> entry : this.pool.entrySet())
+        String key = value.value.getPath();
+        if (this.nbtMap.containsKey(name) && !this.nbtMap.get(name).equals(key))
         {
-            if (entry.getValue() == value)
-            {
-                return entry.getKey();
-            }
+            throw new IllegalArgumentException("The provided nbt name is already registered with a different value reference.");
         }
 
-        return null;
+        if (this.pool.containsKey(key) && this.pool.get(key).value != value.value)
+        {
+            throw new IllegalArgumentException("The provided value's path is already registered with a different value reference.");
+        }
+
+        this.pool.put(key, value);
+        this.nbtMap.put(name, key);
+    }
+
+    /**
+     * @throws IllegalArgumentException when the name is already registered with a different value reference.
+     */
+    protected void putJSONValue(String name, Value<?> value)
+    {
+        String key = value.value.getPath();
+        if (this.jsonMap.containsKey(name) && !this.jsonMap.get(name).equals(key))
+        {
+            throw new IllegalArgumentException("The provided json name is already registered with a different value reference.");
+        }
+
+        if (this.pool.containsKey(key) && this.pool.get(key).value != value.value)
+        {
+            throw new IllegalArgumentException("The provided value's path is already registered with a different value reference.");
+        }
+
+        this.pool.put(key, value);
+        this.jsonMap.put(name, key);
     }
 
     /**
@@ -214,9 +266,9 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
     @Override
     public void fromBytes(ByteBuf buffer)
     {
-        for (GenericBaseValue<?> value : this.pool.values())
+        for (Value<?> value : this.pool.values())
         {
-            value.valueFromBytes(buffer);
+            value.value.valueFromBytes(buffer);
         }
     }
 
@@ -226,9 +278,9 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
     @Override
     public void toBytes(ByteBuf buffer)
     {
-        for (GenericBaseValue<?> value : this.pool.values())
+        for (Value<?> value : this.pool.values())
         {
-            value.valueToBytes(buffer);
+            value.value.valueToBytes(buffer);
         }
     }
 
@@ -240,7 +292,8 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
     {
         for (Map.Entry<String, String> entry : this.nbtMap.entrySet())
         {
-            GenericBaseValue value = this.pool.get(entry.getValue());
+            Value<?> packet = this.pool.get(entry.getValue());
+            GenericBaseValue<?> value = packet.value;
             String key = entry.getKey();
 
             if (tag.hasKey(key))
@@ -259,10 +312,10 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
     {
         for (Map.Entry<String, String> entry : this.nbtMap.entrySet())
         {
-            String uuid = entry.getValue();
-            GenericBaseValue value = this.pool.get(uuid);
+            Value<?> packet = this.pool.get(entry.getValue());
+            GenericBaseValue<?> value = packet.value;
 
-            if (!this.nbtAlwaysWrite.contains(uuid) && value instanceof GenericValue && !((GenericValue) value).hasChanged())
+            if (!packet.nbtAlwaysWrite && value instanceof GenericValue && !((GenericValue) value).hasChanged())
             {
                 continue;
             }
@@ -283,10 +336,9 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
 
         for (Map.Entry<String, String> entry : this.jsonMap.entrySet())
         {
-            String uuid = entry.getValue();
-            GenericBaseValue value = this.pool.get(uuid);
-
-            if (!this.jsonAlwaysWrite.contains(uuid) && value instanceof GenericValue && !((GenericValue) value).hasChanged())
+            Value<?> packet = this.pool.get(entry.getValue());
+            GenericBaseValue<?> value = packet.value;
+            if (!packet.jsonAlwaysWrite && value instanceof GenericValue && !((GenericValue) value).hasChanged())
             {
                 continue;
             }
@@ -312,13 +364,150 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable
 
         for (Map.Entry<String, String> entry : this.jsonMap.entrySet())
         {
-            GenericBaseValue value = this.pool.get(entry.getValue());
+            Value<?> packet = this.pool.get(entry.getValue());
+            GenericBaseValue<?> value = packet.value;
             String key = entry.getKey();
 
             if (jsonObject.has(key))
             {
                 value.valueFromJSON(jsonObject.get(key));
             }
+        }
+    }
+
+    /**
+     * Copies the values of the origin with matching paths to the values in this.
+     * Only copies if copyable is true for the respective value.
+     * @param origin
+     */
+    public void copyValues(ValueSerializer origin)
+    {
+        for (Map.Entry<String, Value<?>> originEntry : origin.pool.entrySet())
+        {
+            if (!originEntry.getValue().copyable) continue;
+
+            this.pool.get(originEntry.getKey()).value.copy(originEntry.getValue().value);
+        }
+    }
+
+    /**
+     * Compare the values with matching paths using the {@link GenericBaseValue#equals(Object)} method.
+     * @param serializer
+     * @return true if all values with matching paths are equal.
+     */
+    public boolean equalsValues(ValueSerializer serializer)
+    {
+        for (Map.Entry<String, Value<?>> entryOrigin : serializer.pool.entrySet())
+        {
+            String path = entryOrigin.getKey();
+            GenericBaseValue<?> originValue = entryOrigin.getValue().value;
+
+            if (this.pool.containsKey(path) && !this.pool.get(path).value.equals(originValue)) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return deep copy of this valueSerializer
+     */
+    @Override
+    public ValueSerializer copy()
+    {
+        ValueSerializer copy = new ValueSerializer();
+        copy.copy(this);
+        return copy;
+    }
+
+    @Override
+    public void copy(ValueSerializer origin)
+    {
+        this.jsonMap.clear();
+        this.jsonMap.putAll(origin.jsonMap);
+
+        this.nbtMap.clear();
+        this.nbtMap.putAll(origin.nbtMap);
+
+        for (Map.Entry<String, Value<?>> entryOrigin : origin.pool.entrySet())
+        {
+            this.pool.put(entryOrigin.getKey(), entryOrigin.getValue().copy(this));
+        }
+    }
+
+    public static class Value<T>
+    {
+        private String nbt;
+        private boolean nbtAlwaysWrite;
+        private String json;
+        private boolean jsonAlwaysWrite;
+        private boolean copyable = true;
+        private GenericBaseValue<T> value;
+        private ValueSerializer serializer;
+
+        public Value(GenericBaseValue<T> value, ValueSerializer serializer)
+        {
+            this.value = value;
+            this.serializer = serializer;
+        }
+
+        /**
+         * @throws IllegalArgumentException when the name is already registered with a different value reference.
+         */
+        public Value<T> serializeNBT(String nbt)
+        {
+            return this.serializeNBT(nbt, false);
+        }
+
+        /**
+         * @throws IllegalArgumentException when the name is already registered with a different value reference.
+         */
+        public Value<T> serializeNBT(String nbt, boolean alwaysWrite)
+        {
+            this.nbt = nbt;
+            this.nbtAlwaysWrite = alwaysWrite;
+            this.serializer.putNBTValue(nbt, this);
+            return this;
+        }
+
+        /**
+         * @throws IllegalArgumentException when the name is already registered with a different value reference.
+         */
+        public Value<T> serializeJSON(String json)
+        {
+            return this.serializeJSON(json, false);
+        }
+
+        /**
+         * @throws IllegalArgumentException when the name is already registered with a different value reference.
+         */
+        public Value<T> serializeJSON(String json, boolean alwaysWrite)
+        {
+            this.json = json;
+            this.jsonAlwaysWrite = alwaysWrite;
+            this.serializer.putJSONValue(json, this);
+            return this;
+        }
+
+        public Value<T> copyable()
+        {
+            this.copyable = true;
+            return this;
+        }
+
+        public Value<T> nonCopyable()
+        {
+            this.copyable = false;
+            return this;
+        }
+
+        public Value<T> copy(ValueSerializer destinationSerializer) {
+            Value<T> copy = new Value<>(this.value.copy(), destinationSerializer);
+            copy.json = this.json;
+            copy.jsonAlwaysWrite = this.jsonAlwaysWrite;
+            copy.nbt = this.nbt;
+            copy.nbtAlwaysWrite = this.nbtAlwaysWrite;
+            copy.copyable = this.copyable;
+            return copy;
         }
     }
 }
