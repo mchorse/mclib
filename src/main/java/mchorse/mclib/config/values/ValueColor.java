@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.utils.Color;
+import mchorse.mclib.utils.Interpolation;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTPrimitive;
 import net.minecraft.nbt.NBTTagFloat;
@@ -96,5 +97,16 @@ public class ValueColor extends GenericValue<Color>
     public NBTBase valueToNBT()
     {
         return new NBTTagInt(this.value.getRGBAColor());
+    }
+
+    public Color interpolate(Interpolation interpolation, GenericBaseValue<Color> to, float factor)
+    {
+        Color interpolated = new Color();
+        interpolated.r = interpolation.interpolate(this.value.r, to.value.r, factor);
+        interpolated.g = interpolation.interpolate(this.value.g, to.value.g, factor);
+        interpolated.b = interpolation.interpolate(this.value.b, to.value.b, factor);
+        interpolated.a = interpolation.interpolate(this.value.a, to.value.a, factor);
+
+        return interpolated;
     }
 }

@@ -9,6 +9,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfigPanel;
+import mchorse.mclib.utils.Interpolation;
 import mchorse.mclib.utils.resources.RLUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTBase;
@@ -239,5 +240,11 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
         clone.useServer = this.useServer;
 
         return clone;
+    }
+
+    @Override
+    public ResourceLocation interpolate(Interpolation interpolation, GenericBaseValue<ResourceLocation> to, float factor)
+    {
+        return factor == 1F ? RLUtils.clone(to.value) : RLUtils.clone(this.value);
     }
 }

@@ -8,6 +8,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfigPanel;
+import mchorse.mclib.utils.Interpolation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTPrimitive;
@@ -162,5 +163,10 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
         clone.value = this.value;
 
         return clone;
+    }
+
+    public Float interpolate(Interpolation interpolation, GenericBaseValue<Float> to, float factor)
+    {
+        return interpolation.interpolate(this.value, to.value, factor);
     }
 }

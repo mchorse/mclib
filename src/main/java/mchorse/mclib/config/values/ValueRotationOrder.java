@@ -3,6 +3,7 @@ package mchorse.mclib.config.values;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import io.netty.buffer.ByteBuf;
+import mchorse.mclib.utils.Interpolation;
 import mchorse.mclib.utils.MatrixUtils.RotationOrder;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
@@ -101,5 +102,11 @@ public class ValueRotationOrder extends GenericValue<RotationOrder>
         {
             this.value = ((ValueRotationOrder) origin).value;
         }
+    }
+
+    @Override
+    public RotationOrder interpolate(Interpolation interpolation, GenericBaseValue<RotationOrder> to, float factor)
+    {
+        return factor == 1F ? to.value : this.value;
     }
 }

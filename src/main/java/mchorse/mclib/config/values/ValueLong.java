@@ -9,6 +9,7 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfigPanel;
+import mchorse.mclib.utils.Interpolation;
 import mchorse.mclib.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTBase;
@@ -169,5 +170,10 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
     public String toString()
     {
         return Long.toString(this.value);
+    }
+
+    public Long interpolate(Interpolation interpolation, GenericBaseValue<Long> to, float factor)
+    {
+        return (long) interpolation.interpolate(this.value, to.value, factor);
     }
 }

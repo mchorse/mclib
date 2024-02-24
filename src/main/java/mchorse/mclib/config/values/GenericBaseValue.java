@@ -3,6 +3,7 @@ package mchorse.mclib.config.values;
 import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
 import mchorse.mclib.utils.ICopy;
+import mchorse.mclib.utils.Interpolation;
 import net.minecraft.nbt.NBTBase;
 
 import javax.annotation.Nullable;
@@ -239,4 +240,12 @@ public abstract class GenericBaseValue<T> extends Value
      */
     @Nullable
     public abstract NBTBase valueToNBT();
+
+    /**
+     * @param interpolation
+     * @param to
+     * @param factor
+     * @return a new interpolated value between this value and the provided to value.
+     */
+    public abstract T interpolate(Interpolation interpolation, GenericBaseValue<T> to, float factor);
 }

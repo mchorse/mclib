@@ -9,12 +9,15 @@ import mchorse.mclib.client.gui.framework.elements.utils.GuiLabel;
 import mchorse.mclib.client.gui.utils.Elements;
 import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.config.gui.GuiConfigPanel;
+import mchorse.mclib.utils.Interpolation;
 import mchorse.mclib.utils.MatrixUtils;
+import mchorse.mclib.utils.resources.RLUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTPrimitive;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -154,5 +157,11 @@ public class ValueString extends GenericValue<String> implements IServerValue, I
         clone.serverValue = this.serverValue;
 
         return clone;
+    }
+
+    @Override
+    public String interpolate(Interpolation interpolation, GenericBaseValue<String> to, float factor)
+    {
+        return factor == 1F ? to.value : this.value;
     }
 }

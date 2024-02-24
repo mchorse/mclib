@@ -2,6 +2,8 @@ package mchorse.mclib.config.values;
 
 import com.google.gson.JsonElement;
 import io.netty.buffer.ByteBuf;
+import mchorse.mclib.utils.Color;
+import mchorse.mclib.utils.Interpolation;
 import mchorse.mclib.utils.JsonUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -359,5 +361,10 @@ public class ValueItemSlots extends GenericValue<ItemStack[]>
         }
 
         return str;
+    }
+
+    public ItemStack[] interpolate(Interpolation interpolation, GenericBaseValue<ItemStack[]> to, float factor)
+    {
+        return factor == 1F ? to.copy().value : this.copy().value;
     }
 }

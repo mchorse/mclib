@@ -13,6 +13,7 @@ import mchorse.mclib.client.gui.utils.keys.IKey;
 import mchorse.mclib.client.gui.utils.keys.KeyParser;
 import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.utils.ColorUtils;
+import mchorse.mclib.utils.Interpolation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTPrimitive;
@@ -304,5 +305,10 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
         KEYBIND,
         COMBOKEY,
         MODES
+    }
+
+    public Integer interpolate(Interpolation interpolation, GenericBaseValue<Integer> to, float factor)
+    {
+        return (int) interpolation.interpolate(this.value, to.value, factor);
     }
 }
