@@ -162,7 +162,7 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     {
         if (tag instanceof NBTPrimitive)
         {
-            this.value = ((NBTPrimitive) tag).getInt();
+            this.set(((NBTPrimitive) tag).getInt());
         }
     }
 
@@ -199,7 +199,7 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     {
         if (value instanceof ValueInt)
         {
-            this.value = ((ValueInt) value).value;
+            this.set(((ValueInt) value).value);
         }
     }
 
@@ -217,10 +217,10 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     {
         superFromBytes(buffer);
 
-        this.value = buffer.readInt();
         this.defaultValue = buffer.readInt();
         this.min = buffer.readInt();
         this.max = buffer.readInt();
+        this.valueFromBytes(buffer);
 
         this.subtype = Subtype.values()[buffer.readInt()];
 
@@ -245,10 +245,10 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     {
         superToBytes(buffer);
 
-        buffer.writeInt(this.value);
         buffer.writeInt(this.defaultValue);
         buffer.writeInt(this.min);
         buffer.writeInt(this.max);
+        this.valueToBytes(buffer);
 
         buffer.writeInt(this.subtype.ordinal());
         buffer.writeBoolean(this.labels != null);
@@ -267,7 +267,7 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
     @Override
     public void valueFromBytes(ByteBuf buffer)
     {
-        this.value = buffer.readInt();
+        this.set(buffer.readInt());
     }
 
     @Override

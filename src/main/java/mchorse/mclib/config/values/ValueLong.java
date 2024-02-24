@@ -109,7 +109,7 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
     {
         if (value instanceof ValueLong)
         {
-            this.value = ((ValueLong) value).value;
+            this.set(((ValueLong) value).value);
         }
     }
 
@@ -127,10 +127,10 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
     {
         superFromBytes(buffer);
 
-        this.value = buffer.readLong();
         this.defaultValue = buffer.readLong();
         this.min = buffer.readLong();
         this.max = buffer.readLong();
+        this.valueFromBytes(buffer);
     }
 
     @Override
@@ -138,16 +138,16 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
     {
         superToBytes(buffer);
 
-        buffer.writeLong(this.value);
         buffer.writeLong(this.defaultValue);
         buffer.writeLong(this.min);
         buffer.writeLong(this.max);
+        this.valueToBytes(buffer);
     }
 
     @Override
     public void valueFromBytes(ByteBuf buffer)
     {
-        this.value = buffer.readLong();
+        this.set(buffer.readLong());
     }
 
     @Override

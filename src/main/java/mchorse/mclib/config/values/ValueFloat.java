@@ -74,7 +74,7 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     {
         if (tag instanceof NBTPrimitive)
         {
-            this.value = ((NBTPrimitive) tag).getFloat();
+            this.set(((NBTPrimitive) tag).getFloat());
         }
     }
 
@@ -102,7 +102,7 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     {
         if (value instanceof ValueFloat)
         {
-            this.value = ((ValueFloat) value).value;
+            this.set(((ValueFloat) value).value);
         }
     }
 
@@ -120,10 +120,10 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     {
         superFromBytes(buffer);
 
-        this.value = buffer.readFloat();
         this.defaultValue = buffer.readFloat();
         this.min = buffer.readFloat();
         this.max = buffer.readFloat();
+        this.valueFromBytes(buffer);
     }
 
     @Override
@@ -131,16 +131,16 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
     {
         superToBytes(buffer);
 
-        buffer.writeFloat(this.value);
         buffer.writeFloat(this.defaultValue);
         buffer.writeFloat(this.min);
         buffer.writeFloat(this.max);
+        this.valueToBytes(buffer);
     }
 
     @Override
     public void valueFromBytes(ByteBuf buffer)
     {
-        this.value = buffer.readFloat();
+        this.set(buffer.readFloat());
     }
 
     @Override

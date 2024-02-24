@@ -87,7 +87,7 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
     {
         if (value instanceof ValueDouble)
         {
-            this.value = ((ValueDouble) value).value;
+            this.set(((ValueDouble) value).value);
         }
     }
 
@@ -105,10 +105,10 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
     {
         superFromBytes(buffer);
 
-        this.value = buffer.readDouble();
         this.defaultValue = buffer.readDouble();
         this.min = buffer.readDouble();
         this.max = buffer.readDouble();
+        this.valueFromBytes(buffer);
     }
 
     @Override
@@ -116,16 +116,16 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
     {
         superToBytes(buffer);
 
-        buffer.writeDouble(this.value);
         buffer.writeDouble(this.defaultValue);
         buffer.writeDouble(this.min);
         buffer.writeDouble(this.max);
+        this.valueToBytes(buffer);
     }
 
     @Override
     public void valueFromBytes(ByteBuf buffer)
     {
-        this.value = buffer.readDouble();
+        this.set(buffer.readDouble());
     }
 
     @Override
