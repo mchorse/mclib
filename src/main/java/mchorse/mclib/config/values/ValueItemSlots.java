@@ -363,8 +363,10 @@ public class ValueItemSlots extends GenericValue<ItemStack[]>
         return str;
     }
 
-    public ItemStack[] interpolate(Interpolation interpolation, GenericBaseValue<ItemStack[]> to, float factor)
+    public ItemStack[] interpolate(Interpolation interpolation, GenericBaseValue<?> to, float factor)
     {
-        return factor == 1F ? to.copy().value : this.copy().value;
+        if (!(to.value instanceof ItemStack[])) return this.copy().value;
+
+        return factor == 1F ? (ItemStack[]) to.copy().value : this.copy().value;
     }
 }

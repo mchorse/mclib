@@ -7,6 +7,7 @@ import mchorse.mclib.client.gui.framework.elements.GuiElement;
 import mchorse.mclib.client.gui.framework.elements.buttons.GuiToggleElement;
 import mchorse.mclib.config.gui.GuiConfigPanel;
 import mchorse.mclib.utils.Interpolation;
+import mchorse.mclib.utils.MatrixUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTPrimitive;
@@ -174,8 +175,10 @@ public class ValueBoolean extends GenericValue<Boolean> implements IServerValue,
         return clone;
     }
 
-    public Boolean interpolate(Interpolation interpolation, GenericBaseValue<Boolean> to, float factor)
+    public Boolean interpolate(Interpolation interpolation, GenericBaseValue<?> to, float factor)
     {
-        return factor == 1F ? to.value : this.value;
+        if (!(to.value instanceof Boolean)) return this.value;
+
+        return factor == 1F ? (Boolean) to.value : this.value;
     }
 }

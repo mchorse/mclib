@@ -307,8 +307,10 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
         MODES
     }
 
-    public Integer interpolate(Interpolation interpolation, GenericBaseValue<Integer> to, float factor)
+    public Integer interpolate(Interpolation interpolation, GenericBaseValue<?> to, float factor)
     {
-        return (int) interpolation.interpolate(this.value, to.value, factor);
+        if (!(to.value instanceof Integer)) return this.value;
+
+        return (int) interpolation.interpolate(this.value, (Integer) to.value, factor);
     }
 }

@@ -243,8 +243,10 @@ public class ValueRL extends GenericValue<ResourceLocation> implements IServerVa
     }
 
     @Override
-    public ResourceLocation interpolate(Interpolation interpolation, GenericBaseValue<ResourceLocation> to, float factor)
+    public ResourceLocation interpolate(Interpolation interpolation, GenericBaseValue<?> to, float factor)
     {
-        return factor == 1F ? RLUtils.clone(to.value) : RLUtils.clone(this.value);
+        if (!(to.value instanceof ResourceLocation)) return RLUtils.clone(this.value);
+
+        return factor == 1F ? RLUtils.clone((ResourceLocation) to.value) : RLUtils.clone(this.value);
     }
 }

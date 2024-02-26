@@ -105,8 +105,10 @@ public class ValueRotationOrder extends GenericValue<RotationOrder>
     }
 
     @Override
-    public RotationOrder interpolate(Interpolation interpolation, GenericBaseValue<RotationOrder> to, float factor)
+    public RotationOrder interpolate(Interpolation interpolation, GenericBaseValue<?> to, float factor)
     {
-        return factor == 1F ? to.value : this.value;
+        if (!(to.value instanceof RotationOrder)) return this.value;
+
+        return factor == 1F ? (RotationOrder) to.value : this.value;
     }
 }

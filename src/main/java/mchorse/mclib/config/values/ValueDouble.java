@@ -165,8 +165,10 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
         return clone;
     }
 
-    public Double interpolate(Interpolation interpolation, GenericBaseValue<Double> to, float factor)
+    public Double interpolate(Interpolation interpolation, GenericBaseValue<?> to, float factor)
     {
-        return interpolation.interpolate(this.value, to.value, factor);
+        if (!(to.value instanceof Double)) return this.value;
+
+        return interpolation.interpolate(this.value, (Double) to.value, factor);
     }
 }

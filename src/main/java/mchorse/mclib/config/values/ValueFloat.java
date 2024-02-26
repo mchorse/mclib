@@ -165,8 +165,10 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
         return clone;
     }
 
-    public Float interpolate(Interpolation interpolation, GenericBaseValue<Float> to, float factor)
+    public Float interpolate(Interpolation interpolation, GenericBaseValue<?> to, float factor)
     {
-        return interpolation.interpolate(this.value, to.value, factor);
+        if (!(to.value instanceof Float)) return this.value;
+
+        return interpolation.interpolate(this.value, (Float) to.value, factor);
     }
 }

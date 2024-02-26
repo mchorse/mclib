@@ -99,13 +99,16 @@ public class ValueColor extends GenericValue<Color>
         return new NBTTagInt(this.value.getRGBAColor());
     }
 
-    public Color interpolate(Interpolation interpolation, GenericBaseValue<Color> to, float factor)
+    public Color interpolate(Interpolation interpolation, GenericBaseValue<?> to, float factor)
     {
+        if (!(to.value instanceof Color)) return this.value.copy();
+
+        Color toC = (Color) to.value;
         Color interpolated = new Color();
-        interpolated.r = interpolation.interpolate(this.value.r, to.value.r, factor);
-        interpolated.g = interpolation.interpolate(this.value.g, to.value.g, factor);
-        interpolated.b = interpolation.interpolate(this.value.b, to.value.b, factor);
-        interpolated.a = interpolation.interpolate(this.value.a, to.value.a, factor);
+        interpolated.r = interpolation.interpolate(this.value.r, toC.r, factor);
+        interpolated.g = interpolation.interpolate(this.value.g, toC.g, factor);
+        interpolated.b = interpolation.interpolate(this.value.b, toC.b, factor);
+        interpolated.a = interpolation.interpolate(this.value.a, toC.a, factor);
 
         return interpolated;
     }

@@ -247,5 +247,5 @@ public abstract class GenericBaseValue<T> extends Value
      * @param factor
      * @return a new interpolated value between this value and the provided to value.
      */
-    public abstract T interpolate(Interpolation interpolation, GenericBaseValue<T> to, float factor);
+    public abstract T interpolate(Interpolation interpolation, GenericBaseValue<?> to, float factor);
 }

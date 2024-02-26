@@ -160,8 +160,10 @@ public class ValueString extends GenericValue<String> implements IServerValue, I
     }
 
     @Override
-    public String interpolate(Interpolation interpolation, GenericBaseValue<String> to, float factor)
+    public String interpolate(Interpolation interpolation, GenericBaseValue<?> to, float factor)
     {
-        return factor == 1F ? to.value : this.value;
+        if (!(to.value instanceof String)) return this.value;
+
+        return factor == 1F ? (String) to.value : this.value;
     }
 }
