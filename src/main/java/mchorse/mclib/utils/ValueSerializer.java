@@ -409,6 +409,24 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable, 
     }
 
     /**
+     * Interpolates values with matching paths from the provided serializer to this and then sets the values to this.
+     * @param from
+     */
+    public void interpolateFrom(Interpolation interpolation, ValueSerializer from, float factor)
+    {
+        for (Map.Entry<String, Value<?>> entryOrigin : from.pool.entrySet())
+        {
+            String path = entryOrigin.getKey();
+            GenericBaseValue<?> originValue = entryOrigin.getValue().value;
+
+            if (this.pool.containsKey(path))
+            {
+                this.pool.get(path).value.setValue(originValue.interpolate(interpolation, this.pool.get(path).value, factor));
+            }
+        }
+    }
+
+    /**
      * @return deep copy of this valueSerializer
      */
     @Override
