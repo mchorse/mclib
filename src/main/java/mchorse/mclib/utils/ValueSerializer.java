@@ -437,6 +437,10 @@ public class ValueSerializer implements IByteBufSerializable, INBTSerializable, 
         return copy;
     }
 
+    /**
+     * Copies the values (deep copy), json and nbt mappings from the specified origin and put them into this.
+     * @param origin
+     */
     @Override
     public void copy(ValueSerializer origin)
     {
