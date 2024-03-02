@@ -33,7 +33,7 @@ public class GuiCollapseSection extends GuiElement
         this.title = Elements.label(title).background(titleBackground);
         this.title.setLeftIconContainer(this.collapsedIcon);
         this.fields = new GuiElement(mc);
-        this.fields.flex().column(5).stretch().vertical().height(20);
+        this.fields.flex().relative(this).column(5).stretch().vertical().height(20);
 
         this.flex().column(5).stretch().vertical();
         super.add(this.title);
@@ -131,8 +131,9 @@ public class GuiCollapseSection extends GuiElement
         if (this.title.area.isInside(context))
         {
             this.updateCollapse();
+            GuiElement element = this.getRoot();
 
-            this.getParent().resize();
+            if (element != null) element.resize();
 
             return true;
         }
