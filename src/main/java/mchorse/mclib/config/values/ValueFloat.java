@@ -48,6 +48,11 @@ public class ValueFloat extends GenericNumberValue<Float> implements IServerValu
         return 0F;
     }
 
+    public boolean isInteger()
+    {
+        return false;
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)

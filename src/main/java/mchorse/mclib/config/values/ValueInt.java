@@ -91,6 +91,12 @@ public class ValueInt extends GenericNumberValue<Integer> implements IServerValu
         return this.subtype(Subtype.MODES);
     }
 
+    public boolean isInteger()
+    {
+        return true;
+    }
+
+
     @Override
     public void resetServer()
     {

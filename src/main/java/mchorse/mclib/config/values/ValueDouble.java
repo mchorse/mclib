@@ -48,6 +48,11 @@ public class ValueDouble extends GenericNumberValue<Double> implements IServerVa
         return 0D;
     }
 
+    public boolean isInteger()
+    {
+        return false;
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)

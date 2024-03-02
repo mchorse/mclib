@@ -52,6 +52,11 @@ public class ValueLong extends GenericNumberValue<Long> implements IServerValue,
         return 0L;
     }
 
+    public boolean isInteger()
+    {
+        return true;
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public List<GuiElement> getFields(Minecraft mc, GuiConfigPanel gui)

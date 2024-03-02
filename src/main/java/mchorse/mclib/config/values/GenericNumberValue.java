@@ -68,6 +68,11 @@ public abstract class GenericNumberValue<T extends Number & Comparable<T>> exten
     @Override
     protected abstract T getNullValue();
 
+    /**
+     * @return true when the Value is a whole number, like integer, byte or long.
+     */
+    public abstract boolean isInteger();
+
     @Override
     public JsonElement valueToJSON()
     {
